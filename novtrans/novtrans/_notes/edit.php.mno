@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<info>
+	<infoitem key="UD_rs_respuesta" value="name:codigo_resp;datatype:string,name:nombre_resp;datatype:string" />
+	<infoitem key="UD_rs_ta" value="name:cod_ti_audit;datatype:int,name:nom_ti_audit;datatype:string,name:estado;datatype:string" />
+	<infoitem key="UD_rs_au" value="name:cod_ti_audit;datatype:int,name:nom_ti_audit;datatype:string,name:estado;datatype:string" />
+	<infoitem key="UD_rs_lc" value="name:id;datatype:int,name:nombre_auditoria;datatype:string" />
+	<infoitem key="UD_rs_adj" value="name:id_files;datatype:int,name:nombre;datatype:string,name:descripcion;datatype:string,name:nombre_image;datatype:string,name:tipo;datatype:string,name:status;datatype:string,name:idpm;datatype:int,name:grupo;datatype:int,name:proceso;datatype:string,name:opc;datatype:string" />
+</info>

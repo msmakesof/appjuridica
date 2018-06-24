@@ -1,0 +1,124 @@
+@charset "utf-8";
+/* CSS Document */
+
+#Subject{
+	padding: 5px;
+	border: 1px solid #06C;
+	border-radius: 5px;
+	width: 200px;
+	margin-bottom: 10px;
+	clear: both;
+	float: none;
+ }
+#Subject:focus{
+ box-shadow:0 0 15px #036;
+ }
+ 
+#stpartdate{
+	padding: 5px;
+	border: 1px solid #06C;
+	border-radius: 5px;
+	width: 200px;
+	margin-bottom: 10px;
+	clear: both;
+	float: none;
+ }
+#stpartdate:focus{
+ box-shadow:0 0 15px #036;
+ }
+
+#etpartdate{
+	padding: 5px;
+	border: 1px solid #06C;
+	border-radius: 5px;
+	width: 50px;
+	margin-bottom: 10px;
+	clear: both;
+	float: none;
+ }
+#etpartdate:focus{
+ box-shadow:0 0 15px #036;
+ }
+
+#Location{
+	padding: 5px;
+	border: 1px solid #06C;
+	border-radius: 5px;
+	width: 50px;
+	margin-bottom: 10px;
+	clear: both;
+	float: none;
+ }
+#Location:focus{
+ box-shadow:0 0 15px #036;
+ }
+
+    .custom-select select {
+	display: inline-block;
+	border: 2px solid #06C;
+	padding: 4px 3px 3px 5px;
+	margin: 0;
+	font: inherit;
+	outline: none; /* remove focus ring from Webkit */
+	line-height: 1.9;
+	background: #f8f8f8;
+	-webkit-appearance: none; /* remove the strong OSX influence from Webkit */
+	-webkit-border-radius: 6px;
+	-moz-border-radius: 6px;
+	border-radius: 6px;
+    }
+
+    /* for Webkit's CSS-only solution */
+    @media screen and (-webkit-min-device-pixel-ratio:0) { 
+        .custom-select select {
+            padding-right:30px;    
+        }
+    }
+    
+    /* Since we removed the default focus styles, we have to add our own */
+    .custom-select select:focus {
+        -webkit-box-shadow: 0 0 3px 1px #06C;
+        -moz-box-shadow: 0 0 3px 1px #06C;
+        box-shadow: 0 0 3px 1px #06C;
+    }
+    
+    /* Select arrow styling */
+    .custom-select:after {
+        content: "▼";
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        font-size: 60%;
+        line-height: 30px;
+        padding: 0 7px;
+        background: #bbb;
+        color: white;
+        
+        pointer-events:none;
+        
+        -webkit-border-radius: 0 6px 6px 0;
+        -moz-border-radius: 0 6px 6px 0;
+        border-radius: 0 6px 6px 0;
+    }
+    
+    .no-pointer-events .custom-select:after {
+        content: none;
+    }
+ 
+#Description, #observacion{
+	border: 2px solid #06C;
+	border-radius: 10px;
+	height: 60px;
+	width: 230px;
+ }
+#Description, #observacion:focus{
+/* box-shadow:0 0 15px #036;*/
+ } 
+
+label, span{
+	font-family: Verdana, Geneva, sans-serif;
+	font-size: 13px;
+	color: #333;
+}
+

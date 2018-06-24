@@ -1,0 +1,4 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<info>
+	<infoitem key="UD_rs_data" value="name:id;datatype:int,name:servidor;datatype:string,name:datab;datatype:string,name:usuario;datatype:string,name:clave;datatype:string" />
+</info>
