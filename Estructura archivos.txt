@@ -1,0 +1,7 @@
+pages/tables/<<roles>>
+pages/forms/form-validationBase<<roles>>
+pages/forms/crea_<<rol>>
+pages/forms/editar<<rol>>
+pages/forms/editar_<<rol>>
+pages/forms/borrar_<<rol>>
+
