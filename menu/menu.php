@@ -72,12 +72,7 @@ else
     $usuario ="";
 }
 
-require_once('../Connections/DataConex.php');    
-$soportecURL = "S";
-$url         = urlServicios."consultadetalle/consultadetalle_Menu.php?IdEstadoTabla=1";
-$existe      = "";
-$usulocal    = "";
-$siguex      = "";
+
 ?>   
    
 <div class="menu">
@@ -103,41 +98,78 @@ $siguex      = "";
             </a>
             <ul class="ml-menu">
             <?php
-            mysqli_select_db($cnn_kn, $database_cnn_kn);
-            $query_rs_ntipo_tabla = "SELECT TAB_Nombre_Tabla, TAB_NombreMostrar FROM gen_tabla WHERE TAB_IdEstadoTabla = 1 ORDER BY TAB_Nombre_Tabla;"; 
-            $rs_ntipo_tabla = mysqli_query($cnn_kn,$query_rs_ntipo_tabla) or die(mysqli_error()."$query_rs_ntipo_tabla");
-            $row_rs_ntipo_tabla = mysqli_fetch_assoc($rs_ntipo_tabla);
-            //Cantidad de registros
-            $cantidad_rs_ntipo_tabla = mysqli_num_rows($rs_ntipo_tabla);
-            
+
+            require_once('../Connections/DataConex.php');    
+            $soportecURL = "S";
+            $url         = urlServicios."consultadetalle/consultadetalle_gen_tabla.php?IdEstadoTabla=1";
+            $existe      = "";
+            $usulocal    = "";
+            $siguex      = "";
+            if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
+            {
+                $ch = curl_init();
+                curl_setopt($ch, CURLOPT_VERBOSE, true);
+                curl_setopt($ch, CURLOPT_URL, $url);
+                curl_setopt($ch, CURLOPT_TIMEOUT, 30);
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+                curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
+                curl_setopt($ch, CURLOPT_POST, 0);
+                $resultado = curl_exec ($ch);
+                curl_close($ch);
+
+                $m =  preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $resultado);    
+                $m = json_decode($m, true);
+
+                $json_errors = array(
+                    JSON_ERROR_NONE => 'No se ha producido ningún error',
+                    JSON_ERROR_DEPTH => 'Maxima profundidad de pila ha sido excedida',
+                    JSON_ERROR_CTRL_CHAR => 'Error de carácter de control, posiblemente codificado incorrectamente',
+                    JSON_ERROR_SYNTAX => 'Error de Sintaxis',
+                    );
+                //echo "Error : ", $json_errors[json_last_error()], PHP_EOL, PHP_EOL."<br>";        
+            }
+            else
+            {
+                $soportecURL = "N";
+                echo "No hay soporte para cURL";
+            } 
+
+            if($soportecURL == "N")
+            {
+                require_once('./unirest/vendor/autoload.php');
+                $response = Unirest\Request::get($url, array("X-Mashape-Key" => "MY SECRET KEY"));
+                $resultado = $response->raw_body;
+                $resultado = preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $resultado);
+                $m = json_decode($resultado, true);	        
+            }  
+
             $nombre_Tabla = "";
-			$clase = "";
-			$NombreArchivo = basename($_SERVER['PHP_SELF'],".php");
-            //echo $NombreArchivo;
-            do{
-                $NombreTablaMenu = trim($row_rs_ntipo_tabla['TAB_Nombre_Tabla']);
-                //echo $NombreTablaMenu; 
-                $NombreMostrar = trim($row_rs_ntipo_tabla['TAB_NombreMostrar']);	               
-                $archivo = "../pages/tables/".$NombreTablaMenu.".php";	
-                //echo $archivo;
-				if( strtoupper($NombreArchivo) == strtoupper($NombreTablaMenu) )
-				{ 
-					$clase = "class='active'"; 
-				}
-				else
-				{
-					$clase = "";	
-				}
-                ?>
+            $clase = "";
+            $NombreArchivo = basename($_SERVER['PHP_SELF'],".php");
+            for($i=0; $i<=count($m); $i++)
+            {
+                $TAB_IdTabla = $m['gen_tabla'][$i]['TAB_IdTabla'];
+                $TAB_Nombre_Tabla = $m['gen_tabla'][$i]['TAB_Nombre_Tabla'];
+                $TAB_NombreMostrar = trim($m['gen_tabla'][$i]['TAB_NombreMostrar']);
+                
+                $archivo = "../pages/tables/".$TAB_Nombre_Tabla.".php";
+                if( strtoupper($NombreArchivo) == strtoupper($TAB_Nombre_Tabla) )
+                { 
+                    $clase = "class='active'"; 
+                }
+                else
+                {
+                    $clase = "";	
+                }
+            ?>
 
                 <li <?php echo $clase ;?> >
-                    <a href="<?php echo $archivo; ?>"><?php echo $NombreMostrar; ?></a>
+                    <a href="<?php echo $archivo; ?>"><?php echo $TAB_NombreMostrar; ?></a>
                 </li>
-                <?php                          
-            } while($row_rs_ntipo_tabla = mysqli_fetch_assoc($rs_ntipo_tabla));     
-            mysqli_free_result($rs_ntipo_tabla);
-            ?>   
-               
+            <?php 
+            }
+            ?>
             </ul>
         </li>
 

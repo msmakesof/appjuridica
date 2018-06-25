@@ -6,7 +6,7 @@
  */
 require '../Connections/database.php';
 
-class USU_USUARIO
+class GEN_TABLA
 {
     function __construct()
     {
@@ -15,7 +15,7 @@ class USU_USUARIO
     /**
      * Retorna todas las filas especificadas de la tabla '$IdTabla'
      *
-     * @param $IdIdTabla Identificador del registro
+     * @param $IdTabla Identificador del registro
      * @return array Datos del registro
      */
     public static function getAll()
@@ -72,24 +72,24 @@ class USU_USUARIO
      * Obtiene los campos de una gen_tabla con un estado Activo
      * determinado
      *
-     * @param $IdTabla Identificador de la tabla
+     * @param $IdEstadoTabla Identificador del estado de la tabla
      * @return mixed
      */
-    public static function getByIdEstado($IdTabla)
+    public static function getByIdEstado($IdEstadoTabla)
     {
         // Consulta de la gen_tabla
-        $consulta = "SELECT TAB_IdEstadoTabla
+        $consulta = "SELECT TAB_IdTabla, TAB_Nombre_Tabla, TAB_NombreMostrar
                     FROM gen_tabla
-                    WHERE IdTabla = ?";
+                    WHERE TAB_IdEstadoTabla = ?";
 
         try {
             // Preparar sentencia
             $comando = Database::getInstance()->getDb()->prepare($consulta);
             // Ejecutar sentencia preparada
-            $comando->execute(array($IdTabla));
-            // Capturar primera fila del resultado
-            $row = $comando->fetch(PDO::FETCH_ASSOC);
-            return $row;
+            $comando->execute(array($IdEstadoTabla));
+
+            // Muestra todos los rows
+            return $comando->fetchAll(PDO::FETCH_ASSOC);
 
         } catch (PDOException $e) {
             // Aquí puedes clasificar el error dependiendo de la excepción
