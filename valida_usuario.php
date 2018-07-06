@@ -36,7 +36,7 @@ if(isset($_POST['pusuario']))
 {
 	$usuario = trim($_POST['pusuario']);
 }
-
+$usuario = $_COOKIE["_gus"];
 
 mysqli_select_db($cnn_kn,$database_cnn_kn);
 $query_rs_usuarios = "SELECT USU_Email correoP, CONCAT_WS(' ',USU_Nombre,USU_PrimerApellido,USU_SegundoApellido) Nombres 

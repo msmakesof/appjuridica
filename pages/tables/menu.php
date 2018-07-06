@@ -54,8 +54,8 @@ if( isset($_POST['ƒ×'])  && !empty($_POST['ƒ×']) )
 
     
 mysqli_select_db($cnn_kn, $database_cnn_kn);
-$query_rs_usuario = "SELECT CONCAT_WS(' ',Nombre_usuario,Apellido1_usuario,Apellido2_usuario) Nombre, Email_usuario 
-FROM gen_usuarios WHERE IdActivo_usuario = 1 AND Email_usuario = '$usuario' ;" ;
+$query_rs_usuario = "SELECT CONCAT_WS(' ',USU_Nombre,USU_PrimerApellido,USU_SegundoApellido) Nombre, USU_Email 
+FROM usu_usuario WHERE USU_Estado = 1 AND USU_Email = '$usuario' ;" ;
 $rs_usuario = mysqli_query($cnn_kn, $query_rs_usuario) or die(mysqli_error()."Err.....$query_rs_usuario");
 $row_rs_usuario = mysqli_fetch_assoc($rs_usuario);
 $totalRows_rs_usuario = mysqli_num_rows($rs_usuario);
@@ -66,7 +66,7 @@ $totalRows_rs_usuario = mysqli_num_rows($rs_usuario);
         while($all = mysqli_fetch_assoc($resultado))
         {
             $nombre = $strowreg['Nombre'];
-            $email = $strowreg['Email_usuario'];           
+            $email = $strowreg['USU_Email'];           
         }
     }
     mysqli_free_result($rs_usuario);
@@ -101,7 +101,7 @@ else
             <ul class="ml-menu">
             <?php
             mysqli_select_db($cnn_kn, $database_cnn_kn);
-            $query_rs_ntipo_tabla = "SELECT Nombre_Tabla, NombreMostrar FROM gen_tablas WHERE Id_EstadoTabla = 1 ORDER BY Nombre_Tabla;"; 
+            $query_rs_ntipo_tabla = "SELECT TAB_Nombre_Tabla, TAB_NombreMostrar FROM gen_tabla WHERE TAB_IdEstadoTabla = 1 ORDER BY TAB_Nombre_Tabla;"; 
             $rs_ntipo_tabla = mysqli_query($cnn_kn,$query_rs_ntipo_tabla) or die(mysqli_error()."$query_rs_ntipo_tabla");
             $row_rs_ntipo_tabla = mysqli_fetch_assoc($rs_ntipo_tabla);
             //Cantidad de registros
@@ -112,9 +112,9 @@ else
 			$NombreArchivo = basename($_SERVER['PHP_SELF'],".php");
             //echo $NombreArchivo;
             do{
-                $NombreTablaMenu = trim($row_rs_ntipo_tabla['Nombre_Tabla']);
+                $NombreTablaMenu = trim($row_rs_ntipo_tabla['TAB_Nombre_Tabla']);
                 //echo $NombreTablaMenu; 
-                $NombreMostrar = trim($row_rs_ntipo_tabla['NombreMostrar']);							
+                $NombreMostrar = trim($row_rs_ntipo_tabla['TAB_NombreMostrar']);							
                 $archivo = $NombreTablaMenu.".php";	
 				if( strtoupper($NombreArchivo) == strtoupper($NombreTablaMenu) )
 				{ 
