@@ -8,7 +8,7 @@ if (!function_exists("GetSQLValueString")) {
 		$theValue = get_magic_quotes_gpc() ? stripslashes($theValue) : $theValue;
 	  }
 	
-	  $theValue = function_exists("mysql_real_escape_string") ? mysql_real_escape_string($theValue) : mysql_escape_string($theValue);
+	  $theValue = function_exists("mysql_real_escape_string") ? mysqli_real_escape_string($theValue) : mysqli_escape_string($theValue);
 	
 	  switch ($theType) {
 		case "text":
@@ -43,7 +43,8 @@ $rs_keyED = mysqli_query($cnn_kn, $query_rs_keyED) or die(mysqli_error()."Err...
 $row_rs_keyED = mysqli_fetch_assoc($rs_keyED);
 $totalRows_rs_keyED = mysqli_num_rows($rs_keyED);
 
-if ($resultado = mysqli_query($cnn_kn, $query_rs_keyED)) {
+if ($resultado = mysqli_query($cnn_kn, $query_rs_keyED)) 
+{
 	while($strowreg = mysqli_fetch_assoc($resultado))
 	{ 
 		$secret_key = trim($strowreg["CON_LlaveInicial"]);
@@ -74,11 +75,13 @@ function encryptor($action, $string) {
 		$iv = substr(hash($GLOBALS['tipo_hash'], $GLOBALS['secret_iv']), 0, 16);		
 
     //do the encyption given text/string/number
-    if( $action == 'encrypt' ) {
+		if( $action == 'encrypt' ) 
+		{
         $output = openssl_encrypt($string, $GLOBALS['encrypt_method'], $key, 0, $iv);
         $output = base64_encode($output);
     }
-    else if( $action == 'decrypt' ){
+		else if( $action == 'decrypt' )
+		{
     	//decrypt the given text/string/number
         $output = openssl_decrypt(base64_decode($string), $GLOBALS['encrypt_method'], $key, 0, $iv);
     }

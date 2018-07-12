@@ -1,4 +1,11 @@
-﻿<?php require_once('../../Connections/cnn_kn.php'); ?>
+﻿<?php 
+require_once('../../Connections/cnn_kn.php'); 
+require_once('../../Connections/config2.php');
+if(!isset($_SESSION)) 
+{ 
+    session_start(); 
+} 
+?>
 <?php
 if (!function_exists("GetSQLValueString")) {
 function GetSQLValueString($theValue, $theType, $theDefinedValue = "", $theNotDefinedValue = "") 
@@ -32,18 +39,60 @@ function GetSQLValueString($theValue, $theType, $theDefinedValue = "", $theNotDe
 }
 $NombreTabla ="USUARIOS";
 
-mysqli_select_db($cnn_kn, $database_cnn_kn);
-$query_rs_tdusuarios = "SELECT IdTipoDocumento, NombreTipoDocumento, Estado FROM tipodocumento ORDER BY NombreTipoDocumento ;" ;
-$rs_tdusuarios = mysqli_query($cnn_kn, $query_rs_tdusuarios) or die(mysqli_error()."Err.....$query_rs_tdusuarios<br>");
-$row_rs_tdusuarios = mysqli_fetch_assoc($rs_tdusuarios);
-$totalRows_rs_tdusuarios = mysqli_num_rows($rs_tdusuarios);
+// mysqli_select_db($cnn_kn, $database_cnn_kn);
+// $query_rs_sucusuarios = "SELECT IdSucursal, NombreSucursal, EstadoSucursal FROM sucursal ORDER BY NombreSucursal ;" ;
+// $rs_sucusuarios = mysqli_query($cnn_kn, $query_rs_sucusuarios) or die(mysqli_error()."Err.....$query_rs_sucusuarios<br>");
+// $row_rs_sucusuarios = mysqli_fetch_assoc($rs_sucusuarios);
+// $totalRows_rs_sucusuarios = mysqli_num_rows($rs_sucusuarios);
 
 
-mysqli_select_db($cnn_kn, $database_cnn_kn);
-$query_rs_sucusuarios = "SELECT IdSucursal, NombreSucursal, EstadoSucursal FROM sucursal ORDER BY NombreSucursal ;" ;
-$rs_sucusuarios = mysqli_query($cnn_kn, $query_rs_sucusuarios) or die(mysqli_error()."Err.....$query_rs_sucusuarios<br>");
-$row_rs_sucusuarios = mysqli_fetch_assoc($rs_sucusuarios);
-$totalRows_rs_sucusuarios = mysqli_num_rows($rs_sucusuarios);
+require_once('../../Connections/DataConex.php');    
+            $soportecURL = "S";
+            $url         = urlServicios."consultadetalle/consultadetalle_gen_tipodocumento.php?IdEstado=1";
+            $existe      = "";
+            $usulocal    = "";
+            $siguex      = "";
+            //echo("<script>console.log('PHP: ".$url."');</script>");
+            if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
+            {
+                $ch = curl_init();
+                curl_setopt($ch, CURLOPT_VERBOSE, true);
+                curl_setopt($ch, CURLOPT_URL, $url);
+                curl_setopt($ch, CURLOPT_TIMEOUT, 30);
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+                curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
+                curl_setopt($ch, CURLOPT_POST, 0);
+                $resultado = curl_exec ($ch);
+                curl_close($ch);
+
+                $m =  preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $resultado);    
+                $m = json_decode($m, true);
+                //echo("<script>console.log('PHP: ".print_r($m)."');</script>");
+                //echo("<script>console.log('PHP: ".count($m['gen_tabla'])."');</script>");
+                
+                $json_errors = array(
+                    JSON_ERROR_NONE => 'No se ha producido ningún error',
+                    JSON_ERROR_DEPTH => 'Maxima profundidad de pila ha sido excedida',
+                    JSON_ERROR_CTRL_CHAR => 'Error de carácter de control, posiblemente codificado incorrectamente',
+                    JSON_ERROR_SYNTAX => 'Error de Sintaxis',
+                    );
+                //echo "Error : ", $json_errors[json_last_error()], PHP_EOL, PHP_EOL."<br>";        
+            }
+            else
+            {
+                $soportecURL = "N";
+                echo "No hay soporte para cURL";
+            } 
+
+            if($soportecURL == "N")
+            {
+                require_once('./unirest/vendor/autoload.php');
+                $response = Unirest\Request::get($url, array("X-Mashape-Key" => "MY SECRET KEY"));
+                $resultado = $response->raw_body;
+                $resultado = preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $resultado);
+                $m = json_decode($resultado, true);	        
+            }  
 
 ?>
 <!DOCTYPE html>
@@ -292,17 +341,26 @@ $totalRows_rs_sucusuarios = mysqli_num_rows($rs_sucusuarios);
                                             <select class="form-control show-tick" data-live-search="true" name="tipodocumento" id="tipodocumento" required>
                                              <option value="" >Seleccione Opción...</option>
                                                 <?php                                                 
-                                                    do                                                 
-                                                    {           
-                                                        $IdTipoDocumento = $row_rs_tdusuarios["IdTipoDocumento"];
-                                                        $NombreTipoDocumento = $row_rs_tdusuarios["NombreTipoDocumento"];
-                                                        $Estado = $row_rs_tdusuarios["Estado"];                                                     
+                                                    // do                                                 
+                                                    // {           
+                                                    //     $IdTipoDocumento = $row_rs_tdusuarios["IdTipoDocumento"];
+                                                    //     $NombreTipoDocumento = $row_rs_tdusuarios["NombreTipoDocumento"];
+                                                    //     $Estado = $row_rs_tdusuarios["Estado"];
+
+                                                    for($i=0; $i<count($m['gen_tipodocumento']); $i++)
+                                                    {
+                                                        $TDO_IdTipoDocumento = $m['gen_tipodocumento'][$i]['TDO_IdTipoDocumento'];
+                                                        $TDO_Abreviatura = $m['gen_tipodocumento'][$i]['TDO_Abreviatura'];
+                                                        $TDO_Nombre = $m['gen_tipodocumento'][$i]['TDO_Nombre'];
+                                                        $TDO_Estado = $m['gen_tipodocumento'][$i]['TDO_Estado'];
+
                                                 ?>
-                                                <option value="<?php echo $IdTipoDocumento; ?>" >
-                                                    <?php echo $NombreTipoDocumento ; ?>                                                
+                                                <option value="<?php echo $TDO_IdTipoDocumento; ?>" >
+                                                    <?php echo $TDO_Nombre ; ?>                                                
                                                 </option>
-                                                <?php                    
-                                                    } while($row_rs_tdusuarios = mysqli_fetch_assoc($rs_tdusuarios));
+                                                <?php
+                                                    }                    
+                                                    // } while($row_rs_tdusuarios = mysqli_fetch_assoc($rs_tdusuarios));
                                                 ?>
                                             </select>
                                         </div>
@@ -311,7 +369,7 @@ $totalRows_rs_sucusuarios = mysqli_num_rows($rs_sucusuarios);
 
                                     <div class="form-group form-float"> -->
                                     <div style="float: left;"> 
-                                        <label class="form-label">Número Documento..</label>
+                                        <label class="form-label">N&uacute;mero Documento..</label>
                                         <div class="form-line">
                                            <input type="text" class="form-control" name="numerodocumento" id="numerodocumento" value="" maxlength="13" required>
                                         </div>
@@ -341,7 +399,7 @@ $totalRows_rs_sucusuarios = mysqli_num_rows($rs_sucusuarios);
                                     </div>
                                 </div>
                                 <div class="form-group form-float">
-                                    <label class="form-label">Dirección</label>
+                                    <label class="form-label">Direcci&oacute;n</label>
                                     <div class="form-line">
                                         <input type="text" class="form-control" name="direccion" id="direccion" value="" maxlength="50" required>
                                        <!-- -->
@@ -371,29 +429,30 @@ $totalRows_rs_sucusuarios = mysqli_num_rows($rs_sucusuarios);
                                 </div>
                                 -->
 
-                                <div class="form-group form-float">
+                                <!-- <div class="form-group form-float">
                                     <label class="form-label">Sede</label>
                                     <div class="col-sm-4">
                                         <select class="form-control show-tick" data-live-search="true" name="sucursal" id="sucursal" required>
                                             <option value="">-- Seleccione Sede --</option>
                                             <?php                                                 
-                                                do                                                 
-                                                {           
-                                                    $idSucursal = $row_rs_sucusuarios["IdSucursal"];
-                                                    $NombreSucursal = $row_rs_sucusuarios["NombreSucursal"];
-                                                    $EstadoSucursal = $row_rs_sucusuarios["EstadoSucursal"];
+                                                //do                                                 
+                                                //{           
+                                                //    $idSucursal = $row_rs_sucusuarios["IdSucursal"];
+                                                //    $NombreSucursal = $row_rs_sucusuarios["NombreSucursal"];
+                                                //    $EstadoSucursal = $row_rs_sucusuarios["EstadoSucursal"];
                                             ?>
-                                            <option value="<?php echo $idSucursal; ?>" >
-                                                <?php echo $NombreSucursal; ?>                                                
+                                            <option value="<?php //echo $idSucursal; ?>" >
+                                                <?php //echo $NombreSucursal; ?>                                                
                                             </option>
                                             <?php                    
-                                                } while($row_rs_sucusuarios = mysqli_fetch_assoc($rs_sucusuarios));
+                                                //} while($row_rs_sucusuarios = mysqli_fetch_assoc($rs_sucusuarios));
                                             ?>
                                         </select>
                                     </div>   
-                                </div>                              
+                                </div>                               -->
                                 
-                                <div class="form-group">
+                                <div class="form-group form-float">
+                                    <label class="form-label">Estado</label>
                                     <input type="radio" name="estado" id="activo" class="with-gap" value="1">
                                     <label for="activo">Activo</label>
 
@@ -440,7 +499,3 @@ $totalRows_rs_sucusuarios = mysqli_num_rows($rs_sucusuarios);
 </body>
 
 </html>
-<?php 
-mysqli_free_result($rs_tdusuarios);
-mysqli_free_result($rs_sucusuarios);
-?>

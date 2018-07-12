@@ -1,56 +1,56 @@
 <?php
 /**
- * Obtiene el detalle de una Tabla especificada por
- * su identificador "$ITabla"
+ * Obtiene el detalle de un Tipo Documento especificada por
+ * su identificador "$IdTipoDocumento"
  */
 header('Access-Control-Allow-Origin: *');
-require '../estructura/gen_tabla.php';
+require '../estructura/gen_tipodocumento.php';
 
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 
-    if (isset($_GET['IdTabla'])) {
+    if (isset($_GET['IdTipoDocumento'])) {
 
-        // Obtener parámetro IdTabla
-        $parametro = $_GET['IdTabla'];
+        // Obtener parámetro IdTipoDocumento
+        $parametro = $_GET['IdTipoDocumento'];
 
         // Tratar retorno
-        $retorno = GEN_TABLA::getById($parametro);
+        $retorno = GEN_TIPODOCUMENTO::getById($parametro);
 
         if ($retorno) {
-            $gen_tabla["estado"] = "1";
-            $gen_tabla["gen_tabla"] = $retorno;
+            $gen_tipodocumento["estado"] = "1";
+            $gen_tipodocumento["gen_tipodocumento"] = $retorno;
             // Enviar objeto json de la meta
             header('Content-Type: application/json');
-            echo json_encode($gen_tabla);
+            echo json_encode($gen_tipodocumento);
         } else {
             // Enviar respuesta de error general
             print json_encode(
                 array(
                     'estado' => '2',
-                    'mensaje' => 'No se obtuvo el registro'
+                    'mensaje' => 'No se obtuvo el registro en tipo documento'
                 )
             );
         }
     }
-    elseif (isset($_GET['IdEstadoTabla'])) {
-        // Obtener parámetro idEstado de gen_tabla
-        $parametro = $_GET['IdEstadoTabla'];
+    elseif (isset($_GET['IdEstado'])) {
+        // Obtener parámetro idEstado de gen_tipodocumento
+        $parametro = $_GET['IdEstado'];
 
         // Tratar retorno
-        $retorno = GEN_TABLA::getByIdEstado($parametro);
+        $retorno = GEN_TIPODOCUMENTO::getByIdEstado($parametro);
 
         if ($retorno) {
-            $gen_tabla["estado"] = "1";
-            $gen_tabla["gen_tabla"] = $retorno;
-            // Enviar objeto json de la gen_tabla
+            $gen_tipodocumento["estado"] = "1";
+            $gen_tipodocumento["gen_tipodocumento"] = $retorno;
+            // Enviar objeto json de la gen_tipodocumento
             header('Content-Type: application/json');
-            echo json_encode($gen_tabla);
+            echo json_encode($gen_tipodocumento);
         } else {
             // Enviar respuesta de error general
             print json_encode(
                 array(
                     'estado' => '2',
-                    'mensaje' => 'No se obtuvo el registro'
+                    'mensaje' => 'No se obtuvo el registro en Tipo Documento'
                 )
             );
         }

@@ -1,6 +1,10 @@
 <?php 
 include('../Connections/cnn_kn.php'); 
 //include('../Connections/config2.php'); 
+if(!isset($_SESSION)) 
+{ 
+    session_start(); 
+} 
 ?>
 <?php
 if (!function_exists("GetSQLValueString")) {
@@ -43,34 +47,34 @@ else
     $clave ="";
  }
 
-$nombre = "";
-$email  = "";
-if( isset($_POST['ƒ×'])  && !empty($_POST['ƒ×']) )
-{    
-    $usuario = trim($_POST['ƒ×']);
+// $nombre = "";
+// $email  = "";
+// if( isset($_POST['ƒ×'])  && !empty($_POST['ƒ×']) )
+// {    
+//     $usuario = trim($_POST['ƒ×']);
    
-mysqli_select_db($cnn_kn, $database_cnn_kn);
-$query_rs_usuario = "SELECT USU_Email AS Email_usuario, CONCAT_WS(' ',USU_Nombre,USU_PrimerApellido,USU_SegundoApellido) Nombre 
-FROM usu_usuario WHERE USU_Email = '$usuario' AND USU_Estado = 1 ;" ;
-$rs_usuario = mysqli_query($cnn_kn, $query_rs_usuario) or die(mysqli_error()."Err.....$query_rs_usuario");
-$row_rs_usuario = mysqli_fetch_assoc($rs_usuario);
-$totalRows_rs_usuario = mysqli_num_rows($rs_usuario);
-    $y = "";
+// mysqli_select_db($cnn_kn, $database_cnn_kn);
+// $query_rs_usuario = "SELECT USU_Email AS Email_usuario, CONCAT_WS(' ',USU_Nombre,USU_PrimerApellido,USU_SegundoApellido) Nombre 
+// FROM usu_usuario WHERE USU_Email = '$usuario' AND USU_Estado = 1 ;" ;
+// $rs_usuario = mysqli_query($cnn_kn, $query_rs_usuario) or die(mysqli_error()."Err.....$query_rs_usuario");
+// $row_rs_usuario = mysqli_fetch_assoc($rs_usuario);
+// $totalRows_rs_usuario = mysqli_num_rows($rs_usuario);
+//     $y = "";
     
-    if ($resultado = mysqli_query($cnn_kn, $query_rs_usuario)) 
-    {
-        while($all = mysqli_fetch_assoc($resultado))
-        {
-            $nombre = $strowreg['Nombre'];
-            $email = $strowreg['Email_usuario'];           
-        }
-    }
-    mysqli_free_result($rs_usuario);
-}
-else
-{
-    $usuario ="";
-}
+//     if ($resultado = mysqli_query($cnn_kn, $query_rs_usuario)) 
+//     {
+//         while($all = mysqli_fetch_assoc($resultado))
+//         {
+//             $nombre = $strowreg['Nombre'];
+//             $email = $strowreg['Email_usuario'];           
+//         }
+//     }
+//     mysqli_free_result($rs_usuario);
+// }
+// else
+// {
+//     $usuario ="";
+// }
 
 
 ?>   
@@ -87,14 +91,14 @@ else
         <li>
             <a href="javascript:void(0);">
                 <i class="material-icons">text_fields</i>
-                <span>Módulo Usuarios</span>
+                <span>M&oacute;dulo Usuarios</span>
             </a>
         </li>                   
 
         <li class="active">
             <a href="javascript:void(0);" class="menu-toggle">
                 <i class="material-icons">view_list</i>
-                <span>Módulo de Administración</span>
+                <span>M&oacute;dulo de Administraci&oacute;n</span>
             </a>
             <ul class="ml-menu">
             <?php
@@ -105,6 +109,7 @@ else
             $existe      = "";
             $usulocal    = "";
             $siguex      = "";
+            //echo("<script>console.log('PHP: ".$url."');</script>");
             if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
             {
                 $ch = curl_init();
@@ -120,7 +125,9 @@ else
 
                 $m =  preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $resultado);    
                 $m = json_decode($m, true);
-
+                //echo("<script>console.log('PHP: ".print_r($m)."');</script>");
+                //echo("<script>console.log('PHP: ".count($m['gen_tabla'])."');</script>");
+                
                 $json_errors = array(
                     JSON_ERROR_NONE => 'No se ha producido ningún error',
                     JSON_ERROR_DEPTH => 'Maxima profundidad de pila ha sido excedida',
@@ -147,13 +154,14 @@ else
             $nombre_Tabla = "";
             $clase = "";
             $NombreArchivo = basename($_SERVER['PHP_SELF'],".php");
-            for($i=0; $i<=count($m); $i++)
+            for($i=0; $i<count($m['gen_tabla']); $i++)
             {
                 $TAB_IdTabla = $m['gen_tabla'][$i]['TAB_IdTabla'];
                 $TAB_Nombre_Tabla = $m['gen_tabla'][$i]['TAB_Nombre_Tabla'];
                 $TAB_NombreMostrar = trim($m['gen_tabla'][$i]['TAB_NombreMostrar']);
                 
                 $archivo = "../pages/tables/".$TAB_Nombre_Tabla.".php";
+               //echo("<script>console.log('PHP: ".$archivo."');</script>");
                 if( strtoupper($NombreArchivo) == strtoupper($TAB_Nombre_Tabla) )
                 { 
                     $clase = "class='active'"; 

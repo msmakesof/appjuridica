@@ -1,6 +1,10 @@
 ﻿<?php 
 require_once('../../Connections/cnn_kn.php'); 
-require_once('../../Connections/config2.php'); 
+require_once('../../Connections/config2.php');
+if(!isset($_SESSION)) 
+{ 
+    session_start(); 
+} 
 ?>
 <?php
 if (!function_exists("GetSQLValueString")) {
@@ -33,7 +37,7 @@ function GetSQLValueString($theValue, $theType, $theDefinedValue = "", $theNotDe
   return $theValue;
 }
 }
-$empresa = "MovilWeb";
+$empresa = "AppJuridica";
 if( isset($_POST['ƒ¤']) && !empty($_POST['ƒ¤']) )
 {    
     $clave = trim($_POST['ƒ¤']);
@@ -45,32 +49,32 @@ else
 $nombre_lnk = "usuarios";
 $nombre = "";
 $email  = "";
-if( isset($_POST['ƒ×'])  && !empty($_POST['ƒ×']) )
-{    
-    $usuario = trim($_POST['ƒ×']);
+// if( isset($_POST['ƒ×'])  && !empty($_POST['ƒ×']) )
+// {    
+//     $usuario = trim($_POST['ƒ×']);
 	
-mysqli_select_db($cnn_kn, $database_cnn_kn);
-$query_rs_usuario = "SELECT CONCAT_WS(' ',USU_Nombre,USU_PrimerApellido,USU_SegundoApellido) Nombre, USU_Email 
-FROM usu_usuario WHERE USU_Estado = 1 AND USU_Email = '$usuario' ;" ;
-$rs_usuario = mysqli_query($cnn_kn, $query_rs_usuario) or die(mysqli_error()."Err.....$query_rs_usuario");
-$row_rs_usuario = mysqli_fetch_assoc($rs_usuario);
-$totalRows_rs_usuario = mysqli_num_rows($rs_usuario);
-	$y = "";
+// mysqli_select_db($cnn_kn, $database_cnn_kn);
+// $query_rs_usuario = "SELECT CONCAT_WS(' ',USU_Nombre,USU_PrimerApellido,USU_SegundoApellido) Nombre, USU_Email 
+// FROM usu_usuario WHERE USU_Estado = 1 AND USU_Email = '$usuario' ;" ;
+// $rs_usuario = mysqli_query($cnn_kn, $query_rs_usuario) or die(mysqli_error()."Err.....$query_rs_usuario");
+// $row_rs_usuario = mysqli_fetch_assoc($rs_usuario);
+// $totalRows_rs_usuario = mysqli_num_rows($rs_usuario);
+// 	$y = "";
 	
-	if ($resultado = mysqli_query($cnn_kn, $query_rs_usuario)) 
-	{
-		while($all = mysqli_fetch_assoc($resultado))
-		{
-			$nombre = $strowreg['Nombre'];
-			$email = $strowreg['USU_Email'];           
-		}
-	}
-	mysqli_free_result($rs_usuario);
-}
-else
-{
-    $usuario ="";
-}
+// 	if ($resultado = mysqli_query($cnn_kn, $query_rs_usuario)) 
+// 	{
+// 		while($all = mysqli_fetch_assoc($resultado))
+// 		{
+// 			$nombre = $strowreg['Nombre'];
+// 			$email = $strowreg['USU_Email'];           
+// 		}
+// 	}
+// 	mysqli_free_result($rs_usuario);
+// }
+// else
+// {
+//     $usuario ="";
+// }
 ?>
 <!DOCTYPE html>
 <html>
@@ -168,7 +172,7 @@ else
                     <img src="../../images/user.png" width="48" height="48" alt="User" />
                 </div>
                 <div class="info-container">
-					<div class="name" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+					<!-- <div class="name" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <script type="text/javascript">
                         var jsNombre = "";
                         $(document).ready(function(){
@@ -182,10 +186,10 @@ else
                         });                    
                         </script>
                         <span id="xNom"></span>                   
-                    </div>
+                    </div> -->
 
 
-                    <div class="email">
+                    <!-- <div class="email">
                         <script type="text/javascript">
                         var jsEmail = "";
                         $(document).ready(function(){
@@ -199,6 +203,14 @@ else
                         });                     
                         </script>
                         <span id="xMail"></span>
+                    </div> -->
+
+                    <div class="name" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">                        
+                        <span id="xNom"><?php echo $_SESSION['NombreUsuario']; ?></span>                   
+                    </div>
+
+                    <div class="email">                       
+                        <span id="xMail"><?php echo $_SESSION['EmailUsuario']; ?></span>
                     </div>
 
 
@@ -404,7 +416,7 @@ mysqli_free_result($rs_tipo_tabla);
     	});
 
     	$("#cerrarModalC").click(function(){
-    	 	 window.location="usuarios.php";
+    	 	 window.location="usu_usuario.php";
     	});
     });     
 

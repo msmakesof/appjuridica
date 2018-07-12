@@ -3,37 +3,40 @@
 //require('../../Connections/config2.php'); 
 ?>
 <?php
-if (!function_exists("GetSQLValueString")) {
-function GetSQLValueString($theValue, $theType, $theDefinedValue = "", $theNotDefinedValue = "") 
+if (!function_exists("GetSQLValueString")) 
 {
-  if (PHP_VERSION < 6) {
-    $theValue = get_magic_quotes_gpc() ? stripslashes($theValue) : $theValue;
-  }
+    function GetSQLValueString($theValue, $theType, $theDefinedValue = "", $theNotDefinedValue = "") 
+    {
+        if (PHP_VERSION < 6) 
+        {
+            $theValue = get_magic_quotes_gpc() ? stripslashes($theValue) : $theValue;
+        }
 
-  $theValue = function_exists("mysqli_real_escape_string") ? mysqli_real_escape_string($theValue) : mysqli_escape_string($theValue);
+        $theValue = function_exists("mysqli_real_escape_string") ? mysqli_real_escape_string($theValue) : mysqli_escape_string($theValue);
 
-  switch ($theType) {
-    case "text":
-      $theValue = ($theValue != "") ? "'" . $theValue . "'" : "NULL";
-      break;    
-    case "long":
-    case "int":
-      $theValue = ($theValue != "") ? intval($theValue) : "NULL";
-      break;
-    case "double":
-      $theValue = ($theValue != "") ? doubleval($theValue) : "NULL";
-      break;
-    case "date":
-      $theValue = ($theValue != "") ? "'" . $theValue . "'" : "NULL";
-      break;
-    case "defined":
-      $theValue = ($theValue != "") ? $theDefinedValue : $theNotDefinedValue;
-      break;
-  }
-  return $theValue;
+        switch ($theType) 
+        {
+            case "text":
+            $theValue = ($theValue != "") ? "'" . $theValue . "'" : "NULL";
+            break;    
+            case "long":
+            case "int":
+            $theValue = ($theValue != "") ? intval($theValue) : "NULL";
+            break;
+            case "double":
+            $theValue = ($theValue != "") ? doubleval($theValue) : "NULL";
+            break;
+            case "date":
+            $theValue = ($theValue != "") ? "'" . $theValue . "'" : "NULL";
+            break;
+            case "defined":
+            $theValue = ($theValue != "") ? $theDefinedValue : $theNotDefinedValue;
+            break;
+        }
+        return $theValue;
+    }
 }
-}
-$empresa = "MovilWeb";
+$empresa = "AppJuridica";
 if( isset($_POST['ƒ¤']) && !empty($_POST['ƒ¤']) )
 {    
     $clave = trim($_POST['ƒ¤']);
@@ -41,24 +44,21 @@ if( isset($_POST['ƒ¤']) && !empty($_POST['ƒ¤']) )
 else
 {
     $clave ="";
- }
+}
 
 $nombre = "";
 $email  = "";
+
 if( isset($_POST['ƒ×'])  && !empty($_POST['ƒ×']) )
 {    
     $usuario = trim($_POST['ƒ×']);
-
-
-
-
     
-mysqli_select_db($cnn_kn, $database_cnn_kn);
-$query_rs_usuario = "SELECT CONCAT_WS(' ',USU_Nombre,USU_PrimerApellido,USU_SegundoApellido) Nombre, USU_Email 
-FROM usu_usuario WHERE USU_Estado = 1 AND USU_Email = '$usuario' ;" ;
-$rs_usuario = mysqli_query($cnn_kn, $query_rs_usuario) or die(mysqli_error()."Err.....$query_rs_usuario");
-$row_rs_usuario = mysqli_fetch_assoc($rs_usuario);
-$totalRows_rs_usuario = mysqli_num_rows($rs_usuario);
+    mysqli_select_db($cnn_kn, $database_cnn_kn);
+    $query_rs_usuario = "SELECT CONCAT_WS(' ',USU_Nombre,USU_PrimerApellido,USU_SegundoApellido) Nombre, USU_Email 
+    FROM usu_usuario WHERE USU_Estado = 1 AND USU_Email = '$usuario' ;" ;
+    $rs_usuario = mysqli_query($cnn_kn, $query_rs_usuario) or die(mysqli_error()."Err.....$query_rs_usuario");
+    $row_rs_usuario = mysqli_fetch_assoc($rs_usuario);
+    $totalRows_rs_usuario = mysqli_num_rows($rs_usuario);
     $y = "";
     
     if ($resultado = mysqli_query($cnn_kn, $query_rs_usuario)) 

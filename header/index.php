@@ -1,9 +1,13 @@
 ﻿<?php
-//session_start();
 include('../Connections/cnn_kn.php'); 
 include('../Connections/config2.php'); 
 //include('../webtrack/signer.php');
 //include('../rutador/config2.php');  falla
+
+if(!isset($_SESSION)) 
+{ 
+    session_start(); 
+} 
 ?>
 <?php
 

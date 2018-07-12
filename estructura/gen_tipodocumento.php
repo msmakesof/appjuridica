@@ -1,26 +1,26 @@
 <?php
 
 /**
- * Representa el la estructura de las $IdUsuario
+ * Representa el la estructura de las $IdTipoDocumento
  * almacenadas en la base de datos
  */
 require '../Connections/database.php';
 
-class GEN_TABLA
+class GEN_TIPODOCUMENTO
 {
     function __construct()
     {
     }
 
     /**
-     * Retorna todas las filas especificadas de la tabla '$IdTabla'
+     * Retorna todas las filas especificadas de la tabla '$IdTipoDocumento'
      *
-     * @param $IdTabla Identificador del registro
+     * @param $IdTipoDocumento Identificador del registro
      * @return array Datos del registro
      */
     public static function getAll()
     {
-        $consulta = "SELECT * FROM gen_tabla ORDER BY TAB_NombreMostrar; ";
+        $consulta = "SELECT * FROM gen_tipodocumento ORDER BY TDO_Nombre; ";
         try {
             // Preparar sentencia
             $comando = Database::getInstance()->getDb()->prepare($consulta);
@@ -38,24 +38,24 @@ class GEN_TABLA
      * Obtiene los campos de una tabla con un identificador
      * determinado
      *
-     * @param $IdTabla Identificador de la $IdTabla
+     * @param $IdTipoDocumento Identificador de la $IdTipoDocumento
      * @return mixed
      */
-    public static function getById($IdTabla)
+    public static function getById($IdTipoDocumento)
     {
         // Consulta de la tabla de tablas
-        $consulta = "SELECT TAB_IdTabla,
-                            TAB_Nombre_Tabla,
-                            TAB_NombreMostrar,
-                            TAB_IdEstadoTabla
-                            FROM gen_tabla
-                            WHERE TAB_IdTabla = ? ORDER BY TAB_NombreMostrar; ";
+        $consulta = "SELECT TDO_IdTipoDocumento,
+                            TDO_Abreviatura,
+                            TDO_Nombre,
+                            TDO_Estado
+                            FROM gen_tipodocumento
+                            WHERE TDO_IdTipoDocumento = ? ORDER BY TDO_Nombre; ";
 
         try {
             // Preparar sentencia
             $comando = Database::getInstance()->getDb()->prepare($consulta);
             // Ejecutar sentencia preparada
-            $comando->execute(array($IdUsuario));
+            $comando->execute(array($IdTipoDocumento));
             // Capturar primera fila del resultado
             $row = $comando->fetch(PDO::FETCH_ASSOC);
             return $row;
@@ -69,24 +69,24 @@ class GEN_TABLA
 
 
     /**
-     * Obtiene los campos de una gen_tabla con un estado Activo
+     * Obtiene los campos de una gen_tipodocumento con un estado Activo
      * determinado
      *
-     * @param $IdEstadoTabla Identificador del estado de la tabla
+     * @param $IdEstado Identificador del estado de la tabla
      * @return mixed
      */
-    public static function getByIdEstado($IdEstadoTabla)
+    public static function getByIdEstado($IdEstado)
     {
-        // Consulta de la gen_tabla
-        $consulta = "SELECT TAB_IdTabla, TAB_Nombre_Tabla, TAB_NombreMostrar
-                    FROM gen_tabla
-                    WHERE TAB_IdEstadoTabla = ? ORDER BY TAB_NombreMostrar; ";
+        // Consulta de la gen_tipodocumento
+        $consulta = "SELECT TDO_IdTipoDocumento, TDO_Abreviatura, TDO_Nombre
+                    FROM gen_tipodocumento
+                    WHERE TDO_Estado = ? ORDER BY TDO_Nombre; ";
 
         try {
             // Preparar sentencia
             $comando = Database::getInstance()->getDb()->prepare($consulta);
             // Ejecutar sentencia preparada
-            $comando->execute(array($IdEstadoTabla));
+            $comando->execute(array($IdEstado));
 
             // Muestra todos los rows
             return $comando->fetchAll(PDO::FETCH_ASSOC);
@@ -100,24 +100,25 @@ class GEN_TABLA
 
 
     /**
-     * Obtiene los campos de una gen_tabla con un estado Activo
-     * determinado
+     * Obtiene los campos de una gen_tipodocumento con un estado Activo
+     * determinado y un total de registros que cumplan la condición del estado
+     * Cuenta la cantidad de registros activos
      *
-     * @param $IdEstadoTabla Identificador de Estado de la tabla
+     * @param $IdEstado Identificador de Estado de la tabla
      * @return mixed
      */
-    public static function getByIdExiste($IdEstadoTabla)
+    public static function getByIdExiste($IdEstado)
     {
-        // Consulta de la gen_tabla
-        $consulta = "SELECT Count(TAB_IdTabla) AS TotalTablas, TAB_Nombre_Tabla, TAB_NombreMostrar, TAB_IdEstadoTabla 
-                    FROM gen_tabla
-                    WHERE TAB_IdEstadoTabla = ? ;";
+        // Consulta de la gen_tipodocumento
+        $consulta = "SELECT Count(TDO_IdTipoDocumento) AS TotalTablas, TDO_Abreviatura, TDO_Nombre, TDO_Estado 
+                    FROM gen_tipodocumento
+                    WHERE TDO_Estado = ? ;";
 
         try {
             // Preparar sentencia
             $comando = Database::getInstance()->getDb()->prepare($consulta);
             // Ejecutar sentencia preparada
-            $comando->execute(array($IdEstadoTabla));
+            $comando->execute(array($IdEstado));
             // Capturar primera fila del resultado
             $row = $comando->fetch(PDO::FETCH_ASSOC);
             return $row;
@@ -134,53 +135,53 @@ class GEN_TABLA
      * Actualiza un registro de la bases de datos basado
      * en los nuevos valores relacionados con un identificador
      *
-     * @param $IdTabla            identificador
-     * @param $Nombre_Tabla        nuevo Nombre Tabla
-     * @param $NombreMostrar       nueva Nombre Tabla a mostrar
-     * @param $IdEstadoTabla       nueva Estado       
+     * @param $IdTipoDocumento     identificador
+     * @param $Abreviatura         nuevo Abreviatura
+     * @param $Nombre              nueva Nombre 
+     * @param $IdEstado            nueva Estado       
      * 
      */
     public static function update(
-        $IdTabla,
-        $Nombre_Tabla,
-        $NombreMostrar,
-        $IdEstadoTabla    
+        $IdTipoDocumento,
+        $Abreviatura,
+        $Nombre,
+        $IdEstado     
     )
     {
         // Creando consulta UPDATE
-        $consulta = "UPDATE gen_tabla" .
-            " SET TAB_Nombre_Tabla=?, TAB_NombreMostrar=?, TAB_IdEstadoTabla=? " .
-            " WHERE TAB_IdTabla=? ;";
+        $consulta = "UPDATE gen_tipodocumento" .
+            " SET TDO_Abreviatura=?, TDO_Nombre=?, TDO_Estado=? " .
+            " WHERE TDO_IdTipoDocumento=? ;";
 
         // Preparar la sentencia
         $cmd = Database::getInstance()->getDb()->prepare($consulta);
 
         // Relacionar y ejecutar la sentencia
-        $cmd->execute(array($Nombre_Tabla, $NombreMostrar, $IdEstadoTabla, $IdTabla ));
+        $cmd->execute(array($Abreviatura, $Nombre, $IdEstado, $IdTipoDocumento ));
 
         return $cmd;
     }
 
     /**
-     * Insertar un nuevo Usuario
+     * Insertar un nuevo Tipo Documento
      *         
-     * @param $IdTabla            identificador
-     * @param $Nombre_Tabla        nuevo Nombre Tabla
-     * @param $NombreMostrar       nueva Nombre Tabla a mostrar
-     * @param $IdEstadoTabla       nueva Estado   
+     * @param $IdTipoDocumento     identificador
+     * @param $Abreviatura         nuevo Abreviatura
+     * @param $Nombre              nueva Nombre 
+     * @param $IdEstado            nueva Estado   
      * @return PDOStatement
      */
     public static function insert(        
-        $Nombre_Tabla,
-        $NombreMostrar,
-        $IdEstadoTabla
+        $Abreviatura,
+        $Nombre,
+        $IdEstado
     )
     {
         // Sentencia INSERT
-        $comando = "INSERT INTO gen_tabla ( " .            
-            " TAB_Nombre_Tabla," .
-            " TAB_NombreMostrar," .
-            " TAB_IdEstadoTabla," . 
+        $comando = "INSERT INTO gen_tipodocumento ( " .            
+            " TDO_Abreviatura," .
+            " TDO_Nombre," .
+            " TDO_Estado," . 
             " )".     
             " VALUES(?,?,?) ;";
 
@@ -189,9 +190,9 @@ class GEN_TABLA
 
         return $sentencia->execute(
             array(                
-                $Nombre_Tabla,
-                $NombreMostrar,
-                $IdEstadoTabla
+                $Abreviatura,
+                $Nombre,
+                $IdEstado
             )
         );
     }
@@ -199,18 +200,18 @@ class GEN_TABLA
     /**
      * Eliminar el registro con el identificador especificado
      *
-     * @param $IdTabla identificador de la gen_tabla
+     * @param $IdTipoDocumento identificador de la gen_tipodocumento
      * @return bool Respuesta de la eliminación
      */
-    public static function delete($IdTabla)
+    public static function delete($IdTipoDocumento)
     {
         // Sentencia DELETE
-        $comando = "DELETE FROM gen_tabla WHERE $IdTabla=? ;";
+        $comando = "DELETE FROM gen_tipodocumento WHERE TDO_IdTipoDocumento = ? ;";
 
         // Preparar la sentencia
         $sentencia = Database::getInstance()->getDb()->prepare($comando);
 
-        return $sentencia->execute(array($IdTabla));
+        return $sentencia->execute(array($IdTipoDocumento));
     }
 }
 
