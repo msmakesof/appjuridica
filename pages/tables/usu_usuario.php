@@ -49,9 +49,10 @@ else
 $nombre_lnk = "usuarios";
 $nombre = "";
 $email  = "";
-// if( isset($_POST['ƒ×'])  && !empty($_POST['ƒ×']) )
-// {    
-//     $usuario = trim($_POST['ƒ×']);
+$usuario ="";
+if( isset($_POST['ƒ×'])  && !empty($_POST['ƒ×']) )
+{    
+     $usuario = trim($_POST['ƒ×']);
 	
 // mysqli_select_db($cnn_kn, $database_cnn_kn);
 // $query_rs_usuario = "SELECT CONCAT_WS(' ',USU_Nombre,USU_PrimerApellido,USU_SegundoApellido) Nombre, USU_Email 
@@ -73,8 +74,8 @@ $email  = "";
 // }
 // else
 // {
-//     $usuario ="";
-// }
+//     
+}
 ?>
 <!DOCTYPE html>
 <html>
@@ -158,8 +159,6 @@ $email  = "";
                 <img src="../../images/logomw.fw.png" style="margin-top: -10px;">
                 </a>
             </div>
-           
-
         </div>
     </nav>
     <!-- #Top Bar -->
@@ -267,7 +266,10 @@ $email  = "";
                                     </a>
                                     <ul class="dropdown-menu pull-right">
                                        <li>
-                                      <a href="javascript:void(0);" onclick="crear('../forms/form-validationBase<?php echo $nombre_lnk ;?>.php')" class="btn btn-warning btn-xs waves-effect" data-toggle="modal" data-target="#defaultModal">Nuevo...</a>
+                                        <a href="javascript:void(0);" onclick="crear('../forms/form-validationBase<?php echo $nombre_lnk ;?>.php')" 
+                                            class="btn btn-warning btn-xs waves-effect" data-toggle="modal" data-target="#defaultModal">
+                                            Nuevo...
+                                        </a>
                                         
                                       <!--  <button type="button" class="btn btn-default waves-effect m-r-20" data-toggle="modal" data-target="#defaultModal">Nuevo</button>-->
                                         </li>                                        
@@ -296,31 +298,62 @@ $email  = "";
                                 <tbody>
 <?php
 
-mysqli_select_db($cnn_kn, $database_cnn_kn);
-// $query_rs_tipo_tabla = "SELECT concat_WS(' ',Nombre_usuario, Apellido1_usuario) AS NombreUsuario, IdUsuario, Email_usuario, 
-// NombreSucursal, CASE EstadoUsuario WHEN 'M' THEN 'Activo' ELSE 'Inactivo' END EstadoUsuario 
-// FROM gen_usuarios 
-// LEFT JOIN sucursal ON sucursal.IdSucursal = gen_usuarios.IdCiudad_usuario 
-// WHERE Nombre_usuario <> '' AND Apellido1_usuario <> '' ORDER BY NombreUsuario ;";
-$query_rs_tipo_tabla = "SELECT concat_WS(' ',USU_Nombre, USU_PrimerApellido) AS NombreUsuario, USU_IdUsuario, USU_Email, 
-'' AS NombreSucursal, CASE USU_Estado WHEN 1 THEN 'Activo' ELSE 'Inactivo' END EstadoUsuario 
-FROM usu_usuario
-WHERE USU_Nombre <> '' AND USU_PrimerApellido <> '' ORDER BY USU_Nombre ;";
-$rs_tipo_tabla = mysqli_query($cnn_kn,$query_rs_tipo_tabla) or die(mysqli_error()."$query_rs_tipo_tabla");
-mysqli_set_charset($cnn_kn,"utf8");
-$row_rs_tipo_tabla = mysqli_fetch_assoc($rs_tipo_tabla);
+require_once('../../Connections/DataConex.php');
+$soportecURL = "S";
+$url         = urlServicios."consultadetalle/consultadetalle_Usuario.php?IdMostrar=0";
+$existe      = "";
+$usulocal    = "";
+$siguex      = "";
+//echo("<script>console.log('PHP: ".$url."');</script>");
+if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
+{
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_VERBOSE, true);
+    curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_TIMEOUT, 30);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
+    curl_setopt($ch, CURLOPT_POST, 0);
+    $resultado = curl_exec ($ch);
+    curl_close($ch);
 
-//Cantidad de registros
-$cantidad_rs_tipo_tabla = mysqli_num_rows($rs_tipo_tabla);
-//echo $query_rs_tipo_tabla;
-$nombre_Tabla="";
-do{
-	$NombreUsuario = trim($row_rs_tipo_tabla['NombreUsuario']);
-	$archivo = $NombreUsuario.".php";
-	$idTabla = $row_rs_tipo_tabla['USU_IdUsuario'];    
-    $Email = trim($row_rs_tipo_tabla['USU_Email']);
-    $NombreSucursal = ""; ///trim($row_rs_tipo_tabla['NombreSucursal']);
-	$EstadoUsuario = trim($row_rs_tipo_tabla['EstadoUsuario']);
+    $mtipouser =  preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $resultado);    
+    $mtipouser = json_decode($mtipouser, true);
+    //echo("<script>console.log('PHP: ".print_r($muser)."');</script>");
+    //echo("<script>console.log('PHP: ".count($m['gen_tabla'])."');</script>");
+    
+    $json_errors = array(
+        JSON_ERROR_NONE => 'No se ha producido ningún error',
+        JSON_ERROR_DEPTH => 'Maxima profundidad de pila ha sido excedida',
+        JSON_ERROR_CTRL_CHAR => 'Error de carácter de control, posiblemente codificado incorrectamente',
+        JSON_ERROR_SYNTAX => 'Error de Sintaxis',
+        );
+    //echo "Error : ", $json_errors[json_last_error()], PHP_EOL, PHP_EOL."<br>";        
+}
+else
+{
+    $soportecURL = "N";
+    echo "No hay soporte para cURL";
+} 
+
+if($soportecURL == "N")
+{
+    require_once('./unirest/vendor/autoload.php');
+    $response = Unirest\Request::get($url, array("X-Mashape-Key" => "MY SECRET KEY"));
+    $resultado = $response->raw_body;
+    $resultado = preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $resultado);
+    $mtipouser = json_decode($resultado, true);	        
+} 
+
+for($i=0; $i<count($mtipouser['usu_usuario']); $i++)
+{
+    $NombreUsuario = trim($mtipouser['usu_usuario'][$i]['NombreUsuario']);
+    $archivo = $NombreUsuario.".php";
+    $idTabla = $mtipouser['usu_usuario'][$i]['USU_IdUsuario'];
+    $Email = trim($mtipouser['usu_usuario'][$i]['USU_Email']);
+    $NombreSucursal = "";
+    $EstadoUsuario = $mtipouser['usu_usuario'][$i]['EstadoUsuario'];
 ?>
     <tr>
         <td>
@@ -349,13 +382,11 @@ do{
 		<td><?php echo $EstadoUsuario; ?></td>
     </tr>
 <?php                          
-} while($row_rs_tipo_tabla = mysqli_fetch_assoc($rs_tipo_tabla)); ?>
+} 
+?>
 
  </tbody>
-</table>
-<?php                                                    
-mysqli_free_result($rs_tipo_tabla); 
-?>                                           
+</table>                                          
                                
                         </div>
                     </div>
@@ -373,8 +404,11 @@ mysqli_free_result($rs_tipo_tabla);
                             <!-- <h4 class="modal-title" id="defaultModalLabel">Crear</h4> -->
                         </div>
                         
-                        <div class="modal-body">                         
-                            <object type="text/html" data="../forms/form-validationBase<?php echo $nombre_lnk ;?>.php" id="crear"></object>
+                        <div class="modal-body" style="padding :0px; position: relative; height: 100%; max-height:100%; bottom:0; overflow: hidden; margin: 0; ">                         
+                            <object class="xmodal-content" 
+                                style="padding :0px; position: relative; height: 85vh; max-height:85vh; bottom:0; overflow: hidden; margin: 0;" 
+                                type="text/html" data="../forms/form-validationBase<?php echo $nombre_lnk ;?>.php" id="crear">
+                            </object>
                         </div>
                         <div class="modal-footer">
                             <!-- <button type="button" class="btn btn-link waves-effect">SAVE CHANGES</button> -->

@@ -20,7 +20,29 @@ class USU_USUARIO
      */
     public static function getAll()
     {
-        $consulta = "SELECT * FROM usu_usuario";
+        $consulta = "SELECT USU_IdUsuario ,
+        USU_TipoDocumento,
+        USU_Identificacion,
+        USU_PrimerApellido,
+        USU_SegundoApellido,
+        USU_Nombre,
+        USU_Email,
+        USU_Celular,
+        USU_Usuario,
+        USU_Clave,
+        USU_TipoUsuario,
+        USU_Estado,
+        USU_FechaCreado,
+        USU_UsuarioCrea,
+        USU_FechaModificado,
+        USU_UsuarioModifica,
+        USU_FechaEstado,
+        USU_UsuarioEstado,
+        USU_IdInterno,
+        USU_Local ,
+        CASE USU_Estado WHEN 1 THEN 'Activo' ELSE 'Inactivo' END EstadoUsuario,
+        concat_WS(' ',USU_Nombre, USU_PrimerApellido, USU_SegundoApellido) AS NombreUsuario 
+        FROM usu_usuario";
         try {
             // Preparar sentencia
             $comando = Database::getInstance()->getDb()->prepare($consulta);
@@ -45,27 +67,27 @@ class USU_USUARIO
     {
         // Consulta de la tabla de usuario
         $consulta = "SELECT USU_IdUsuario,
-                            USU_TipoDocumento,
-                            USU_Identificacion,
-                            USU_PrimerApellido,
-                            USU_SegundoApellido,
-                            USU_Nombre,
-                            USU_Email,
-                            USU_Celular,
-                            USU_Usuario,
-                            USU_Clave,
-                            USU_TipoUsuario,
-                            USU_Estado,
-                            USU_FechaCreado,
-                            USU_UsuarioCrea,
-                            USU_FechaModificado,
-                            USU_UsuarioModifica,
-                            USU_FechaEstado,
-                            USU_UsuarioEstado,
-                            USU_IdInterno,
-                            USU_Local
-                            FROM usu_usuario
-                            WHERE USU_IdUsuario = ?";
+                        USU_TipoDocumento,
+                        USU_Identificacion,
+                        USU_PrimerApellido,
+                        USU_SegundoApellido,
+                        USU_Nombre,
+                        USU_Email,
+                        USU_Celular,
+                        USU_Usuario,
+                        USU_Clave,
+                        USU_TipoUsuario,
+                        USU_Estado,
+                        USU_FechaCreado,
+                        USU_UsuarioCrea,
+                        USU_FechaModificado,
+                        USU_UsuarioModifica,
+                        USU_FechaEstado,
+                        USU_UsuarioEstado,
+                        USU_IdInterno,
+                        USU_Local
+                        FROM usu_usuario
+                        WHERE USU_IdUsuario = ?";
 
         try {
             // Preparar sentencia
@@ -95,8 +117,8 @@ class USU_USUARIO
     {
         // Consulta de la usu_usuario
         $consulta = "SELECT USU_Estado
-                            FROM usu_usuario
-                            WHERE USU_IdUsuario = ?";
+                        FROM usu_usuario
+                        WHERE USU_IdUsuario = ?";
 
         try {
             // Preparar sentencia
@@ -126,9 +148,9 @@ class USU_USUARIO
     public static function getByIdExiste($IdUsuario,$IdClave)
     {
         // Consulta de la usu_usuario
-        $consulta = "SELECT Count(USU_IdUsuario) AS TotalUsuario, Usu_Local, USU_IdUsuario, USU_Local 
-                            FROM usu_usuario
-                            WHERE USU_Usuario = ? AND USU_Clave = ?";
+        $consulta = "SELECT Count(USU_IdUsuario) AS TotalUsuario, Usu_IdInterno, USU_IdUsuario, USU_Local 
+                        FROM usu_usuario
+                        WHERE USU_Usuario = ? AND USU_Clave = ?";
 
         try {
             // Preparar sentencia
@@ -219,6 +241,7 @@ class USU_USUARIO
      * @param $SegundoApellido      nueva categoria
      * @param $Nombre               nueva Nombre
      * @param $Email                nueva Email
+     * @param $Direccion            nueva Direccion
      * @param $Celular              nueva Celular
      * @param $Usuario              nueva Usuario o Login
      * @param $Clave                nueva Clave
@@ -234,27 +257,9 @@ class USU_USUARIO
      * @param $Local                nueva Id Interno Cliente 
      * @return PDOStatement
      */
-    public static function insert(
-        $TipoDocumento,
-        $Identificacion,
-        $PrimerApellido,
-        $SegundoApellido,
-        $Nombre,
-        $Email,
-        $Celular,
-        $Usuario,
-        $Clave,
-        $TipoUsuario,
-        $Estado,
-        $FechaCreado,
-        $UsuarioCrea,
-        $FechaModificado,
-        $UsuarioModifica,
-        $FechaEstado,
-        $UsuarioEstado,
-        $IdInterno,
-        $Local
-    )
+
+    public static function insert( $TipoDocumento, $Identificacion, $PrimerApellido, $SegundoApellido, $Nombre, $Email, $Direccion, $Celular, $Usuario,
+        $Clave, $TipoUsuario,$Estado, $IdInterno, $Local )
     {
         // Sentencia INSERT
         $comando = "INSERT INTO usu_usuario ( " .            
@@ -264,47 +269,26 @@ class USU_USUARIO
             " USU_SegundoApellido," .
             " USU_Nombre," .
             " USU_Email," .
+            " USU_Direccion," .
             " USU_Celular," .
             " USU_Usuario," .
             " USU_Clave," .
             " USU_TipoUsuario," .
-            " USU_Estado," .
-            " USU_FechaCreado," .
-            " USU_UsuarioCrea," .
-            " USU_FechaModificado," .
-            " USU_UsuarioModifica," .
-            " USU_FechaEstado," .
-            " USU_UsuarioEstado," .
-            " USU_IdInterno," .
-            " USU_Local )".     
-            " VALUES( ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-
-        // Preparar la sentencia
-        $sentencia = Database::getInstance()->getDb()->prepare($comando);
-
-        return $sentencia->execute(
-            array(
-                $TipoDocumento,
-                $Identificacion,
-                $PrimerApellido,
-                $SegundoApellido,
-                $Nombre,
-                $Email,
-                $Celular,
-                $Usuario,
-                $Clave,
-                $TipoUsuario,
-                $Estado,
-                $FechaCreado,
-                $UsuarioCrea,
-                $FechaModificado,
-                $UsuarioModifica,
-                $FechaEstado,
-                $UsuarioEstado,
-                $IdInterno,
-                $Local
-            )
-        );
+            " USU_Estado, " .
+            " USU_IdInterno, USU_Local ) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?);";
+        try {
+            // Preparar la sentencia
+            $sentencia = Database::getInstance()->getDb()->prepare($comando);
+            return $sentencia->execute(
+                array($TipoDocumento, $Identificacion,$PrimerApellido, $SegundoApellido, $Nombre,$Email,
+                $Direccion, $Celular, $Usuario,$Clave,$TipoUsuario,$Estado, $IdInterno, $Local )    
+            );
+           
+        } catch (PDOException $e) {
+            // Aquí puedes clasificar el error dependiendo de la excepción
+            // para presentarlo en la respuesta Json
+            return $e;
+        }    
     }
 
     /**
@@ -322,6 +306,28 @@ class USU_USUARIO
         $sentencia = Database::getInstance()->getDb()->prepare($comando);
 
         return $sentencia->execute(array($IdUsuario));
+    }
+
+    public static function existeusuario($Identificacion, $PrimerApellido, $SegundoApellido, $Nombre, $Email)
+    {
+        $consulta = "SELECT count(USU_IdUsuario) existe, USU_Identificacion, USU_PrimerApellido, USU_SegundoApellido, USU_Nombre, USU_Email
+        FROM usu_usuario
+        WHERE USU_Identificacion = ? OR (USU_PrimerApellido = ? AND USU_SegundoApellido = ? AND USU_Nombre = ?) OR USU_Email = ?";
+
+        try {
+        // Preparar sentencia
+        $comando = Database::getInstance()->getDb()->prepare($consulta);
+        // Ejecutar sentencia preparada
+        $comando->execute(array($Identificacion, $PrimerApellido, $SegundoApellido, $Nombre, $Email));
+        // Capturar primera fila del resultado
+        $row = $comando->fetch(PDO::FETCH_ASSOC);
+        return $row;
+
+        } catch (PDOException $e) {
+        // Aquí puedes clasificar el error dependiendo de la excepción
+        // para presentarlo en la respuesta Json
+        return -1;
+        }
     }
 }
 

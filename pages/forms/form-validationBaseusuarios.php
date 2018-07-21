@@ -46,53 +46,102 @@ $NombreTabla ="USUARIOS";
 // $totalRows_rs_sucusuarios = mysqli_num_rows($rs_sucusuarios);
 
 
-require_once('../../Connections/DataConex.php');    
-            $soportecURL = "S";
-            $url         = urlServicios."consultadetalle/consultadetalle_gen_tipodocumento.php?IdEstado=1";
-            $existe      = "";
-            $usulocal    = "";
-            $siguex      = "";
-            //echo("<script>console.log('PHP: ".$url."');</script>");
-            if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
-            {
-                $ch = curl_init();
-                curl_setopt($ch, CURLOPT_VERBOSE, true);
-                curl_setopt($ch, CURLOPT_URL, $url);
-                curl_setopt($ch, CURLOPT_TIMEOUT, 30);
-                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-                curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-                curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
-                curl_setopt($ch, CURLOPT_POST, 0);
-                $resultado = curl_exec ($ch);
-                curl_close($ch);
+require_once('../../Connections/DataConex.php');
 
-                $m =  preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $resultado);    
-                $m = json_decode($m, true);
-                //echo("<script>console.log('PHP: ".print_r($m)."');</script>");
-                //echo("<script>console.log('PHP: ".count($m['gen_tabla'])."');</script>");
-                
-                $json_errors = array(
-                    JSON_ERROR_NONE => 'No se ha producido ningún error',
-                    JSON_ERROR_DEPTH => 'Maxima profundidad de pila ha sido excedida',
-                    JSON_ERROR_CTRL_CHAR => 'Error de carácter de control, posiblemente codificado incorrectamente',
-                    JSON_ERROR_SYNTAX => 'Error de Sintaxis',
-                    );
-                //echo "Error : ", $json_errors[json_last_error()], PHP_EOL, PHP_EOL."<br>";        
-            }
-            else
-            {
-                $soportecURL = "N";
-                echo "No hay soporte para cURL";
-            } 
+$soportecURL = "S";
+$url         = urlServicios."consultadetalle/consultadetalle_gen_tipousuario.php?IdEstado=1";
+$existe      = "";
+$usulocal    = "";
+$siguex      = "";
+//echo("<script>console.log('PHP: ".$url."');</script>");
+if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
+{
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_VERBOSE, true);
+    curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_TIMEOUT, 30);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
+    curl_setopt($ch, CURLOPT_POST, 0);
+    $resultado = curl_exec ($ch);
+    curl_close($ch);
 
-            if($soportecURL == "N")
-            {
-                require_once('./unirest/vendor/autoload.php');
-                $response = Unirest\Request::get($url, array("X-Mashape-Key" => "MY SECRET KEY"));
-                $resultado = $response->raw_body;
-                $resultado = preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $resultado);
-                $m = json_decode($resultado, true);	        
-            }  
+    $mtipouser =  preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $resultado);    
+    $mtipouser = json_decode($mtipouser, true);
+    //echo("<script>console.log('PHP: ".print_r($muser)."');</script>");
+    //echo("<script>console.log('PHP: ".count($m['gen_tabla'])."');</script>");
+    
+    $json_errors = array(
+        JSON_ERROR_NONE => 'No se ha producido ningún error',
+        JSON_ERROR_DEPTH => 'Maxima profundidad de pila ha sido excedida',
+        JSON_ERROR_CTRL_CHAR => 'Error de carácter de control, posiblemente codificado incorrectamente',
+        JSON_ERROR_SYNTAX => 'Error de Sintaxis',
+        );
+    //echo "Error : ", $json_errors[json_last_error()], PHP_EOL, PHP_EOL."<br>";        
+}
+else
+{
+    $soportecURL = "N";
+    echo "No hay soporte para cURL";
+} 
+
+if($soportecURL == "N")
+{
+    require_once('./unirest/vendor/autoload.php');
+    $response = Unirest\Request::get($url, array("X-Mashape-Key" => "MY SECRET KEY"));
+    $resultado = $response->raw_body;
+    $resultado = preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $resultado);
+    $m = json_decode($resultado, true);	        
+}  
+
+
+$soportecURL = "S";
+$url         = urlServicios."consultadetalle/consultadetalle_gen_tipodocumento.php?IdEstado=1";
+$existe      = "";
+$usulocal    = "";
+$siguex      = "";
+//echo("<script>console.log('PHP: ".$url."');</script>");
+if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
+{
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_VERBOSE, true);
+    curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_TIMEOUT, 30);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
+    curl_setopt($ch, CURLOPT_POST, 0);
+    $resultado = curl_exec ($ch);
+    curl_close($ch);
+
+    $m =  preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $resultado);    
+    $m = json_decode($m, true);
+    //echo("<script>console.log('PHP: ".print_r($m)."');</script>");
+    //echo("<script>console.log('PHP: ".count($m['gen_tabla'])."');</script>");
+    
+    $json_errors = array(
+        JSON_ERROR_NONE => 'No se ha producido ningún error',
+        JSON_ERROR_DEPTH => 'Maxima profundidad de pila ha sido excedida',
+        JSON_ERROR_CTRL_CHAR => 'Error de carácter de control, posiblemente codificado incorrectamente',
+        JSON_ERROR_SYNTAX => 'Error de Sintaxis',
+        );
+    //echo "Error : ", $json_errors[json_last_error()], PHP_EOL, PHP_EOL."<br>";        
+}
+else
+{
+    $soportecURL = "N";
+    echo "No hay soporte para cURL";
+} 
+
+if($soportecURL == "N")
+{
+    require_once('./unirest/vendor/autoload.php');
+    $response = Unirest\Request::get($url, array("X-Mashape-Key" => "MY SECRET KEY"));
+    $resultado = $response->raw_body;
+    $resultado = preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $resultado);
+    $m = json_decode($resultado, true);	        
+}  
 
 ?>
 <!DOCTYPE html>
@@ -140,12 +189,11 @@ require_once('../../Connections/DataConex.php');
 
 
 
- <!-- Jquery Core Js -->
+    <!-- Jquery Core Js -->
     <script src="../../plugins/jquery/jquery.min.js"></script>
 
-
-        <!-- Sweet Alert Plugin Js -->
-   <!--  <script src="../../plugins/sweetalert/sweetalert.min.js"></script> -->
+    <!-- Sweet Alert Plugin Js -->
+    <!--  <script src="../../plugins/sweetalert/sweetalert.min.js"></script> -->
     <script src="../../js/sweet/functions.js"></script>
     <script src="../../js/sweet/sweetalert.min.js"></script>
     <script src="../../plugins/sweetalert/sweetalert.min.js"></script>
@@ -236,16 +284,18 @@ require_once('../../Connections/DataConex.php');
             var numerodocumento = $("#numerodocumento").val();
             var nombre = $("#nombre").val();
             var apellido1 = $("#apellido1").val();
+            var apellido2 = $("#apellido2").val();
             var clave = $("#clave").val();            
             var direccion = $("#direccion").val();
             var email = $("#email").val();
             var celular = $("#celular").val();
+            var tipousuario = $("#tipousuario").val();
             //var telefonofijo = $("#telefonofijo").val();
-            var sucursal = $("#sucursal").val();            
+            //var sucursal = $("#sucursal").val();            
             var estado = $('input:radio[name=estado]:checked').val();
             e.preventDefault();
 
-            if( tipodocumento == "" || numerodocumento =="" || nombre == "" || apellido1 == "" || clave =="" || direccion == "" || email == "" || celular == "" || estado == undefined  || sucursal == "" )
+            if( tipodocumento == "" || numerodocumento =="" || nombre == "" || apellido1 == "" || apellido2 == "" || clave =="" || direccion == "" || email == "" || celular == "" || estado == undefined || tipousuario == "" )
             {
                //swal("Atencion:", "Estudiante " + nombre + " !Ya se encuentra registrado(a)...");
                 swal({
@@ -262,30 +312,35 @@ require_once('../../Connections/DataConex.php');
             {                
 
                 $.ajax({
-                    data : {"tipodocumento": tipodocumento, "numerodocumento": numerodocumento, "nombre": nombre, "apellido1": apellido1, "clave": clave, "direccion": direccion, "email": email, "celular": celular, "estado": estado, "sucursal": sucursal}, 
+                    data : {"tipodocumento": tipodocumento, "numerodocumento": numerodocumento, "nombre": nombre, "apellido1": apellido1, "apellido2": apellido2, "clave": clave, "direccion": direccion, "email": email, "celular": celular, "estado": estado, "tipousuario": tipousuario}, 
                     type: "POST",
                     dataType: "html",
                     url : "crea_usuario.php",
                 })  
                 .done(function( data, textStatus, jqXHR){                 
-                    var respstr = data;
+                    var xrespstr = data.trim();
+                    var respstr = xrespstr.substr(0,1);
+                    var msj = xrespstr.substr(2);
                     if(respstr == "E")
-                    { 
-                        swal("Atencion:", "Tabla " + nombre + " !Ya se encuentra registrado(a)...");
-                        
+                    {                         
+                       //swal("Atencion:", "Usuario: " + nombre + " !Ya se encuentra registrado(a)...");
+                       swal("Atencion:", msj);
                     }
                     else
                     {    
                         if( respstr == "S" )
                         {                        
-                            swal("Atencion: ", "Registro grabado Correctamente.", "success");
-                            return false;                            
+                            swal("Atencion: ", msj, "success");
+                            return false;
                             //window.location="../alumnos.php";
-
                         }
                         else
-                        {
-                            swal("Atencion: ", "Registro No ha sido grabado.", "danger");
+                        {                            
+                            swal({
+                                title: "Atencion: ",   
+                                text: msj,   
+                                type: "error" 
+                            });
                             return false;                                 
                         }
                         //$('#form_validation')[0].reset();
@@ -340,27 +395,19 @@ require_once('../../Connections/DataConex.php');
                                         <div class="col-sm-4">                                       
                                             <select class="form-control show-tick" data-live-search="true" name="tipodocumento" id="tipodocumento" required>
                                              <option value="" >Seleccione Opción...</option>
-                                                <?php                                                 
-                                                    // do                                                 
-                                                    // {           
-                                                    //     $IdTipoDocumento = $row_rs_tdusuarios["IdTipoDocumento"];
-                                                    //     $NombreTipoDocumento = $row_rs_tdusuarios["NombreTipoDocumento"];
-                                                    //     $Estado = $row_rs_tdusuarios["Estado"];
-
+                                                <?php
                                                     for($i=0; $i<count($m['gen_tipodocumento']); $i++)
                                                     {
                                                         $TDO_IdTipoDocumento = $m['gen_tipodocumento'][$i]['TDO_IdTipoDocumento'];
                                                         $TDO_Abreviatura = $m['gen_tipodocumento'][$i]['TDO_Abreviatura'];
                                                         $TDO_Nombre = $m['gen_tipodocumento'][$i]['TDO_Nombre'];
-                                                        $TDO_Estado = $m['gen_tipodocumento'][$i]['TDO_Estado'];
-
+                                                        //$TDO_Estado = $m['gen_tipodocumento'][$i]['TDO_Estado'];
                                                 ?>
-                                                <option value="<?php echo $TDO_IdTipoDocumento; ?>" >
-                                                    <?php echo $TDO_Nombre ; ?>                                                
-                                                </option>
+                                                        <option value="<?php echo $TDO_IdTipoDocumento; ?>" >
+                                                            <?php echo $TDO_Nombre ; ?>                                                
+                                                        </option>
                                                 <?php
-                                                    }                    
-                                                    // } while($row_rs_tdusuarios = mysqli_fetch_assoc($rs_tdusuarios));
+                                                    }
                                                 ?>
                                             </select>
                                         </div>
@@ -384,9 +431,17 @@ require_once('../../Connections/DataConex.php');
                                     </div>
                                 </div>
                                 <div class="form-group form-float">
-                                    <label class="form-label">Apellidos</label>
+                                    <label class="form-label">Primer Apellido</label>
                                     <div class="form-line">
                                         <input type="text" class="form-control" name="apellido1" id="apellido1" value="" required>
+                                       <!-- -->
+                                    </div>
+                                </div>
+
+                                <div class="form-group form-float">
+                                    <label class="form-label">Segundo Apellido</label>
+                                    <div class="form-line">
+                                        <input type="text" class="form-control" name="apellido2" id="apellido2" value="" required>
                                        <!-- -->
                                     </div>
                                 </div>
@@ -418,7 +473,32 @@ require_once('../../Connections/DataConex.php');
                                         <input type="text" class="form-control" name="celular" id="celular" value="" maxlength="13" required>
                                        <!---->
                                     </div>
-                                </div>                               
+                                </div> 
+
+                                <div style="form-group form-float">                                     
+                                    <label class="form-label">
+                                        Tipo Usuario
+                                    </label>                                    
+                                    <div class="col-sm-4">                                       
+                                        <select class="form-control show-tick" data-live-search="true" name="tipousuario" id="tipousuario" required>
+                                            <option value="" >Seleccione Opción...</option>
+                                            <?php
+                                                for($i=0; $i<count($mtipouser['gen_tipousuario']); $i++)
+                                                {
+                                                    $TUS_IdTipoDocumento = $mtipouser['gen_tipousuario'][$i]['TUS_ID_TipoUsuario'];                                                    
+                                                    $TUS_Nombre = $mtipouser['gen_tipousuario'][$i]['TUS_Nombre'];
+                                                    $TUS_Estado = $mtipouser['gen_tipousuario'][$i]['TUS_Estado'];
+                                            ?>
+                                                    <option value="<?php echo $TUS_IdTipoDocumento; ?>" >
+                                                        <?php echo $TUS_Nombre ; ?>                                                
+                                                    </option>
+                                            <?php
+                                                }
+                                            ?>
+                                        </select>
+                                    </div>
+                                </div>
+
                                 <!-- 
                                 <div class="form-group form-float">
                                     <label class="form-label">Telefono Fijo</label>

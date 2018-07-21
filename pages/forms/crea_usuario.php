@@ -1,4 +1,6 @@
-<?php require_once('../../Connections/cnn_kn.php'); ?>
+<?php require_once('../../Connections/cnn_kn.php'); 
+require_once('../../Connections/config2.php');
+?>
 <?php
 if (!function_exists("GetSQLValueString")) {
 function GetSQLValueString($theValue, $theType, $theDefinedValue = "", $theNotDefinedValue = "") 
@@ -31,11 +33,13 @@ function GetSQLValueString($theValue, $theType, $theDefinedValue = "", $theNotDe
 }
 }
 
+date_default_timezone_set('America/Bogota');
+$fechaCreado = date('Y-m-d g:ia');
+
 $tipodocumento ="";
 if(isset($_POST['tipodocumento'])){
   $tipodocumento = trim($_POST['tipodocumento']);
 }
-//echo "tipodocumento....$tipodocumento";
 
 $numerodocumento ="";
 if(isset($_POST['numerodocumento'])){
@@ -45,85 +49,174 @@ if(isset($_POST['numerodocumento'])){
 $nombre ="";
 if(isset($_POST['nombre'])){
   $nombre = trim($_POST['nombre']);
+  $nombre = str_replace(" ","%20",$nombre);
+  //$count = 0;
+  //$nombre = preg_replace(' \'  \'', '%20', $nombre, -1, $count);
 }
 
 $apellido1 ="";
 if(isset($_POST['apellido1'])){
   $apellido1 = trim($_POST['apellido1']);
 }
+
+$apellido2 ="";
+if(isset($_POST['apellido2'])){
+  $apellido2 = trim($_POST['apellido2']);
+}
+
 $clave ="";
 if(isset($_POST['clave'])){
   $clave = trim($_POST['clave']);
 }
 $direccion ="";
 if(isset($_POST['direccion'])){
-  $direccion = trim($_POST['direccion']);
+  $direccion = trim($_POST['direccion']);  
+  $direccion = str_replace(' ', '%20', $direccion);
+  $direccion = str_replace('#',"No.", $direccion);  
 }
+
 $email ="";
 if(isset($_POST['email'])){
   $email = trim($_POST['email']);
 }
+
 $celular ="";
 if(isset($_POST['celular'])){
   $celular = trim($_POST['celular']);
 }
-$telefonofijo ="";
-if(isset($_POST['telefonofijo'])){
-  $telefonofijo = trim($_POST['telefonofijo']);
-}
-$sucursal ="";
-if(isset($_POST['sucursal'])){
-  $sucursal = trim($_POST['sucursal']);
+
+$tipousuario ="";
+if(isset($_POST['tipousuario'])){
+  $tipousuario = trim($_POST['tipousuario']);
 }
 
 $estado ="";
 if(isset($_POST['estado'])){
   $estado = trim($_POST['estado']);
 }
-$strowreg =0;
-$row_rs_base = 0;
 
-mysqli_select_db($cnn_kn, $database_cnn_kn);
-$query_rs_key = "SELECT un_LlaveAcceso FROM un_control WHERE un_IdEstado = 1;" ;
-$rs_key = mysqli_query($cnn_kn, $query_rs_key) or die(mysqli_error()."Err.....$query_rs_key");
-$row_rs_key = mysqli_fetch_assoc($rs_key);
-$totalRows_rs_key = mysqli_num_rows($rs_key);
-if ($resultado = mysqli_query($cnn_kn, $query_rs_key)) {
-  while($strowreg = mysqli_fetch_assoc($resultado))
-  { 
-    $llave = $strowreg["un_LlaveAcceso"];
-  }
-}  
-mysqli_free_result($rs_key);
-
-mysqli_select_db($cnn_kn, $database_cnn_kn);
-$query_rs_base = "SELECT IdUsuario FROM gen_usuarios WHERE Identificacion_usuario = $numerodocumento AND IdTipoDocumento_usuario = $tipodocumento;" ;
-$rs_base = mysqli_query($cnn_kn, $query_rs_base) or die(mysqli_error()."Err.....$query_rs_base<br>");
-$row_rs_base = mysqli_fetch_assoc($rs_base);
-$totalRows_rs_base = mysqli_num_rows($rs_base);
-
-while($strowreg = mysqli_fetch_array($rs_base, MYSQLI_ASSOC))
-{ 
-	$idciudad = $strowreg["Id_Tabla"];
-	$estadociudad = $strowreg["Id_EstadoTabla"];
-}
-
-if( $row_rs_base >= 1 )
-{   
-   echo "E";
-}
-else
+require_once('../../Connections/DataConex.php');
+//Verifico si existe un usuario con las siguientes caracteristicas
+// Nombres iguales o nro documento igual o email igual
+if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
 {
-	$insertSQL = "INSERT INTO gen_usuarios (IdTipoDocumento_usuario, Identificacion_usuario, Nombre_usuario, Apellido1_usuario, Clave, EstadoUsuario, Direccion_usuario, Email_usuario, Telefono_usuario, IdCiudad_usuario, FechaHoraCreado_usuario, IdActivo_usuario, IdInterno, IdLocal) VALUES ($tipodocumento, $numerodocumento,'$nombre', '$apellido1', '$clave', $estado, '$direccion', '$email', '$celular', $sucursal, Now(), $estado, AES_ENCRYPT('$clave', '$llave'), AES_ENCRYPT('$clave', '$llave') );";
-	 mysqli_select_db($cnn_kn, $database_cnn_kn);
-	 $Result1 = mysqli_query($cnn_kn, $insertSQL) or die(mysqli_error()."Err....$insertSQL<br>");
-	$sigue="N";
-	if( $Result1 )
-	{	   
-	   $sigue="S";
-	}	 
-	echo $sigue;
-}
-mysqli_free_result($rs_base);
-mysqli_close($cnn_kn);
+  $parameters = "ExisteUsuario=1&Identificacion=$numerodocumento&PrimerApellido=$apellido1&SegundoApellido=$apellido2&Nombre=$nombre&Email=$email";
+  $url = urlServicios."consultadetalle/consultadetalle_Usuario.php?".$parameters;
+  $ch = curl_init();
+  curl_setopt($ch, CURLOPT_VERBOSE, true);
+  curl_setopt($ch, CURLOPT_URL, $url);
+  curl_setopt($ch, CURLOPT_TIMEOUT, 30);
+  curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+  curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+  curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
+  curl_setopt($ch, CURLOPT_POST, 0);
+
+  $resultado = curl_exec ($ch);         
+  $http_status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+  $curl_errno= curl_errno($ch);
+  curl_close($ch);
+
+  if($resultado === false || $curl_errno > 0)
+  {
+      //echo 'Curl error: ' . curl_error($ch);
+      $sigue = "N - Curl Error: " . $curl_errno;
+  }
+  else
+  {          
+    
+    $m = preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $resultado);    
+    $m = json_decode($m, true);
+    //print_r ($m);
+    $existe = $m['usu_usuario']['existe'];
+    if($existe > 0)
+    {
+      $sigue = "E-Existe un usuario registrado con el mismo Nombre o Número de Identificación o Email.";
+    }
+    else
+    {
+      //
+      $llave = $GLOBALS['secret_key'];
+      $interno = rand(10000000,100000123456789);
+      $local = rand(10000000,1234567890000);
+      $clave = encryptor('encrypt',$clave);
+
+      $parameters = "insert=insert&TipoDocumento=$tipodocumento&Identificacion=$numerodocumento&PrimerApellido=$apellido1&SegundoApellido=$apellido2&Nombre=$nombre&Email=$email&Direccion=$direccion&Celular=$celular&Usuario=$email&Clave=$clave&TipoUsuario=$tipousuario&Estado=$estado&IdInterno=$interno&Local=$local";
+      //$parameters = array("insert" => "insert", "TipoDocumento" => "$tipodocumento","Identificacion" => "$numerodocumento","PrimerApellido" => "$apellido1", "SegundoApellido" => "$apellido2","Nombre" => "$nombre","Email" => "$email", "Direccion" => "$direccion","Celular" => "$celular", "Usuario" => "$email", "Clave" => "$clave", "TipoUsuario" => "$tipousuario", "Estado" => "$estado", "IdInterno" => "$interno", "Local" => "$local");
+     
+      $soportecURL = "S";
+      $url         = urlServicios."consultadetalle/consultadetalle_Usuario.php?".$parameters;
+      $existe      = "";
+      $usulocal    = "";
+      $sigue       = "";
+      //$verbose = fopen("php://appjuridica/tempoErr", 'w');
+      if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
+      {    
+          $ch = curl_init();
+          curl_setopt($ch, CURLOPT_VERBOSE, true);
+          curl_setopt($ch, CURLOPT_URL, $url);
+          curl_setopt($ch, CURLOPT_TIMEOUT, 30);
+          curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+          curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+          curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
+          curl_setopt($ch, CURLOPT_POST, 0);          
+          //curl_setopt($handle, CURLOPT_STDERR, $verbose);
+          //curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($parameters));    
+
+          $resultado = curl_exec ($ch);         
+          $http_status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+          $curl_errno = curl_errno($ch);
+          $curl_msj = curl_error($ch) ;
+          curl_close($ch);
+          
+          if($resultado === false || $curl_errno > 0)
+          {
+              //echo 'Curl error: ' . curl_error($ch);
+              $sigue = "N-Se presentó problema... ". $curl_errno.' '.$curl_msj;
+          }
+          else
+          {          
+            //echo "Curl Err_no returned.... $curl_errno <br/>";
+            $m = preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $resultado);    
+            $m = json_decode($m, true);
+            $grabadoOK = $m['usu_usuario'];
+            if(!$grabadoOK)
+            {
+              $sigue = "N-Registro NO ha sido grabado.";
+            }
+            else
+            {
+              $sigue = "S-Registro grabado Correctamente.";
+            }  
+          }
+
+          $json_errors = array(
+            JSON_ERROR_NONE => 'No se ha producido ningún error',
+            JSON_ERROR_DEPTH => 'Maxima profundidad de pila ha sido excedida',
+            JSON_ERROR_CTRL_CHAR => 'Error de carácter de control, posiblemente codificado incorrectamente',
+            JSON_ERROR_SYNTAX => 'Error de Sintaxis',
+          );
+            //echo "Error : ", $json_errors[json_last_error()], PHP_EOL, PHP_EOL."<br>";        
+      }
+      else
+      {
+          $soportecURL = "N";
+          //echo "No hay soporte para cURL";
+          $sigue ="N-No hay soporte para cURL";
+      } 
+
+      if($soportecURL == "N")
+      {
+          require_once('./unirest/vendor/autoload.php');
+          $response = Unirest\Request::get($url, array("X-Mashape-Key" => "MY SECRET KEY"));
+          $resultado = $response->raw_body;
+          $resultado = preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $resultado);
+          $m = json_decode($resultado, true);	        
+      }
+      //
+    }
+    
+  }
+
+}  
+echo $sigue;
 ?>

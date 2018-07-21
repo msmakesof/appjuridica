@@ -19,7 +19,8 @@ if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
 	curl_close($ch);    
     
 	$m =  preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $resultado);    
-	$m = json_decode($m, true);
+
+        $m = json_decode($m, true);
     
     $json_errors = array(
 	JSON_ERROR_NONE => 'No se ha producido ningún error',
