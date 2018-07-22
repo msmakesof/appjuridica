@@ -25,7 +25,7 @@ $celular= '3114324234';
 $estado= 1;
 $tipousuario= 1;
 require_once('Connections/DataConex.php');
-//$parameters = array("insert" => "insert", "TipoDocumento" => "$tipodocumento","Identificacion" => "$numerodocumento","PrimerApellido" => "$apellido1", "SegundoApellido" => "$apellido2","Nombre" => "$nombre","Email" => "$email", "Direccion" => "$direccion","Celular" => "$celular", "Usuario" => "$email", "Clave" => "$clave", "TipoUsuario" => "$tipousuario", "Estado" => "$estado", "IdInterno" => "$interno", "Local" => "$local");
+
 $parameters = "insert=insert&TipoDocumento=$tipodocumento&Identificacion=$numerodocumento&PrimerApellido=$apellido1&SegundoApellido=$apellido2&Nombre=$nombre&Email=$email&Direccion=$direccion&Celular=$celular&Usuario=$email&Clave=$clave&TipoUsuario=$tipousuario&Estado=$estado&IdInterno=$interno&Local=$local";
 
     $ch = curl_init();

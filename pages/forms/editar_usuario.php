@@ -108,5 +108,6 @@ if($OldClave != $clave)
 {
   $clave = encryptor('encrypt',$clave);
 }
+//echo "<script>console.log(usuario...".$idUsuario.");</script>";
 require_once('../../apis/usuario/infoUsuario.upd.php');
 ?>

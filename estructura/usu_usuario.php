@@ -214,9 +214,9 @@ class USU_USUARIO
     {
         // Creando consulta UPDATE
         $consulta = "UPDATE usu_usuario" .
-            " SET USU_TipoDocumento=?, USU_Identificacion=?, USU_PrimerApellido=?, USU_SegundoApellido=?, USU_Nombre=?, USU_Email=?, USU_Direccion=
-            ?, USU_Celular=?, USU_Usuario=?, USU_Clave=?, USU_TipoUsuario=?, USU_Estado=?; " .
-            " WHERE USU_IdUsuario=?";
+            " SET USU_TipoDocumento=?, USU_Identificacion=?, USU_PrimerApellido=?, USU_SegundoApellido=?, USU_Nombre=?, USU_Email=?, ".
+            " USU_Direccion=?, USU_Celular=?, USU_Usuario=?, USU_Clave=?, USU_TipoUsuario=?, USU_Estado=? " .
+            " WHERE USU_IdUsuario=? ;";
 
         // Preparar la sentencia
         $cmd = Database::getInstance()->getDb()->prepare($consulta);
@@ -295,7 +295,7 @@ class USU_USUARIO
     public static function delete($IdUsuario)
     {
         // Sentencia DELETE
-        $comando = "DELETE FROM usu_usuario WHERE $IdUsuario=?";
+        $comando = "DELETE FROM usu_usuario WHERE USU_IdUsuario =? ;";
 
         // Preparar la sentencia
         $sentencia = Database::getInstance()->getDb()->prepare($comando);

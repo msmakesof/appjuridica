@@ -196,8 +196,33 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         }
     }
 
+    elseif(isset($_GET['delete']) )
+    {
+        $par0  = $_GET['pidtabla'];
 
-    elseif (isset($_GET['idU']) && isset($_GET['idC'])) {
+        $retorno = USU_USUARIO::delete($par0);
+        if ($retorno) 
+        {
+            $usu_usuario["estado"] = "1";
+            $usu_usuario["usu_usuario"] = $retorno;
+            // Enviar objeto json de la usu_usuario
+            header('Content-Type: application/json');
+            echo json_encode($usu_usuario);
+        } 
+        else 
+        {
+            // Enviar respuesta de error general
+            print json_encode(
+                array(
+                    'estado' => '2',
+                    'mensaje' => 'No se obtuvo el registro'
+                )
+            );
+        }
+    }
+
+    elseif (isset($_GET['idU']) && isset($_GET['idC'])) 
+    {
         // Obtener parámetro idUsuario y idClave de usu_usuario
         $parametro = $_GET['idU'];
         $parametroC = $_GET['idC'];

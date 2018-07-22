@@ -1,6 +1,11 @@
 <?php
-    session_start();
+    require_once('./Connections/config2.php');
+    if(!isset($_SESSION)) 
+    { 
+        session_start(); 
+    } 
     require_once('./Connections/DataConex.php');    
+    $clave = encryptor('encrypt', $clave);
     $soportecURL = "S";
     $url         = urlServicios."consultadetalle/consultadetalle_Usuario.php?idU=$usuario&idC=$clave";
     $existe      = "";

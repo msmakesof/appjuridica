@@ -420,17 +420,25 @@ $TipoUsuario = $muser['usu_usuario']['USU_TipoUsuario'];
                         url : "../forms/borrar_usuario.php",
                     })  
                     .done(function( dataX, textStatus, jqXHR ){                       
-                        var respstr = dataX;        
+                        var xrespstr = dataX.trim();
+                        var respstr = xrespstr.substr(0,1);
+                        var msj = xrespstr.substr(2);         
                         if( respstr == "S" )
                         {            
-                            $("#form_validation").hide();
-                            $("#mensaje").show();                    
+                            //$("#form_validation").hide();
+                            //$("#mensaje").show();
+                            swal("Atencion: ", msj, "success");
                         }
                         else
                         {                    
-                             $("#mensaje").hide();
-                             $("#form_validation").show();
-                             $("#msj").html('<div class="alert alert-danger"><span class="glyphicon-hand-right"></span><strong>  Atención: </strong> <?php echo $Tabla; ?> NO Borrada.</div>').fadeIn(3000);                    
+                            //$("#mensaje").hide();
+                            //$("#form_validation").show();
+                            //$("#msj").html('<div class="alert alert-danger"><span class="glyphicon-hand-right"></span><strong>  Atención: </strong> <?php echo $Tabla; ?> NO Borrada.</div>').fadeIn(3000);
+                            swal({
+                                title: "Atencion: ",   
+                                text: msj,   
+                                type: "error" 
+                            });
                         }
                     })
                     .fail(function( jqXHR, textStatus, errorThrown ) {
