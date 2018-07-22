@@ -49,9 +49,7 @@ if(isset($_POST['numerodocumento'])){
 $nombre ="";
 if(isset($_POST['nombre'])){
   $nombre = trim($_POST['nombre']);
-  $nombre = str_replace(" ","%20",$nombre);
-  //$count = 0;
-  //$nombre = preg_replace(' \'  \'', '%20', $nombre, -1, $count);
+  $nombre = str_replace(" ","%20",$nombre);  
 }
 
 $apellido1 ="";

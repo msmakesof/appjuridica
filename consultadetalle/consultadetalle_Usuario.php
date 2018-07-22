@@ -155,7 +155,46 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
                 )
             );
         }
-    }    
+    }
+    
+    elseif(isset($_GET['update']) )
+    {
+        // Obtener parámetros               
+        $par1  = $_GET['tipodocumento'];
+        $par2  = $_GET['numerodocumento'];        
+        $par3  = $_GET['apellido1'];
+        $par4  = $_GET['apellido2'];
+        $par5  = $_GET['nombre'];
+        $par6  = $_GET['email'];
+        $par7  = $_GET['direccion'];        
+        $par8  = $_GET['celular'];  
+        $par9  = $_GET['email']; // usu
+        $par10 = $_GET['clave'];
+        $par11 = $_GET['tipousuario'];
+        $par12 = $_GET['estado'];
+        $par0  = $_GET['idtabla'];    
+
+        $retorno = USU_USUARIO::update($par1,$par2,$par3,$par4,$par5,$par6,$par7,$par8,$par9,$par10,$par11,$par12,$par0);
+        $msj =$retorno;
+        if ($retorno) 
+        {
+            $usu_usuario["estado"] = "1";
+            $usu_usuario["usu_usuario"] = $retorno;
+            // Enviar objeto json de la usu_usuario
+            header('Content-Type: application/json');
+            echo json_encode($usu_usuario);
+        } 
+        else 
+        {
+            // Enviar respuesta de error general
+            print json_encode(
+                array(
+                    'estado' => '2',
+                    'mensaje' => 'No se obtuvo el registro'
+                )
+            );
+        }
+    }
 
 
     elseif (isset($_GET['idU']) && isset($_GET['idC'])) {

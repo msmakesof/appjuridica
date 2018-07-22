@@ -7,141 +7,42 @@ if(!isset($_SESSION))
 } 
 ?>
 <?php
-if (!function_exists("GetSQLValueString")) {
-function GetSQLValueString($theValue, $theType, $theDefinedValue = "", $theNotDefinedValue = "") 
+if (!function_exists("GetSQLValueString")) 
 {
-  if (PHP_VERSION < 6) {
-    $theValue = get_magic_quotes_gpc() ? stripslashes($theValue) : $theValue;
-  }
+    function GetSQLValueString($theValue, $theType, $theDefinedValue = "", $theNotDefinedValue = "") 
+    {
+        if (PHP_VERSION < 6) {
+            $theValue = get_magic_quotes_gpc() ? stripslashes($theValue) : $theValue;
+        }
 
-  $theValue = function_exists("mysql_real_escape_string") ? mysqli_real_escape_string($theValue) : mysqli_escape_string($theValue);
+        $theValue = function_exists("mysql_real_escape_string") ? mysqli_real_escape_string($theValue) : mysqli_escape_string($theValue);
 
-  switch ($theType) {
-    case "text":
-      $theValue = ($theValue != "") ? "'" . $theValue . "'" : "NULL";
-      break;    
-    case "long":
-    case "int":
-      $theValue = ($theValue != "") ? intval($theValue) : "NULL";
-      break;
-    case "double":
-      $theValue = ($theValue != "") ? doubleval($theValue) : "NULL";
-      break;
-    case "date":
-      $theValue = ($theValue != "") ? "'" . $theValue . "'" : "NULL";
-      break;
-    case "defined":
-      $theValue = ($theValue != "") ? $theDefinedValue : $theNotDefinedValue;
-      break;
-  }
-  return $theValue;
-}
+        switch ($theType) 
+        {
+            case "text":
+            $theValue = ($theValue != "") ? "'" . $theValue . "'" : "NULL";
+            break;    
+            case "long":
+            case "int":
+            $theValue = ($theValue != "") ? intval($theValue) : "NULL";
+            break;
+            case "double":
+            $theValue = ($theValue != "") ? doubleval($theValue) : "NULL";
+            break;
+            case "date":
+            $theValue = ($theValue != "") ? "'" . $theValue . "'" : "NULL";
+            break;
+            case "defined":
+            $theValue = ($theValue != "") ? $theDefinedValue : $theNotDefinedValue;
+            break;
+        }
+        return $theValue;
+    }
 }
 $NombreTabla ="USUARIOS";
 
-// mysqli_select_db($cnn_kn, $database_cnn_kn);
-// $query_rs_sucusuarios = "SELECT IdSucursal, NombreSucursal, EstadoSucursal FROM sucursal ORDER BY NombreSucursal ;" ;
-// $rs_sucusuarios = mysqli_query($cnn_kn, $query_rs_sucusuarios) or die(mysqli_error()."Err.....$query_rs_sucusuarios<br>");
-// $row_rs_sucusuarios = mysqli_fetch_assoc($rs_sucusuarios);
-// $totalRows_rs_sucusuarios = mysqli_num_rows($rs_sucusuarios);
-
-
-require_once('../../Connections/DataConex.php');
-
-$soportecURL = "S";
-$url         = urlServicios."consultadetalle/consultadetalle_gen_tipousuario.php?IdEstado=1";
-$existe      = "";
-$usulocal    = "";
-$siguex      = "";
-//echo("<script>console.log('PHP: ".$url."');</script>");
-if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
-{
-    $ch = curl_init();
-    curl_setopt($ch, CURLOPT_VERBOSE, true);
-    curl_setopt($ch, CURLOPT_URL, $url);
-    curl_setopt($ch, CURLOPT_TIMEOUT, 30);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-    curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
-    curl_setopt($ch, CURLOPT_POST, 0);
-    $resultado = curl_exec ($ch);
-    curl_close($ch);
-
-    $mtipouser =  preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $resultado);    
-    $mtipouser = json_decode($mtipouser, true);
-    //echo("<script>console.log('PHP: ".print_r($muser)."');</script>");
-    //echo("<script>console.log('PHP: ".count($m['gen_tabla'])."');</script>");
-    
-    $json_errors = array(
-        JSON_ERROR_NONE => 'No se ha producido ningún error',
-        JSON_ERROR_DEPTH => 'Maxima profundidad de pila ha sido excedida',
-        JSON_ERROR_CTRL_CHAR => 'Error de carácter de control, posiblemente codificado incorrectamente',
-        JSON_ERROR_SYNTAX => 'Error de Sintaxis',
-        );
-    //echo "Error : ", $json_errors[json_last_error()], PHP_EOL, PHP_EOL."<br>";        
-}
-else
-{
-    $soportecURL = "N";
-    echo "No hay soporte para cURL";
-} 
-
-if($soportecURL == "N")
-{
-    require_once('./unirest/vendor/autoload.php');
-    $response = Unirest\Request::get($url, array("X-Mashape-Key" => "MY SECRET KEY"));
-    $resultado = $response->raw_body;
-    $resultado = preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $resultado);
-    $m = json_decode($resultado, true);	        
-}  
-
-
-$soportecURL = "S";
-$url         = urlServicios."consultadetalle/consultadetalle_gen_tipodocumento.php?IdEstado=1";
-$existe      = "";
-$usulocal    = "";
-$siguex      = "";
-//echo("<script>console.log('PHP: ".$url."');</script>");
-if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
-{
-    $ch = curl_init();
-    curl_setopt($ch, CURLOPT_VERBOSE, true);
-    curl_setopt($ch, CURLOPT_URL, $url);
-    curl_setopt($ch, CURLOPT_TIMEOUT, 30);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-    curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
-    curl_setopt($ch, CURLOPT_POST, 0);
-    $resultado = curl_exec ($ch);
-    curl_close($ch);
-
-    $m =  preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $resultado);    
-    $m = json_decode($m, true);
-    //echo("<script>console.log('PHP: ".print_r($m)."');</script>");
-    //echo("<script>console.log('PHP: ".count($m['gen_tabla'])."');</script>");
-    
-    $json_errors = array(
-        JSON_ERROR_NONE => 'No se ha producido ningún error',
-        JSON_ERROR_DEPTH => 'Maxima profundidad de pila ha sido excedida',
-        JSON_ERROR_CTRL_CHAR => 'Error de carácter de control, posiblemente codificado incorrectamente',
-        JSON_ERROR_SYNTAX => 'Error de Sintaxis',
-        );
-    //echo "Error : ", $json_errors[json_last_error()], PHP_EOL, PHP_EOL."<br>";        
-}
-else
-{
-    $soportecURL = "N";
-    echo "No hay soporte para cURL";
-} 
-
-if($soportecURL == "N")
-{
-    require_once('./unirest/vendor/autoload.php');
-    $response = Unirest\Request::get($url, array("X-Mashape-Key" => "MY SECRET KEY"));
-    $resultado = $response->raw_body;
-    $resultado = preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $resultado);
-    $m = json_decode($resultado, true);	        
-}  
+require_once('../../apis/general/tipoDocumento.php');
+require_once('../../apis/general/tipoUsuario.php');
 
 ?>
 <!DOCTYPE html>
@@ -181,14 +82,9 @@ if($soportecURL == "N")
     <!-- AdminBSB Themes. You can choose a theme from css/themes instead of get all themes -->
     <link href="../../css/themes/all-themes.css" rel="stylesheet" />
 
-   
-
     <!-- mks 20170128
     <link rel="stylesheet" href="../../css/themes2/alertify.core.css" />
     <link rel="stylesheet" href="../../css/themes2/alertify.default.css" id="toggleCSS" /> -->
-
-
-
     <!-- Jquery Core Js -->
     <script src="../../plugins/jquery/jquery.min.js"></script>
 
@@ -227,14 +123,13 @@ if($soportecURL == "N")
     <!-- Demo Js -->
     <script src="../../js/demo.js"></script>
 
-    <!--     <script src="../../js/alertify.min.js"></script> -->
+    <!-- <script src="../../js/alertify.min.js"></script> -->
      <script src="../../js/jquery.numeric.js"></script>
 
     <script type="text/javascript">
     var nombre ="";
     $(document).ready(function()
-    {           
-       
+    {       
         $("#msj").hide();
         $("#numerodocumento").numeric();
         $("#celular").numeric();
@@ -309,8 +204,7 @@ if($soportecURL == "N")
             }
 
             else
-            {                
-
+            {
                 $.ajax({
                     data : {"tipodocumento": tipodocumento, "numerodocumento": numerodocumento, "nombre": nombre, "apellido1": apellido1, "apellido2": apellido2, "clave": clave, "direccion": direccion, "email": email, "celular": celular, "estado": estado, "tipousuario": tipousuario}, 
                     type: "POST",

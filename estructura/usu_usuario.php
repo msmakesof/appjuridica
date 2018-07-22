@@ -73,6 +73,7 @@ class USU_USUARIO
                         USU_SegundoApellido,
                         USU_Nombre,
                         USU_Email,
+                        USU_Direccion,
                         USU_Celular,
                         USU_Usuario,
                         USU_Clave,
@@ -195,39 +196,33 @@ class USU_USUARIO
      * @param $Local                nueva Id Interno Cliente   
      * 
      */
-    public static function update(
-        $IdUsuario,
+    public static function update(        
         $TipoDocumento,
         $Identificacion,
         $PrimerApellido,
         $SegundoApellido,
-        $Nombre,
+        $Nombre,        
         $Email,
+        $Direccion,
         $Celular,
         $Usuario,
         $Clave,
         $TipoUsuario,
         $Estado,
-        $FechaCreado,
-        $UsuarioCrea,
-        $FechaModificado,
-        $UsuarioModifica,
-        $FechaEstado,
-        $UsuarioEstado,
-        $IdInterno,
-        $Local    
+        $IdUsuario
     )
     {
         // Creando consulta UPDATE
         $consulta = "UPDATE usu_usuario" .
-            " SET USU_TipoDocumento=?, USU_Identificacion=?, USU_PrimerApellido=?, USU_SegundoApellido=?, USU_Nombre=?, USU_Email=?, USU_Celular=?, USU_Usuario=?, USU_Clave=?, USU_TipoUsuario=?, USU_Estado=?, USU_FechaCreado=?, USU_UsuarioCrea=?, USU_FechaModificado=?, USU_UsuarioModifica=?, USU_FechaEstado=?, USU_UsuarioEstado=?, USU_IdInterno=?, USU_Local=? " .
+            " SET USU_TipoDocumento=?, USU_Identificacion=?, USU_PrimerApellido=?, USU_SegundoApellido=?, USU_Nombre=?, USU_Email=?, USU_Direccion=
+            ?, USU_Celular=?, USU_Usuario=?, USU_Clave=?, USU_TipoUsuario=?, USU_Estado=?; " .
             " WHERE USU_IdUsuario=?";
 
         // Preparar la sentencia
         $cmd = Database::getInstance()->getDb()->prepare($consulta);
 
         // Relacionar y ejecutar la sentencia
-        $cmd->execute(array($TipoDocumento, $Identificacion, $PrimerApellido, $SegundoApellido, $Nombre, $Email, $Celular, $Usuario, $Clave, $TipoUsuario, $Estado, $FechaCreado, $UsuarioCrea, $FechaModificado, $UsuarioModifica, $FechaEstado, $UsuarioEstado, $IdInterno, $Local, $IdUsuario ));
+        $cmd->execute(array($TipoDocumento, $Identificacion, $PrimerApellido, $SegundoApellido, $Nombre, $Email, $Direccion, $Celular, $Usuario, $Clave, $TipoUsuario, $Estado, $IdUsuario ));
 
         return $cmd;
     }

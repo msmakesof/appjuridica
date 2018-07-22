@@ -318,8 +318,8 @@ if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
     $resultado = curl_exec ($ch);
     curl_close($ch);
 
-    $mtipouser =  preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $resultado);    
-    $mtipouser = json_decode($mtipouser, true);
+    $muser =  preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $resultado);    
+    $muser = json_decode($muser, true);
     //echo("<script>console.log('PHP: ".print_r($muser)."');</script>");
     //echo("<script>console.log('PHP: ".count($m['gen_tabla'])."');</script>");
     
@@ -343,48 +343,49 @@ if($soportecURL == "N")
     $response = Unirest\Request::get($url, array("X-Mashape-Key" => "MY SECRET KEY"));
     $resultado = $response->raw_body;
     $resultado = preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $resultado);
-    $mtipouser = json_decode($resultado, true);	        
+    $muser = json_decode($resultado, true);	        
 } 
-
-for($i=0; $i<count($mtipouser['usu_usuario']); $i++)
+if( $muser['estado'] < 2)
 {
-    $NombreUsuario = trim($mtipouser['usu_usuario'][$i]['NombreUsuario']);
-    $archivo = $NombreUsuario.".php";
-    $idTabla = $mtipouser['usu_usuario'][$i]['USU_IdUsuario'];
-    $Email = trim($mtipouser['usu_usuario'][$i]['USU_Email']);
-    $NombreSucursal = "";
-    $EstadoUsuario = $mtipouser['usu_usuario'][$i]['EstadoUsuario'];
-?>
-    <tr>
-        <td>
-           <a href="javascript:void(0);" onclick="cambiar('../forms/editarusuario.php?f=<?php echo $idTabla; ?>')" class="nav nav-tabs nav-stacked" data-toggle="modal" data-target="#defaultModalEditar" style="text-decoration:none;"><?php echo $NombreUsuario; ?></a>
-            <div class="modal fade" id="defaultModalEditar" tabindex="-1" role="dialog">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content" >
-                         <div class="modal-header">
-                            <h4 class="modal-title" id="defaultModalLabel">Editar</h4>
-                        </div>
-                         
-                        <div class="modal-body">
-                            <object type="text/html" data="../forms/editartabla.php" id="carga" class="modalobj"></object>                           
-                        </div>
+    for($i=0; $i<count($muser['usu_usuario']); $i++)
+    {
+        $NombreUsuario = trim($muser['usu_usuario'][$i]['NombreUsuario']);
+        $archivo = $NombreUsuario.".php";
+        $idTabla = $muser['usu_usuario'][$i]['USU_IdUsuario'];
+        $Email = trim($muser['usu_usuario'][$i]['USU_Email']);
+        $NombreSucursal = "";
+        $EstadoUsuario = $muser['usu_usuario'][$i]['EstadoUsuario'];
+    ?>
+        <tr>
+            <td>
+            <a href="javascript:void(0);" onclick="cambiar('../forms/editarusuario.php?f=<?php echo $idTabla; ?>')" class="nav nav-tabs nav-stacked" data-toggle="modal" data-target="#defaultModalEditar" style="text-decoration:none;"><?php echo $NombreUsuario; ?></a>
+                <div class="modal fade" id="defaultModalEditar" tabindex="-1" role="dialog">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content" >
+                            <div class="modal-header">
+                                <h4 class="modal-title" id="defaultModalLabel">Editar</h4>
+                            </div>
+                            
+                            <div class="modal-body">
+                                <object type="text/html" data="../forms/editartabla.php" id="carga" class="modalobj"></object>                           
+                            </div>
 
-                        <div class="modal-footer">
-                                                       
-                            <button type="button" class="btn btn-info waves-effect" data-dismiss="modal" id="cerrarModal">CERRAR</button>
+                            <div class="modal-footer">
+                                                        
+                                <button type="button" class="btn btn-info waves-effect" data-dismiss="modal" id="cerrarModal">CERRAR</button>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </div>         
-        </td>        
-        <td><?php echo $Email; ?></td>
-        <td><?php echo $NombreSucursal; ?></td>
-		<td><?php echo $EstadoUsuario; ?></td>
-    </tr>
-<?php                          
-} 
+                </div>         
+            </td>        
+            <td><?php echo $Email; ?></td>
+            <td><?php echo $NombreSucursal; ?></td>
+            <td><?php echo $EstadoUsuario; ?></td>
+        </tr>
+    <?php                          
+    } 
+}
 ?>
-
  </tbody>
 </table>                                          
                                
@@ -446,7 +447,7 @@ for($i=0; $i<count($mtipouser['usu_usuario']); $i++)
     <script type="text/javascript">
     $(document).ready(function () {	 
     	$("#cerrarModal").click(function(){
-    	 	 window.location="usuarios.php";
+    	 	 window.location="usu_usuario.php";
     	});
 
     	$("#cerrarModalC").click(function(){

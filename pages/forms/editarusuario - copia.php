@@ -1,42 +1,34 @@
-﻿<?php 
-require_once('../../Connections/cnn_kn.php'); 
-require_once('../../Connections/config2.php');
-if(!isset($_SESSION)) 
-{ 
-    session_start(); 
-} 
-?>
+﻿<?php require_once('../../Connections/cnn_kn.php'); ?>
 <?php
-if (!function_exists("GetSQLValueString")) 
+if (!function_exists("GetSQLValueString")) {
+function GetSQLValueString($theValue, $theType, $theDefinedValue = "", $theNotDefinedValue = "") 
 {
-    function GetSQLValueString($theValue, $theType, $theDefinedValue = "", $theNotDefinedValue = "") 
-    {
-        if (PHP_VERSION < 6) {
-            $theValue = get_magic_quotes_gpc() ? stripslashes($theValue) : $theValue;
-        }
+  if (PHP_VERSION < 6) {
+    $theValue = get_magic_quotes_gpc() ? stripslashes($theValue) : $theValue;
+  }
 
-        $theValue = function_exists("mysql_real_escape_string") ? mysqli_real_escape_string($theValue) : mysqli_escape_string($theValue);
+  $theValue = function_exists("mysql_real_escape_string") ? mysqli_real_escape_string($theValue) : mysqli_escape_string($theValue);
 
-        switch ($theType) {
-            case "text":
-            $theValue = ($theValue != "") ? "'" . $theValue . "'" : "NULL";
-            break;    
-            case "long":
-            case "int":
-            $theValue = ($theValue != "") ? intval($theValue) : "NULL";
-            break;
-            case "double":
-            $theValue = ($theValue != "") ? doubleval($theValue) : "NULL";
-            break;
-            case "date":
-            $theValue = ($theValue != "") ? "'" . $theValue . "'" : "NULL";
-            break;
-            case "defined":
-            $theValue = ($theValue != "") ? $theDefinedValue : $theNotDefinedValue;
-            break;
-        }
-        return $theValue;
-    }
+  switch ($theType) {
+    case "text":
+      $theValue = ($theValue != "") ? "'" . $theValue . "'" : "NULL";
+      break;    
+    case "long":
+    case "int":
+      $theValue = ($theValue != "") ? intval($theValue) : "NULL";
+      break;
+    case "double":
+      $theValue = ($theValue != "") ? doubleval($theValue) : "NULL";
+      break;
+    case "date":
+      $theValue = ($theValue != "") ? "'" . $theValue . "'" : "NULL";
+      break;
+    case "defined":
+      $theValue = ($theValue != "") ? $theDefinedValue : $theNotDefinedValue;
+      break;
+  }
+  return $theValue;
+}
 }
 $idTabla = 0;
 if( isset($_GET['f'])  && !empty($_GET['f']) )
@@ -49,23 +41,45 @@ $idtabla = 0;
 $row_rs_tabla = 0;
 $Nombreciudad = "";
 
-require_once('../../apis/general/tipoDocumento.php');
-require_once('../../apis/general/tipoUsuario.php');
-require_once('../../apis/usuario/infoUsuario.php');
 
-$idtabla = $muser['usu_usuario']['USU_IdUsuario'];
-$TipoDocumento = $muser['usu_usuario']['USU_TipoDocumento'];
-$NumeroDocumento = trim($muser['usu_usuario']['USU_Identificacion']);
-$Apellido1 = trim($muser['usu_usuario']['USU_PrimerApellido']);
-$Apellido2 = trim($muser['usu_usuario']['USU_SegundoApellido']);
-$NombreAlumno = trim($muser['usu_usuario']['USU_Nombre']);
-$Email = trim($muser['usu_usuario']['USU_Email']);
-$Direccion = trim($muser['usu_usuario']['USU_Direccion']);
-$Celular = trim($muser['usu_usuario']['USU_Celular']);
-$Usuario = trim($muser['usu_usuario']['USU_Usuario']);
-$Clave = $muser['usu_usuario']['USU_Clave'];
-$EstadoEst = $muser['usu_usuario']['USU_Estado'];
-$TipoUsuario = $muser['usu_usuario']['USU_TipoUsuario'];
+mysqli_select_db($cnn_kn, $database_cnn_kn);
+$query_rs_tdusuarios = "SELECT IdTipoDocumento, NombreTipoDocumento, Estado FROM tipodocumento ORDER BY NombreTipoDocumento ;" ;
+$rs_tdusuarios = mysqli_query($cnn_kn, $query_rs_tdusuarios) or die(mysqli_error()."Err.....$query_rs_tdusuarios<br>");
+$row_rs_tdusuarios = mysqli_fetch_assoc($rs_tdusuarios);
+$totalRows_rs_tdusuarios = mysqli_num_rows($rs_tdusuarios);
+
+
+mysqli_select_db($cnn_kn, $database_cnn_kn);
+$query_rs_sucusuarios = "SELECT IdSucursal, NombreSucursal, EstadoSucursal FROM sucursal ORDER BY NombreSucursal ;" ;
+$rs_sucusuarios = mysqli_query($cnn_kn, $query_rs_sucusuarios) or die(mysqli_error()."Err.....$query_rs_sucusuarios<br>");
+$row_rs_sucusuarios = mysqli_fetch_assoc($rs_sucusuarios);
+$totalRows_rs_sucusuarios = mysqli_num_rows($rs_sucusuarios);
+
+
+mysqli_select_db($cnn_kn, $database_cnn_kn);
+$query_rs_tabla = "SELECT IdUsuario, IdTipoDocumento_usuario, Identificacion_usuario, Nombre_usuario, Apellido1_usuario, clave, EstadoUsuario, Direccion_usuario, Email_usuario, Telefono_usuario, IdCiudad_usuario, FechaHoraCreado_usuario, IdActivo_usuario FROM gen_usuarios WHERE IdUsuario = $idTabla ;" ;
+//echo "qry_usu......$query_rs_tabla" ;
+mysqli_set_charset($cnn_kn,"utf8");
+$rs_tabla = mysqli_query($cnn_kn, $query_rs_tabla) or die(mysqli_error()."Err.....$query_rs_tabla<br>");
+$row_rs_tabla = mysqli_fetch_assoc($rs_tabla);
+$totalRows_rs_tabla = mysqli_num_rows($rs_tabla);
+
+	$idtabla = $row_rs_tabla["IdUsuario"];
+    $TipoDocumento = trim($row_rs_tabla["IdTipoDocumento_usuario"]);
+    $NumeroDocumento = trim($row_rs_tabla['Identificacion_usuario']);
+    $NombreAlumno = trim($row_rs_tabla['Nombre_usuario']);
+    $Apellido1 = trim($row_rs_tabla['Apellido1_usuario']);
+    //$Apellido2 = trim($row_rs_tabla['Apellido2_EST']);    
+    $EstadoEst = $row_rs_tabla['IdActivo_usuario'];
+    //$Usuario = $row_rs_tabla['Usuario_EST'];
+    $Clave = $row_rs_tabla['clave'];
+    //$Ciudad = $row_rs_tabla['IdCiudad_usuario'];
+    $Direccion = $row_rs_tabla['Direccion_usuario'];
+    $Email = $row_rs_tabla['Email_usuario'];
+    $Celular = $row_rs_tabla['Telefono_usuario'];     
+    //$archivo = $NombreAlumno.".php";    
+    $Sucursal = trim($row_rs_tabla['IdCiudad_usuario']);    
+    
 ?>
 <!DOCTYPE html>
 <html>
@@ -141,18 +155,18 @@ $TipoUsuario = $muser['usu_usuario']['USU_TipoUsuario'];
                                         <div class="col-sm-4">
                                            <input type="hidden" class="form-control" name="IdEstudiante" id="IdEstudiante" value="<?php echo $idtabla ;?>" readonly>
                                             <select class="form-control show-tick" data-live-search="true" name="tipodocumento" id="tipodocumento" required>
-                                                <?php                                                    
-                                                    for($i=0; $i<count($m['gen_tipodocumento']); $i++)
-                                                    {                                                         
-                                                        $TDO_IdTipoDocumento = $m['gen_tipodocumento'][$i]['TDO_IdTipoDocumento'];
-                                                        $TDO_Abreviatura = $m['gen_tipodocumento'][$i]['TDO_Abreviatura'];
-                                                        $TDO_Nombre = $m['gen_tipodocumento'][$i]['TDO_Nombre'];
-                                                ?>                                                
-                                                        <option value="<?php echo $TDO_IdTipoDocumento; ?>" <?php if (trim($TDO_IdTipoDocumento) == trim($TipoDocumento)){ echo "selected/=selected/";} else{ echo "";} ?>>
-                                                            <?php echo $TDO_Nombre ; ?>                                                
-                                                        </option>
+                                                <?php                                                 
+                                                    do                                                 
+                                                    {           
+                                                        $IdTipoDocumento = $row_rs_tdusuarios["IdTipoDocumento"];
+                                                        $NombreTipoDocumento = $row_rs_tdusuarios["NombreTipoDocumento"];
+                                                        $Estado = $row_rs_tdusuarios["Estado"];                                                     
+                                                ?>
+                                                <option value="<?php echo $IdTipoDocumento; ?>" <?php if (trim($IdTipoDocumento) == trim($TipoDocumento)){ echo "selected/=selected/";} else{ echo "";} ?>>
+                                                    <?php echo $NombreTipoDocumento ; ?>                                                
+                                                </option>
                                                 <?php                    
-                                                    } 
+                                                    } while($row_rs_tdusuarios = mysqli_fetch_assoc($rs_tdusuarios));
                                                 ?>
                                             </select>
                                         </div> 
@@ -175,17 +189,9 @@ $TipoUsuario = $muser['usu_usuario']['USU_TipoUsuario'];
                                     </div>
                                 </div>
                                 <div class="form-group form-float">
-                                    <label class="form-label">Primer Apellido</label>
+                                    <label class="form-label">Apellidos</label>
                                     <div class="form-line">
                                         <input type="text" class="form-control" name="apellido1" id="apellido1" value="<?php echo $Apellido1 ;?>" required>
-                                       <!-- -->
-                                    </div>
-                                </div>  
-
-                                <div class="form-group form-float">
-                                    <label class="form-label">Segundo Apellido</label>
-                                    <div class="form-line">
-                                        <input type="text" class="form-control" name="apellido2" id="apellido2" value="<?php echo $Apellido2 ;?>" required>
                                        <!-- -->
                                     </div>
                                 </div>                                
@@ -222,22 +228,22 @@ $TipoUsuario = $muser['usu_usuario']['USU_TipoUsuario'];
                                 
 
                                 <div class="form-group form-float">
-                                    <label class="form-label">Tipo Usuario</label>
+                                    <label class="form-label">Sede</label>
                                     <div class="col-sm-4">
-                                        <select class="form-control show-tick" data-live-search="true" name="tipousuario" id="tipousuario" required>
+                                        <select class="form-control show-tick" data-live-search="true" name="sucursal" id="sucursal" required>
                                             <!-- <option value="">-- Seleccione --</option> -->
                                             <?php                                                 
-                                                 for($i=0; $i<count($mtipouser['gen_tipousuario']); $i++)
+                                                do                                                 
                                                 {           
-                                                    $TUS_IdTipoDocumento = $mtipouser['gen_tipousuario'][$i]['TUS_ID_TipoUsuario'];                                                    
-                                                    $TUS_Nombre = $mtipouser['gen_tipousuario'][$i]['TUS_Nombre'];
-                                                    $TUS_Estado = $mtipouser['gen_tipousuario'][$i]['TUS_Estado'];
-                                            ?>                                            
-                                            <option value="<?php echo $TUS_IdTipoDocumento; ?>" <?php if ($TUS_IdTipoDocumento == $TipoUsuario){ echo "selected";} else{ echo "";} ?>>
-                                                <?php echo $TUS_Nombre ; ?>                                                
+                                                    $idSucursal = $row_rs_sucusuarios["IdSucursal"];
+                                                    $NombreSucursal = $row_rs_sucusuarios["NombreSucursal"];
+                                                    $EstadoSucursal = $row_rs_sucusuarios["EstadoSucursal"];
+                                            ?>
+                                            <option value="<?php echo $idSucursal; ?>" <?php if ($idSucursal == $Sucursal){ echo "selected";} else{ echo "";} ?>>
+                                                <?php echo $NombreSucursal; ?>                                                
                                             </option>
                                             <?php                    
-                                                } 
+                                                } while($row_rs_sucusuarios = mysqli_fetch_assoc($rs_sucusuarios));
                                             ?>
                                         </select>
                                     </div>   
@@ -302,7 +308,8 @@ $TipoUsuario = $muser['usu_usuario']['USU_TipoUsuario'];
 
     <script src="../../js/pages/ui/dialogs.js"></script>
     <!-- Demo Js -->
-    <script src="../../js/demo.js"></script>    
+    <script src="../../js/demo.js"></script>
+    
 
     <script src="../../js/alertify.min.js"></script>
     <script src="../../js/jquery.numeric.js"></script>
@@ -348,17 +355,17 @@ $TipoUsuario = $muser['usu_usuario']['USU_TipoUsuario'];
             var numerodocumento = $("#numerodocumento").val();
             var nombre = $("#nombre").val();
             var apellido1 = $("#apellido1").val();
-            var apellido2 = $("#apellido2").val();
             var clave = $("#clave").val();            
             var direccion = $("#direccion").val();
             var email = $("#email").val();
-            var celular = $("#celular").val();            
-            var tipousuario = $("#tipousuario").val();			
+            var celular = $("#celular").val();
+            //var telefonofijo = $("#telefonofijo").val();
+            var sucursal = $("#sucursal").val();			
 			var estado = $('input:radio[name=estado]:checked').val();
 			var idtabla =  "<?php echo $idtabla; ?>";
-            var OldClave = "<?php echo $Clave; ?>";
-            if( tipodocumento == "" || numerodocumento =="" || nombre == "" || apellido1 == "" || apellido2 == "" || clave =="" || direccion == "" || email == "" || celular == "" || estado == undefined  || tipousuario == "" )
-            {               
+            if( tipodocumento == "" || numerodocumento =="" || nombre == "" || apellido1 == "" || clave =="" || direccion == "" || email == "" || celular == "" || estado == undefined  || sucursal == "" )
+            {
+               //swal("Atencion:", "Estudiante " + nombre + " !Ya se encuentra registrado(a)...");
                 swal({
                   title: "Error:  Ingrese información en todos los campos...",
                   text: "un momento por favor.",
@@ -371,27 +378,21 @@ $TipoUsuario = $muser['usu_usuario']['USU_TipoUsuario'];
             else
             {
     			$.ajax({
-    				data : {"tipodocumento": tipodocumento, "numerodocumento": numerodocumento, "nombre": nombre, "apellido1": apellido1, "apellido2": apellido2, "clave": clave, "direccion": direccion, "email": email, "celular": celular, "estado": estado, "tipousuario": tipousuario, "idtabla": idtabla, "OldClave": OldClave },
+    				data : {"tipodocumento": tipodocumento, "numerodocumento": numerodocumento, "nombre": nombre, "apellido1": apellido1, "clave": clave, "direccion": direccion, "email": email, "celular": celular, "estado": estado, "sucursal": sucursal,"idtabla": idtabla},                
     				type: "POST",				
     				url : "editar_usuario.php",
                 })  
-    			.done(function( dataX, textStatus, jqXHR ){	    			    
-    				var xrespstr = dataX.trim();
-                    var respstr = xrespstr.substr(0,1);
-                    var msj = xrespstr.substr(2);    				
+    			.done(function( dataX, textStatus, jqXHR ){	
+    			    // 				
+    				var respstr = dataX;
+    				
     				if( respstr == "S" )
                     {
-                        swal("Atencion: ", msj, "success");
-                        return false;
+                        $("#msj").html('<div class="alert alert-info"><span class="glyphicon glyphicon-ok"></span><strong>  Atención: </strong> Registro modificado Correctamente.</div>').fadeOut(4000).delay(2000);                    
                     }
     				else
-    				{
-                        swal({
-                            title: "Atencion: ",   
-                            text: msj,   
-                            type: "error" 
-                        });
-                        return false;  
+    				{					
+                        $("#msj").html('<div class="alert alert-danger"><span class="glyphicon-hand-right"></span><strong>  Atención: </strong> Registro NO modificado.</div>').fadeIn(3000);                     
     				}
     			})
     			.fail(function( jqXHR, textStatus, errorThrown ) {
@@ -406,8 +407,10 @@ $TipoUsuario = $muser['usu_usuario']['USU_TipoUsuario'];
 		});
 
 	
-        $("#borrar").on('click', function() {
-            var idtabla  = "<?php echo $idtabla; ?>";            
+        $("#borrar").on('click', function() {   
+
+            var idtabla  = "<?php echo $idtabla; ?>";
+            //alert(idtabla);
             var nomtabla = "<?php echo $NombreAlumno; ?>";
 
             alertify.confirm( 'Desea borrar este registro?', function (e) {
@@ -448,9 +451,14 @@ $TipoUsuario = $muser['usu_usuario']['USU_TipoUsuario'];
             });
          });
     });
-    </script>    
+    </script>
+    
 </body>
+
 </html>
 <?php
+mysqli_free_result($rs_tabla);
+mysqli_free_result($rs_tdusuarios);
+mysqli_free_result($rs_sucusuarios);
 mysqli_close($cnn_kn);
 ?>
