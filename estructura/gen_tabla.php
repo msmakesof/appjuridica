@@ -162,7 +162,7 @@ class GEN_TABLA
     }
 
     /**
-     * Insertar un nuevo Usuario
+     * Insertar un nueva Tabla
      *         
      * @param $IdTabla            identificador
      * @param $Nombre_Tabla        nuevo Nombre Tabla
@@ -211,6 +211,32 @@ class GEN_TABLA
         $sentencia = Database::getInstance()->getDb()->prepare($comando);
 
         return $sentencia->execute(array($IdTabla));
+    }
+
+    /**
+     * Verifica si existe la tabla
+     *
+     * @param $IdUsuario identificador de la gen_tabla
+     * @return bool Respuesta de la consulta
+     */
+    public static function existetabla($Nombre, $Nombremostrar)
+    {
+        $consulta = "SELECT count(TAB_IdTabla) existe, TAB_Nombre_Tabla, TAB_NombreMostrar FROM gen_tabla WHERE TAB_Nombre_Tabla = ? OR TAB_NombreMostrar = ? ";
+
+        try {
+            // Preparar sentencia
+            $comando = Database::getInstance()->getDb()->prepare($consulta);
+            // Ejecutar sentencia preparada
+            $comando->execute(array($Nombre, $Nombremostrar));
+            // Capturar primera fila del resultado
+            $row = $comando->fetch(PDO::FETCH_ASSOC);
+            return $row;
+
+        } catch (PDOException $e) {
+            // Aquí puedes clasificar el error dependiendo de la excepción
+            // para presentarlo en la respuesta Json
+            return -1;
+        }
     }
 }
 

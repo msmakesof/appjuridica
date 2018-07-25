@@ -303,6 +303,12 @@ class USU_USUARIO
         return $sentencia->execute(array($IdUsuario));
     }
 
+    /**
+     * Verifica si existe el usuario
+     *
+     * @param $IdUsuario identificador de la usu_usuario
+     * @return bool Respuesta de la consulta
+     */
     public static function existeusuario($Identificacion, $PrimerApellido, $SegundoApellido, $Nombre, $Email)
     {
         $consulta = "SELECT count(USU_IdUsuario) existe, USU_Identificacion, USU_PrimerApellido, USU_SegundoApellido, USU_Nombre, USU_Email
@@ -310,18 +316,18 @@ class USU_USUARIO
         WHERE USU_Identificacion = ? OR (USU_PrimerApellido = ? AND USU_SegundoApellido = ? AND USU_Nombre = ?) OR USU_Email = ?";
 
         try {
-        // Preparar sentencia
-        $comando = Database::getInstance()->getDb()->prepare($consulta);
-        // Ejecutar sentencia preparada
-        $comando->execute(array($Identificacion, $PrimerApellido, $SegundoApellido, $Nombre, $Email));
-        // Capturar primera fila del resultado
-        $row = $comando->fetch(PDO::FETCH_ASSOC);
-        return $row;
+            // Preparar sentencia
+            $comando = Database::getInstance()->getDb()->prepare($consulta);
+            // Ejecutar sentencia preparada
+            $comando->execute(array($Identificacion, $PrimerApellido, $SegundoApellido, $Nombre, $Email));
+            // Capturar primera fila del resultado
+            $row = $comando->fetch(PDO::FETCH_ASSOC);
+            return $row;
 
         } catch (PDOException $e) {
-        // Aquí puedes clasificar el error dependiendo de la excepción
-        // para presentarlo en la respuesta Json
-        return -1;
+            // Aquí puedes clasificar el error dependiendo de la excepción
+            // para presentarlo en la respuesta Json
+            return -1;
         }
     }
 }

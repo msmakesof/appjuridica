@@ -4,38 +4,39 @@ require_once('../../Connections/config2.php');
 if(!isset($_SESSION)) 
 { 
     session_start(); 
-}
+} 
 ?>
 <?php
-if (!function_exists("GetSQLValueString")) {
-function GetSQLValueString($theValue, $theType, $theDefinedValue = "", $theNotDefinedValue = "") 
+if (!function_exists("GetSQLValueString")) 
 {
-  if (PHP_VERSION < 6) {
-    $theValue = get_magic_quotes_gpc() ? stripslashes($theValue) : $theValue;
-  }
+    function GetSQLValueString($theValue, $theType, $theDefinedValue = "", $theNotDefinedValue = "") 
+    {
+    if (PHP_VERSION < 6) {
+        $theValue = get_magic_quotes_gpc() ? stripslashes($theValue) : $theValue;
+    }
 
-  $theValue = function_exists("mysqli_real_escape_string") ? mysqli_real_escape_string($theValue) : mysqli_escape_string($theValue);
+    $theValue = function_exists("mysqli_real_escape_string") ? mysqli_real_escape_string($theValue) : mysqli_escape_string($theValue);
 
-  switch ($theType) {
-    case "text":
-      $theValue = ($theValue != "") ? "'" . $theValue . "'" : "NULL";
-      break;    
-    case "long":
-    case "int":
-      $theValue = ($theValue != "") ? intval($theValue) : "NULL";
-      break;
-    case "double":
-      $theValue = ($theValue != "") ? doubleval($theValue) : "NULL";
-      break;
-    case "date":
-      $theValue = ($theValue != "") ? "'" . $theValue . "'" : "NULL";
-      break;
-    case "defined":
-      $theValue = ($theValue != "") ? $theDefinedValue : $theNotDefinedValue;
-      break;
-  }
-  return $theValue;
-}
+    switch ($theType) {
+        case "text":
+        $theValue = ($theValue != "") ? "'" . $theValue . "'" : "NULL";
+        break;    
+        case "long":
+        case "int":
+        $theValue = ($theValue != "") ? intval($theValue) : "NULL";
+        break;
+        case "double":
+        $theValue = ($theValue != "") ? doubleval($theValue) : "NULL";
+        break;
+        case "date":
+        $theValue = ($theValue != "") ? "'" . $theValue . "'" : "NULL";
+        break;
+        case "defined":
+        $theValue = ($theValue != "") ? $theDefinedValue : $theNotDefinedValue;
+        break;
+    }
+    return $theValue;
+    }
 }
 $empresa = "MovilWeb";
 if( isset($_POST['ƒ¤']) && !empty($_POST['ƒ¤']) )
@@ -46,30 +47,13 @@ else
 {
     $clave ="";
  }
-
-$nombre = "";
-$email  = "";
+ $nombre_lnk = "tablas";
+ $nombre = "";
+ $email  = "";
+ $usuario ="";
 if( isset($_POST['ƒ×'])  && !empty($_POST['ƒ×']) )
 {    
     $usuario = trim($_POST['ƒ×']);
-	
-// mysqli_select_db($cnn_kn, $database_cnn_kn);
-// $query_rs_usuario = "SELECT CONCAT_WS(' ',Nombre_usuario,Apellido1_usuario,Apellido2_usuario) Nombre, Email_usuario 
-// FROM gen_usuarios WHERE IdActivo_usuario = 1 AND Email_usuario = '$usuario' ;" ;
-// $rs_usuario = mysqli_query($cnn_kn, $query_rs_usuario) or die(mysqli_error()."Err.....$query_rs_usuario");
-// $row_rs_usuario = mysqli_fetch_assoc($rs_usuario);
-// $totalRows_rs_usuario = mysqli_num_rows($rs_usuario);
-// 	$y = "";
-	
-// 	if ($resultado = mysqli_query($cnn_kn, $query_rs_usuario)) 
-// 	{
-// 		while($all = mysqli_fetch_assoc($resultado))
-// 		{
-// 			$nombre = $strowreg['Nombre'];
-// 			$email = $strowreg['Email_usuario'];           
-// 		}
-// 	}
-// 	mysqli_free_result($rs_usuario);
 }
 else
 {
@@ -370,9 +354,10 @@ else
                     <img src="../../images/user.png" width="48" height="48" alt="User" />
                 </div>
                 <div class="info-container">
-					<div class="name" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">                        
-                        <span id="xNom"><?php echo $_SESSION['NombreUsuario']; ?></span>
+					<div class="name" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">                       
+                        <span id="xNom"><?php echo $_SESSION['NombreUsuario']; ?></span>                   
                     </div>
+
 
                     <div class="email">                        
                         <span id="xMail"><?php echo $_SESSION['EmailUsuario']; ?></span>
@@ -560,7 +545,7 @@ else
         <div class="container-fluid">
             <div class="block-header">
                 <h2>
-                    INFORMACION DE: TABLAS...
+                    INFORMACION DE: <?php echo strtoupper($nombre_lnk); ?>
                     <small>Opciones: <a href="#" target="_blank">consultar, crear, modificar.</a></small>
                 </h2>
             </div>
@@ -582,7 +567,7 @@ else
                                     
                                     <ul class="dropdown-menu pull-right">
                                        <li>
-                                       <a href="javascript:void(0);" onclick="crear('../forms/form-validationBase.html')" class="btn btn-warning btn-xs waves-effect" data-toggle="modal" data-target="#defaultModal">Nuevo</a>
+                                       <a href="javascript:void(0);" onclick="crear('../forms/form-validationBase<?php echo $nombre_lnk ;?>.php')" class="btn btn-warning btn-xs waves-effect" data-toggle="modal" data-target="#defaultModal">Nuevo</a>
                                         
                                       <!--  <button type="button" class="btn btn-default waves-effect m-r-20" data-toggle="modal" data-target="#defaultModal">Nuevo</button>-->
                                         </li>
@@ -612,55 +597,96 @@ else
                                 </tfoot>
                                 <tbody>
 <?php
+require_once('../../Connections/DataConex.php');
+$soportecURL = "S";
+$url         = urlServicios."consultadetalle/consultadetalle_gen_tabla.php?IdMostrar=0";
+$existe      = "";
+$usulocal    = "";
+$siguex      = "";
 
-mysqli_select_db($cnn_kn, $database_cnn_kn);
-$query_rs_tipo_tabla = "SELECT Nombre_Tabla, Id_Tabla, Nombre_Estado, NombreMostrar FROM gen_tablas JOIN gen_estado ON gen_estado.Id_Estado = Id_EstadoTabla ORDER BY Nombre_Tabla;";
-$rs_tipo_tabla = mysqli_query($cnn_kn,$query_rs_tipo_tabla) or die(mysqli_error()."$query_rs_tipo_tabla");
-$row_rs_tipo_tabla = mysqli_fetch_assoc($rs_tipo_tabla);
-//Cantidad de registros
-$cantidad_rs_tipo_tabla = mysqli_num_rows($rs_tipo_tabla);
+if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
+{
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_VERBOSE, true);
+    curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_TIMEOUT, 30);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
+    curl_setopt($ch, CURLOPT_POST, 0);
+    $resultado = curl_exec ($ch);
+    curl_close($ch);
 
-$nombre_Tabla="";
-do{
-	$NombreTabla = trim($row_rs_tipo_tabla['NombreMostrar']);
-    $NombreMostrar = trim($row_rs_tipo_tabla['NombreMostrar']);
-	$archivo = $NombreTabla.".php";
-	$idTabla = $row_rs_tipo_tabla['Id_Tabla'];
-	$estadoTabla = trim($row_rs_tipo_tabla['Nombre_Estado']);
-?>
-    <tr>
-        <td>
-        	<a href="javascript:void(0);" onclick="cambiar('../forms/editartabla.php?f=<?php echo $idTabla; ?>')" class="nav nav-tabs nav-stacked" data-toggle="modal" data-target="#defaultModalEditar" style="text-decoration:none;"><?php echo $NombreTabla; ?></a>        	
-            <!-- Default Editar -->
-            <div class="modal fade" id="defaultModalEditar" tabindex="-1" role="dialog">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content" >
-                         <div class="modal-header">
-                            <h4 class="modal-title" id="defaultModalLabel">Editar</h4>
-                        </div>
-                         
-                        <div class="modal-body">
-                            <object type="text/html" data="../forms/editartabla.php" id="carga"></object>                           
-                        </div>
+    $mtabla =  preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $resultado);    
+    $mtabla = json_decode($mtabla, true);
+    //echo("<script>console.log('PHP: ".print_r($mtabla)."');</script>");
+    //echo("<script>console.log('PHP: ".count($m['gen_tabla'])."');</script>");
+    
+    $json_errors = array(
+        JSON_ERROR_NONE => 'No se ha producido ningún error',
+        JSON_ERROR_DEPTH => 'Maxima profundidad de pila ha sido excedida',
+        JSON_ERROR_CTRL_CHAR => 'Error de carácter de control, posiblemente codificado incorrectamente',
+        JSON_ERROR_SYNTAX => 'Error de Sintaxis',
+        );
+    //echo "Error : ", $json_errors[json_last_error()], PHP_EOL, PHP_EOL."<br>";        
+}
+else
+{
+    $soportecURL = "N";
+    echo "No hay soporte para cURL";
+} 
 
-                        <div class="modal-footer">
-                            <!-- <button type="button" class="btn btn-link waves-effect">SAVE CHANGES</button> -->                            
-                            <button type="button" class="btn btn-info waves-effect" data-dismiss="modal" id="cerrarModal">CERRAR</button>
+if($soportecURL == "N")
+{
+    require_once('./unirest/vendor/autoload.php');
+    $response = Unirest\Request::get($url, array("X-Mashape-Key" => "MY SECRET KEY"));
+    $resultado = $response->raw_body;
+    $resultado = preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $resultado);
+    $mtabla = json_decode($resultado, true);	        
+} 
+
+if( $mtabla['estado'] < 2)
+{
+    $nombre_Tabla="";
+    for($i=0; $i<count($mtabla['gen_tabla']); $i++)
+    {
+        $NombreTabla = trim($mtabla['gen_tabla'][$i]['TAB_NombreMostrar']);
+        $NombreMostrar = trim($mtabla['gen_tabla'][$i]['TAB_NombreMostrar']);
+        $archivo = $NombreTabla.".php";
+        $idTabla = $mtabla['gen_tabla'][$i]['TAB_IdTabla'];
+        $estadoTabla = trim($mtabla['gen_tabla'][$i]['TAB_IdEstadoTabla']);
+    ?>
+        <tr>
+            <td>
+                <a href="javascript:void(0);" onclick="cambiar('../forms/editartabla.php?f=<?php echo $idTabla; ?>')" class="nav nav-tabs nav-stacked" data-toggle="modal" data-target="#defaultModalEditar" style="text-decoration:none;"><?php echo $NombreTabla; ?></a>        	
+                <!-- Default Editar -->
+                <div class="modal fade" id="defaultModalEditar" tabindex="-1" role="dialog">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content" >
+                            <div class="modal-header">
+                                <h4 class="modal-title" id="defaultModalLabel">Editar</h4>
+                            </div>
+                            
+                            <div class="modal-body">
+                                <object type="text/html" data="../forms/editartabla.php" id="carga"></object>                           
+                            </div>
+
+                            <div class="modal-footer">
+                                <!-- <button type="button" class="btn btn-link waves-effect">SAVE CHANGES</button> -->                            
+                                <button type="button" class="btn btn-info waves-effect" data-dismiss="modal" id="cerrarModal">CERRAR</button>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </div>         
-        </td>
-        <td><?php echo $estadoTabla; ?></td>               
-    </tr>
-<?php                          
-}while($row_rs_tipo_tabla = mysqli_fetch_assoc($rs_tipo_tabla)); ?>
-
+                </div>         
+            </td>
+            <td><?php echo $estadoTabla; ?></td>               
+        </tr>
+    <?php                          
+    }
+}
+?>
  </tbody>
 </table>
-<?php                                                    
-mysqli_free_result($rs_tipo_tabla); 
-?>                                           
                                
                         </div>
                     </div>
@@ -680,7 +706,7 @@ mysqli_free_result($rs_tipo_tabla);
                         </div>
                         
                         <div class="modal-body">                         
-                            <object type="text/html" data="../forms/form-validationBase.html" id="crear"></object>
+                            <object type="text/html" data="../forms/form-validationBase<?php echo $nombre_lnk ;?>.php" id="crear"></object>
                         </div>
                         <div class="modal-footer">
                             <!-- <button type="button" class="btn btn-link waves-effect">SAVE CHANGES</button> -->
@@ -721,42 +747,18 @@ mysqli_free_result($rs_tipo_tabla);
 
     <!-- Demo Js -->
     <script src="../../js/demo.js"></script>
-    
-    
-
 
 <script type="text/javascript">
  $(document).ready(function () {	 
 	$("#cerrarModal").click(function(){
-	 	 window.location="tablas.php";		 		 
-
-	 	// window.location.replace("tablas.php");
-		/*
-		$.ajax({
-			type: "POST",
-			dataType: "html",
-			url : "querytalas.php",
-		})  
-		.done(function( dataX, textStatus, jqXHR ){					
-			window.location.replace("datos.php");			      	
-		})
-		.fail(function( jqXHR, textStatus, errorThrown ) {
-			if ( console && console.log ) 
-			{
-				console.log( "La solicitud a fallado: " +  textStatus);
-			}
-		});	
-		*/	 
+	 	 window.location="gen_tabla.php";
 	});
 
 	$("#cerrarModalC").click(function(){
-	 	 window.location="tablas.php";
+	 	 window.location="gen_tabla.php";
 	});		
 
- });
- 
-
-
+ }); 
 
 function cambiar(nuevaurl) 
 { 
@@ -777,8 +779,6 @@ function crear(nuevaurl)
     $(obj).remove();
     $(container).append(newobj);
 }
-
 </script>	
 </body>
-
 </html>

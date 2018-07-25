@@ -52,29 +52,7 @@ $email  = "";
 $usuario ="";
 if( isset($_POST['ƒ×'])  && !empty($_POST['ƒ×']) )
 {    
-     $usuario = trim($_POST['ƒ×']);
-	
-// mysqli_select_db($cnn_kn, $database_cnn_kn);
-// $query_rs_usuario = "SELECT CONCAT_WS(' ',USU_Nombre,USU_PrimerApellido,USU_SegundoApellido) Nombre, USU_Email 
-// FROM usu_usuario WHERE USU_Estado = 1 AND USU_Email = '$usuario' ;" ;
-// $rs_usuario = mysqli_query($cnn_kn, $query_rs_usuario) or die(mysqli_error()."Err.....$query_rs_usuario");
-// $row_rs_usuario = mysqli_fetch_assoc($rs_usuario);
-// $totalRows_rs_usuario = mysqli_num_rows($rs_usuario);
-// 	$y = "";
-	
-// 	if ($resultado = mysqli_query($cnn_kn, $query_rs_usuario)) 
-// 	{
-// 		while($all = mysqli_fetch_assoc($resultado))
-// 		{
-// 			$nombre = $strowreg['Nombre'];
-// 			$email = $strowreg['USU_Email'];           
-// 		}
-// 	}
-// 	mysqli_free_result($rs_usuario);
-// }
-// else
-// {
-//     
+     $usuario = trim($_POST['ƒ×']);   
 }
 ?>
 <!DOCTYPE html>
@@ -297,7 +275,6 @@ if( isset($_POST['ƒ×'])  && !empty($_POST['ƒ×']) )
                                 </tfoot>
                                 <tbody>
 <?php
-
 require_once('../../Connections/DataConex.php');
 $soportecURL = "S";
 $url         = urlServicios."consultadetalle/consultadetalle_Usuario.php?IdMostrar=0";
