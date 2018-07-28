@@ -137,6 +137,87 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         }
     
     }
+    elseif(isset($_GET['insert']) )
+    {
+        //Obtener Parametros
+        $par1 = $_GET['Nombre'];
+        $par2 = $_GET['Nombremostrar'];
+        $par3 = $_GET['Estado'];
+
+        $retorno = GEN_TABLA::INSERT($par1, $par2, $par3);
+        $msj = $retorno;
+        if($retorno)
+        {
+            $gen_tabla["estado"] = "1";
+            $gen_tabla["gen_tabla"] = $retorno;
+             // Enviar objeto json de la gen_tabla
+            header('Content-Type: application/json');
+            echo json_encode($gen_tabla);
+        }
+        else
+        {
+            // Enviar respuesta de error general
+            print json_encode(
+                array(
+                    'estado' => '2',
+                    'mensaje' => 'No se obtuvo el registro'
+                )
+            );
+        }
+    }
+    elseif(isset($_GET['update']) )
+    {
+        //Obtener Parametros
+        $par1 = $_GET['nombre'];
+        $par2 = $_GET['nombremostrar'];
+        $par3 = $_GET['estado'];
+        $par4 = $_GET['idtabla'];
+
+        $retorno = GEN_TABLA::update($par1, $par2, $par3, $par4);
+        $msj = $retorno;
+        if($retorno)
+        {
+            $gen_tabla["estado"] = "1";
+            $gen_tabla["gen_tabla"] = $retorno;
+             // Enviar objeto json de la gen_tabla
+            header('Content-Type: application/json');
+            echo json_encode($gen_tabla);
+        }
+        else
+        {
+            // Enviar respuesta de error general
+            print json_encode(
+                array(
+                    'estado' => '2',
+                    'mensaje' => 'No se obtuvo el registro'
+                )
+            );
+        }
+    }
+    elseif(isset($_GET['delete']) )
+    {
+        $par0  = $_GET['pidtabla'];
+
+        $retorno = GEN_TABLA::delete($par0);
+        if ($retorno) 
+        {
+            $gen_tabla["estado"] = "1";
+            $gen_tabla["gen_tabla"] = $retorno;
+            // Enviar objeto json de la gen_tabla
+            header('Content-Type: application/json');
+            echo json_encode($gen_tabla);
+        } 
+        else 
+        {
+            // Enviar respuesta de error general
+            print json_encode(
+                array(
+                    'estado' => '2',
+                    'mensaje' => 'No se obtuvo el registro'
+                )
+            );
+        }
+    }   
 
     else {
         // Enviar respuesta de error

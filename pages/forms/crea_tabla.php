@@ -103,7 +103,7 @@ if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
       //$parameters = "insert=insert&TipoDocumento=$tipodocumento&Identificacion=$numerodocumento&PrimerApellido=$apellido1&SegundoApellido=$apellido2&Nombre=$nombre&Email=$email&Direccion=$direccion&Celular=$celular&Usuario=$email&Clave=$clave&TipoUsuario=$tipousuario&Estado=$estado&IdInterno=$interno&Local=$local";
       //$parameters = array("insert" => "insert", "TipoDocumento" => "$tipodocumento","Identificacion" => "$numerodocumento","PrimerApellido" => "$apellido1", "SegundoApellido" => "$apellido2","Nombre" => "$nombre","Email" => "$email", "Direccion" => "$direccion","Celular" => "$celular", "Usuario" => "$email", "Clave" => "$clave", "TipoUsuario" => "$tipousuario", "Estado" => "$estado", "IdInterno" => "$interno", "Local" => "$local");
 
-      $parameters = "insert=insert&Nombre=$pnombre&Nombremostrar=$pnombremostrar";
+      $parameters = "insert=insert&Nombre=$pnombre&Nombremostrar=$pnombremostrar&Estado=$pestado";
       $soportecURL = "S";
       $url         = urlServicios."consultadetalle/consultadetalle_gen_tabla.php?".$parameters;
       $existe      = "";

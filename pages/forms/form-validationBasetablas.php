@@ -129,18 +129,18 @@ $NombreTabla ="TABLAS";
                     url : "crea_tabla.php",
                 })  
                 .done(function( data, textStatus, jqXHR){                  
-                    var respstr = data;
+                    var xrespstr = data.trim();
+                    var respstr = xrespstr.substr(0,1);
+                    var msj = xrespstr.substr(2);
                     if(respstr == "E")
                     {         
-                        
-                        swal("Atencion:", "Tabla " + nombre + " !Ya se encuentra registrada...");
+                        swal("Atencion:", msj);
 
                        /*
                         reset();
                         alertify.alert("Registro No ha sido grabado.");
                         return false;     
                         */
-
 
                         //existe(nombre);
                         //get the closable setting value.
@@ -165,8 +165,8 @@ $NombreTabla ="TABLAS";
                     {    
                         if( respstr == "S" )
                         {                        
-                           swal("Atencion: ", "Registro grabado Correctamente.", "success");
-                           return false;
+                            swal("Atencion: ", msj, "success");
+                            return false;
 
                             // reset();                        
                             // alertify.alert("Registro grabado Correctamente.");
@@ -182,11 +182,12 @@ $NombreTabla ="TABLAS";
                         }
                         else
                         {
-                            // reset();
-                            // alertify.alert("Registro No ha sido grabado.");
-                            // return false;     
-                            swal("Atencion: ", "Registro No ha sido grabado.", "danger");
-                            return false;     
+                           swal({
+                                title: "Atencion: ",   
+                                text: msj,   
+                                type: "error" 
+                            });
+                            return false;       
                         }
                     }    
                 })

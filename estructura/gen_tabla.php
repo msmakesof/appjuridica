@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Representa el la estructura de las $IdUsuario
  * almacenadas en la base de datos
@@ -20,7 +19,9 @@ class GEN_TABLA
      */
     public static function getAll()
     {
-        $consulta = "SELECT * FROM gen_tabla ORDER BY TAB_NombreMostrar; ";
+        $consulta = "SELECT TAB_IdTabla, TAB_Nombre_Tabla, TAB_NombreMostrar, 
+            CASE TAB_IdEstadoTabla WHEN 1 THEN 'Activo' ELSE 'Inactivo' END EstadoTabla
+            FROM gen_tabla ORDER BY TAB_NombreMostrar; ";
         try {
             // Preparar sentencia
             $comando = Database::getInstance()->getDb()->prepare($consulta);
@@ -55,7 +56,7 @@ class GEN_TABLA
             // Preparar sentencia
             $comando = Database::getInstance()->getDb()->prepare($consulta);
             // Ejecutar sentencia preparada
-            $comando->execute(array($IdUsuario));
+            $comando->execute(array($IdTabla));
             // Capturar primera fila del resultado
             $row = $comando->fetch(PDO::FETCH_ASSOC);
             return $row;
@@ -78,7 +79,7 @@ class GEN_TABLA
     public static function getByIdEstado($IdEstadoTabla)
     {
         // Consulta de la gen_tabla
-        $consulta = "SELECT TAB_IdTabla, TAB_Nombre_Tabla, TAB_NombreMostrar
+        $consulta = "SELECT TAB_IdTabla, TAB_Nombre_Tabla, TAB_NombreMostrar, TAB_IdEstadoTabla
                     FROM gen_tabla
                     WHERE TAB_IdEstadoTabla = ? ORDER BY TAB_NombreMostrar; ";
 
@@ -141,10 +142,10 @@ class GEN_TABLA
      * 
      */
     public static function update(
-        $IdTabla,
-        $Nombre_Tabla,
+        $NombreTabla,
         $NombreMostrar,
-        $IdEstadoTabla    
+        $IdEstadoTabla,
+        $IdTabla
     )
     {
         // Creando consulta UPDATE
@@ -156,7 +157,7 @@ class GEN_TABLA
         $cmd = Database::getInstance()->getDb()->prepare($consulta);
 
         // Relacionar y ejecutar la sentencia
-        $cmd->execute(array($Nombre_Tabla, $NombreMostrar, $IdEstadoTabla, $IdTabla ));
+        $cmd->execute(array($NombreTabla, $NombreMostrar, $IdEstadoTabla, $IdTabla ));
 
         return $cmd;
     }
@@ -165,22 +166,22 @@ class GEN_TABLA
      * Insertar un nueva Tabla
      *         
      * @param $IdTabla            identificador
-     * @param $Nombre_Tabla        nuevo Nombre Tabla
-     * @param $NombreMostrar       nueva Nombre Tabla a mostrar
-     * @param $IdEstadoTabla       nueva Estado   
+     * @param $Nombre             nuevo Nombre Tabla
+     * @param $NombreMostrar      nueva Nombre Tabla a mostrar
+     * @param $Estado             Estado   
      * @return PDOStatement
      */
     public static function insert(        
-        $Nombre_Tabla,
-        $NombreMostrar,
-        $IdEstadoTabla
+        $Nombre,
+        $Nombremostrar,
+        $Estado
     )
     {
         // Sentencia INSERT
         $comando = "INSERT INTO gen_tabla ( " .            
             " TAB_Nombre_Tabla," .
             " TAB_NombreMostrar," .
-            " TAB_IdEstadoTabla," . 
+            " TAB_IdEstadoTabla" . 
             " )".     
             " VALUES(?,?,?) ;";
 
@@ -189,9 +190,9 @@ class GEN_TABLA
 
         return $sentencia->execute(
             array(                
-                $Nombre_Tabla,
-                $NombreMostrar,
-                $IdEstadoTabla
+                $Nombre,
+                $Nombremostrar,
+                $Estado
             )
         );
     }
@@ -205,7 +206,7 @@ class GEN_TABLA
     public static function delete($IdTabla)
     {
         // Sentencia DELETE
-        $comando = "DELETE FROM gen_tabla WHERE $IdTabla=? ;";
+        $comando = "DELETE FROM gen_tabla WHERE TAB_IdTabla = ? ;";
 
         // Preparar la sentencia
         $sentencia = Database::getInstance()->getDb()->prepare($comando);

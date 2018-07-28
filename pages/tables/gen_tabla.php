@@ -38,7 +38,7 @@ if (!function_exists("GetSQLValueString"))
     return $theValue;
     }
 }
-$empresa = "MovilWeb";
+$empresa = "AppJuridica";
 if( isset($_POST['ƒ¤']) && !empty($_POST['ƒ¤']) )
 {    
     $clave = trim($_POST['ƒ¤']);
@@ -654,7 +654,7 @@ if( $mtabla['estado'] < 2)
         $NombreMostrar = trim($mtabla['gen_tabla'][$i]['TAB_NombreMostrar']);
         $archivo = $NombreTabla.".php";
         $idTabla = $mtabla['gen_tabla'][$i]['TAB_IdTabla'];
-        $estadoTabla = trim($mtabla['gen_tabla'][$i]['TAB_IdEstadoTabla']);
+        $estadoTabla = trim($mtabla['gen_tabla'][$i]['EstadoTabla']);
     ?>
         <tr>
             <td>

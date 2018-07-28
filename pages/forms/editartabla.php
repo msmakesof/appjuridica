@@ -1,54 +1,57 @@
-﻿<?php require_once('../../Connections/cnn_kn.php'); ?>
+﻿<?php 
+require_once('../../Connections/cnn_kn.php'); 
+require_once('../../Connections/config2.php');
+if(!isset($_SESSION)) 
+{ 
+    session_start(); 
+} 
+?>
 <?php
 if (!function_exists("GetSQLValueString")) {
-function GetSQLValueString($theValue, $theType, $theDefinedValue = "", $theNotDefinedValue = "") 
-{
-  if (PHP_VERSION < 6) {
-    $theValue = get_magic_quotes_gpc() ? stripslashes($theValue) : $theValue;
-  }
+    function GetSQLValueString($theValue, $theType, $theDefinedValue = "", $theNotDefinedValue = "") 
+    {
+      if (PHP_VERSION < 6) {
+        $theValue = get_magic_quotes_gpc() ? stripslashes($theValue) : $theValue;
+      }
 
-  $theValue = function_exists("mysql_real_escape_string") ? mysqli_real_escape_string($theValue) : mysqli_escape_string($theValue);
+      $theValue = function_exists("mysql_real_escape_string") ? mysqli_real_escape_string($theValue) : mysqli_escape_string($theValue);
 
-  switch ($theType) {
-    case "text":
-      $theValue = ($theValue != "") ? "'" . $theValue . "'" : "NULL";
-      break;    
-    case "long":
-    case "int":
-      $theValue = ($theValue != "") ? intval($theValue) : "NULL";
-      break;
-    case "double":
-      $theValue = ($theValue != "") ? doubleval($theValue) : "NULL";
-      break;
-    case "date":
-      $theValue = ($theValue != "") ? "'" . $theValue . "'" : "NULL";
-      break;
-    case "defined":
-      $theValue = ($theValue != "") ? $theDefinedValue : $theNotDefinedValue;
-      break;
-  }
-  return $theValue;
-}
+      switch ($theType) {
+        case "text":
+          $theValue = ($theValue != "") ? "'" . $theValue . "'" : "NULL";
+          break;    
+        case "long":
+        case "int":
+          $theValue = ($theValue != "") ? intval($theValue) : "NULL";
+          break;
+        case "double":
+          $theValue = ($theValue != "") ? doubleval($theValue) : "NULL";
+          break;
+        case "date":
+          $theValue = ($theValue != "") ? "'" . $theValue . "'" : "NULL";
+          break;
+        case "defined":
+          $theValue = ($theValue != "") ? $theDefinedValue : $theNotDefinedValue;
+          break;
+      }
+      return $theValue;
+    }
 }
 $idTabla = 0;
 if( isset($_GET['f'])  && !empty($_GET['f']) )
 {    
     $idTabla = trim($_GET['f']);
 }
-$strowreg =0;
-$idtabla = 0;
-$row_rs_tabla = 0;
-$Nombreciudad = "";
-mysqli_select_db($cnn_kn, $database_cnn_kn);
-$query_rs_tabla = "SELECT Nombre_Tabla, Id_EstadoTabla,Id_Tabla FROM gen_tablas WHERE Id_Tabla = $idTabla ;" ;
-//echo "qry_usu......$query_rs_tabla" ;
-$rs_tabla = mysqli_query($cnn_kn, $query_rs_tabla) or die(mysqli_error()."Err.....$query_rs_tabla<br>");
-$row_rs_tabla = mysqli_fetch_assoc($rs_tabla);
-$totalRows_rs_tabla = mysqli_num_rows($rs_tabla);
 
-	$Nombre = trim($row_rs_tabla["Nombre_Tabla"]);
-	$estado = $row_rs_tabla["Id_EstadoTabla"];
-	$idtabla = $row_rs_tabla["Id_Tabla"];
+$Tabla ="TABLAS";
+$idtabla = 0;
+
+require_once('../../apis/general/tabla.php');
+
+$Nombre = trim($mtabla['gen_tabla']['TAB_Nombre_Tabla']);
+$NombreMostrar = trim($mtabla['gen_tabla']['TAB_NombreMostrar']);
+$estado = $mtabla['gen_tabla']['TAB_IdEstadoTabla'];
+$idtabla = $mtabla['gen_tabla']['TAB_IdTabla'];
 ?>
 <!DOCTYPE html>
 <html>
@@ -116,9 +119,18 @@ $totalRows_rs_tabla = mysqli_num_rows($rs_tabla);
                         <div class="body  table-responsive">
                             <form id="form_validation" method="POST">
                                 <div class="form-group form-float">
+                                    <label class="form-label">Nombre</label>
                                     <div class="form-line">
                                         <input type="text" class="form-control" name="nombre" id="nombre" value="<?php echo $Nombre ;?>" required>
-                                       <!-- <label class="form-label">Nombre</label>-->
+                                       <!-- -->
+                                    </div>
+                                </div> 
+
+                                <div class="form-group form-float">
+                                    <label class="form-label">Nombre a Mostrar</label>
+                                    <div class="form-line">
+                                        <input type="text" class="form-control" name="nombremostrar" id="nombremostrar" value="<?php echo $NombreMostrar ;?>" required>
+                                       <!-- -->
                                     </div>
                                 </div>                               
                                 
@@ -197,27 +209,36 @@ $totalRows_rs_tabla = mysqli_num_rows($rs_tabla);
 		
 		$("#grabar").on('click', function(e) {
             $("#mensaje").hide();
-			var nombre = $("#nombre").val();			
+			var nombre = $("#nombre").val();
+            var nombremostrar = $("#nombremostrar").val();			
 			var estado = $('input:radio[name=estado]:checked').val();
 			var idtabla = "<?php echo $idtabla; ?>";
 			
 			$.ajax({
-				data : {"pnombre": nombre, "pestado": estado, "pidtabla": idtabla},
+				data : {"nombre": nombre, "nombremostrar": nombremostrar, "estado": estado, "idtabla": idtabla},
 				type: "POST",
 				dataType: "html",
 				url : "editar_tabla.php",
             })  
 			.done(function( dataX, textStatus, jqXHR ){	
 			    // 				
-				var respstr = dataX;
+				var xrespstr = dataX.trim();
+                var respstr = xrespstr.substr(0,1);
+                var msj = xrespstr.substr(2); 
 				
 				if( respstr == "S" )
                 {
-                    $("#msj").html('<div class="alert alert-info"><span class="glyphicon glyphicon-ok"></span><strong>  Atención: </strong> Registro modificado Correctamente.</div>').fadeOut(4000).delay(2000);                    
+                    swal("Atencion: ", msj, "success");
+                    return false;                    
                 }
 				else
 				{					
-                    $("#msj").html('<div class="alert alert-danger"><span class="glyphicon-hand-right"></span><strong>  Atención: </strong> Registro NO modificado.</div>').fadeIn(3000);                     
+                    swal({
+                        title: "Atencion: ",   
+                        text: msj,   
+                        type: "error" 
+                    });
+                    return false;                    
 				}
 			})
 			.fail(function( jqXHR, textStatus, errorThrown ) {
@@ -232,9 +253,7 @@ $totalRows_rs_tabla = mysqli_num_rows($rs_tabla);
 
 	
     $("#borrar").on('click', function() {   
-
-        var idtabla  = "<?php echo $idtabla; ?>";
-        //alert(idtabla);
+        var idtabla  = "<?php echo $idtabla; ?>";        
         var nomtabla = "<?php echo $Nombre; ?>";
 
         alertify.confirm( 'Desea borrar este registro?', function (e) {
@@ -247,17 +266,20 @@ $totalRows_rs_tabla = mysqli_num_rows($rs_tabla);
                     url : "../forms/borrar_tabla.php",
                 })  
                 .done(function( dataX, textStatus, jqXHR ){                       
-                    var respstr = dataX;        
+                    var xrespstr = dataX.trim();
+                    var respstr = xrespstr.substr(0,1);
+                    var msj = xrespstr.substr(2);        
                     if( respstr == "S" )
                     {            
-                        $("#form_validation").hide();
-                        $("#mensaje").show();                    
+                       swal("Atención: ", msj, "success");                  
                     }
                     else
                     {                    
-                         $("#mensaje").hide();
-                         $("#form_validation").show();
-                         $("#msj").html('<div class="alert alert-danger"><span class="glyphicon-hand-right"></span><strong>  Atención: </strong> Tabla NO Borrada.</div>').fadeIn(3000);                    
+                        swal({
+                            title: "Atencion: ",   
+                            text: msj,   
+                            type: "error" 
+                        });                    
                     }
                 })
                 .fail(function( jqXHR, textStatus, errorThrown ) {
@@ -285,6 +307,6 @@ $totalRows_rs_tabla = mysqli_num_rows($rs_tabla);
 
 </html>
 <?php
-mysqli_free_result($rs_tabla);
-mysqli_close($cnn_kn);
+//mysqli_free_result($rs_tabla);
+//mysqli_close($cnn_kn);
 ?>
