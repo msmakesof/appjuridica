@@ -4,24 +4,25 @@
  * almacenadas en la base de datos
  */
 require '../Connections/database.php';
-
-class GEN_DEPARTAMENTO
+$TABLA ="gen_ciudad";
+$Llave ="CIU_IdCiudades";
+class GEN_CIUDAD
 {
     function __construct()
     {
     }
 
     /**
-     * Retorna todas las filas especificadas de la tabla '$IdTabla'
+     * Retorna todas las filas especificadas de la Ciudad '$IdTabla'
      *
      * @param $IdTabla Identificador del registro
      * @return array Datos del registro
      */
     public static function getAll()
     {
-        $consulta = "SELECT DEP_IdDepartamento, DEP_Nombre, DEP_Pais,
-        CASE DEP_Estado WHEN 1 THEN 'Activo' ELSE 'Inactivo' END EstadoTabla
-            FROM gen_departamento ORDER BY DEP_Nombre; ";
+        $consulta = "SELECT ".$GLOBALS['Llave'].", CIU_Nombre, CIU_Abreviatura, CIU_IdDepartamento, ".
+            " CASE CIU_Estado WHEN 1 THEN 'Activo' ELSE 'Inactivo' END EstadoTabla ".
+            " FROM ".$GLOBALS['TABLA']." ORDER BY CIU_Nombre; ";
         try {
             // Preparar sentencia
             $comando = Database::getInstance()->getDb()->prepare($consulta);
@@ -45,12 +46,13 @@ class GEN_DEPARTAMENTO
     public static function getById($IdTabla)
     {
         // Consulta de la tabla de tablas
-        $consulta = "SELECT DEP_IdDepartamento,
-                            DEP_Nombre,
-                            DEP_Pais,
-                            DEP_Estado
-                            FROM gen_departamento
-                            WHERE DEP_IdDepartamento = ? ORDER BY DEP_Nombre; ";
+        $consulta = "SELECT ".$GLOBALS['Llave'].",
+                            CIU_Nombre,
+                            CIU_Abreviatura,
+                            CIU_IdDepartamento,
+                            CIU_Estado ".
+                            " FROM ".$GLOBALS['TABLA'].
+                            " WHERE ".$GLOBALS['Llave']." = ? ORDER BY CIU_Nombre; ";
 
         try {
             // Preparar sentencia
@@ -78,10 +80,10 @@ class GEN_DEPARTAMENTO
      */
     public static function getByIdEstado($IdEstadoTabla)
     {
-        // Consulta de la GEN_DEPARTAMENTO
-        $consulta = "SELECT DEP_IdDepartamento, DEP_Nombre, DEP_Pais, DEP_Estado
-                    FROM gen_departamento
-                    WHERE DEP_Estado = ? ORDER BY DEP_Nombre; ";
+        // Consulta de la GEN_PAIS
+        $consulta = "SELECT ".$GLOBALS['Llave'].", CIU_Nombre, CIU_Abreviatura, CIU_IdDepartamento, CIU_Estado".
+                    " FROM ". $GLOBALS['TABLA'].
+                    " WHERE CIU_Estado = ? ORDER BY CIU_Nombre; ";
 
         try {
             // Preparar sentencia
@@ -101,7 +103,7 @@ class GEN_DEPARTAMENTO
 
 
     /**
-     * Obtiene los campos de una GEN_DEPARTAMENTO con un estado Activo
+     * Obtiene los campos de una GEN_PAIS con un estado Activo
      * determinado
      *
      * @param $IdEstadoTabla Identificador de Estado de la tabla
@@ -110,9 +112,9 @@ class GEN_DEPARTAMENTO
     public static function getByIdExiste($IdEstadoTabla)
     {
         // Consulta de la gen_departamento
-        $consulta = "SELECT Count(DEP_IdDepartamento) AS TotalTablas, DEP_Nombre, DEP_Estado
-                    FROM gen_departamento
-                    WHERE DEP_IdDepartamento = ? ;";
+        $consulta = "SELECT Count(".$GLOBALS['Llave'].") AS TotalTablas, CIU_Nombre, CIU_IdDepartamento, CIU_Estado ".
+                    " FROM ". $GLOBALS['TABLA'].
+                    " WHERE ".$GLOBALS['Llave']." = ? ;";
 
         try {
             // Preparar sentencia
@@ -135,55 +137,60 @@ class GEN_DEPARTAMENTO
      * Actualiza un registro de la bases de datos basado
      * en los nuevos valores relacionados con un identificador
      *
-     * @param $IdTabla            identificador
-     * @param $Nombre_Tabla        nuevo Nombre Tabla
-     * @param $NombreMostrar       nueva Nombre Tabla a mostrar
-     * @param $IdEstadoTabla       nueva Estado       
+     * @param $IdTabla           identificador
+     * @param $Nombre            nuevo Nombre Tabla
+     * @param $Abreviatura       nueva Nombre Abreviatura
+     * @param $Departamento      nueva Nombre Departamento
+     * @param $IdEstadoTabla     nueva Estado       
      * 
      */
     public static function update(
         $NombreTabla,
-        $Pais,
+        $Abreviatura,
+        $Departamento,
         $IdEstadoTabla,
         $IdTabla
     )
     {
         // Creando consulta UPDATE
-        $consulta = "UPDATE gen_departamento" .
-            " SET DEP_Nombre=?, DEP_Pais=?, DEP_Estado=? " .
-            " WHERE DEP_IdDepartamento=? ;";
+        $consulta = "UPDATE ". $GLOBALS['TABLA']. 
+            " SET CIU_Nombre=?, CIU_Abreviatura = ? CIU_IdDepartamento=?, CIU_Estado=? " .
+            " WHERE ". $GLOBALS['Llave'] ." =? ;";
 
         // Preparar la sentencia
         $cmd = Database::getInstance()->getDb()->prepare($consulta);
 
         // Relacionar y ejecutar la sentencia
-        $cmd->execute(array($NombreTabla, $Pais, $IdEstadoTabla, $IdTabla ));
+        $cmd->execute(array($NombreTabla, $Abreviatura, $Departamento, $IdEstadoTabla, $IdTabla ));
 
         return $cmd;
     }
 
     /**
-     * Insertar un nueva Tabla
+     * Insertar un nueva Ciudad
      *         
      * @param $IdTabla            identificador
-     * @param $Nombre             nuevo Nombre Tabla
-     * @param $NombreMostrar      nueva Nombre Tabla a mostrar
+     * @param $Nombre             nuevo Nombre cIUDAD
+     * @param $Abreviatura        nueva Nombre Abreviatura a mostrar
+     * @param $Departamento       nueva Nombre Departamento a mostrar
      * @param $Estado             Estado   
      * @return PDOStatement
      */
     public static function insert(        
         $Nombre,
-        $Pais,        
+        $Abreviatura,
+        $Depto,       
         $Estado
     )
     {
         // Sentencia INSERT
-        $comando = "INSERT INTO gen_departamento ( " .            
-            " DEP_Nombre," . 
-            " DEP_Pais," .            
-            " DEP_Estado" . 
+        $comando = "INSERT INTO ". $GLOBALS['TABLA'] ." ( " .            
+            " CIU_Nombre," . 
+            " CIU_Abreviatura," .
+            " CIU_IdDepartamento," .
+            " CIU_Estado" . 
             " )".     
-            " VALUES(?,?,?) ;";
+            " VALUES(?,?,?,?) ;";
 
         // Preparar la sentencia
         $sentencia = Database::getInstance()->getDb()->prepare($comando);
@@ -191,7 +198,8 @@ class GEN_DEPARTAMENTO
         return $sentencia->execute(
             array(                
                 $Nombre, 
-                $Pais,               
+                $Abreviatura,
+                $Depto,               
                 $Estado
             )
         );
@@ -206,7 +214,7 @@ class GEN_DEPARTAMENTO
     public static function delete($IdTabla)
     {
         // Sentencia DELETE
-        $comando = "DELETE FROM gen_departamento WHERE DEP_IdDepartamento = ? ;";
+        $comando = "DELETE FROM ". $GLOBALS['TABLA'] ." WHERE ". $GLOBALS['Llave']. " = ? ;";
 
         // Preparar la sentencia
         $sentencia = Database::getInstance()->getDb()->prepare($comando);
@@ -215,20 +223,21 @@ class GEN_DEPARTAMENTO
     }
 
     /**
-     * Verifica si existe el DEPARTAMENTO
+     * Verifica si existe el Pais
      *
      * @param $IdUsuario identificador de la gen_departamento
      * @return bool Respuesta de la consulta
      */
-    public static function existetabla($Nombre)
+    public static function existetabla($Nombre,$Abreviatura)
     {
-        $consulta = "SELECT count(DEP_IdDepartamento) existe, DEP_Nombre FROM DEP_IdDepartamento WHERE DEP_Nombre = ? ; ";
+        $consulta = "SELECT count(". $GLOBALS['Llave']. ") existe, CIU_Nombre FROM ".$GLOBALS['TABLA'].
+        " WHERE CIU_Nombre = ? OR CIU_Abreviatura = ?; ";
 
         try {
             // Preparar sentencia
             $comando = Database::getInstance()->getDb()->prepare($consulta);
             // Ejecutar sentencia preparada
-            $comando->execute(array($Nombre));
+            $comando->execute(array($Nombre,$Abreviatura));
             // Capturar primera fila del resultado
             $row = $comando->fetch(PDO::FETCH_ASSOC);
             return $row;
