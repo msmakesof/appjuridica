@@ -44,15 +44,16 @@ if( isset($_GET['f'])  && !empty($_GET['f']) )
     $idTabla = trim($_GET['f']);
 }
 
-$Tabla ="TABLAS";
+$Tabla ="DEPARTAMENTO";
 $idtabla = 0;
 
-require_once('../../apis/general/tabla.php');
+require_once('../../apis/general/departamento.php');
 
-$Nombre = trim($mtabla['gen_tabla']['TAB_Nombre_Tabla']);
-$NombreMostrar = trim($mtabla['gen_tabla']['TAB_NombreMostrar']);
-$estado = $mtabla['gen_tabla']['TAB_IdEstadoTabla'];
-$idtabla = $mtabla['gen_tabla']['TAB_IdTabla'];
+$Nombre = trim($mdepartamento['gen_departamento']['DEP_Nombre']);
+$Pais = trim($mdepartamento['gen_departamento']['DEP_Pais']);
+$estado = $mdepartamento['gen_departamento']['DEP_Estado'];
+$idtabla = $mdepartamento['gen_departamento']['DEP_IdDepartamento'];
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -79,9 +80,9 @@ $idtabla = $mtabla['gen_tabla']['TAB_IdTabla'];
 
     <!-- Sweet Alert Css -->
     <link href="../../plugins/sweetalert/sweetalert.css" rel="stylesheet" />
-	
-	<!-- Bootstrap Select Css -->
-	<link href="../../plugins/bootstrap-select/css/bootstrap-select.css" rel="stylesheet" />
+
+     <!-- Bootstrap Select Css -->
+    <link href="../../plugins/bootstrap-select/css/bootstrap-select.css" rel="stylesheet" />
 
     <!-- Custom Css -->
     <link href="../../css/style.css" rel="stylesheet">
@@ -100,7 +101,7 @@ $idtabla = $mtabla['gen_tabla']['TAB_IdTabla'];
         <div class="container-fluid">
             <div class="block-header">
                 <h2>
-                    FORMULARIO: TABLAS.
+                    FORMULARIO: <?php echo $Tabla; ?>.
                     <!--<small>Editar.</small>-->
                 </h2>
             </div>
@@ -109,7 +110,7 @@ $idtabla = $mtabla['gen_tabla']['TAB_IdTabla'];
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <div class="card">
                         <div class="header">
-                            <h2>REGISTRO EDICION DE TABLAS.</h2>
+                            <h2>REGISTRO EDICION DE <?php echo $Tabla; ?>.</h2>
                            <!--  <ul class="header-dropdown m-r--5">
                                <li class="dropdown">
                                     <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
@@ -126,17 +127,32 @@ $idtabla = $mtabla['gen_tabla']['TAB_IdTabla'];
                                         <input type="text" class="form-control" name="nombre" id="nombre" value="<?php echo $Nombre ;?>" required>
                                        <!-- -->
                                     </div>
-                                </div> 
+                                </div>                                
 
-                                <div class="form-group form-float">
-                                    <label class="form-label">Nombre a Mostrar</label>
-                                    <div class="form-line">
-                                        <input type="text" class="form-control" name="nombremostrar" id="nombremostrar" value="<?php echo $NombreMostrar ;?>" required>
-                                       <!-- -->
-                                    </div>
-                                </div>                               
-                                
                                 <div class="form-group">
+                                    <label class="form-label">Pa&iacute;s</label>
+                                    <div class="col-sm-4">
+                                        <select class="form-control show-tick" data-live-search="true" name="pais" id="pais" required>                                            
+                                            <?php 
+                                                $idTabla = 0;
+                                                require_once('../../apis/general/pais.php');                                                
+                                                 for($i=0; $i<count($mpais['gen_pais']); $i++)
+                                                {           
+                                                    $PAI_IdPais = $mpais['gen_pais'][$i]['PAI_IdPais'];
+                                                    $PAI_Nombre = $mpais['gen_pais'][$i]['PAI_Nombre'];
+                                                    $PAI_Estado = $mpais['gen_pais'][$i]['PAI_Estado']; 
+                                            ?>                                            
+                                            <option value="<?php echo $PAI_IdPais; ?>" <?php if ($PAI_IdPais == $Pais){ echo "selected";} else{ echo "";} ?>>
+                                                <?php echo $PAI_Nombre ; ?>                                                
+                                            </option>
+                                            <?php                    
+                                                } 
+                                            ?>
+                                        </select>
+                                    </div>   
+                                </div>                            
+                                
+                                <div class="form-group" style="clear: both;">
                                     <input type="radio" name="estado" id="activo" class="with-gap" value="1" <?php if( $estado == 1){?>checked="checked"<?php } ?>>
                                     <label for="activo">Activo</label>
 
@@ -212,15 +228,15 @@ $idtabla = $mtabla['gen_tabla']['TAB_IdTabla'];
 		$("#grabar").on('click', function(e) {
             $("#mensaje").hide();
 			var nombre = $("#nombre").val();
-            var nombremostrar = $("#nombremostrar").val();			
+            var pais = $("#pais").val();			
 			var estado = $('input:radio[name=estado]:checked').val();
 			var idtabla = "<?php echo $idtabla; ?>";
 			
 			$.ajax({
-				data : {"nombre": nombre, "nombremostrar": nombremostrar, "estado": estado, "idtabla": idtabla},
+				data : {"nombre": nombre, "pais": pais, "estado": estado, "idtabla": idtabla},
 				type: "POST",
 				dataType: "html",
-				url : "editar_tabla.php",
+				url : "editar_departamento.php",
             })  
 			.done(function( dataX, textStatus, jqXHR ){	
 			    // 				
@@ -265,7 +281,7 @@ $idtabla = $mtabla['gen_tabla']['TAB_IdTabla'];
                     data : {"pidtabla": idtabla},
                     type: "POST",
                     dataType: "html",
-                    url : "../forms/borrar_tabla.php",
+                    url : "../forms/borrar_departamento.php",
                 })  
                 .done(function( dataX, textStatus, jqXHR ){                       
                     var xrespstr = dataX.trim();
@@ -308,7 +324,3 @@ $idtabla = $mtabla['gen_tabla']['TAB_IdTabla'];
 </body>
 
 </html>
-<?php
-//mysqli_free_result($rs_tabla);
-//mysqli_close($cnn_kn);
-?>

@@ -1,4 +1,5 @@
-﻿<?php 
+﻿
+<?php 
 if(!isset($_SESSION)) 
 { 
     session_start(); 
@@ -7,7 +8,9 @@ else
 {
     header('Location: ../../index.html');
 }
-$NombreTabla ="TABLAS";
+$idTabla = 0;
+require_once('../../apis/general/pais.php');
+$NombreTabla ="DEPARTAMENTO";
 ?>
 <!DOCTYPE html>
 <html>
@@ -113,13 +116,14 @@ $NombreTabla ="TABLAS";
         
         $("#grabar").on('click', function(e) { 
            
-            var nombremostrar = $("#nombremostrar").val();
+            //var nombremostrar = $("#nombremostrar").val();
             var nombre = $("#nombre").val();
+            var pais = $("#pais").val();
             var estado = $('input:radio[name=estado]:checked').val();
             e.preventDefault();
-            if( estado == undefined || nombre == "" || nombremostrar == "")
+            if( estado == undefined || nombre == "" || pais == "")
             {                 
-                swal("Atencion:", "Debe digitar un Nombre y/o seleccionar un Estado.");
+                swal("Atencion:", "Debe digitar un Nombre de Departamento, o un País y/o seleccionar un Estado.");
                 e.stopPropagation();
                 return false;
             }
@@ -127,10 +131,10 @@ $NombreTabla ="TABLAS";
             else
             {
                 $.ajax({
-                    data : {"pnombre": nombre, "pnombremostrar": nombremostrar, "pestado": estado},
+                    data : {"pnombre": nombre, "ppais": pais, "pestado": estado},
                     type: "POST",
                     dataType: "html",
-                    url : "crea_tabla.php",
+                    url : "crea_departamento.php",
                 })  
                 .done(function( data, textStatus, jqXHR){                  
                     var xrespstr = data.trim();
@@ -139,31 +143,6 @@ $NombreTabla ="TABLAS";
                     if(respstr == "E")
                     {         
                         swal("Atencion:", msj);
-
-                       /*
-                        reset();
-                        alertify.alert("Registro No ha sido grabado.");
-                        return false;     
-                        */
-
-                        //existe(nombre);
-                        //get the closable setting value.
-                        //var closable = alertify.alert().setting('closable');
-                        //grab the dialog instance using its parameter-less constructor then set multiple settings at once.
-                        /*
-                        alertify.alert()
-                          .setting({
-                            'label':'Agree',
-                            'message': 'This dialog is : ' + (closable ? ' ' : ' not ') + 'closable.' ,
-                            'onok': function(){ alertify.success('Great');}
-                          }).show();
-                        
-                        reset();   
-                        //alertify.alert("Tabla: "+ parnombre +" !Ya se encuentra registrada.").set({onfocus:function(){ alertify.message('alert - onfocus callback.')}});
-                        alertify.alert('Demo').set({onfocus:function(){ alertify.message('alert - onfocus callback.')}}); 
-                        return false;   
-                        */
-
                     }
                     else
                     {    
@@ -171,18 +150,6 @@ $NombreTabla ="TABLAS";
                         {                        
                             swal("Atencion: ", msj, "success");
                             return false;
-
-                            // reset();                        
-                            // alertify.alert("Registro grabado Correctamente.");
-                            // return false;
-                            //setTimeout(function(evt) {
-                            //    evt.preventDefault();
-                            //$("#g").html("Grabado.");
-                                //alert("Grabado");
-                                //$("#msj").html("Registro grabado Correctamente.").fadeOut(1500);
-                                //$("#msj").html("");
-                                //$("#g").show().fadeOut(1500);
-                            //},3000);
                         }
                         else
                         {
@@ -207,13 +174,9 @@ $NombreTabla ="TABLAS";
     });
 
     function existe(parnombre)
-        {
-            //parnombre.preventDefault();
-            //reset();                        
-            alertify.alert("Tabla: "+ parnombre +" !Ya se encuentra registrada.");
+        {                       
+            alertify.alert("Departamento: "+ parnombre +" !Ya se encuentra registrada.");
              $("#msj").html("Echo....");
-            //return false;
-
         }
     </script>    
 </head>
@@ -252,12 +215,30 @@ $NombreTabla ="TABLAS";
                                         <label class="form-label">Nombre:</label>
                                     </div>
                                 </div>      
-                                <div class="form-group form-float">
-                                    <div class="form-line">
-                                        <input type="text" class="form-control" name="nombremostrar"id="nombremostrar" required>
-                                        <label class="form-label">Nombre a Mostrar:</label>
+                                
+                                <div style="form-group form-float">                                     
+                                    <label class="form-label">
+                                        País
+                                    </label>                                    
+                                    <div class="col-sm-4">                                       
+                                        <select class="form-control show-tick" data-live-search="true" name="pais" id="pais" required>
+                                            <option value="" >Seleccione Opción...</option>
+                                            <?php
+                                                for($i=0; $i<count($mpais['gen_pais']); $i++)
+                                                {
+                                                    $PAI_IdPais = $mpais['gen_pais'][$i]['PAI_IdPais'];
+                                                    $PAI_Nombre = $mpais['gen_pais'][$i]['PAI_Nombre'];
+                                                    $PAI_Estado = $mpais['gen_pais'][$i]['PAI_Estado'];                                                   
+                                            ?>
+                                                    <option value="<?php echo $PAI_IdPais; ?>" >
+                                                        <?php echo $PAI_Nombre ; ?>                                                
+                                                    </option>
+                                            <?php
+                                                }
+                                            ?>
+                                        </select>
                                     </div>
-                                </div>                               
+                                </div>                              
                                 
                                 <div class="form-group">
                                     <input type="radio" name="estado" id="activo" class="with-gap" value="1">

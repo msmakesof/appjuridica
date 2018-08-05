@@ -45,15 +45,16 @@ else
 $pnombre ="";
 if( isset($_POST['pnombre']) )
 {
-	  $pnombre = trim($_POST['pnombre']);
+    $pnombre = trim($_POST['pnombre']);
+    $pnombre = str_replace(' ','%20', $pnombre);
 }
 
-$pnombremostrar ="";
-if( isset($_POST['pnombremostrar']) )
-{
-	  $pnombremostrar = trim($_POST['pnombremostrar']);
-    $pnombremostrar = str_replace(' ', '%20',  $pnombremostrar);
-}
+// $pnombremostrar ="";
+// if( isset($_POST['pnombremostrar']) )
+// {
+// 	  $pnombremostrar = trim($_POST['pnombremostrar']);
+//     $pnombremostrar = str_replace(' ', '%20',  $pnombremostrar);
+// }
 
 $pestado ="";
 if( isset($_POST['pestado']) )
@@ -66,8 +67,8 @@ require_once('../../Connections/DataConex.php');
 // Nombres iguales 
 if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
 {
-  $parameters = "ExisteTabla=1&Nombre=$pnombre&Nombremostrar=$pnombremostrar";
-  $url = urlServicios."consultadetalle/consultadetalle_gen_tabla.php?".$parameters;
+  $parameters = "ExisteTabla=1&Nombre=$pnombre";
+  $url = urlServicios."consultadetalle/consultadetalle_gen_pais.php?".$parameters;
   $ch = curl_init();
   curl_setopt($ch, CURLOPT_VERBOSE, true);
   curl_setopt($ch, CURLOPT_URL, $url);
@@ -93,28 +94,20 @@ if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
     $m = preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $resultado);    
     $m = json_decode($m, true);
     //print_r ($m);
-    $existe = $m['gen_tabla']['existe'];
+    $existe = $m['gen_pais']['existe'];
     if($existe > 0)
     {
-      $sigue = "E-Existe una Tabla registrado con el mismo Nombre.";
+      $sigue = "E-Existe un País registrado con el mismo Nombre.";
     }
     else
     {
-      //
-      // $llave = $GLOBALS['secret_key'];
-      // $interno = rand(10000000,100000123456789);
-      // $local = rand(10000000,1234567890000);
-      // $clave = encryptor('encrypt',$clave);
-      //$parameters = "insert=insert&TipoDocumento=$tipodocumento&Identificacion=$numerodocumento&PrimerApellido=$apellido1&SegundoApellido=$apellido2&Nombre=$nombre&Email=$email&Direccion=$direccion&Celular=$celular&Usuario=$email&Clave=$clave&TipoUsuario=$tipousuario&Estado=$estado&IdInterno=$interno&Local=$local";
-      //$parameters = array("insert" => "insert", "TipoDocumento" => "$tipodocumento","Identificacion" => "$numerodocumento","PrimerApellido" => "$apellido1", "SegundoApellido" => "$apellido2","Nombre" => "$nombre","Email" => "$email", "Direccion" => "$direccion","Celular" => "$celular", "Usuario" => "$email", "Clave" => "$clave", "TipoUsuario" => "$tipousuario", "Estado" => "$estado", "IdInterno" => "$interno", "Local" => "$local");
-
-      $parameters = "insert=insert&Nombre=$pnombre&Nombremostrar=$pnombremostrar&Estado=$pestado";
+      
+      $parameters = "insert=insert&Nombre=$pnombre&Estado=$pestado";
       $soportecURL = "S";
-      $url         = urlServicios."consultadetalle/consultadetalle_gen_tabla.php?".$parameters;
+      $url         = urlServicios."consultadetalle/consultadetalle_gen_pais.php?".$parameters;
       $existe      = "";
       $usulocal    = "";
-      $sigue       = "";
-      //$verbose = fopen("php://appjuridica/tempoErr", 'w');
+      $sigue       = "";      
       if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
       {    
           $ch = curl_init();
@@ -144,7 +137,7 @@ if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
             //echo "Curl Err_no returned.... $curl_errno <br/>";
             $m = preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $resultado);    
             $m = json_decode($m, true);
-            $grabadoOK = $m['gen_tabla'];
+            $grabadoOK = $m['gen_pais'];
             if(!$grabadoOK)
             {
               $sigue = "N-Registro NO ha sido grabado.";
@@ -184,46 +177,5 @@ if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
   }
 
 }  
-
-
-
-// $strowreg =0;
-// $row_rs_tabla = 0;
-// mysqli_select_db($cnn_kn, $database_cnn_kn);
-// $query_rs_tabla = "SELECT Id_Tabla, Id_EstadoTabla FROM gen_tablas WHERE trim(Nombre_Tabla) = '$pnombre' ;" ;
-// //echo "qry_usu......$query_rs_tabla" ;
-// $rs_tabla = mysqli_query($cnn_kn, $query_rs_tabla) or die(mysqli_error()."Err Ln53.....$query_rs_tabla<br>");
-// $row_rs_tabla = mysqli_fetch_assoc($rs_tabla);
-// $totalRows_rs_tabla = mysqli_num_rows($rs_tabla);
-
-// while( $strowreg = mysqli_fetch_array($rs_tabla, MYSQLI_ASSOC) )
-// { 
-// 	$idciudad = $strowreg["Id_Tabla"];
-// 	$estadociudad = $strowreg["Id_EstadoTabla"];
-// }
-
-// $sigue   = "";
-// $Result1 = "";
-// if( $row_rs_tabla >= 1 )
-// {
-//    //echo "<span style='clear:both;width:100%;background-color:#900; color:#FFF; font-size:10.5px; font-family:verdana; text-align:center; padding:5px'> * Tabla: $pnombre !Ya se encuentra registrada.<span>";
-//       $sigue="E";
-// }
-// else
-// {
-// 	//mysqli_next_result($cnn_ok); //función clave 	
-// 	$insertSQL = "INSERT INTO gen_tablas (Nombre_Tabla, Id_EstadoTabla) VALUES ('$pnombre', $pestado);";
-// 	//echo "insert......$insertSQL<br>";	
-// 	 mysqli_select_db($cnn_kn, $database_cnn_kn);
-// 	 $Result1 = mysqli_query($cnn_kn, $insertSQL) or die(mysqli_error()."Err Ln72....$insertSQL<br>");
-// }
-
-// if( $Result1 )
-// {	   
-// 	  $sigue="S";
-// }	 
 echo $sigue;
-
-// mysqli_free_result($rs_tabla);
-// mysqli_close($cnn_kn);
 ?>

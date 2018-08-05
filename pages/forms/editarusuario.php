@@ -162,10 +162,10 @@ $TipoUsuario = $muser['usu_usuario']['USU_TipoUsuario'];
                                     <div style="float: left;">
                                         <label class="form-label">Número Documento</label>
                                         <div class="form-line">
-                                               <input type="text" class="form-control" name="numerodocumento" id="numerodocumento" value="<?php echo $NumeroDocumento ;?>" maxlength="13" required>
-                                            </div>
-                                        </div>    
-                                    </div>
+                                            <input type="text" class="form-control" name="numerodocumento" id="numerodocumento" value="<?php echo $NumeroDocumento ;?>" maxlength="13" required>
+										</div>
+									</div>    
+								</div>
 
                                 <div class="form-group form-float" style="clear: both;">
                                     <label class="form-label">Nombre Usuario</label>

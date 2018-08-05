@@ -42,5 +42,5 @@ if(isset($_POST['pidtabla'])){
 	$pidtabla = trim($_POST['pidtabla']);
 }
 
-require_once('../../apis/general/tabla.del.php');
+require_once('../../apis/general/departamento.del.php');
 ?>

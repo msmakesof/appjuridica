@@ -43,5 +43,5 @@ if(isset($_POST['pidtabla'])){
 }
 
 require_once('../../apis/usuario/infoUsuario.del.php');
-echo $sigue;
+//echo $sigue;
 ?>

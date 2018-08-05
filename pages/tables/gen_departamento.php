@@ -47,7 +47,7 @@ else
 {
     $clave ="";
  }
- $nombre_lnk = "tablas";
+ $nombre_lnk = "departamento";
  $nombre = "";
  $email  = "";
  $usuario ="";
@@ -567,8 +567,7 @@ else
                                     
                                     <ul class="dropdown-menu pull-right">
                                        <li>
-                                       <a id="nuevo" class="btn btn-warning btn-xs waves-effect" data-toggle="modal" data-target="#defaultModal">Nuevo</a>
-                                        
+                                       <a  id="nuevo" class="btn btn-warning btn-xs waves-effect waves-effect m-r-20" data-toggle="modal" data-target="#defaultModal">Nuevo</a>                                        
                                       <!--  <button type="button" class="btn btn-default waves-effect m-r-20" data-toggle="modal" data-target="#defaultModal">Nuevo</button>-->
                                         </li>
                                         <!-- 
@@ -599,7 +598,7 @@ else
 <?php
 require_once('../../Connections/DataConex.php');
 $soportecURL = "S";
-$url         = urlServicios."consultadetalle/consultadetalle_gen_tabla.php?IdMostrar=0";
+$url         = urlServicios."consultadetalle/consultadetalle_gen_departamento.php?IdMostrar=0";
 $existe      = "";
 $usulocal    = "";
 $siguex      = "";
@@ -617,10 +616,10 @@ if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
     $resultado = curl_exec ($ch);
     curl_close($ch);
 
-    $mtabla =  preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $resultado);    
-    $mtabla = json_decode($mtabla, true);
-    //echo("<script>console.log('PHP: ".print_r($mtabla)."');</script>");
-    //echo("<script>console.log('PHP: ".count($m['gen_tabla'])."');</script>");
+    $mdepto =  preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $resultado);    
+    $mdepto = json_decode($mdepto, true);
+    //echo("<script>console.log('PHP: ".print_r($mdepto)."');</script>");
+    //echo("<script>console.log('PHP: ".count($m['gen_depto'])."');</script>");
     
     $json_errors = array(
         JSON_ERROR_NONE => 'No se ha producido ningún error',
@@ -642,23 +641,22 @@ if($soportecURL == "N")
     $response = Unirest\Request::get($url, array("X-Mashape-Key" => "MY SECRET KEY"));
     $resultado = $response->raw_body;
     $resultado = preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $resultado);
-    $mtabla = json_decode($resultado, true);	        
+    $mdepto = json_decode($resultado, true);	        
 } 
 
-if( $mtabla['estado'] < 2)
+if( $mdepto['estado'] < 2)
 {
     $nombre_Tabla="";
-    for($i=0; $i<count($mtabla['gen_tabla']); $i++)
+    for($i=0; $i<count($mdepto['gen_departamento']); $i++)
     {
-        $NombreTabla = trim($mtabla['gen_tabla'][$i]['TAB_NombreMostrar']);
-        $NombreMostrar = trim($mtabla['gen_tabla'][$i]['TAB_NombreMostrar']);
+        $NombreTabla = trim($mdepto['gen_departamento'][$i]['DEP_Nombre']);        
         $archivo = $NombreTabla.".php";
-        $idTabla = $mtabla['gen_tabla'][$i]['TAB_IdTabla'];
-        $estadoTabla = trim($mtabla['gen_tabla'][$i]['EstadoTabla']);
+        $idTabla = $mdepto['gen_departamento'][$i]['DEP_IdDepartamento'];
+        $estadoTabla = trim($mdepto['gen_departamento'][$i]['EstadoTabla']);
     ?>
         <tr>
             <td>
-                <a href="javascript:void(0);" onclick="cambiar('../forms/editartabla.php?f=<?php echo $idTabla; ?>')" class="nav nav-tabs nav-stacked" data-toggle="modal" data-target="#defaultModalEditar" style="text-decoration:none;"><?php echo $NombreTabla; ?></a>        	
+                <a href="javascript:void(0);" onclick="cambiar('../forms/editar<?php echo $nombre_lnk ;?>.php?f=<?php echo $idTabla; ?>')" class="nav nav-tabs nav-stacked" data-toggle="modal" data-target="#defaultModalEditar" style="text-decoration:none;"><?php echo $NombreTabla; ?></a>        	
                 <!-- Default Editar -->
                 <div class="modal fade" id="defaultModalEditar" tabindex="-1" role="dialog">
                     <div class="modal-dialog" role="document">
@@ -668,7 +666,7 @@ if( $mtabla['estado'] < 2)
                             </div>
                             
                             <div class="modal-body">
-                                <object type="text/html" data="../forms/editartabla.php" id="carga"></object>                           
+                                <object type="text/html" data="../forms/editar<?php echo $nombre_lnk ;?>.php" id="carga"></object>                           
                             </div>
 
                             <div class="modal-footer">
@@ -751,11 +749,11 @@ if( $mtabla['estado'] < 2)
 <script type="text/javascript">
  $(document).ready(function () {	 
 	$("#cerrarModal").click(function(){
-	 	 window.location="gen_tabla.php";
+	 	 window.location="gen_departamento.php";
 	});
 
 	$("#cerrarModalC").click(function(){
-	 	 window.location="gen_tabla.php";
+	 	 window.location="gen_departamento.php";
 	});		
 
  }); 

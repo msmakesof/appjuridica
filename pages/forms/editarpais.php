@@ -43,16 +43,14 @@ if( isset($_GET['f'])  && !empty($_GET['f']) )
 {    
     $idTabla = trim($_GET['f']);
 }
-
-$Tabla ="TABLAS";
+//echo $idTabla."<br>";
+$Tabla ="PAIS";
 $idtabla = 0;
 
-require_once('../../apis/general/tabla.php');
-
-$Nombre = trim($mtabla['gen_tabla']['TAB_Nombre_Tabla']);
-$NombreMostrar = trim($mtabla['gen_tabla']['TAB_NombreMostrar']);
-$estado = $mtabla['gen_tabla']['TAB_IdEstadoTabla'];
-$idtabla = $mtabla['gen_tabla']['TAB_IdTabla'];
+require_once('../../apis/general/pais.php');
+$Nombre = trim($mpais['gen_pais']['PAI_Nombre']);
+$estado = $mpais['gen_pais']['PAI_Estado'];
+$idtabla = $mpais['gen_pais']['PAI_IdPais'];
 ?>
 <!DOCTYPE html>
 <html>
@@ -100,7 +98,7 @@ $idtabla = $mtabla['gen_tabla']['TAB_IdTabla'];
         <div class="container-fluid">
             <div class="block-header">
                 <h2>
-                    FORMULARIO: TABLAS.
+                    FORMULARIO: <?php echo $Tabla; ?>.
                     <!--<small>Editar.</small>-->
                 </h2>
             </div>
@@ -109,7 +107,7 @@ $idtabla = $mtabla['gen_tabla']['TAB_IdTabla'];
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <div class="card">
                         <div class="header">
-                            <h2>REGISTRO EDICION DE TABLAS.</h2>
+                            <h2>REGISTRO EDICION DE <?php echo $Tabla; ?>.</h2>
                            <!--  <ul class="header-dropdown m-r--5">
                                <li class="dropdown">
                                     <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
@@ -126,23 +124,14 @@ $idtabla = $mtabla['gen_tabla']['TAB_IdTabla'];
                                         <input type="text" class="form-control" name="nombre" id="nombre" value="<?php echo $Nombre ;?>" required>
                                        <!-- -->
                                     </div>
-                                </div> 
-
-                                <div class="form-group form-float">
-                                    <label class="form-label">Nombre a Mostrar</label>
-                                    <div class="form-line">
-                                        <input type="text" class="form-control" name="nombremostrar" id="nombremostrar" value="<?php echo $NombreMostrar ;?>" required>
-                                       <!-- -->
-                                    </div>
-                                </div>                               
+                                </div>
                                 
                                 <div class="form-group">
                                     <input type="radio" name="estado" id="activo" class="with-gap" value="1" <?php if( $estado == 1){?>checked="checked"<?php } ?>>
                                     <label for="activo">Activo</label>
 
                                     <input type="radio" name="estado" id="inactivo" class="with-gap" value="2"<?php if( $estado == 2){?>checked="checked"<?php } ?>>
-                                    <label for="inactivo" class="m-l-20">Inactivo</label>
-                                    
+                                    <label for="inactivo" class="m-l-20">Inactivo</label>                                    
                                 </div>
                                                                
                                 <button class="btn btn-primary waves-effect" type="button" id="grabar">GRABAR</button>
@@ -153,7 +142,7 @@ $idtabla = $mtabla['gen_tabla']['TAB_IdTabla'];
 
 
                              <form id="mensaje">
-                             <lael style="font-family: Verdana; font-size: 18; color:red;">Registro ha sido borrado correctamente.</lael>
+                             <label style="font-family: Verdana; font-size: 18; color:red;">Registro ha sido borrado correctamente.</lael>
                             </form>
 
                     	</div> 
@@ -212,15 +201,15 @@ $idtabla = $mtabla['gen_tabla']['TAB_IdTabla'];
 		$("#grabar").on('click', function(e) {
             $("#mensaje").hide();
 			var nombre = $("#nombre").val();
-            var nombremostrar = $("#nombremostrar").val();			
+            //var nombremostrar = $("#nombremostrar").val();			
 			var estado = $('input:radio[name=estado]:checked').val();
 			var idtabla = "<?php echo $idtabla; ?>";
 			
 			$.ajax({
-				data : {"nombre": nombre, "nombremostrar": nombremostrar, "estado": estado, "idtabla": idtabla},
+				data : {"nombre": nombre, "estado": estado, "idtabla": idtabla},
 				type: "POST",
 				dataType: "html",
-				url : "editar_tabla.php",
+				url : "editar_<?php echo strtolower($Tabla); ?>.php",
             })  
 			.done(function( dataX, textStatus, jqXHR ){	
 			    // 				
@@ -231,7 +220,7 @@ $idtabla = $mtabla['gen_tabla']['TAB_IdTabla'];
 				if( respstr == "S" )
                 {
                     swal("Atencion: ", msj, "success");
-                    return false;                    
+                    return false;                                    
                 }
 				else
 				{					
@@ -265,7 +254,7 @@ $idtabla = $mtabla['gen_tabla']['TAB_IdTabla'];
                     data : {"pidtabla": idtabla},
                     type: "POST",
                     dataType: "html",
-                    url : "../forms/borrar_tabla.php",
+                    url : "../forms/borrar_<?php echo strtolower($Tabla); ?>.php",
                 })  
                 .done(function( dataX, textStatus, jqXHR ){                       
                     var xrespstr = dataX.trim();
@@ -273,7 +262,9 @@ $idtabla = $mtabla['gen_tabla']['TAB_IdTabla'];
                     var msj = xrespstr.substr(2);        
                     if( respstr == "S" )
                     {            
-                       swal("Atención: ", msj, "success");                  
+                       swal("Atención: ", msj, "success");
+                       //$('#defaultModalEditar').css('display', 'none');
+                       //window.location="../tables/gen_tabla.php";                       
                     }
                     else
                     {                    
@@ -308,7 +299,3 @@ $idtabla = $mtabla['gen_tabla']['TAB_IdTabla'];
 </body>
 
 </html>
-<?php
-//mysqli_free_result($rs_tabla);
-//mysqli_close($cnn_kn);
-?>
