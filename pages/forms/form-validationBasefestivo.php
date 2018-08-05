@@ -44,8 +44,7 @@ if (!function_exists("GetSQLValueString"))
     }
 }
 $idTabla = 0;
-require_once('../../apis/general/departamento.php');
-$NombreTabla ="CIUDAD";
+$NombreTabla ="FESTIVO";
 
 ?>
 <!DOCTYPE html>
@@ -57,10 +56,14 @@ $NombreTabla ="CIUDAD";
     <title></title>
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&subset=latin,cyrillic-ext" rel="stylesheet" type="text/css">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" type="text/css">     
+
 
     <!-- Bootstrap Core Css -->
     <link href="../../plugins/bootstrap/css/bootstrap.css" rel="stylesheet">
+
+    <!-- DateTime Picker -->
+    <link href="../../calendar/css/bootstrap-datetimepicker.min.css" rel="stylesheet"> 
 
     <!-- Waves Effect Css -->
     <link href="../../plugins/node-waves/waves.css" rel="stylesheet" />
@@ -84,7 +87,7 @@ $NombreTabla ="CIUDAD";
 
     <!-- AdminBSB Themes. You can choose a theme from css/themes instead of get all themes -->
     <link href="../../css/themes/all-themes.css" rel="stylesheet" />
-
+    
     <!-- mks 20170128
     <link rel="stylesheet" href="../../css/themes2/alertify.core.css" />
     <link rel="stylesheet" href="../../css/themes2/alertify.default.css" id="toggleCSS" /> -->
@@ -127,13 +130,22 @@ $NombreTabla ="CIUDAD";
     <script src="../../js/demo.js"></script>
 
     <!-- <script src="../../js/alertify.min.js"></script> -->
-     <script src="../../js/jquery.numeric.js"></script>
+    <script src="../../js/jquery.numeric.js"></script>
+    
+    <!-- DateTime picker -->
+    <script src="../../calendar/js/moment.min.js"></script>
+    <script src="../../calendar/js/bootstrap-datetimepicker.min.js"></script>
+    <script src="../../calendar/js/bootstrap-datetimepicker.es.js"></script>  
 
     <script type="text/javascript">
     var nombre ="";
     $(document).ready(function()
-    {       
+    {                        
         $("#msj").hide();        
+        
+        $('#nombre').datetimepicker({
+          format: 'YYYY-MM-DD'       
+        });
 
         function reset () {
             $("#toggleCSS").attr("href", "../../css/themes2/alertify.default.css");
@@ -150,15 +162,12 @@ $NombreTabla ="CIUDAD";
         
 
         $("#grabar").on('click', function(e) {             
-            var nombre = $("#nombre").val();
-            nombre = nombre.toUpperCase();
-            var abreviatura = $("#abreviatura").val();
-            abreviatura = abreviatura.toUpperCase();
-            var depto = $("#depto").val();
+            var nombre = $("#txtFecha").val();            
+            var vanciaJudicial = $("#VanciaJudicial").val();
             var estado = $('input:radio[name=estado]:checked').val();
             e.preventDefault();
 
-            if( estado == undefined || nombre == "" || abreviatura == "" || depto == "" )
+            if( estado == undefined || nombre == "" || vanciaJudicial == "" )
             {               
                 swal({
                   title: "Atención:  Ingrese información en todos los campos...",
@@ -173,7 +182,7 @@ $NombreTabla ="CIUDAD";
             else
             {
                 $.ajax({
-                    data : {"pnombre": nombre, "pabreviatura": abreviatura, "pdepto": depto, "pestado": estado}, 
+                    data : {"pnombre": nombre, "pvanciaJudicial": vanciaJudicial, "pestado": estado}, 
                     type: "POST",
                     dataType: "html",
                     url : "crea_<?php echo strtolower($NombreTabla); ?>.php",
@@ -184,19 +193,19 @@ $NombreTabla ="CIUDAD";
                     var msj = xrespstr.substr(2);
                     if(respstr == "E")
                     {                         
-                       swal("Atencion:", msj);
+                       swal("Atención:", msj);
                     }
                     else
                     {    
                         if( respstr == "S" )
                         {                        
-                            swal("Atencion: ", msj, "success");
+                            swal("Atención: ", msj, "success");
                             return false;                            
                         }
                         else
                         {                            
                             swal({
-                                title: "Atencion: ",   
+                                title: "Atención: ",   
                                 text: msj,   
                                 type: "error" 
                             });
@@ -247,44 +256,21 @@ $NombreTabla ="CIUDAD";
                             <form id="form_validation" method="POST">
                                 
                                 <div class="form-group form-float" style="clear: both;">
-                                    <label class="form-label">Nombre Ciudad</label>
-                                    <div class="form-line">
-                                        <input type="text" class="form-control" name="nombre" id="nombre" value="" required>                                       
+                                    <label class="form-label">Seleccione Día Festivo</label>                                    
+                                    <div class='input-group date form-line' name="nombre" id="nombre" required>
+                                        <input type='text' id="txtFecha" class="form-control"  readonly/>
+                                        <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span>
+                                        </span>
                                     </div>
                                 </div>
+                                
 
                                 <div class="form-group form-float" style="clear: both;">
-                                    <label class="form-label">Abreviatura</label>
+                                    <label class="form-label">Vancia Judicial</label>
                                     <div class="form-line">
-                                        <input type="text" class="form-control" name="abreviatura" id="abreviatura" maxlength="4" value="" required>                                       
+                                        <input type="text" class="form-control" name="VanciaJudicial" id="VanciaJudicial" maxlength="1" value="" required>                                       
                                     </div>
-                                </div>
-
-                                <div class="form-group" style="clear: both;">
-                                    <div style="float: left;">                                     
-                                        <label class="form-label">
-                                            Departamento
-                                        </label>                                    
-                                        <div class="col-sm-4">                                       
-                                            <select class="form-control show-tick" data-live-search="true" name="depto" id="depto" required>
-                                             <option value="" >Seleccione Opción...</option>
-                                                <?php
-                                                    for($i=0; $i<count($mdepartamento['gen_departamento']); $i++)
-                                                    {
-                                                        $DEP_IdDepto = $mdepartamento['gen_departamento'][$i]['DEP_IdDepartamento'];
-                                                        $DEP_Nombre = $mdepartamento['gen_departamento'][$i]['DEP_Nombre'];
-                                                        $DEP_Estado = $mdepartamento['gen_departamento'][$i]['DEP_IdDepartamento']; 
-                                                ?>
-                                                        <option value="<?php echo $DEP_IdDepto; ?>" >
-                                                            <?php echo $DEP_Nombre ; ?>                                                
-                                                        </option>
-                                                <?php
-                                                    }
-                                                ?>
-                                            </select>
-                                        </div>
-                                    </div>                                        
-                                </div>
+                                </div>                                
                                 
                                 <div class="form-group form-float" style="clear: both;">
                                     <label class="form-label">Estado</label>

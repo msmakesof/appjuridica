@@ -1,5 +1,4 @@
-<?php 
-require_once('../../Connections/cnn_kn.php'); 
+<?php require_once('../../Connections/cnn_kn.php'); 
 require_once('../../Connections/config2.php');
 if(!isset($_SESSION)) 
 { 
@@ -38,26 +37,10 @@ if (!function_exists("GetSQLValueString")) {
   }
 }
 
-$nombre ="";
-if(isset($_POST['nombre'])){
-    $nombre = trim($_POST['nombre']);
-    $nombre = str_replace(' ', '%20', $nombre);
+$pidtabla = 0;
+if(isset($_POST['pidtabla'])){
+	$pidtabla = trim($_POST['pidtabla']);
 }
 
-$pais ="";
-if(isset($_POST['pais'])){
-  $pais = trim($_POST['pais']);  
-}
-
-$estado ="";
-if(isset($_POST['estado'])){
-	$estado = trim($_POST['estado']);
-}
-
-$idtabla = 0;
-if(isset($_POST['idtabla'])){
-	$idtabla = trim($_POST['idtabla']);
-}
-
-require_once('../../apis/general/departamento.upd.php');
+require_once('../../apis/general/festivo.del.php');
 ?>

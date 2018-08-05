@@ -43,14 +43,18 @@ if( isset($_GET['f'])  && !empty($_GET['f']) )
 {    
     $idTabla = trim($_GET['f']);
 }
-//echo $idTabla."<br>";
-$Tabla ="PAIS";
+
+$Tabla ="CIUDAD";
 $idtabla = 0;
 
-require_once('../../apis/general/pais.php');
-$Nombre = trim($mpais['gen_pais']['PAI_Nombre']);
-$estado = $mpais['gen_pais']['PAI_Estado'];
-$idtabla = $mpais['gen_pais']['PAI_IdPais'];
+require_once('../../apis/general/ciudad.php');
+
+$Nombre = trim($mciudad['gen_ciudad']['CIU_Nombre']);
+$Abreviatura = trim($mciudad['gen_ciudad']['CIU_Abreviatura']);
+$Departamento = trim($mciudad['gen_ciudad']['CIU_IdDepartamento']);
+$estado = $mciudad['gen_ciudad']['CIU_Estado'];
+$idtabla = $mciudad['gen_ciudad']['CIU_IdCiudades'];
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -77,9 +81,9 @@ $idtabla = $mpais['gen_pais']['PAI_IdPais'];
 
     <!-- Sweet Alert Css -->
     <link href="../../plugins/sweetalert/sweetalert.css" rel="stylesheet" />
-	
-	<!-- Bootstrap Select Css -->
-	<link href="../../plugins/bootstrap-select/css/bootstrap-select.css" rel="stylesheet" />
+
+     <!-- Bootstrap Select Css -->
+    <link href="../../plugins/bootstrap-select/css/bootstrap-select.css" rel="stylesheet" />
 
     <!-- Custom Css -->
     <link href="../../css/style.css" rel="stylesheet">
@@ -121,17 +125,47 @@ $idtabla = $mpais['gen_pais']['PAI_IdPais'];
                                 <div class="form-group form-float">
                                     <label class="form-label">Nombre</label>
                                     <div class="form-line">
-                                        <input type="text" class="form-control" name="nombre" id="nombre" value="<?php echo $Nombre ;?>" required>
-                                       <!-- -->
+                                        <input type="text" class="form-control" name="nombre" id="nombre" value="<?php echo $Nombre ;?>" required>                                    
                                     </div>
                                 </div>
-                                
+
+                                <div class="form-group form-float">
+                                    <label class="form-label">Abreviatura</label>
+                                    <div class="form-line">
+                                        <input type="text" class="form-control" name="abreviatura" id="abreviatura" value="<?php echo $Abreviatura ;?>" required>                                    
+                                    </div>
+                                </div>                              
+
                                 <div class="form-group">
+                                    <label class="form-label">Departamento</label>
+                                    <div class="col-sm-4">
+                                        <select class="form-control show-tick" data-live-search="true" name="depto" id="depto" required>                                            
+                                            <?php 
+                                                $idTabla = 0;
+                                                require_once('../../apis/general/departamento.php');                                                
+                                                 for($i=0; $i<count($mdepartamento['gen_departamento']); $i++)
+                                                {           
+                                                    $DEP_IdDepartamento = $mdepartamento['gen_departamento'][$i]['DEP_IdDepartamento'];
+                                                    $DEP_Nombre = $mdepartamento['gen_departamento'][$i]['DEP_Nombre'];
+                                                    $DEP_Estado = $mdepartamento['gen_departamento'][$i]['DEP_Estado']; 
+                                            ?>                                            
+                                            <option value="<?php echo $DEP_IdDepartamento; ?>" <?php if ($DEP_IdDepartamento == $Departamento){ echo "selected";} else{ echo "";} ?>>
+                                                <?php echo $DEP_Nombre ; ?>                                                
+                                            </option>
+                                            <?php                    
+                                                } 
+                                            ?>
+                                        </select>
+                                    </div>   
+                                </div>                            
+                                
+                                <div class="form-group" style="clear: both;">
                                     <input type="radio" name="estado" id="activo" class="with-gap" value="1" <?php if( $estado == 1){?>checked="checked"<?php } ?>>
                                     <label for="activo">Activo</label>
 
                                     <input type="radio" name="estado" id="inactivo" class="with-gap" value="2"<?php if( $estado == 2){?>checked="checked"<?php } ?>>
-                                    <label for="inactivo" class="m-l-20">Inactivo</label>                                    
+                                    <label for="inactivo" class="m-l-20">Inactivo</label>
+                                    
                                 </div>
                                                                
                                 <button class="btn btn-primary waves-effect" type="button" id="grabar">GRABAR</button>
@@ -142,7 +176,7 @@ $idtabla = $mpais['gen_pais']['PAI_IdPais'];
 
 
                              <form id="mensaje">
-                             <label style="font-family: Verdana; font-size: 18; color:red;">Registro ha sido borrado correctamente.</lael>
+                             <lael style="font-family: Verdana; font-size: 18; color:red;">Registro ha sido borrado correctamente.</lael>
                             </form>
 
                     	</div> 
@@ -202,14 +236,17 @@ $idtabla = $mpais['gen_pais']['PAI_IdPais'];
             $("#mensaje").hide();
 			var nombre = $("#nombre").val();
             nombre = nombre.toUpperCase();
+            var abreviatura = $("#abreviatura").val();
+            abreviatura = abreviatura.toUpperCase();
+            var depto = $("#depto").val();			
 			var estado = $('input:radio[name=estado]:checked').val();
 			var idtabla = "<?php echo $idtabla; ?>";
 			
 			$.ajax({
-				data : {"nombre": nombre, "estado": estado, "idtabla": idtabla},
+				data : {"nombre": nombre, "abreviatura": abreviatura, "depto": depto, "estado": estado, "idtabla": idtabla},
 				type: "POST",
 				dataType: "html",
-				url : "editar_<?php echo strtolower($Tabla); ?>.php",
+				url : "editar_ciudad.php",
             })  
 			.done(function( dataX, textStatus, jqXHR ){	
 			    // 				
@@ -219,13 +256,13 @@ $idtabla = $mpais['gen_pais']['PAI_IdPais'];
 				
 				if( respstr == "S" )
                 {
-                    swal("Atencion: ", msj, "success");
-                    return false;                                    
+                    swal("Atención: ", msj, "success");
+                    return false;                    
                 }
 				else
 				{					
                     swal({
-                        title: "Atencion: ",   
+                        title: "Atención: ",   
                         text: msj,   
                         type: "error" 
                     });
@@ -254,7 +291,7 @@ $idtabla = $mpais['gen_pais']['PAI_IdPais'];
                     data : {"pidtabla": idtabla},
                     type: "POST",
                     dataType: "html",
-                    url : "../forms/borrar_<?php echo strtolower($Tabla); ?>.php",
+                    url : "../forms/borrar_ciudad.php",
                 })  
                 .done(function( dataX, textStatus, jqXHR ){                       
                     var xrespstr = dataX.trim();
@@ -262,9 +299,7 @@ $idtabla = $mpais['gen_pais']['PAI_IdPais'];
                     var msj = xrespstr.substr(2);        
                     if( respstr == "S" )
                     {            
-                       swal("Atención: ", msj, "success");
-                       //$('#defaultModalEditar').css('display', 'none');
-                       //window.location="../tables/gen_tabla.php";                       
+                       swal("Atención: ", msj, "success");                  
                     }
                     else
                     {                    

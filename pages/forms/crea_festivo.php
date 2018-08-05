@@ -45,22 +45,15 @@ else
 $pnombre ="";
 if( isset($_POST['pnombre']) )
 {
-    $pnombre = trim($_POST['pnombre']);
-    $pnombre = str_replace(' ','%20', $pnombre);
+    $pnombre = trim($_POST['pnombre']);   
 }
 
-$pabreviatura ="";
-if( isset($_POST['pabreviatura']) )
+$pvanciaJudicial ="";
+if( isset($_POST['pvanciaJudicial']) )
 {
-	  $pabreviatura = trim($_POST['pabreviatura']);
-    //$pnombremostrar = str_replace(' ', '%20',  $pnombremostrar);
+	  $pvanciaJudicial = trim($_POST['pvanciaJudicial']);
 }
-
-$pdepto ="";
-if( isset($_POST['pdepto']) )
-{
-	  $pdepto = trim($_POST['pdepto']);
-}
+//echo "pvanciaJudicial....$pvanciaJudicial<br>";
 
 $pestado ="";
 if( isset($_POST['pestado']) )
@@ -73,8 +66,8 @@ require_once('../../Connections/DataConex.php');
 // Nombres iguales 
 if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
 {
-  $parameters = "ExisteTabla=1&Nombre=$pnombre&Abreviatura=$pabreviatura";
-  $url = urlServicios."consultadetalle/consultadetalle_gen_ciudad.php?".$parameters;
+  $parameters = "ExisteTabla=1&Nombre=$pnombre";
+  $url = urlServicios."consultadetalle/consultadetalle_gen_festivo.php?".$parameters;
   $ch = curl_init();
   curl_setopt($ch, CURLOPT_VERBOSE, true);
   curl_setopt($ch, CURLOPT_URL, $url);
@@ -100,17 +93,17 @@ if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
     $m = preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $resultado);    
     $m = json_decode($m, true);
     //print_r ($m);
-    $existe = $m['gen_ciudad']['existe'];
+    $existe = $m['gen_festivo']['existe'];
     if($existe > 0)
     {
-      $sigue = "E-Existe una Ciudad registrado con el mismo Nombre o con la misma Abreviatura.";
+      $sigue = "E-Existe un Festivo Registrado para esta fecha.";
     }
     else
     {
       
-      $parameters = "insert=insert&Nombre=$pnombre&Abreviatura=$pabreviatura&Depto=$pdepto&Estado=$pestado";
+      $parameters = "insert=insert&Nombre=$pnombre&VanciaJudicial=$pvanciaJudicial&Estado=$pestado";
       $soportecURL = "S";
-      $url         = urlServicios."consultadetalle/consultadetalle_gen_ciudad.php?".$parameters;
+      $url         = urlServicios."consultadetalle/consultadetalle_gen_festivo.php?".$parameters;
       $existe      = "";
       $usulocal    = "";
       $sigue       = ""; 
@@ -144,7 +137,7 @@ if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
             //echo "Curl Err_no returned.... $curl_errno <br/>";
             $m = preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $resultado);    
             $m = json_decode($m, true);
-            $grabadoOK = $m['gen_ciudad'];
+            $grabadoOK = $m['gen_festivo'];
             if(!$grabadoOK)
             {
               $sigue = "N-Registro NO ha sido grabado.";

@@ -124,15 +124,14 @@ $idtabla = $mdepartamento['gen_departamento']['DEP_IdDepartamento'];
                                 <div class="form-group form-float">
                                     <label class="form-label">Nombre</label>
                                     <div class="form-line">
-                                        <input type="text" class="form-control" name="nombre" id="nombre" value="<?php echo $Nombre ;?>" required>
-                                       <!-- -->
+                                        <input type="text" class="form-control" name="nombre" id="nombre" value="<?php echo $Nombre ;?>" required>                                    
                                     </div>
-                                </div>                                
+                                </div>                                                             
 
                                 <div class="form-group">
                                     <label class="form-label">Pa&iacute;s</label>
                                     <div class="col-sm-4">
-                                        <select class="form-control show-tick" data-live-search="true" name="pais" id="pais" required>                                            
+                                        <select class="form-control show-tick" data-live-search="true" name="depto" id="depto" required>                                            
                                             <?php 
                                                 $idTabla = 0;
                                                 require_once('../../apis/general/pais.php');                                                
@@ -228,6 +227,7 @@ $idtabla = $mdepartamento['gen_departamento']['DEP_IdDepartamento'];
 		$("#grabar").on('click', function(e) {
             $("#mensaje").hide();
 			var nombre = $("#nombre").val();
+            nombre = nombre.toUpperCase();
             var pais = $("#pais").val();			
 			var estado = $('input:radio[name=estado]:checked').val();
 			var idtabla = "<?php echo $idtabla; ?>";
@@ -246,13 +246,13 @@ $idtabla = $mdepartamento['gen_departamento']['DEP_IdDepartamento'];
 				
 				if( respstr == "S" )
                 {
-                    swal("Atencion: ", msj, "success");
+                    swal("Atención: ", msj, "success");
                     return false;                    
                 }
 				else
 				{					
                     swal({
-                        title: "Atencion: ",   
+                        title: "Atención: ",   
                         text: msj,   
                         type: "error" 
                     });
@@ -281,7 +281,7 @@ $idtabla = $mdepartamento['gen_departamento']['DEP_IdDepartamento'];
                     data : {"pidtabla": idtabla},
                     type: "POST",
                     dataType: "html",
-                    url : "../forms/borrar_departamento.php",
+                    url : "../forms/borrar_ciudad.php",
                 })  
                 .done(function( dataX, textStatus, jqXHR ){                       
                     var xrespstr = dataX.trim();

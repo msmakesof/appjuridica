@@ -117,6 +117,7 @@ $NombreTabla ="PAIS";
            
             //var nombremostrar = $("#nombremostrar").val();
             var nombre = $("#nombre").val();
+            nombre = nombre.toUpperCase();
             var estado = $('input:radio[name=estado]:checked').val();
             e.preventDefault();
             if( estado == undefined || nombre == "" )

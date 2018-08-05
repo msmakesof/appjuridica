@@ -56,7 +56,7 @@ else
 }
 
 $soportecURL = "S";
-$url         = urlServicios."consultadetalle/consultadetalle_gen_departamento.php?".$params;
+$url         = urlServicios."consultadetalle/consultadetalle_gen_ciudad.php?".$params;
 //echo("<script>console.log('PHP: ".$url."');</script>");
 if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
 {
@@ -71,10 +71,10 @@ if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
     $resultado = curl_exec ($ch);
     curl_close($ch);
 
-    $mdepartamento =  preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $resultado);    
-    $mdepartamento = json_decode($mdepartamento, true);
-    //echo("<script>console.log('PHP: ".print_r($muser)."');</script>");
-    //echo("<script>console.log('PHP: ".count($m['gen_departamento'])."');</script>");
+    $mciudad =  preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $resultado);    
+    $mciudad = json_decode($mciudad, true);
+    //echo("<script>console.log('PHP: ".print_r($mciudad)."');</script>");
+    //echo("<script>console.log('PHP: ".count($m['gen_ciudad'])."');</script>");
     
     $json_errors = array(
         JSON_ERROR_NONE => 'No se ha producido ningún error',
@@ -96,6 +96,6 @@ if($soportecURL == "N")
     $response = Unirest\Request::get($url, array("X-Mashape-Key" => "MY SECRET KEY"));
     $resultado = $response->raw_body;
     $resultado = preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $resultado);
-    $mdepartamento = json_decode($resultado, true);	        
+    $mciudad = json_decode($resultado, true);	        
 }
 ?>

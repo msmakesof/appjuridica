@@ -5,10 +5,10 @@
  */
 header('Access-Control-Allow-Origin: *');
 
-require '../estructura/gen_ciudad.php';
+require '../estructura/gen_festivo.php';
 
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
-        $LNK_TABLA = "CIUDAD";
+        $LNK_TABLA = "FESTIVO";
         $lnk_tabla = strtolower($LNK_TABLA);
 
     if (isset($_GET['IdTabla'])) {
@@ -17,14 +17,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         $parametro = $_GET['IdTabla'];
 
         // Tratar retorno
-        $retorno = GEN_CIUDAD::getById($parametro);
+        $retorno = GEN_FESTIVO::getById($parametro);
 
         if ($retorno) {
-            $gen_ciudad["estado"] = "1";
-            $gen_ciudad["gen_ciudad"] = $retorno;
+            $gen_festivo["estado"] = "1";
+            $gen_festivo["gen_festivo"] = $retorno;
             // Enviar objeto json de la meta
             header('Content-Type: application/json');
-            echo json_encode($gen_ciudad);
+            echo json_encode($gen_festivo);
         } else {
             // Enviar respuesta de error general
             print json_encode(
@@ -36,18 +36,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         }
     }
     elseif (isset($_GET['IdEstado'])) {
-        // Obtener parámetro idEstado de gen_departamento
+        // Obtener parámetro idEstado de gen_festivo
         $parametro = $_GET['IdEstado'];
 
         // Tratar retorno
-        $retorno = GEN_CIUDAD::getByIdEstado($parametro);
+        $retorno = GEN_FESTIVO::getByIdEstado($parametro);
 
         if ($retorno) {
-            $gen_ciudad["estado"] = "1";
-            $gen_ciudad["gen_ciudad"] = $retorno;
-            // Enviar objeto json de la gen_ciudad
+            $gen_festivo["estado"] = "1";
+            $gen_festivo["gen_festivo"] = $retorno;
+            // Enviar objeto json de la gen_festivo
             header('Content-Type: application/json');
-            echo json_encode($gen_ciudad);
+            echo json_encode($gen_festivo);
         } else {
             // Enviar respuesta de error general
             print json_encode(
@@ -64,12 +64,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         $parametroC = $_GET['idC'];
 
         // Tratar retorno
-        $retorno = GEN_CIUDAD::getByIdExiste($parametro,$parametroC);
+        $retorno = GEN_FESTIVO::getByIdExiste($parametro,$parametroC);
 
         if ($retorno) {
-            $gen_departamento["estado"] = "1";
-            $gen_departamento["gen_departamento"] = $retorno;
-            // Enviar objeto json de la usu_usuario
+            $gen_festivo["estado"] = "1";
+            $gen_festivo["gen_festivo"] = $retorno;
+            // Enviar objeto json de gen_festivo
             header('Content-Type: application/json');
             echo json_encode($gen_departamento);
         } else {
@@ -85,17 +85,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 
     elseif (isset($_GET['ExisteTabla']) )
     {
-        $par1 = $_GET['Nombre'];
-        $par2 = $_GET['Abreviatura'];
+        $par1 = $_GET['Nombre'];        
 
-        $retorno = GEN_CIUDAD::existetabla($par1, $par2);
+        $retorno = GEN_FESTIVO::existetabla($par1);
         if ($retorno) 
         {
-            $gen_ciudad["estado"] = "1";
-            $gen_ciudad["gen_ciudad"] = $retorno;
-            // Enviar objeto json de la gen_ciudad
+            $gen_festivo["estado"] = "1";
+            $gen_festivo["gen_festivo"] = $retorno;
+            // Enviar objeto json de la gen_festivo
             header('Content-Type: application/json');
-            echo json_encode($gen_ciudad);
+            echo json_encode($gen_festivo);
         } 
         else 
         {
@@ -110,7 +109,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     }
 
     elseif (isset($_GET['IdMostrar'])) {
-        // Obtener parámetro IdMostrar de gen_departamento
+        // Obtener parámetro IdMostrar de gen_festivo
         $parametro = $_GET['IdMostrar'];
         if($parametro == 0)
         {
@@ -118,15 +117,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         }
 
         // Tratar retorno
-        $retorno = GEN_CIUDAD::getAll($parametro);
+        $retorno = GEN_FESTIVO::getAll($parametro);
 
         if ($retorno) 
         {
-            $gen_ciudad["estado"] = "1";
-            $gen_ciudad["gen_ciudad"] = $retorno;
-            // Enviar objeto json de la gen_ciudad
+            $gen_festivo["estado"] = "1";
+            $gen_festivo["gen_festivo"] = $retorno;
+            // Enviar objeto json de la gen_festivo
             header('Content-Type: application/json');
-            echo json_encode($gen_ciudad);
+            echo json_encode($gen_festivo);
         } 
         else 
         {
@@ -144,19 +143,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     {
         //Obtener Parametros
         $par1 = $_GET['Nombre'];
-        $par2 = $_GET['Abreviatura']; 
-        $par3 = $_GET['Depto'];        
-        $par4 = $_GET['Estado'];
+        $par2 = $_GET['VanciaJudicial'];         
+        $par3 = $_GET['Estado'];
 
-        $retorno = GEN_CIUDAD::insert($par1, $par2, $par3, $par4);
+        $retorno = GEN_FESTIVO::insert($par1, $par2, $par3);
         $msj = $retorno;
         if($retorno)
         {
-            $gen_ciudad["estado"] = "1";
-            $gen_ciudad["gen_ciudad"] = $retorno;
-             // Enviar objeto json de la gen_ciudad
+            $gen_festivo["estado"] = "1";
+            $gen_festivo["gen_festivo"] = $retorno;
+             // Enviar objeto json de la gen_festivo
             header('Content-Type: application/json');
-            echo json_encode($gen_ciudad);
+            echo json_encode($gen_festivo);
         }
         else
         {
@@ -173,20 +171,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     {
         //Obtener Parametros
         $par1 = $_GET['nombre'];
-        $par2 = $_GET['abreviatura'];
-        $par3 = $_GET['depto']; 
-        $par4 = $_GET['estado'];
-        $par5 = $_GET['idtabla'];
+        $par2 = $_GET['vanciaJudicial']; 
+        $par3 = $_GET['estado'];
+        $par4 = $_GET['idtabla'];
 
-        $retorno = GEN_CIUDAD::update($par1, $par2, $par3, $par4, $par5);
+        $retorno = GEN_FESTIVO::update($par1, $par2, $par3, $par4);
         $msj = $retorno;
         if($retorno)
         {
-            $gen_ciudad["estado"] = "1";
-            $gen_ciudad["gen_ciudad"] = $retorno;
-             // Enviar objeto json de la gen_ciudad
+            $gen_festivo["estado"] = "1";
+            $gen_festivo["gen_festivo"] = $retorno;
+             // Enviar objeto json de la gen_festivo
             header('Content-Type: application/json');
-            echo json_encode($gen_ciudad);
+            echo json_encode($gen_festivo);
         }
         else
         {
@@ -203,14 +200,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     {
         $par0  = $_GET['pidtabla'];
 
-        $retorno = GEN_CIUDAD::delete($par0);
+        $retorno = GEN_FESTIVO::delete($par0);
         if ($retorno) 
         {
-            $gen_ciudad["estado"] = "1";
-            $gen_ciudad["gen_ciudad"] = $retorno;
-            // Enviar objeto json de la gen_departamento
+            $gen_festivo["estado"] = "1";
+            $gen_festivo["gen_ciudad"] = $retorno;
+            // Enviar objeto json de la gen_festivo
             header('Content-Type: application/json');
-            echo json_encode($gen_ciudad);
+            echo json_encode($gen_festivo);
         } 
         else 
         {

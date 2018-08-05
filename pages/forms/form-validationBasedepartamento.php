@@ -151,6 +151,7 @@ $NombreTabla ="DEPARTAMENTO";
 
         $("#grabar").on('click', function(e) {             
             var nombre = $("#nombre").val();
+            nombre = nombre.toUpperCase();
             var pais = $("#pais").val();
             var estado = $('input:radio[name=estado]:checked').val();
             e.preventDefault();

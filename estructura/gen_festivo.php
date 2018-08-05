@@ -4,9 +4,9 @@
  * almacenadas en la base de datos
  */
 require '../Connections/database.php';
-$TABLA ="gen_ciudad";
-$Llave ="CIU_IdCiudades";
-class GEN_CIUDAD
+$TABLA ="gen_festivo";
+$Llave ="FES_IdFestivo";
+class GEN_FESTIVO
 {
     function __construct()
     {
@@ -20,9 +20,9 @@ class GEN_CIUDAD
      */
     public static function getAll()
     {
-        $consulta = "SELECT ".$GLOBALS['Llave'].", CIU_Nombre, CIU_Abreviatura, CIU_IdDepartamento, ".
-            " CASE CIU_Estado WHEN 1 THEN 'Activo' ELSE 'Inactivo' END EstadoTabla ".
-            " FROM ".$GLOBALS['TABLA']." ORDER BY CIU_Nombre; ";
+        $consulta = "SELECT ".$GLOBALS['Llave'].", FES_Festivo, FES_VanciaJudicial, ".
+            " CASE FES_Estado WHEN 1 THEN 'Activo' ELSE 'Inactivo' END EstadoTabla ".
+            " FROM ".$GLOBALS['TABLA']." ORDER BY FES_Festivo; ";
         try {
             // Preparar sentencia
             $comando = Database::getInstance()->getDb()->prepare($consulta);
@@ -47,12 +47,11 @@ class GEN_CIUDAD
     {
         // Consulta de la tabla de tablas
         $consulta = "SELECT ".$GLOBALS['Llave'].",
-                            CIU_Nombre,
-                            CIU_Abreviatura,
-                            CIU_IdDepartamento,
-                            CIU_Estado ".
+                            FES_Festivo,
+                            FES_VanciaJudicial,
+                            FES_Estado ".
                             " FROM ".$GLOBALS['TABLA'].
-                            " WHERE ".$GLOBALS['Llave']." = ? ORDER BY CIU_Nombre; ";
+                            " WHERE ".$GLOBALS['Llave']." = ? ORDER BY FES_Festivo; ";
 
         try {
             // Preparar sentencia
@@ -81,9 +80,9 @@ class GEN_CIUDAD
     public static function getByIdEstado($IdEstadoTabla)
     {
         // Consulta de la GEN_PAIS
-        $consulta = "SELECT ".$GLOBALS['Llave'].", CIU_Nombre, CIU_Abreviatura, CIU_IdDepartamento, CIU_Estado".
+        $consulta = "SELECT ".$GLOBALS['Llave'].", FES_Festivo, FES_VanciaJudicial, FES_Estado".
                     " FROM ". $GLOBALS['TABLA'].
-                    " WHERE CIU_Estado = ? ORDER BY CIU_Nombre; ";
+                    " WHERE FES_Estado = ? ORDER BY FES_Festivo; ";
 
         try {
             // Preparar sentencia
@@ -112,7 +111,7 @@ class GEN_CIUDAD
     public static function getByIdExiste($IdEstadoTabla)
     {
         // Consulta de la gen_departamento
-        $consulta = "SELECT Count(".$GLOBALS['Llave'].") AS TotalTablas, CIU_Nombre, CIU_IdDepartamento, CIU_Estado ".
+        $consulta = "SELECT Count(".$GLOBALS['Llave'].") AS TotalTablas, FES_Festivo, FES_VanciaJudicial, FES_Estado ".
                     " FROM ". $GLOBALS['TABLA'].
                     " WHERE ".$GLOBALS['Llave']." = ? ;";
 
@@ -139,58 +138,53 @@ class GEN_CIUDAD
      *
      * @param $IdTabla           identificador
      * @param $Nombre            nuevo Nombre Tabla
-     * @param $Abreviatura       nueva Nombre Abreviatura
-     * @param $Departamento      nueva Nombre Departamento
+     * @param $VanciaJudicial    nueva Nombre VanciaJudicial a mostrar
      * @param $IdEstadoTabla     nueva Estado       
      * 
      */
     public static function update(
         $nombre,
-        $abreviatura,
-        $depto,
+        $vanciaJudicial,
         $estado,
         $idtabla
     )
     {
         // Creando consulta UPDATE
         $consulta = "UPDATE ". $GLOBALS['TABLA']. 
-            " SET CIU_Nombre=?, CIU_Abreviatura = ?, CIU_IdDepartamento=?, CIU_Estado=? " .
+            " SET FES_Festivo=?, FES_VanciaJudicial=?, FES_Estado=? " .
             " WHERE ". $GLOBALS['Llave'] ." =? ;";
 
         // Preparar la sentencia
         $cmd = Database::getInstance()->getDb()->prepare($consulta);
 
         // Relacionar y ejecutar la sentencia
-        $cmd->execute(array($nombre, $abreviatura, $depto, $estado, $idtabla ));
+        $cmd->execute(array($nombre, $vanciaJudicial, $estado, $idtabla ));
 
         return $cmd;
     }
 
     /**
-     * Insertar un nueva Ciudad
+     * Insertar un nuevo festivo
      *         
      * @param $IdTabla            identificador
      * @param $Nombre             nuevo Nombre Ciudad
-     * @param $Abreviatura        nueva Nombre Abreviatura a mostrar
-     * @param $Departamento       nueva Nombre Departamento a mostrar
+     * @param $VanciaJudicial     nueva Nombre VanciaJudicial a mostrar
      * @param $Estado             Estado   
      * @return PDOStatement
      */
     public static function insert(        
-        $Nombre,
-        $Abreviatura,
-        $Depto,       
+        $Nombre,        
+        $VanciaJudicial,       
         $Estado
     )
     {
         // Sentencia INSERT
         $comando = "INSERT INTO ". $GLOBALS['TABLA'] ." ( " .            
-            " CIU_Nombre," . 
-            " CIU_Abreviatura," .
-            " CIU_IdDepartamento," .
-            " CIU_Estado" . 
+            " FES_Festivo," . 
+            " FES_VanciaJudicial," .
+            " FES_Estado" . 
             " )".     
-            " VALUES(?,?,?,?) ;";
+            " VALUES(?,?,?) ;";
 
         // Preparar la sentencia
         $sentencia = Database::getInstance()->getDb()->prepare($comando);
@@ -198,8 +192,7 @@ class GEN_CIUDAD
         return $sentencia->execute(
             array(                
                 $Nombre, 
-                $Abreviatura,
-                $Depto,               
+                $VanciaJudicial,               
                 $Estado
             )
         );
@@ -208,7 +201,7 @@ class GEN_CIUDAD
     /**
      * Eliminar el registro con el identificador especificado
      *
-     * @param $IdTabla identificador de la gen_departamento
+     * @param $IdTabla identificador de la gen_festivo
      * @return bool Respuesta de la eliminación
      */
     public static function delete($IdTabla)
@@ -223,21 +216,21 @@ class GEN_CIUDAD
     }
 
     /**
-     * Verifica si existe el Pais
+     * Verifica si existe el festivo
      *
-     * @param $IdUsuario identificador de la gen_departamento
+     * @param $IdUsuario identificador de la gen_festivo
      * @return bool Respuesta de la consulta
      */
-    public static function existetabla($Nombre,$Abreviatura)
+    public static function existetabla($Nombre)
     {
-        $consulta = "SELECT count(". $GLOBALS['Llave']. ") existe, CIU_Nombre FROM ".$GLOBALS['TABLA'].
-        " WHERE CIU_Nombre = ? OR CIU_Abreviatura = ?; ";
+        $consulta = "SELECT count(". $GLOBALS['Llave']. ") existe, FES_Festivo FROM ".$GLOBALS['TABLA'].
+        " WHERE FES_Festivo = ?; ";
 
         try {
             // Preparar sentencia
             $comando = Database::getInstance()->getDb()->prepare($consulta);
             // Ejecutar sentencia preparada
-            $comando->execute(array($Nombre,$Abreviatura));
+            $comando->execute(array($Nombre));
             // Capturar primera fila del resultado
             $row = $comando->fetch(PDO::FETCH_ASSOC);
             return $row;
