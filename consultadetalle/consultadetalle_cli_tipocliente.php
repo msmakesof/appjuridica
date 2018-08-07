@@ -5,10 +5,10 @@
  */
 header('Access-Control-Allow-Origin: *');
 
-require '../estructura/gen_tipodocumento.php';
+require '../estructura/cli_tipocliente.php';
 
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
-        $LNK_TABLA = "TIPODOCUMENTO";
+        $LNK_TABLA = "TIPOCLIENTE";
         $lnk_tabla = strtolower($LNK_TABLA);
 
     if (isset($_GET['IdTabla'])) {
@@ -17,14 +17,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         $parametro = $_GET['IdTabla'];
 
         // Tratar retorno
-        $retorno = GEN_TIPODOCUMENTO::getById($parametro);
+        $retorno = CLI_TIPOCLIENTE::getById($parametro);
 
         if ($retorno) {
-            $gen_tipodocumento["estado"] = "1";
-            $gen_tipodocumento["gen_tipodocumento"] = $retorno;
+            $cli_tipocliente["estado"] = "1";
+            $cli_tipocliente["cli_tipocliente"] = $retorno;
             // Enviar objeto json de la meta
             header('Content-Type: application/json');
-            echo json_encode($gen_tipodocumento);
+            echo json_encode($cli_tipocliente);
         } else {
             // Enviar respuesta de error general
             print json_encode(
@@ -36,18 +36,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         }
     }
     elseif (isset($_GET['IdEstado'])) {
-        // Obtener parámetro idEstado de gen_tipodocumento
+        // Obtener parámetro idEstado de cli_tipocliente
         $parametro = $_GET['IdEstado'];
 
         // Tratar retorno
-        $retorno = GEN_TIPODOCUMENTO::getByIdEstado($parametro);
+        $retorno = CLI_TIPOCLIENTE::getByIdEstado($parametro);
 
         if ($retorno) {
-            $gen_tipodocumento["estado"] = "1";
-            $gen_tipodocumento["gen_tipodocumento"] = $retorno;
-            // Enviar objeto json de gen_tipodocumento
+            $cli_tipocliente["estado"] = "1";
+            $cli_tipocliente["cli_tipocliente"] = $retorno;
+            // Enviar objeto json de cli_tipocliente
             header('Content-Type: application/json');
-            echo json_encode($gen_tipodocumento);
+            echo json_encode($cli_tipocliente);
         } else {
             // Enviar respuesta de error general
             print json_encode(
@@ -64,14 +64,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         $parametroC = $_GET['idC'];
 
         // Tratar retorno
-        $retorno = GEN_TIPODOCUMENTO::getByIdExiste($parametro,$parametroC);
+        $retorno = CLI_TIPOCLIENTE::getByIdExiste($parametro,$parametroC);
 
         if ($retorno) {
-            $gen_tipodocumento["estado"] = "1";
-            $gen_tipodocumento["gen_tipodocumento"] = $retorno;
-            // Enviar objeto json de gen_tipodocumento
+            $cli_tipocliente["estado"] = "1";
+            $cli_tipocliente["cli_tipocliente"] = $retorno;
+            // Enviar objeto json de cli_tipocliente
             header('Content-Type: application/json');
-            echo json_encode($gen_tipodocumento);
+            echo json_encode($cli_tipocliente);
         } else {
             // Enviar respuesta de error general
             print json_encode(
@@ -85,17 +85,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 
     elseif (isset($_GET['ExisteTabla']) )
     {
-        $par1 = $_GET['Nombre'];
-        $par2 = $_GET['Abreviatura'];
+        $par1 = $_GET['Nombre'];       
 
-        $retorno = GEN_TIPODOCUMENTO::existetabla($par1, $par2);
+        $retorno = CLI_TIPOCLIENTE::existetabla($par1);
         if ($retorno) 
         {
-            $gen_tipodocumento["estado"] = "1";
-            $gen_tipodocumento["gen_tipodocumento"] = $retorno;
-            // Enviar objeto json de la gen_tipodocumento
+            $cli_tipocliente["estado"] = "1";
+            $cli_tipocliente["cli_tipocliente"] = $retorno;
+            // Enviar objeto json de la cli_tipocliente
             header('Content-Type: application/json');
-            echo json_encode($gen_tipodocumento);
+            echo json_encode($cli_tipocliente);
         } 
         else 
         {
@@ -110,7 +109,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     }
 
     elseif (isset($_GET['IdMostrar'])) {
-        // Obtener parámetro IdMostrar de gen_tipodocumento
+        // Obtener parámetro IdMostrar de cli_tipocliente
         $parametro = $_GET['IdMostrar'];
         if($parametro == 0)
         {
@@ -118,15 +117,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         }
 
         // Tratar retorno
-        $retorno = GEN_TIPODOCUMENTO::getAll($parametro);
+        $retorno = CLI_TIPOCLIENTE::getAll($parametro);
 
         if ($retorno) 
         {
-            $gen_tipodocumento["estado"] = "1";
-            $gen_tipodocumento["gen_tipodocumento"] = $retorno;
-            // Enviar objeto json de la gen_tipodocumento
+            $cli_tipocliente["estado"] = "1";
+            $cli_tipocliente["cli_tipocliente"] = $retorno;
+            // Enviar objeto json de la cli_tipocliente
             header('Content-Type: application/json');
-            echo json_encode($gen_tipodocumento);
+            echo json_encode($cli_tipocliente);
         } 
         else 
         {
@@ -143,19 +142,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     elseif(isset($_GET['insert']) )
     {
         //Obtener Parametros
-        $par1 = $_GET['Nombre'];
-        $par2 = $_GET['Abreviatura'];         
-        $par3 = $_GET['Estado'];
+        $par1 = $_GET['Nombre'];        
+        $par2 = $_GET['Estado'];
 
-        $retorno = GEN_TIPODOCUMENTO::insert($par1, $par2, $par3);
+        $retorno = CLI_TIPOCLIENTE::insert($par1, $par2);
         $msj = $retorno;
         if($retorno)
         {
-            $gen_tipodocumento["estado"] = "1";
-            $gen_tipodocumento["gen_tipodocumento"] = $retorno;
-             // Enviar objeto json de la gen_tipodocumento
+            $cli_tipocliente["estado"] = "1";
+            $cli_tipocliente["cli_tipocliente"] = $retorno;
+             // Enviar objeto json de la cli_tipocliente
             header('Content-Type: application/json');
-            echo json_encode($gen_tipodocumento);
+            echo json_encode($cli_tipocliente);
         }
         else
         {
@@ -171,20 +169,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     elseif(isset($_GET['update']) )
     {
         //Obtener Parametros
-        $par1 = $_GET['nombre'];
-        $par2 = $_GET['abreviatura'];        
-        $par3 = $_GET['estado'];
-        $par4 = $_GET['idtabla'];
+        $par1 = $_GET['nombre'];        
+        $par2 = $_GET['estado'];
+        $par3 = $_GET['idtabla'];
 
-        $retorno = GEN_TIPODOCUMENTO::update($par1, $par2, $par3, $par4);
+        $retorno = CLI_TIPOCLIENTE::update($par1, $par2, $par3);
         $msj = $retorno;
         if($retorno)
         {
-            $gen_tipodocumento["estado"] = "1";
-            $gen_tipodocumento["gen_tipodocumento"] = $retorno;
+            $cli_tipocliente["estado"] = "1";
+            $cli_tipocliente["cli_tipocliente"] = $retorno;
              // Enviar objeto json de la gen_ciudad
             header('Content-Type: application/json');
-            echo json_encode($gen_tipodocumento);
+            echo json_encode($cli_tipocliente);
         }
         else
         {
@@ -201,14 +198,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     {
         $par0  = $_GET['pidtabla'];
 
-        $retorno = GEN_TIPODOCUMENTO::delete($par0);
+        $retorno = CLI_TIPOCLIENTE::delete($par0);
         if ($retorno) 
         {
-            $gen_tipodocumento["estado"] = "1";
-            $gen_tipodocumento["gen_tipodocumento"] = $retorno;
+            $cli_tipocliente["estado"] = "1";
+            $cli_tipocliente["cli_tipocliente"] = $retorno;
             // Enviar objeto json de la gen_departamento
             header('Content-Type: application/json');
-            echo json_encode($gen_tipodocumento);
+            echo json_encode($cli_tipocliente);
         } 
         else 
         {

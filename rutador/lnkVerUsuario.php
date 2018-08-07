@@ -1,9 +1,10 @@
 <?php
-    require_once('./Connections/config2.php');
+    require_once('./Connections/config2.php');    
     if(!isset($_SESSION)) 
     { 
         session_start(); 
-    } 
+    }
+    
     require_once('./Connections/DataConex.php');    
     $clave = encryptor('encrypt', $clave);
     $soportecURL = "S";
@@ -111,6 +112,8 @@
         }
     }
     //echo trim($existe.'- cookie...'.$_COOKIE['_gus']);
+    require_once('./pages/tables/regAuditor.php');
+    //regAuditor();
     echo trim("$existe$cookie_value");
 ?>
 

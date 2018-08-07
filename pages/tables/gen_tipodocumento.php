@@ -5,7 +5,6 @@ if(!isset($_SESSION))
 { 
     session_start(); 
 } 
-//echo "<br><br><br><br><br><br><br><br>".getdate();
 ?>
 <?php
 if (!function_exists("GetSQLValueString")) 
@@ -48,7 +47,7 @@ else
 {
     $clave ="";
  }
- $nombre_lnk = "festivo";
+ $nombre_lnk = "tipodocumento";
  $nombre = "";
  $email  = "";
  $usuario ="";
@@ -599,7 +598,7 @@ else
 <?php
 require_once('../../Connections/DataConex.php');
 $soportecURL = "S";
-$url         = urlServicios."consultadetalle/consultadetalle_gen_festivo.php?IdMostrar=0";
+$url         = urlServicios."consultadetalle/consultadetalle_gen_tipodocumento.php?IdMostrar=0";
 $existe      = "";
 $usulocal    = "";
 $siguex      = "";
@@ -617,10 +616,10 @@ if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
     $resultado = curl_exec ($ch);
     curl_close($ch);
 
-    $mfestivo =  preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $resultado);    
-    $mfestivo = json_decode($mfestivo, true);
-    //echo("<script>console.log('PHP: ".print_r($mdepto)."');</script>");
-    //echo("<script>console.log('PHP: ".count($m['gen_depto'])."');</script>");
+    $mtipodocumento =  preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $resultado);    
+    $mtipodocumento = json_decode($mtipodocumento, true);
+    //echo("<script>console.log('PHP: ".print_r($mtipodocumento)."');</script>");
+    //echo("<script>console.log('PHP: ".count($m['gen_tipodocumento'])."');</script>");
     
     $json_errors = array(
         JSON_ERROR_NONE => 'No se ha producido ningún error',
@@ -642,19 +641,19 @@ if($soportecURL == "N")
     $response = Unirest\Request::get($url, array("X-Mashape-Key" => "MY SECRET KEY"));
     $resultado = $response->raw_body;
     $resultado = preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $resultado);
-    $mfestivo = json_decode($resultado, true);	        
+    $mtipodocumento = json_decode($resultado, true);	        
 } 
 
-if( $mfestivo['estado'] < 2)
+if( $mtipodocumento['estado'] < 2)
 {
     $nombre_Tabla="";
-    for($i=0; $i<count($mfestivo['gen_festivo']); $i++)
+    for($i=0; $i<count($mtipodocumento['gen_tipodocumento']); $i++)
     {
-        $NombreTabla = trim($mfestivo['gen_festivo'][$i]['FES_Festivo']);
-		$VanciaJudicial = trim($mfestivo['gen_festivo'][$i]['FES_VanciaJudicial']);
+        $NombreTabla = trim($mtipodocumento['gen_tipodocumento'][$i]['TDO_Nombre']);
+		$Abreviatura = trim($mtipodocumento['gen_tipodocumento'][$i]['TDO_Abreviatura']);
         $archivo = $NombreTabla.".php";
-        $idTabla = $mfestivo['gen_festivo'][$i]['FES_IdFestivo'];
-        $estadoTabla = trim($mfestivo['gen_festivo'][$i]['EstadoTabla']);
+        $idTabla = $mtipodocumento['gen_tipodocumento'][$i]['TDO_IdTipoDocumento'];
+        $estadoTabla = trim($mtipodocumento['gen_tipodocumento'][$i]['EstadoTabla']);
     ?>
         <tr>
             <td>

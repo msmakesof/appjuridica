@@ -54,7 +54,7 @@ else
   $params ="IdTabla=$idTabla";
 }
 $soportecURL = "S";
-$url         = urlServicios."consultadetalle/consultadetalle_gen_tipodocumento.php?".$params;
+$url         = urlServicios."consultadetalle/consultadetalle_cli_tipocliente.php?".$params;
 $existe      = "";
 $usulocal    = "";
 $siguex      = "";
@@ -72,10 +72,10 @@ if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
     $resultado = curl_exec ($ch);
     curl_close($ch);
 
-    $mtipodocumento =  preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $resultado);    
-    $mtipodocumento = json_decode($mtipodocumento, true);
-    //echo("<script>console.log('PHP: ".print_r($mtipodocumento)."');</script>");
-    //echo("<script>console.log('PHP: ".count($m['gen_tipodocumento'])."');</script>");
+    $mtipocliente =  preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $resultado);    
+    $mtipocliente = json_decode($mtipocliente, true);
+    //echo("<script>console.log('PHP: ".print_r($mtipocliente)."');</script>");
+    //echo("<script>console.log('PHP: ".count($m['cli_tipocliente'])."');</script>");
     
     $json_errors = array(
       JSON_ERROR_NONE => 'No se ha producido ningún error',
@@ -97,6 +97,6 @@ if($soportecURL == "N")
     $response = Unirest\Request::get($url, array("X-Mashape-Key" => "MY SECRET KEY"));
     $resultado = $response->raw_body;
     $resultado = preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $resultado);
-    $mtipodocumento = json_decode($resultado, true);	        
+    $mtipocliente = json_decode($resultado, true);	        
 } 
 ?>

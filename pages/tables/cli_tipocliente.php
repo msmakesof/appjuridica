@@ -5,7 +5,6 @@ if(!isset($_SESSION))
 { 
     session_start(); 
 } 
-//echo "<br><br><br><br><br><br><br><br>".getdate();
 ?>
 <?php
 if (!function_exists("GetSQLValueString")) 
@@ -48,7 +47,7 @@ else
 {
     $clave ="";
  }
- $nombre_lnk = "festivo";
+ $nombre_lnk = "tipocliente";
  $nombre = "";
  $email  = "";
  $usuario ="";
@@ -599,7 +598,7 @@ else
 <?php
 require_once('../../Connections/DataConex.php');
 $soportecURL = "S";
-$url         = urlServicios."consultadetalle/consultadetalle_gen_festivo.php?IdMostrar=0";
+$url         = urlServicios."consultadetalle/consultadetalle_cli_tipocliente.php?IdMostrar=0";
 $existe      = "";
 $usulocal    = "";
 $siguex      = "";
@@ -617,10 +616,10 @@ if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
     $resultado = curl_exec ($ch);
     curl_close($ch);
 
-    $mfestivo =  preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $resultado);    
-    $mfestivo = json_decode($mfestivo, true);
-    //echo("<script>console.log('PHP: ".print_r($mdepto)."');</script>");
-    //echo("<script>console.log('PHP: ".count($m['gen_depto'])."');</script>");
+    $mtipocliente =  preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $resultado);    
+    $mtipocliente = json_decode($mtipocliente, true);
+    //echo("<script>console.log('PHP: ".print_r($mtipocliente)."');</script>");
+    //echo("<script>console.log('PHP: ".count($m['cli_tipocliente'])."');</script>");
     
     $json_errors = array(
         JSON_ERROR_NONE => 'No se ha producido ningún error',
@@ -642,19 +641,18 @@ if($soportecURL == "N")
     $response = Unirest\Request::get($url, array("X-Mashape-Key" => "MY SECRET KEY"));
     $resultado = $response->raw_body;
     $resultado = preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $resultado);
-    $mfestivo = json_decode($resultado, true);	        
+    $mtipocliente = json_decode($resultado, true);	        
 } 
 
-if( $mfestivo['estado'] < 2)
+if( $mtipocliente['estado'] < 2)
 {
     $nombre_Tabla="";
-    for($i=0; $i<count($mfestivo['gen_festivo']); $i++)
+    for($i=0; $i<count($mtipocliente['cli_tipocliente']); $i++)
     {
-        $NombreTabla = trim($mfestivo['gen_festivo'][$i]['FES_Festivo']);
-		$VanciaJudicial = trim($mfestivo['gen_festivo'][$i]['FES_VanciaJudicial']);
+        $NombreTabla = trim($mtipocliente['cli_tipocliente'][$i]['TCL_Nombre']);		
         $archivo = $NombreTabla.".php";
-        $idTabla = $mfestivo['gen_festivo'][$i]['FES_IdFestivo'];
-        $estadoTabla = trim($mfestivo['gen_festivo'][$i]['EstadoTabla']);
+        $idTabla = $mtipocliente['cli_tipocliente'][$i]['TCL_IdTipoCliente'];
+        $estadoTabla = trim($mtipocliente['cli_tipocliente'][$i]['EstadoTabla']);
     ?>
         <tr>
             <td>
@@ -751,11 +749,11 @@ if( $mfestivo['estado'] < 2)
 <script type="text/javascript">
  $(document).ready(function () {	 
 	$("#cerrarModal").click(function(){
-	 	 window.location="gen_<?php echo $nombre_lnk; ?>.php";
+	 	 window.location="cli_<?php echo $nombre_lnk; ?>.php";
 	});
 
 	$("#cerrarModalC").click(function(){
-	 	 window.location="gen_<?php echo $nombre_lnk; ?>.php";
+	 	 window.location="cli_<?php echo $nombre_lnk; ?>.php";
 	});		
 
  }); 

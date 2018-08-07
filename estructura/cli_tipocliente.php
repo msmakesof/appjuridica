@@ -4,9 +4,9 @@
  * almacenadas en la base de datos
  */
 require '../Connections/database.php';
-$TABLA ="gen_tipodocumento";
-$Llave ="TDO_IdTipoDocumento";
-class GEN_TIPODOCUMENTO
+$TABLA ="cli_tipocliente";
+$Llave ="TCL_IdTipoCliente";
+class CLI_TIPOCLIENTE
 {
     function __construct()
     {
@@ -20,9 +20,9 @@ class GEN_TIPODOCUMENTO
      */
     public static function getAll()
     {
-        $consulta = "SELECT ".$GLOBALS['Llave'].", TDO_Nombre, TDO_Abreviatura, ".
-            " CASE TDO_Estado WHEN 1 THEN 'Activo' ELSE 'Inactivo' END EstadoTabla ".
-            " FROM ".$GLOBALS['TABLA']." ORDER BY TDO_Nombre; ";
+        $consulta = "SELECT ".$GLOBALS['Llave'].", TCL_Nombre, ".
+            " CASE TCL_Estado WHEN 1 THEN 'Activo' ELSE 'Inactivo' END EstadoTabla ".
+            " FROM ".$GLOBALS['TABLA']." ORDER BY TCL_Nombre; ";
         try {
             // Preparar sentencia
             $comando = Database::getInstance()->getDb()->prepare($consulta);
@@ -47,11 +47,10 @@ class GEN_TIPODOCUMENTO
     {
         // Consulta de la tabla de tablas
         $consulta = "SELECT ".$GLOBALS['Llave'].",
-                            TDO_Nombre,
-                            TDO_Abreviatura,                            
-                            TDO_Estado ".
+                            TCL_Nombre,                            
+                            TCL_Estado ".
                             " FROM ".$GLOBALS['TABLA'].
-                            " WHERE ".$GLOBALS['Llave']." = ? ORDER BY TDO_Nombre; ";
+                            " WHERE ".$GLOBALS['Llave']." = ? ORDER BY TCL_Nombre; ";
 
         try {
             // Preparar sentencia
@@ -80,9 +79,9 @@ class GEN_TIPODOCUMENTO
     public static function getByIdEstado($IdEstadoTabla)
     {
         // Consulta de la GEN_PAIS
-        $consulta = "SELECT ".$GLOBALS['Llave'].", TDO_Nombre, TDO_Abreviatura, TDO_Estado".
+        $consulta = "SELECT ".$GLOBALS['Llave'].", TCL_Nombre, TCL_Estado".
                     " FROM ". $GLOBALS['TABLA'].
-                    " WHERE TDO_Estado = ? ORDER BY TDO_Nombre; ";
+                    " WHERE TCL_Estado = ? ORDER BY TCL_Nombre; ";
 
         try {
             // Preparar sentencia
@@ -111,7 +110,7 @@ class GEN_TIPODOCUMENTO
     public static function getByIdExiste($IdEstadoTabla)
     {
         // Consulta de la gen_departamento
-        $consulta = "SELECT Count(".$GLOBALS['Llave'].") AS TotalTablas, TDO_Nombre, TDO_Estado ".
+        $consulta = "SELECT Count(".$GLOBALS['Llave'].") AS TotalTablas, TCL_Nombre, TCL_Estado ".
                     " FROM ". $GLOBALS['TABLA'].
                     " WHERE ".$GLOBALS['Llave']." = ? ;";
 
@@ -137,28 +136,26 @@ class GEN_TIPODOCUMENTO
      * en los nuevos valores relacionados con un identificador
      *
      * @param $IdTabla           identificador
-     * @param $Nombre            nuevo Nombre Tipo Documento
-     * @param $Abreviatura       nueva Nombre Abreviatura     
+     * @param $Nombre            nuevo Nombre Tipo Cliente
      * @param $IdEstadoTabla     nueva Estado       
      * 
      */
     public static function update(
-        $nombre,
-        $abreviatura,        
+        $nombre,        
         $estado,
         $idtabla
     )
     {
         // Creando consulta UPDATE
         $consulta = "UPDATE ". $GLOBALS['TABLA']. 
-            " SET TDO_Nombre=?, TDO_Abreviatura = ?, TDO_Estado=? " .
+            " SET TCL_Nombre=?, TCL_Estado=? " .
             " WHERE ". $GLOBALS['Llave'] ." =? ;";
 
         // Preparar la sentencia
         $cmd = Database::getInstance()->getDb()->prepare($consulta);
 
         // Relacionar y ejecutar la sentencia
-        $cmd->execute(array($nombre, $abreviatura, $estado, $idtabla ));
+        $cmd->execute(array($nombre, $estado, $idtabla ));
 
         return $cmd;
     }
@@ -167,32 +164,28 @@ class GEN_TIPODOCUMENTO
      * Insertar un nueva Tipo Documento
      *         
      * @param $IdTabla            identificador
-     * @param $Nombre             nuevo Nombre Tipo Documento
-     * @param $Abreviatura        nueva Nombre Abreviatura a mostrar     
+     * @param $Nombre             nuevo Nombre Tipo Cliente    
      * @param $Estado             Estado   
      * @return PDOStatement
      */
     public static function insert(        
-        $Nombre,
-        $Abreviatura,        
+        $Nombre,       
         $Estado
     )
     {
         // Sentencia INSERT
         $comando = "INSERT INTO ". $GLOBALS['TABLA'] ." ( " .            
-            " TDO_Nombre," . 
-            " TDO_Abreviatura," .           
-            " TDO_Estado" . 
+            " TCL_Nombre," .            
+            " TCL_Estado" . 
             " )".     
-            " VALUES(?,?,?) ;";
+            " VALUES(?,?) ;";
 
         // Preparar la sentencia
         $sentencia = Database::getInstance()->getDb()->prepare($comando);
 
         return $sentencia->execute(
             array(                
-                $Nombre, 
-                $Abreviatura,                            
+                $Nombre,                 
                 $Estado
             )
         );
@@ -221,16 +214,16 @@ class GEN_TIPODOCUMENTO
      * @param $IdUsuario identificador de la gen_Tipo Documento
      * @return bool Respuesta de la consulta
      */
-    public static function existetabla($Nombre,$Abreviatura)
+    public static function existetabla($Nombre)
     {
-        $consulta = "SELECT count(". $GLOBALS['Llave']. ") existe, TDO_Nombre FROM ".$GLOBALS['TABLA'].
-        " WHERE TDO_Nombre = ? OR TDO_Abreviatura = ?; ";
+        $consulta = "SELECT count(". $GLOBALS['Llave']. ") existe, TCL_Nombre FROM ".$GLOBALS['TABLA'].
+        " WHERE TCL_Nombre = ? ; ";
 
         try {
             // Preparar sentencia
             $comando = Database::getInstance()->getDb()->prepare($consulta);
             // Ejecutar sentencia preparada
-            $comando->execute(array($Nombre,$Abreviatura));
+            $comando->execute(array($Nombre));
             // Capturar primera fila del resultado
             $row = $comando->fetch(PDO::FETCH_ASSOC);
             return $row;
