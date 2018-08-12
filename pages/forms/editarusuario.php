@@ -38,7 +38,12 @@ if (!function_exists("GetSQLValueString"))
         return $theValue;
     }
 }
+
+
 $idTabla = 0;
+require_once('../../apis/general/tipodocumento.php');
+require_once('../../apis/general/tipousuario.php');
+
 if( isset($_GET['f'])  && !empty($_GET['f']) )
 {    
     $idTabla = trim($_GET['f']);
@@ -49,8 +54,6 @@ $idtabla = 0;
 $row_rs_tabla = 0;
 $Nombreciudad = "";
 
-require_once('../../apis/general/tipoDocumento.php');
-require_once('../../apis/general/tipoUsuario.php');
 require_once('../../apis/usuario/infoUsuario.php');
 
 $idtabla = $muser['usu_usuario']['USU_IdUsuario'];
@@ -142,11 +145,11 @@ $TipoUsuario = $muser['usu_usuario']['USU_TipoUsuario'];
                                            <input type="hidden" class="form-control" name="IdEstudiante" id="IdEstudiante" value="<?php echo $idtabla ;?>" readonly>
                                             <select class="form-control show-tick" data-live-search="true" name="tipodocumento" id="tipodocumento" required>
                                                 <?php                                                    
-                                                    for($i=0; $i<count($m['gen_tipodocumento']); $i++)
+                                                    for($i=0; $i<count($mtipodocumento['gen_tipodocumento']); $i++)
                                                     {                                                         
-                                                        $TDO_IdTipoDocumento = $m['gen_tipodocumento'][$i]['TDO_IdTipoDocumento'];
-                                                        $TDO_Abreviatura = $m['gen_tipodocumento'][$i]['TDO_Abreviatura'];
-                                                        $TDO_Nombre = $m['gen_tipodocumento'][$i]['TDO_Nombre'];
+                                                        $TDO_IdTipoDocumento = $mtipodocumento['gen_tipodocumento'][$i]['TDO_IdTipoDocumento'];
+                                                        $TDO_Abreviatura = $mtipodocumento['gen_tipodocumento'][$i]['TDO_Abreviatura'];
+                                                        $TDO_Nombre = $mtipodocumento['gen_tipodocumento'][$i]['TDO_Nombre'];
                                                 ?>                                                
                                                         <option value="<?php echo $TDO_IdTipoDocumento; ?>" <?php if (trim($TDO_IdTipoDocumento) == trim($TipoDocumento)){ echo "selected/=selected/";} else{ echo "";} ?>>
                                                             <?php echo $TDO_Nombre ; ?>                                                
@@ -227,11 +230,11 @@ $TipoUsuario = $muser['usu_usuario']['USU_TipoUsuario'];
                                         <select class="form-control show-tick" data-live-search="true" name="tipousuario" id="tipousuario" required>
                                             <!-- <option value="">-- Seleccione --</option> -->
                                             <?php                                                 
-                                                 for($i=0; $i<count($mtipouser['gen_tipousuario']); $i++)
+                                                 for($i=0; $i<count($mtipousuario['usu_tipousuario']); $i++)
                                                 {           
-                                                    $TUS_IdTipoDocumento = $mtipouser['gen_tipousuario'][$i]['TUS_ID_TipoUsuario'];                                                    
-                                                    $TUS_Nombre = $mtipouser['gen_tipousuario'][$i]['TUS_Nombre'];
-                                                    $TUS_Estado = $mtipouser['gen_tipousuario'][$i]['TUS_Estado'];
+                                                    $TUS_IdTipoDocumento = $mtipousuario['usu_tipousuario'][$i]['TUS_ID_TipoUsuario'];                                                    
+                                                    $TUS_Nombre = $mtipousuario['usu_tipousuario'][$i]['TUS_Nombre'];
+                                                    $TUS_Estado = $mtipousuario['usu_tipousuario'][$i]['TUS_Estado'];
                                             ?>                                            
                                             <option value="<?php echo $TUS_IdTipoDocumento; ?>" <?php if ($TUS_IdTipoDocumento == $TipoUsuario){ echo "selected";} else{ echo "";} ?>>
                                                 <?php echo $TUS_Nombre ; ?>                                                

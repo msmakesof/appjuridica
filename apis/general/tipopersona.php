@@ -40,32 +40,20 @@ if (!function_exists("GetSQLValueString"))
     return $theValue;
   }
 }
+
+$params="";
+if ($idTabla == 0 )
+{
+	$params="IdEstado=1";
+}
+else
+{
+	$params="IdTabla=$idTabla";
+}	
+
 require_once('../../Connections/DataConex.php');
-$params ="";
-//$idTabla = 0;
-//if(isset($_GET["idTabla"]))
-if($idTabla > 0)
-{
-  $idTabla = $idTabla; //$_GET["idTabla"];
-}
-else
-{
-  $idTabla = 0;
-}
-//echo("<script>console.log('PHP idTabla: ".$idTabla."');</script>");
-if($idTabla == 0)
-{
-  $params = "IdEstado=1";
-}
-else
-{
-  $params ="IdTabla=$idTabla";
-}
 $soportecURL = "S";
-$url         = urlServicios."consultadetalle/consultadetalle_gen_tipodocumento.php?".$params;
-$existe      = "";
-$usulocal    = "";
-$siguex      = "";
+$url         = urlServicios."consultadetalle/consultadetalle_gen_tipopersona.php?$params"; 
 //echo("<script>console.log('PHP: ".$url."');</script>");
 if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
 {
@@ -80,16 +68,16 @@ if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
     $resultado = curl_exec ($ch);
     curl_close($ch);
 
-    $mtipodocumento =  preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $resultado);    
-    $mtipodocumento = json_decode($mtipodocumento, true);
-    //echo("<script>console.log('PHP: ".print_r($mtipodocumento)."');</script>");
-    //echo("<script>console.log('PHP: ".count($m['gen_tipodocumento'])."');</script>");
+    $mtipopersona =  preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $resultado);    
+    $mtipopersona = json_decode($mtipopersona, true);
+    //echo("<script>console.log('PHP: ".print_r($mtipopersona)."');</script>");
+    //echo("<script>console.log('PHP: ".count($m['gen_tipopersona'])."');</script>");
     
     $json_errors = array(
-      JSON_ERROR_NONE => 'No se ha producido ningún error',
-      JSON_ERROR_DEPTH => 'Maxima profundidad de pila ha sido excedida',
-      JSON_ERROR_CTRL_CHAR => 'Error de carácter de control, posiblemente codificado incorrectamente',
-      JSON_ERROR_SYNTAX => 'Error de Sintaxis',
+        JSON_ERROR_NONE => 'No se ha producido ningún error',
+        JSON_ERROR_DEPTH => 'Maxima profundidad de pila ha sido excedida',
+        JSON_ERROR_CTRL_CHAR => 'Error de carácter de control, posiblemente codificado incorrectamente',
+        JSON_ERROR_SYNTAX => 'Error de Sintaxis',
     );
     //echo "Error : ", $json_errors[json_last_error()], PHP_EOL, PHP_EOL."<br>";        
 }
@@ -105,6 +93,6 @@ if($soportecURL == "N")
     $response = Unirest\Request::get($url, array("X-Mashape-Key" => "MY SECRET KEY"));
     $resultado = $response->raw_body;
     $resultado = preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $resultado);
-    $mtipodocumento = json_decode($resultado, true);	        
-} 
+    $mtipopersona = json_decode($resultado, true);	        
+}
 ?>

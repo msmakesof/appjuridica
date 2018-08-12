@@ -40,15 +40,15 @@ function GetSQLValueString($theValue, $theType, $theDefinedValue = "", $theNotDe
 
 $nombre ="";
 if(isset($_POST['nombre'])){
-	$nombre = trim($_POST['nombre']);
+    $nombre = trim($_POST['nombre']);
+    $nombre = str_replace(' ', '%20', $nombre);
 }
 
-$nombremostrar ="";
-if(isset($_POST['nombremostrar'])){
-  $nombremostrar = trim($_POST['nombremostrar']);
-  $nombremostrar = str_replace(' ', '%20', $nombremostrar);
-  $nombremostrar = strtoupper($nombremostrar);
-}
+// $nombremostrar ="";
+// if(isset($_POST['nombremostrar'])){
+//   $nombremostrar = trim($_POST['nombremostrar']);
+//   $nombremostrar = str_replace(' ', '%20', $nombremostrar);
+// }
 
 $estado ="";
 if(isset($_POST['estado'])){
@@ -60,5 +60,5 @@ if(isset($_POST['idtabla'])){
 	$idtabla = trim($_POST['idtabla']);
 }
 
-require_once('../../apis/general/tabla.upd.php');
+require_once('../../apis/general/tipopersona.upd.php');
 ?>

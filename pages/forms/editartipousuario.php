@@ -43,18 +43,14 @@ if( isset($_GET['f'])  && !empty($_GET['f']) )
 {    
     $idTabla = trim($_GET['f']);
 }
-//echo "idTabla desde editartipodoc.....$idTabla<br>";
-
-$Tabla ="TIPODOCUMENTO";
+//echo $idTabla."<br>";
+$Tabla ="TIPOUSUARIO";
 $idtabla = 0;
 
-include('../../apis/general/tipodocumento.php');
-
-$Nombre = trim($mtipodocumento['gen_tipodocumento']['TDO_Nombre']);
-$Abreviatura = trim($mtipodocumento['gen_tipodocumento']['TDO_Abreviatura']);
-$estado = $mtipodocumento['gen_tipodocumento']['TDO_Estado'];
-$idtabla = $mtipodocumento['gen_tipodocumento']['TDO_IdTipoDocumento'];
-
+require_once('../../apis/general/tipousuario.php');
+$Nombre = trim($mtipousuario['usu_tipousuario']['TUS_Nombre']);
+$estado = $mtipousuario['usu_tipousuario']['TUS_Estado'];
+$idtabla = $mtipousuario['usu_tipousuario']['TUS_ID_TipoUsuario'];
 ?>
 <!DOCTYPE html>
 <html>
@@ -81,9 +77,9 @@ $idtabla = $mtipodocumento['gen_tipodocumento']['TDO_IdTipoDocumento'];
 
     <!-- Sweet Alert Css -->
     <link href="../../plugins/sweetalert/sweetalert.css" rel="stylesheet" />
-
-     <!-- Bootstrap Select Css -->
-    <link href="../../plugins/bootstrap-select/css/bootstrap-select.css" rel="stylesheet" />
+	
+	<!-- Bootstrap Select Css -->
+	<link href="../../plugins/bootstrap-select/css/bootstrap-select.css" rel="stylesheet" />
 
     <!-- Custom Css -->
     <link href="../../css/style.css" rel="stylesheet">
@@ -125,24 +121,17 @@ $idtabla = $mtipodocumento['gen_tipodocumento']['TDO_IdTipoDocumento'];
                                 <div class="form-group form-float">
                                     <label class="form-label">Nombre</label>
                                     <div class="form-line">
-                                        <input type="text" class="form-control" name="nombre" id="nombre" value="<?php echo $Nombre ;?>" required>                                    
-                                    </div>
-                                </div>
-
-                                <div class="form-group form-float">
-                                    <label class="form-label">Abreviatura</label>
-                                    <div class="form-line">
-                                        <input type="text" class="form-control" name="abreviatura" id="abreviatura" value="<?php echo $Abreviatura ;?>" required>                                    
+                                        <input type="text" class="form-control" name="nombre" id="nombre" value="<?php echo $Nombre ;?>" required>
+                                       <!-- -->
                                     </div>
                                 </div>
                                 
-                                <div class="form-group" style="clear: both;">
+                                <div class="form-group">
                                     <input type="radio" name="estado" id="activo" class="with-gap" value="1" <?php if( $estado == 1){?>checked="checked"<?php } ?>>
                                     <label for="activo">Activo</label>
 
                                     <input type="radio" name="estado" id="inactivo" class="with-gap" value="2"<?php if( $estado == 2){?>checked="checked"<?php } ?>>
-                                    <label for="inactivo" class="m-l-20">Inactivo</label>
-                                    
+                                    <label for="inactivo" class="m-l-20">Inactivo</label>                                    
                                 </div>
                                                                
                                 <button class="btn btn-primary waves-effect" type="button" id="grabar">GRABAR</button>
@@ -153,7 +142,7 @@ $idtabla = $mtipodocumento['gen_tipodocumento']['TDO_IdTipoDocumento'];
 
 
                              <form id="mensaje">
-                             <lael style="font-family: Verdana; font-size: 18; color:red;">Registro ha sido borrado correctamente.</lael>
+                             <label style="font-family: Verdana; font-size: 18; color:red;">Registro ha sido borrado correctamente.</lael>
                             </form>
 
                     	</div> 
@@ -213,16 +202,14 @@ $idtabla = $mtipodocumento['gen_tipodocumento']['TDO_IdTipoDocumento'];
             $("#mensaje").hide();
 			var nombre = $("#nombre").val();
             nombre = nombre.toUpperCase();
-            var abreviatura = $("#abreviatura").val();
-            abreviatura = abreviatura.toUpperCase();            
 			var estado = $('input:radio[name=estado]:checked').val();
 			var idtabla = "<?php echo $idtabla; ?>";
 			
 			$.ajax({
-				data : {"nombre": nombre, "abreviatura": abreviatura, "estado": estado, "idtabla": idtabla},
+				data : {"nombre": nombre, "estado": estado, "idtabla": idtabla},
 				type: "POST",
 				dataType: "html",
-				url : "editar_tipodocumento.php",
+				url : "editar_<?php echo strtolower($Tabla); ?>.php",
             })  
 			.done(function( dataX, textStatus, jqXHR ){	
 			    // 				
@@ -233,7 +220,7 @@ $idtabla = $mtipodocumento['gen_tipodocumento']['TDO_IdTipoDocumento'];
 				if( respstr == "S" )
                 {
                     swal("Atención: ", msj, "success");
-                    return false;                    
+                    return false;                                    
                 }
 				else
 				{					
@@ -267,7 +254,7 @@ $idtabla = $mtipodocumento['gen_tipodocumento']['TDO_IdTipoDocumento'];
                     data : {"pidtabla": idtabla},
                     type: "POST",
                     dataType: "html",
-                    url : "../forms/borrar_tipodocumento.php",
+                    url : "../forms/borrar_<?php echo strtolower($Tabla); ?>.php",
                 })  
                 .done(function( dataX, textStatus, jqXHR ){                       
                     var xrespstr = dataX.trim();
@@ -275,7 +262,7 @@ $idtabla = $mtipodocumento['gen_tipodocumento']['TDO_IdTipoDocumento'];
                     var msj = xrespstr.substr(2);        
                     if( respstr == "S" )
                     {            
-                       swal("Atención: ", msj, "success");                  
+                       swal("Atención: ", msj, "success");                                       
                     }
                     else
                     {                    

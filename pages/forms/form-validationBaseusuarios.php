@@ -40,9 +40,9 @@ if (!function_exists("GetSQLValueString"))
     }
 }
 $NombreTabla ="USUARIOS";
-
-require_once('../../apis/general/tipoDocumento.php');
-require_once('../../apis/general/tipoUsuario.php');
+$idTabla = 0;
+require_once('../../apis/general/tipodocumento.php');
+require_once('../../apis/general/tipousuario.php');
 
 ?>
 <!DOCTYPE html>
@@ -290,11 +290,11 @@ require_once('../../apis/general/tipoUsuario.php');
                                             <select class="form-control show-tick" data-live-search="true" name="tipodocumento" id="tipodocumento" required>
                                              <option value="" >Seleccione Opción...</option>
                                                 <?php
-                                                    for($i=0; $i<count($m['gen_tipodocumento']); $i++)
+                                                    for($i=0; $i<count($mtipodocumento['gen_tipodocumento']); $i++)
                                                     {
-                                                        $TDO_IdTipoDocumento = $m['gen_tipodocumento'][$i]['TDO_IdTipoDocumento'];
-                                                        $TDO_Abreviatura = $m['gen_tipodocumento'][$i]['TDO_Abreviatura'];
-                                                        $TDO_Nombre = $m['gen_tipodocumento'][$i]['TDO_Nombre'];
+                                                        $TDO_IdTipoDocumento = $mtipodocumento['gen_tipodocumento'][$i]['TDO_IdTipoDocumento'];
+                                                        $TDO_Abreviatura = $mtipodocumento['gen_tipodocumento'][$i]['TDO_Abreviatura'];
+                                                        $TDO_Nombre = $mtipodocumento['gen_tipodocumento'][$i]['TDO_Nombre'];
                                                         //$TDO_Estado = $m['gen_tipodocumento'][$i]['TDO_Estado'];
                                                 ?>
                                                         <option value="<?php echo $TDO_IdTipoDocumento; ?>" >
@@ -377,11 +377,11 @@ require_once('../../apis/general/tipoUsuario.php');
                                         <select class="form-control show-tick" data-live-search="true" name="tipousuario" id="tipousuario" required>
                                             <option value="" >Seleccione Opción...</option>
                                             <?php
-                                                for($i=0; $i<count($mtipouser['gen_tipousuario']); $i++)
+                                                for($i=0; $i<count($mtipousuario['usu_tipousuario']); $i++)
                                                 {
-                                                    $TUS_IdTipoDocumento = $mtipouser['gen_tipousuario'][$i]['TUS_ID_TipoUsuario'];                                                    
-                                                    $TUS_Nombre = $mtipouser['gen_tipousuario'][$i]['TUS_Nombre'];
-                                                    $TUS_Estado = $mtipouser['gen_tipousuario'][$i]['TUS_Estado'];
+                                                    $TUS_IdTipoDocumento = $mtipousuario['usu_tipousuario'][$i]['TUS_ID_TipoUsuario'];                                                    
+                                                    $TUS_Nombre = $mtipousuario['usu_tipousuario'][$i]['TUS_Nombre'];
+                                                    $TUS_Estado = $mtipousuario['usu_tipousuario'][$i]['TUS_Estado'];
                                             ?>
                                                     <option value="<?php echo $TUS_IdTipoDocumento; ?>" >
                                                         <?php echo $TUS_Nombre ; ?>                                                

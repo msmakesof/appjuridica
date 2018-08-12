@@ -101,16 +101,23 @@ else
             </a>
             <ul class="ml-menu">
             <?php
-            include('menuInclude.php');
+            mysqli_select_db($cnn_kn, $database_cnn_kn);
+            $query_rs_ntipo_tabla = "SELECT TAB_Nombre_Tabla, TAB_NombreMostrar FROM gen_tabla WHERE TAB_IdEstadoTabla = 1 ORDER BY TAB_Nombre_Tabla;"; 
+            $rs_ntipo_tabla = mysqli_query($cnn_kn,$query_rs_ntipo_tabla) or die(mysqli_error()."$query_rs_ntipo_tabla");
+            $row_rs_ntipo_tabla = mysqli_fetch_assoc($rs_ntipo_tabla);
+            //Cantidad de registros
+            $cantidad_rs_ntipo_tabla = mysqli_num_rows($rs_ntipo_tabla);
+            
+            $nombre_Tabla = "";
+			$clase = "";
 			$NombreArchivo = basename($_SERVER['PHP_SELF'],".php");
-
-            for($i=0; $i<count($mmenu['menu']); $i++)    
-            {
-                $NombreTablaMenu = trim($mmenu['menu'][$i]['TAB_Nombre_Tabla']);                
-                $NombreMostrar = trim($mmenu['menu'][$i]['TAB_NombreMostrar']);							
+            //echo $NombreArchivo;
+            do{
+                $NombreTablaMenu = trim($row_rs_ntipo_tabla['TAB_Nombre_Tabla']);
+                //echo $NombreTablaMenu; 
+                $NombreMostrar = trim($row_rs_ntipo_tabla['TAB_NombreMostrar']);							
                 $archivo = $NombreTablaMenu.".php";	
-                
-                if( strtoupper($NombreArchivo) == strtoupper($NombreTablaMenu) )
+				if( strtoupper($NombreArchivo) == strtoupper($NombreTablaMenu) )
 				{ 
 					$clase = "class='active'"; 
 				}
@@ -124,7 +131,8 @@ else
                     <a href="<?php echo $archivo; ?>"><?php echo $NombreMostrar; ?></a>
                 </li>
                 <?php                          
-            }             
+            } while($row_rs_ntipo_tabla = mysqli_fetch_assoc($rs_ntipo_tabla));     
+            mysqli_free_result($rs_ntipo_tabla);
             ?>   
                
             </ul>

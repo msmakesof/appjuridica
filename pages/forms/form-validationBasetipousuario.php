@@ -7,7 +7,7 @@ else
 {
     header('Location: ../../index.html');
 }
-$NombreTabla ="TABLAS";
+$NombreTabla ="TIPOUSUARIO";
 ?>
 <!DOCTYPE html>
 <html>
@@ -113,14 +113,13 @@ $NombreTabla ="TABLAS";
         
         $("#grabar").on('click', function(e) { 
            
-            var nombremostrar = $("#nombremostrar").val();
-            nombremostrar = nombremostrar.toUpperCase();
-            var nombre = $("#nombre").val();            
+            var nombre = $("#nombre").val();
+            nombre = nombre.toUpperCase();            
             var estado = $('input:radio[name=estado]:checked').val();
             e.preventDefault();
-            if( estado == undefined || nombre == "" || nombremostrar == "")
+            if( estado == undefined || nombre == "" )
             {                 
-                swal("Atencion:", "Debe digitar un Nombre y/o seleccionar un Estado.");
+                swal("Atención:", "Debe digitar un Nombre y/o seleccionar un Estado.");
                 e.stopPropagation();
                 return false;
             }
@@ -128,10 +127,10 @@ $NombreTabla ="TABLAS";
             else
             {
                 $.ajax({
-                    data : {"pnombre": nombre, "pnombremostrar": nombremostrar, "pestado": estado},
+                    data : {"pnombre": nombre, "pestado": estado},
                     type: "POST",
                     dataType: "html",
-                    url : "crea_tabla.php",
+                    url : "crea_<?php echo strtolower($NombreTabla); ?>.php",
                 })  
                 .done(function( data, textStatus, jqXHR){                  
                     var xrespstr = data.trim();
@@ -139,56 +138,19 @@ $NombreTabla ="TABLAS";
                     var msj = xrespstr.substr(2);
                     if(respstr == "E")
                     {         
-                        swal("Atencion:", msj);
-
-                       /*
-                        reset();
-                        alertify.alert("Registro No ha sido grabado.");
-                        return false;     
-                        */
-
-                        //existe(nombre);
-                        //get the closable setting value.
-                        //var closable = alertify.alert().setting('closable');
-                        //grab the dialog instance using its parameter-less constructor then set multiple settings at once.
-                        /*
-                        alertify.alert()
-                          .setting({
-                            'label':'Agree',
-                            'message': 'This dialog is : ' + (closable ? ' ' : ' not ') + 'closable.' ,
-                            'onok': function(){ alertify.success('Great');}
-                          }).show();
-                        
-                        reset();   
-                        //alertify.alert("Tabla: "+ parnombre +" !Ya se encuentra registrada.").set({onfocus:function(){ alertify.message('alert - onfocus callback.')}});
-                        alertify.alert('Demo').set({onfocus:function(){ alertify.message('alert - onfocus callback.')}}); 
-                        return false;   
-                        */
-
+                        swal("Atención:", msj);                
                     }
                     else
                     {    
                         if( respstr == "S" )
                         {                        
-                            swal("Atencion: ", msj, "success");
+                            swal("Atención: ", msj, "success");
                             return false;
-
-                            // reset();                        
-                            // alertify.alert("Registro grabado Correctamente.");
-                            // return false;
-                            //setTimeout(function(evt) {
-                            //    evt.preventDefault();
-                            //$("#g").html("Grabado.");
-                                //alert("Grabado");
-                                //$("#msj").html("Registro grabado Correctamente.").fadeOut(1500);
-                                //$("#msj").html("");
-                                //$("#g").show().fadeOut(1500);
-                            //},3000);
                         }
                         else
                         {
                            swal({
-                                title: "Atencion: ",   
+                                title: "Atención: ",
                                 text: msj,   
                                 type: "error" 
                             });
@@ -252,15 +214,10 @@ $NombreTabla ="TABLAS";
                                         <input type="text" class="form-control" name="nombre"id="nombre" required>
                                         <label class="form-label">Nombre:</label>
                                     </div>
-                                </div>      
-                                <div class="form-group form-float">
-                                    <div class="form-line">
-                                        <input type="text" class="form-control" name="nombremostrar"id="nombremostrar" required>
-                                        <label class="form-label">Nombre a Mostrar:</label>
-                                    </div>
-                                </div>                               
-                                
+                                </div>
+
                                 <div class="form-group">
+                                    <label class="form-label">Estado:</label>
                                     <input type="radio" name="estado" id="activo" class="with-gap" value="1">
                                     <label for="activo">Activo</label>
 
@@ -269,8 +226,7 @@ $NombreTabla ="TABLAS";
                                 </div>
                                 
                                 <button class="btn btn-primary waves-effect" type="submit" id="grabar">GRABAR</button>
-
-                                <!-- <div id="g" class='alert'>GRabado</div> -->
+                                
                             </form>                        
                     	</div>
                 	</div>    

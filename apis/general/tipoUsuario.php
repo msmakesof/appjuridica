@@ -42,12 +42,33 @@ if (!function_exists("GetSQLValueString"))
 }
 require_once('../../Connections/DataConex.php');
 
+$params ="";
+//$idTabla = 0;
+//if(isset($_GET["idTabla"]))
+if($idTabla > 0)
+{
+  $idTabla = $idTabla; //$_GET["idTabla"];
+}
+else
+{
+  $idTabla = 0;
+}
+//echo("<script>console.log('PHP idTabla: ".$idTabla."');</script>");
+if($idTabla == 0)
+{
+  $params = "IdEstado=1";
+}
+else
+{
+  $params ="IdTabla=$idTabla";
+}
+
 $soportecURL = "S";
-$url         = urlServicios."consultadetalle/consultadetalle_gen_tipousuario.php?IdEstado=1";
+$url         = urlServicios."consultadetalle/consultadetalle_usu_tipousuario.php?".$params;
 $existe      = "";
 $usulocal    = "";
 $siguex      = "";
-//echo("<script>console.log('PHP: ".$url."');</script>");
+echo("<script>console.log('PHP: ".$url."');</script>");
 if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
 {
     $ch = curl_init();
@@ -61,10 +82,10 @@ if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
     $resultado = curl_exec ($ch);
     curl_close($ch);
 
-    $mtipouser =  preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $resultado);    
-    $mtipouser = json_decode($mtipouser, true);
-    //echo("<script>console.log('PHP: ".print_r($muser)."');</script>");
-    //echo("<script>console.log('PHP: ".count($m['gen_tabla'])."');</script>");
+    $mtipousuario =  preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $resultado);    
+    $mtipousuario = json_decode($mtipousuario, true);
+    //echo("<script>console.log('PHP: ".print_r($mtipouser)."');</script>");
+    //echo("<script>console.log('PHP: ".count($m['usu_tipousuario'])."');</script>");
     
     $json_errors = array(
         JSON_ERROR_NONE => 'No se ha producido ningún error',
@@ -86,6 +107,6 @@ if($soportecURL == "N")
     $response = Unirest\Request::get($url, array("X-Mashape-Key" => "MY SECRET KEY"));
     $resultado = $response->raw_body;
     $resultado = preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $resultado);
-    $mtipouser = json_decode($resultado, true);	        
+    $mtipousuario = json_decode($resultado, true);	        
 }
 ?>
