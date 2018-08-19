@@ -312,7 +312,7 @@ if( $mjuzgado['estado'] < 2)
 ?>
     <tr>
         <td>
-           <a href="javascript:void(0);" onclick="cambiar('../forms/editarusuario.php?f=<?php echo $idTabla; ?>')" class="nav nav-tabs nav-stacked" data-toggle="modal" data-target="#defaultModalEditar" style="text-decoration:none;"><?php echo $NombreUsuario; ?></a>
+           <a href="javascript:void(0);" onclick="cambiar('../forms/editar<?php echo $nombre_lnk ;?>.php?f=<?php echo $idTabla; ?>')" class="nav nav-tabs nav-stacked" data-toggle="modal" data-target="#defaultModalEditar"  style="text-decoration:none;"><?php echo $NombreUsuario; ?></a>
             <div class="modal fade" id="defaultModalEditar" tabindex="-1" role="dialog">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
@@ -321,7 +321,7 @@ if( $mjuzgado['estado'] < 2)
                         </div>
                          
                         <div class="modal-body">
-                            <object type="text/html" data="../forms/editartabla.php" id="carga" class="modalobj" style="height:80% !important;"></object>
+                            <object type="text/html" data="../forms/editartabla.php" id="carga" class="modalobj"></object>
                         </div>
 
                         <div class="modal-footer">

@@ -39,6 +39,10 @@ if (!function_exists("GetSQLValueString")) {
     }
 }
 $idTabla = 0;
+require_once('../../apis/general/ciudad.php');
+require_once('../../apis/general/piso.php');
+require_once('../../apis/general/tipojuzgado.php');
+require_once('../../apis/general/area.php');
 if( isset($_GET['f'])  && !empty($_GET['f']) )
 {    
     $idTabla = trim($_GET['f']);
@@ -46,16 +50,9 @@ if( isset($_GET['f'])  && !empty($_GET['f']) )
 
 $Tabla ="JUZGADO";
 $idtabla = 0;
+require_once('../../apis/juzgado/juzgado.php');
 
-require_once('../../apis/general/ciudad.php');
-require_once('../../apis/general/piso.php');
-require_once('../../apis/general/tipojuzgado.php');
-require_once('../../apis/general/area.php');
-
-//$Nombre = trim($mtipojuzgado['juz_tipojuzgado']['JUZ_Nombre']);
-//$estado = $mtipojuzgado['juz_tipojuzgado']['JUZ_Estado'];
-//$idtabla = $mtipojuzgado['juz_tipojuzgado']['JUZ_IdTipoJuzgado'];
-$Nombre = trim($mjuzgado['juz_juzgado'][$i]['JUZ_Ubicacion']);
+$Nombre = trim($mjuzgado['juz_juzgado']['JUZ_Ubicacion']);
 $idTabla = $mjuzgado['juz_juzgado']['JUZ_IdJuzgado'];    
 $Ciudad = $mjuzgado['juz_juzgado']['JUZ_IdCiudad'];
 $NombreCiudad = $mjuzgado['juz_juzgado']['CIU_Nombre'];
@@ -65,6 +62,7 @@ $TipoJuzgado = $mjuzgado['juz_juzgado']['JUZ_IdTipoJuzgado'];
 $NombreTipoJuzgado = $mjuzgado['juz_juzgado']['TJU_Nombre'];
 $Piso = $mjuzgado['juz_juzgado']['JUZ_Piso'];
 $Area = $mjuzgado['juz_juzgado']['JUZ_IdArea'];
+$Estado = $mjuzgado['juz_juzgado']['JUZ_Estado'];
 $EstadoUsuario = $mjuzgado['juz_juzgado']['EstadoTabla'];
 
 ?>
@@ -245,10 +243,10 @@ $EstadoUsuario = $mjuzgado['juz_juzgado']['EstadoTabla'];
                                 </div>  
                                 
                                 <div class="form-group" style="clear: both;">
-                                    <input type="radio" name="estado" id="activo" class="with-gap" value="1" <?php if( $estado == 1){?>checked="checked"<?php } ?>>
+                                    <input type="radio" name="estado" id="activo" class="with-gap" value="1" <?php if( $Estado == 1){?>checked="checked"<?php } ?>>
                                     <label for="activo">Activo</label>
 
-                                    <input type="radio" name="estado" id="inactivo" class="with-gap" value="2"<?php if( $estado == 2){?>checked="checked"<?php } ?>>
+                                    <input type="radio" name="estado" id="inactivo" class="with-gap" value="2"<?php if( $Estado == 2){?>checked="checked"<?php } ?>>
                                     <label for="inactivo" class="m-l-20">Inactivo</label>
                                     
                                 </div>
@@ -320,14 +318,14 @@ $EstadoUsuario = $mjuzgado['juz_juzgado']['EstadoTabla'];
 		$("#grabar").on('click', function(e) {
             $("#mensaje").hide();
 			var ubicacion = $("#ubicacion").val();
-            ubicacion = strtoupper(ubicacion);
+            ubicacion = ubicacion.toUpperCase();
             var ciudad = $("#ciudad").val();
             var direccion = $("#direccion").val();
             var piso = $("#piso").val();            
             var tipojuzgado = $("#tipojuzgado").val();
             var area = $("#area").val();
 			var estado = $('input:radio[name=estado]:checked').val();
-			var idtabla = "<?php echo $idtabla; ?>";
+			var idtabla = "<?php echo $idTabla; ?>";
 			
 			$.ajax({
 				data : {"ubicacion": ubicacion, "ciudad": ciudad, "direccion": direccion, "piso": piso, "tipojuzgado": tipojuzgado, "area": area, "estado": estado, "idtabla": idtabla},

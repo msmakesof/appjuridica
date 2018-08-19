@@ -59,15 +59,20 @@ class JUZ_JUZGADO
     {
         // Consulta de la tabla de usuario
         $consulta = "SELECT ".$GLOBALS['Llave'].",
-                        JUZ_Ubicacion,
-                        JUZ_IdCiudad,
-                        JUZ_Direccion,
-                        JUZ_Piso,
-                        JUZ_IdTipoJuzgado,
-                        JUZ_IdArea,
-                        JUZ_Estado
-                        FROM ". $GLOBALS['TABLA'].
-                        " WHERE ".$GLOBALS['Llave']." = ?";
+                    JUZ_Ubicacion,
+                    JUZ_IdCiudad,
+                    JUZ_Direccion,
+                    JUZ_Piso,
+                    JUZ_IdTipoJuzgado,
+                    JUZ_IdArea,
+                    JUZ_Estado,
+                    CASE JUZ_Estado WHEN 1 THEN 'Activo' ELSE 'Inactivo' END EstadoTabla, 
+                    CIU_Nombre , TJU_Nombre, ARE_Nombre
+                    FROM ". $GLOBALS['TABLA'].
+                    " JOIN gen_ciudad ON JUZ_IdCiudad = gen_ciudad.CIU_IdCiudades ".
+                    " JOIN juz_tipojuzgado ON JUZ_IdTipoJuzgado = juz_tipojuzgado.TJU_IdTipoJuzgado ".
+                    " JOIN juz_area ON JUZ_IdArea = juz_area.ARE_IdArea ".
+                    " WHERE ".$GLOBALS['Llave']." = ?";
 
         try {
             // Preparar sentencia

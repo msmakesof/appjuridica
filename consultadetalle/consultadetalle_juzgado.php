@@ -1,17 +1,17 @@
 <?php
 /**
  * Obtiene el detalle de un usuario especificado por
- * su identificador "$IdUsuario"
+ * su identificador "$IdTabla"
  */
 header('Access-Control-Allow-Origin: *');
 require '../estructura/juz_juzgado.php';
 $msj="";
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 
-    if (isset($_GET['IdUsuario'])) {
+    if (isset($_GET['IdTabla'])) {
 
-        // Obtener parámetro IdUsuario
-        $parametro = $_GET['IdUsuario'];
+        // Obtener parámetro IdTabla
+        $parametro = $_GET['IdTabla'];
 
         // Tratar retorno
         $retorno = JUZ_JUZGADO::getById($parametro);
