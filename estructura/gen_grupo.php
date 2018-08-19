@@ -1,11 +1,12 @@
 <?php
 /**
- * Representa el la estructura de las $IdUsuario
+ * Representa el la estructura de las $IdGRUPO
  * almacenadas en la base de datos
  */
 require '../Connections/database.php';
-
-class GEN_TABLA
+$TABLA ="gen_grupo";
+$Llave ="GRU_IdGrupo";
+class GEN_GRUPO
 {
     function __construct()
     {
@@ -19,9 +20,9 @@ class GEN_TABLA
      */
     public static function getAll()
     {
-        $consulta = "SELECT TAB_IdTabla, TAB_Nombre_Tabla, TAB_NombreMostrar, TAB_Grupo,
-            CASE TAB_IdEstadoTabla WHEN 1 THEN 'Activo' ELSE 'Inactivo' END EstadoTabla
-            FROM gen_tabla ORDER BY TAB_NombreMostrar; ";
+        $consulta = "SELECT ".$GLOBALS['Llave'].", GRU_Nombre,  
+            CASE GRU_Estado WHEN 1 THEN 'Activo' ELSE 'Inactivo' END EstadoTabla
+            FROM ".$GLOBALS['TABLA']." ORDER BY GRU_Nombre; ";
         try {
             // Preparar sentencia
             $comando = Database::getInstance()->getDb()->prepare($consulta);
@@ -45,13 +46,11 @@ class GEN_TABLA
     public static function getById($IdTabla)
     {
         // Consulta de la tabla de tablas
-        $consulta = "SELECT TAB_IdTabla,
-                            TAB_Nombre_Tabla,
-                            TAB_NombreMostrar,
-                            TAB_Grupo,
-                            TAB_IdEstadoTabla
-                            FROM gen_tabla
-                            WHERE TAB_IdTabla = ? ORDER BY TAB_NombreMostrar; ";
+        $consulta = "SELECT ".$GLOBALS['Llave'].",
+                            GRU_Nombre,
+                            GRU_Estado
+                            FROM ".$GLOBALS['TABLA'].
+                            " WHERE ".$GLOBALS['Llave']." = ? ORDER BY GRU_Nombre; ";
 
         try {
             // Preparar sentencia
@@ -71,7 +70,7 @@ class GEN_TABLA
 
 
     /**
-     * Obtiene los campos de una gen_tabla con un estado Activo
+     * Obtiene los campos de una GEN_PAIS con un estado Activo
      * determinado
      *
      * @param $IdEstadoTabla Identificador del estado de la tabla
@@ -79,10 +78,10 @@ class GEN_TABLA
      */
     public static function getByIdEstado($IdEstadoTabla)
     {
-        // Consulta de la gen_tabla
-        $consulta = "SELECT TAB_IdTabla, TAB_Nombre_Tabla, TAB_NombreMostrar, TAB_Grupo, TAB_IdEstadoTabla
-                    FROM gen_tabla
-                    WHERE TAB_IdEstadoTabla = ? ORDER BY TAB_NombreMostrar; ";
+        // Consulta de la GEN_PAIS
+        $consulta = "SELECT ".$GLOBALS['Llave'].", GRU_Nombre, GRU_Estado ".
+                    " FROM ". $GLOBALS['TABLA'].
+                    " WHERE GRU_Estado = ? ORDER BY GRU_Nombre; ";
 
         try {
             // Preparar sentencia
@@ -102,7 +101,7 @@ class GEN_TABLA
 
 
     /**
-     * Obtiene los campos de una gen_tabla con un estado Activo
+     * Obtiene los campos de una GEN_PAIS con un estado Activo
      * determinado
      *
      * @param $IdEstadoTabla Identificador de Estado de la tabla
@@ -110,10 +109,10 @@ class GEN_TABLA
      */
     public static function getByIdExiste($IdEstadoTabla)
     {
-        // Consulta de la gen_tabla
-        $consulta = "SELECT Count(TAB_IdTabla) AS TotalTablas, TAB_Nombre_Tabla, TAB_NombreMostrar, TAB_IdEstadoTabla 
-                    FROM gen_tabla
-                    WHERE TAB_IdEstadoTabla = ? ;";
+        // Consulta de la GEN_PAIS
+        $consulta = "SELECT Count(".$GLOBALS['Llave'].") AS TotalTablas, GRU_Nombre, GRU_Estado ".
+                    " FROM ". $GLOBALS['TABLA'].
+                    " WHERE ".$GLOBALS['Llave']."  = ? ;";
 
         try {
             // Preparar sentencia
@@ -137,29 +136,26 @@ class GEN_TABLA
      * en los nuevos valores relacionados con un identificador
      *
      * @param $IdTabla            identificador
-     * @param $Nombre_Tabla        nuevo Nombre Tabla
-     * @param $NombreMostrar       nueva Nombre Tabla a mostrar
+     * @param $Nombre_Tabla        nuevo Nombre Tabla     
      * @param $IdEstadoTabla       nueva Estado       
      * 
      */
     public static function update(
-        $NombreTabla,
-        $NombreMostrar,         
-        $Grupo,
-        $IdEstadoTabla,        
+        $NombreTabla,        
+        $IdEstadoTabla,
         $IdTabla
     )
     {
         // Creando consulta UPDATE
-        $consulta = "UPDATE gen_tabla" .
-            " SET TAB_Nombre_Tabla=?, TAB_NombreMostrar=?, TAB_Grupo=?, TAB_IdEstadoTabla=? " .
-            " WHERE TAB_IdTabla=? ;";
+        $consulta = "UPDATE ". $GLOBALS['TABLA']. 
+            " SET GRU_Nombre=?, GRU_Estado=? " .
+            " WHERE ". $GLOBALS['Llave'] ." =? ;";
 
         // Preparar la sentencia
         $cmd = Database::getInstance()->getDb()->prepare($consulta);
 
         // Relacionar y ejecutar la sentencia
-        $cmd->execute(array($NombreTabla, $NombreMostrar, $Grupo, $IdEstadoTabla, $IdTabla ));
+        $cmd->execute(array($NombreTabla, $IdEstadoTabla, $IdTabla ));
 
         return $cmd;
     }
@@ -168,36 +164,28 @@ class GEN_TABLA
      * Insertar un nueva Tabla
      *         
      * @param $IdTabla            identificador
-     * @param $Nombre             nuevo Nombre Tabla
-     * @param $NombreMostrar      nueva Nombre Tabla a mostrar
-     * @param $Grupo              Grupo
-     * @param $Estado             Estado
+     * @param $Nombre             nuevo Nombre Tabla     
+     * @param $Estado             Estado   
      * @return PDOStatement
      */
     public static function insert(        
-        $Nombre,
-        $Nombremostrar,
-        $Grupo,
+        $Nombre,        
         $Estado
     )
     {
         // Sentencia INSERT
-        $comando = "INSERT INTO gen_tabla ( " .            
-            " TAB_Nombre_Tabla," .
-            " TAB_NombreMostrar," .
-            " TAB_Grupo," .
-            " TAB_IdEstadoTabla" . 
+        $comando = "INSERT INTO ". $GLOBALS['TABLA'] ." ( " . 
+            " GRU_Nombre," .            
+            " GRU_Estado" . 
             " )".     
-            " VALUES(?,?,?,?) ;";
+            " VALUES(?,?) ;";
 
         // Preparar la sentencia
         $sentencia = Database::getInstance()->getDb()->prepare($comando);
 
         return $sentencia->execute(
             array(                
-                $Nombre,
-                $Nombremostrar,
-                $Grupo,
+                $Nombre,                
                 $Estado
             )
         );
@@ -206,13 +194,13 @@ class GEN_TABLA
     /**
      * Eliminar el registro con el identificador especificado
      *
-     * @param $IdTabla identificador de la gen_tabla
+     * @param $IdTabla identificador de la GEN_GRUPO
      * @return bool Respuesta de la eliminación
      */
     public static function delete($IdTabla)
     {
         // Sentencia DELETE
-        $comando = "DELETE FROM gen_tabla WHERE TAB_IdTabla = ? ;";
+        $comando = "DELETE FROM ". $GLOBALS['TABLA'] ." WHERE ". $GLOBALS['Llave']. " = ? ;";
 
         // Preparar la sentencia
         $sentencia = Database::getInstance()->getDb()->prepare($comando);
@@ -221,20 +209,21 @@ class GEN_TABLA
     }
 
     /**
-     * Verifica si existe la tabla
+     * Verifica si existe el Grupo
      *
-     * @param $IdUsuario identificador de la gen_tabla
+     * @param $IdUsuario identificador de la GEN_GRUPO
      * @return bool Respuesta de la consulta
      */
-    public static function existetabla($Nombre, $Nombremostrar)
+    public static function existetabla($Nombre)
     {
-        $consulta = "SELECT count(TAB_IdTabla) existe, TAB_Nombre_Tabla, TAB_NombreMostrar FROM gen_tabla WHERE TAB_Nombre_Tabla = ? OR TAB_NombreMostrar = ? ";
+        $consulta = "SELECT count(". $GLOBALS['Llave']. ") existe, GRU_Nombre FROM FROM ".$GLOBALS['TABLA'].
+        " WHERE GRU_Nombre = ? ; ";
 
         try {
             // Preparar sentencia
             $comando = Database::getInstance()->getDb()->prepare($consulta);
             // Ejecutar sentencia preparada
-            $comando->execute(array($Nombre, $Nombremostrar));
+            $comando->execute(array($Nombre));
             // Capturar primera fila del resultado
             $row = $comando->fetch(PDO::FETCH_ASSOC);
             return $row;

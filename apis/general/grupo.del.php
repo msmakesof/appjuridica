@@ -4,7 +4,7 @@ require_once('../../Connections/config2.php');
 if(!isset($_SESSION)) 
 { 
   session_start(); 
-} 
+}
 ?>
 <?php
 if (!function_exists("GetSQLValueString")) 
@@ -42,12 +42,12 @@ if (!function_exists("GetSQLValueString"))
 }
 
 require_once('../../Connections/DataConex.php');
-$parameters = "update=update&nombre=$nombre&nombremostrar=$nombremostrar&grupo=$grupo&estado=$estado&idtabla=$idtabla";
+$parameters = "delete=delete&pidtabla=$pidtabla";
 $soportecURL = "S";
-$url         = urlServicios."consultadetalle/consultadetalle_gen_tabla.php?".$parameters;
+$url         = urlServicios."consultadetalle/consultadetalle_gen_grupo.php?".$parameters;
 $existe      = "";
 $usulocal    = "";
-$siguex      = "";
+$sigue      = "";
 //echo("<script>console.log('PHP: ".$url."');</script>");
 if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
 {
@@ -64,11 +64,11 @@ if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
     $curl_errno  = curl_errno($ch);
     curl_close($ch);
 
-    $mtabla = preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $resultado);    
-    $mtabla = json_decode($mtabla, true);    
-    //echo("<script>console.log('PHP: ".print_r($mtabla)."');</script>");
+    $mgrupo = preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $resultado);    
+    $mgrupo = json_decode($mgrupo, true);    
+    //echo("<script>console.log('PHP: ".print_r($mgrupo)."');</script>");
     //echo("<script>console.log('PHP resultado: ".$resultado."');</script>");
-    //echo("<script>console.log('PHP: ".count($m['gen_tabla'])."');</script>");
+    //echo("<script>console.log('PHP: ".count($m['gen_grupo'])."');</script>");
     
     $json_errors = array(
         JSON_ERROR_NONE => 'No se ha producido ningún error',
@@ -80,11 +80,11 @@ if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
     if($resultado === false || $curl_errno > 0)
     {
         //echo 'Curl error: ' . curl_error($ch);
-        $sigue = "N-Registro NO modificado - Curl Error: " . $curl_errno;
+        $sigue = "N-Registro NO borrado - Curl Error: " . $curl_errno;
     }
     else
     {
-      $sigue = "S-Registro modificado Correctamente.";
+      $sigue = "S-Registro borrado Correctamente.";
     }
     //echo "Error : ", $json_errors[json_last_error()], PHP_EOL, PHP_EOL."<br>";        
 }
@@ -100,7 +100,7 @@ if($soportecURL == "N")
     $response = Unirest\Request::get($url, array("X-Mashape-Key" => "MY SECRET KEY"));
     $resultado = $response->raw_body;
     $resultado = preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $resultado);
-    $mtabla = json_decode($resultado, true);	        
+    $mgrupo = json_decode($resultado, true);	        
 }
 echo $sigue;
 ?>

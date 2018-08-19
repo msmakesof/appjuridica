@@ -4,7 +4,7 @@
  * su identificador "$ITabla"
  */
 header('Access-Control-Allow-Origin: *');
-require '../estructura/gen_tabla.php';
+require '../estructura/gen_grupo.php';
 
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 
@@ -14,14 +14,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         $parametro = $_GET['IdTabla'];
 
         // Tratar retorno
-        $retorno = GEN_TABLA::getById($parametro);
+        $retorno = GEN_GRUPO::getById($parametro);
 
         if ($retorno) {
-            $gen_tabla["estado"] = "1";
-            $gen_tabla["gen_tabla"] = $retorno;
+            $gen_grupo["estado"] = "1";
+            $gen_grupo["gen_grupo"] = $retorno;
             // Enviar objeto json de la meta
             header('Content-Type: application/json');
-            echo json_encode($gen_tabla);
+            echo json_encode($gen_grupo);
         } else {
             // Enviar respuesta de error general
             print json_encode(
@@ -32,19 +32,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             );
         }
     }
-    elseif (isset($_GET['IdEstadoTabla'])) {
-        // Obtener parámetro idEstado de gen_tabla
-        $parametro = $_GET['IdEstadoTabla'];
+    elseif (isset($_GET['IdEstado'])) {
+        // Obtener parámetro idEstado de GEN_GRUPO
+        $parametro = $_GET['IdEstado'];
 
         // Tratar retorno
-        $retorno = GEN_TABLA::getByIdEstado($parametro);
+        $retorno = GEN_GRUPO::getByIdEstado($parametro);
 
         if ($retorno) {
-            $gen_tabla["estado"] = "1";
-            $gen_tabla["gen_tabla"] = $retorno;
-            // Enviar objeto json de la gen_tabla
+            $gen_grupo["estado"] = "1";
+            $gen_grupo["gen_grupo"] = $retorno;
+            // Enviar objeto json de la GEN_GRUPO
             header('Content-Type: application/json');
-            echo json_encode($gen_tabla);
+            echo json_encode($gen_grupo);
         } else {
             // Enviar respuesta de error general
             print json_encode(
@@ -61,14 +61,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         $parametroC = $_GET['idC'];
 
         // Tratar retorno
-        $retorno = USU_USUARIO::getByIdExiste($parametro,$parametroC);
+        $retorno = USU_GRUPO::getByIdExiste($parametro,$parametroC);
 
         if ($retorno) {
-            $gen_tabla["estado"] = "1";
-            $gen_tabla["gen_tabla"] = $retorno;
-            // Enviar objeto json de la usu_usuario
+            $gen_grupo["estado"] = "1";
+            $gen_grupo["gen_grupo"] = $retorno;
+            // Enviar objeto json de  gen_GRUPO
             header('Content-Type: application/json');
-            echo json_encode($gen_tabla);
+            echo json_encode($gen_grupo);
         } else {
             // Enviar respuesta de error general
             print json_encode(
@@ -82,17 +82,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 
     elseif (isset($_GET['ExisteTabla']) )
     {
-        $par1 = $_GET['Nombre'];
-        $par2 = $_GET['Nombremostrar'];
+        $par1 = $_GET['Nombre'];        
 
-        $retorno = GEN_TABLA::existetabla($par1, $par2);
+        $retorno = GEN_GRUPO::existetabla($par1);
         if ($retorno) 
         {
-            $gen_tabla["estado"] = "1";
-            $gen_tabla["gen_tabla"] = $retorno;
-            // Enviar objeto json de la gen_tabla
+            $gen_grupo["estado"] = "1";
+            $gen_grupo["gen_grupo"] = $retorno;
+            // Enviar objeto json de la GEN_GRUPO
             header('Content-Type: application/json');
-            echo json_encode($gen_tabla);
+            echo json_encode($gen_grupo);
         } 
         else 
         {
@@ -107,7 +106,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     }
 
     elseif (isset($_GET['IdMostrar'])) {
-        // Obtener parámetro IdMostrar de gen_tabla
+        // Obtener parámetro IdMostrar de GEN_GRUPO
         $parametro = $_GET['IdMostrar'];
         if($parametro == 0)
         {
@@ -115,15 +114,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         }
 
         // Tratar retorno
-        $retorno = GEN_TABLA::getAll($parametro);
+        $retorno = GEN_GRUPO::getAll($parametro);
 
         if ($retorno) 
         {
-            $gen_tabla["estado"] = "1";
-            $gen_tabla["gen_tabla"] = $retorno;
-            // Enviar objeto json de la gen_tabla
+            $gen_grupo["estado"] = "1";
+            $gen_grupo["gen_grupo"] = $retorno;
+            // Enviar objeto json de la GEN_PAIS
             header('Content-Type: application/json');
-            echo json_encode($gen_tabla);
+            echo json_encode($gen_grupo);
         } 
         else 
         {
@@ -140,20 +139,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     elseif(isset($_GET['insert']) )
     {
         //Obtener Parametros
-        $par1 = $_GET['Nombre'];
-        $par2 = $_GET['Nombremostrar'];
-        $par3 = $_GET['Grupo'];
-        $par4 = $_GET['Estado'];
+        $par1 = $_GET['Nombre'];        
+        $par3 = $_GET['Estado'];
 
-        $retorno = GEN_TABLA::INSERT($par1, $par2, $par3, $par4);
+        $retorno = GEN_GRUPO::insert($par1, $par3);
         $msj = $retorno;
         if($retorno)
         {
-            $gen_tabla["estado"] = "1";
-            $gen_tabla["gen_tabla"] = $retorno;
-             // Enviar objeto json de la gen_tabla
+            $gen_grupo["estado"] = "1";
+            $gen_grupo["gen_grupo"] = $retorno;
+             // Enviar objeto json de la GEN_GRUPO
             header('Content-Type: application/json');
-            echo json_encode($gen_tabla);
+            echo json_encode($gen_grupo);
         }
         else
         {
@@ -169,21 +166,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     elseif(isset($_GET['update']) )
     {
         //Obtener Parametros
-        $par1 = $_GET['nombre'];
-        $par2 = $_GET['nombremostrar'];
-        $par3 = $_GET['grupo'];
-        $par4 = $_GET['estado'];        
-        $par5 = $_GET['idtabla'];
+        $par1 = $_GET['nombre'];        
+        $par3 = $_GET['estado'];
+        $par4 = $_GET['idtabla'];
 
-        $retorno = GEN_TABLA::update($par1, $par2, $par3, $par4, $par5);
+        $retorno = GEN_GRUPO::update($par1, $par3, $par4);
         $msj = $retorno;
         if($retorno)
         {
-            $gen_tabla["estado"] = "1";
-            $gen_tabla["gen_tabla"] = $retorno;
-             // Enviar objeto json de la gen_tabla
+            $gen_grupo["estado"] = "1";
+            $gen_grupo["gen_grupo"] = $retorno;
+             // Enviar objeto json de la GEN_GRUPO
             header('Content-Type: application/json');
-            echo json_encode($gen_tabla);
+            echo json_encode($gen_grupo);
         }
         else
         {
@@ -200,14 +195,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     {
         $par0  = $_GET['pidtabla'];
 
-        $retorno = GEN_TABLA::delete($par0);
+        $retorno = GEN_GRUPO::delete($par0);
         if ($retorno) 
         {
-            $gen_tabla["estado"] = "1";
-            $gen_tabla["gen_tabla"] = $retorno;
-            // Enviar objeto json de la gen_tabla
+            $gen_grupo["estado"] = "1";
+            $gen_grupo["gen_grupo"] = $retorno;
+            // Enviar objeto json de la GEN_GRUPO
             header('Content-Type: application/json');
-            echo json_encode($gen_tabla);
+            echo json_encode($gen_grupo);
         } 
         else 
         {

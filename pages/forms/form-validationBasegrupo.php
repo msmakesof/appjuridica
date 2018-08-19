@@ -1,6 +1,4 @@
-﻿<?php
-require_once('../../Connections/cnn_kn.php'); 
-require_once('../../Connections/config2.php');
+﻿<?php 
 if(!isset($_SESSION)) 
 { 
     session_start(); 
@@ -9,10 +7,7 @@ else
 {
     header('Location: ../../index.html');
 }
-$NombreTabla ="TABLAS";
-$idTabla = 0;
-require_once('../../apis/general/grupo.php');
-
+$NombreTabla ="GRUPO";
 ?>
 <!DOCTYPE html>
 <html>
@@ -41,8 +36,6 @@ require_once('../../apis/general/grupo.php');
     <link href="../../css/sweet/sweetalert.css" rel="stylesheet" />
     <link href="../../css/sweet/main.css" rel="stylesheet" />
 
-    <!-- Bootstrap Select Css -->
-    <link href="../../plugins/bootstrap-select/css/bootstrap-select.css" rel="stylesheet" />
 
     <!-- Custom Css -->
     <link href="../../css/style.css" rel="stylesheet">
@@ -59,7 +52,9 @@ require_once('../../apis/general/grupo.php');
 
 
  <!-- Jquery Core Js -->
-    <script src="../../plugins/jquery/jquery.min.js"></script>
+    <!-- <script src="../../plugins/jquery/jquery.min.js"></script> -->
+    <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+    
 
 
         <!-- Sweet Alert Plugin Js -->
@@ -120,15 +115,14 @@ require_once('../../apis/general/grupo.php');
         
         $("#grabar").on('click', function(e) { 
            
-            var nombremostrar = $("#nombremostrar").val();
-            nombremostrar = nombremostrar.toUpperCase();
+            //var nombremostrar = $("#nombremostrar").val();
             var nombre = $("#nombre").val();
-            var grupo = $("#grupo").val();
+            nombre = nombre.toUpperCase();
             var estado = $('input:radio[name=estado]:checked').val();
             e.preventDefault();
-            if( estado == undefined || nombre == "" || nombremostrar == "" || grupo == "")
+            if( estado == undefined || nombre == "" )
             {                 
-                swal("Atención:", "Debe digitar un Nombre y/o seleccionar un Estado o un Grupo.");
+                swal("Atencion:", "Debe digitar un Nombre y/o seleccionar un Estado.");
                 e.stopPropagation();
                 return false;
             }
@@ -136,10 +130,10 @@ require_once('../../apis/general/grupo.php');
             else
             {
                 $.ajax({
-                    data : {"pnombre": nombre, "pnombremostrar": nombremostrar, "pgrupo": grupo, "pestado": estado},
+                    data : {"pnombre": nombre, "pestado": estado},
                     type: "POST",
                     dataType: "html",
-                    url : "crea_tabla.php",
+                    url : "crea_<?php echo strtolower($NombreTabla); ?>.php",
                 })  
                 .done(function( data, textStatus, jqXHR){                  
                     var xrespstr = data.trim();
@@ -147,56 +141,19 @@ require_once('../../apis/general/grupo.php');
                     var msj = xrespstr.substr(2);
                     if(respstr == "E")
                     {         
-                        swal("Atencion:", msj);
-
-                       /*
-                        reset();
-                        alertify.alert("Registro No ha sido grabado.");
-                        return false;     
-                        */
-
-                        //existe(nombre);
-                        //get the closable setting value.
-                        //var closable = alertify.alert().setting('closable');
-                        //grab the dialog instance using its parameter-less constructor then set multiple settings at once.
-                        /*
-                        alertify.alert()
-                          .setting({
-                            'label':'Agree',
-                            'message': 'This dialog is : ' + (closable ? ' ' : ' not ') + 'closable.' ,
-                            'onok': function(){ alertify.success('Great');}
-                          }).show();
-                        
-                        reset();   
-                        //alertify.alert("Tabla: "+ parnombre +" !Ya se encuentra registrada.").set({onfocus:function(){ alertify.message('alert - onfocus callback.')}});
-                        alertify.alert('Demo').set({onfocus:function(){ alertify.message('alert - onfocus callback.')}}); 
-                        return false;   
-                        */
-
+                        swal("Atención:", msj);
                     }
                     else
                     {    
                         if( respstr == "S" )
                         {                        
-                            swal("Atencion: ", msj, "success");
+                            swal("Atención: ", msj, "success");
                             return false;
-
-                            // reset();                        
-                            // alertify.alert("Registro grabado Correctamente.");
-                            // return false;
-                            //setTimeout(function(evt) {
-                            //    evt.preventDefault();
-                            //$("#g").html("Grabado.");
-                                //alert("Grabado");
-                                //$("#msj").html("Registro grabado Correctamente.").fadeOut(1500);
-                                //$("#msj").html("");
-                                //$("#g").show().fadeOut(1500);
-                            //},3000);
                         }
                         else
                         {
                            swal({
-                                title: "Atencion: ",   
+                                title: "Atención: ",   
                                 text: msj,   
                                 type: "error" 
                             });
@@ -216,13 +173,9 @@ require_once('../../apis/general/grupo.php');
     });
 
     function existe(parnombre)
-        {
-            //parnombre.preventDefault();
-            //reset();                        
-            alertify.alert("Tabla: "+ parnombre +" !Ya se encuentra registrada.");
+        {                       
+            alertify.alert("Grupo: "+ parnombre +" !Ya se encuentra registrada.");
              $("#msj").html("Echo....");
-            //return false;
-
         }
     </script>    
 </head>
@@ -261,39 +214,14 @@ require_once('../../apis/general/grupo.php');
                                         <label class="form-label">Nombre:</label>
                                     </div>
                                 </div>      
-                                <div class="form-group form-float" style="clear: both;">
+                                <!-- <div class="form-group form-float">
                                     <div class="form-line">
                                         <input type="text" class="form-control" name="nombremostrar"id="nombremostrar" required>
                                         <label class="form-label">Nombre a Mostrar:</label>
                                     </div>
-                                </div>
-
-                                <div style="form-group form-float">                                     
-                                    <label class="form-label">
-                                        Grupo
-                                    </label>                                    
-                                    <div class="col-sm-4">                                       
-                                        <select class="form-control show-tick" data-live-search="true" name="grupo" id="grupo" required>
-                                            <option value="" >Seleccione Opción...</option>
-                                            <?php
-                                                for($i=0; $i<count($mgrupo['gen_grupo']); $i++)
-                                                {
-                                                    $GRU_IdGrupo = $mgrupo['gen_grupo'][$i]['GRU_IdGrupo'];                                                    
-                                                    $GRU_Nombre = $mgrupo['gen_grupo'][$i]['GRU_Nombre'];
-                                                    $GRU_Estado = $mgrupo['gen_grupo'][$i]['GRU_Estado'];
-                                            ?>
-                                                    <option value="<?php echo $GRU_IdGrupo; ?>" >
-                                                        <?php echo $GRU_Nombre ; ?>                                                
-                                                    </option>
-                                            <?php
-                                                }
-                                            ?>
-                                        </select>
-                                    </div>
-                                </div> 
+                                </div>                                -->
                                 
-                                <div class="form-group form-float">
-                                    <label class="form-label">Estado</label>
+                                <div class="form-group">
                                     <input type="radio" name="estado" id="activo" class="with-gap" value="1">
                                     <label for="activo">Activo</label>
 

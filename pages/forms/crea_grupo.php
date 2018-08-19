@@ -45,20 +45,8 @@ else
 $pnombre ="";
 if( isset($_POST['pnombre']) )
 {
-	  $pnombre = trim($_POST['pnombre']);
-}
-
-$pnombremostrar ="";
-if( isset($_POST['pnombremostrar']) )
-{
-	  $pnombremostrar = trim($_POST['pnombremostrar']);
-    $pnombremostrar = str_replace(' ', '%20',  $pnombremostrar);
-}
-
-$pgrupo ="";
-if( isset($_POST['pgrupo']) )
-{
-	  $pgrupo = trim($_POST['pgrupo']);
+    $pnombre = trim($_POST['pnombre']);
+    $pnombre = str_replace(' ','%20', $pnombre);
 }
 
 $pestado ="";
@@ -72,8 +60,8 @@ require_once('../../Connections/DataConex.php');
 // Nombres iguales 
 if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
 {
-  $parameters = "ExisteTabla=1&Nombre=$pnombre&Nombremostrar=$pnombremostrar&Grupo=pgrupo";
-  $url = urlServicios."consultadetalle/consultadetalle_gen_tabla.php?".$parameters;
+  $parameters = "ExisteTabla=1&Nombre=$pnombre";
+  $url = urlServicios."consultadetalle/consultadetalle_gen_grupo.php?".$parameters;
   $ch = curl_init();
   curl_setopt($ch, CURLOPT_VERBOSE, true);
   curl_setopt($ch, CURLOPT_URL, $url);
@@ -99,28 +87,20 @@ if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
     $m = preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $resultado);    
     $m = json_decode($m, true);
     //print_r ($m);
-    $existe = $m['gen_tabla']['existe'];
+    $existe = $m['gen_grupo']['existe'];
     if($existe > 0)
     {
-      $sigue = "E-Existe una Tabla registrado con el mismo Nombre.";
+      $sigue = "E-Existe un Grupo registrado con el mismo Nombre.";
     }
     else
     {
-      //
-      // $llave = $GLOBALS['secret_key'];
-      // $interno = rand(10000000,100000123456789);
-      // $local = rand(10000000,1234567890000);
-      // $clave = encryptor('encrypt',$clave);
-      //$parameters = "insert=insert&TipoDocumento=$tipodocumento&Identificacion=$numerodocumento&PrimerApellido=$apellido1&SegundoApellido=$apellido2&Nombre=$nombre&Email=$email&Direccion=$direccion&Celular=$celular&Usuario=$email&Clave=$clave&TipoUsuario=$tipousuario&Estado=$estado&IdInterno=$interno&Local=$local";
-      //$parameters = array("insert" => "insert", "TipoDocumento" => "$tipodocumento","Identificacion" => "$numerodocumento","PrimerApellido" => "$apellido1", "SegundoApellido" => "$apellido2","Nombre" => "$nombre","Email" => "$email", "Direccion" => "$direccion","Celular" => "$celular", "Usuario" => "$email", "Clave" => "$clave", "TipoUsuario" => "$tipousuario", "Estado" => "$estado", "IdInterno" => "$interno", "Local" => "$local");
-
-      $parameters = "insert=insert&Nombre=$pnombre&Nombremostrar=$pnombremostrar&Grupo=$pgrupo&Estado=$pestado";
+      
+      $parameters = "insert=insert&Nombre=$pnombre&Estado=$pestado";
       $soportecURL = "S";
-      $url         = urlServicios."consultadetalle/consultadetalle_gen_tabla.php?".$parameters;
+      $url         = urlServicios."consultadetalle/consultadetalle_gen_grupo.php?".$parameters;
       $existe      = "";
       $usulocal    = "";
-      $sigue       = "";
-      //$verbose = fopen("php://appjuridica/tempoErr", 'w');
+      $sigue       = "";      
       if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
       {    
           $ch = curl_init();
@@ -150,7 +130,7 @@ if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
             //echo "Curl Err_no returned.... $curl_errno <br/>";
             $m = preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $resultado);    
             $m = json_decode($m, true);
-            $grabadoOK = $m['gen_tabla'];
+            $grabadoOK = $m['gen_grupo'];
             if(!$grabadoOK)
             {
               $sigue = "N-Registro NO ha sido grabado.";

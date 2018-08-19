@@ -8,7 +8,7 @@ $url         = urlServicios."consultadetalle/consultadetalle_menu.php?IdMostrar=
 $existe      = "";
 $usulocal    = "";
 $siguex      = "";
-
+echo("<script>console.log('Menu select: ".$url."');</script>");
 if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
 {
     $ch = curl_init();

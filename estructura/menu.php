@@ -20,9 +20,9 @@ class MENU
      */
     public static function getAll()
     {
-        $consulta = "SELECT ".$GLOBALS['Llave'].", TAB_Nombre_Tabla, TAB_NombreMostrar,  
+        $consulta = "SELECT ".$GLOBALS['Llave'].", TAB_Nombre_Tabla, TAB_NombreMostrar, TAB_Grupo, 
             CASE TAB_IdEstadoTabla WHEN 1 THEN 'Activo' ELSE 'Inactivo' END EstadoTabla
-            FROM ".$GLOBALS['TABLA']." WHERE TAB_IdEstadoTabla = 1 ORDER BY TAB_NombreMostrar; ";
+            FROM ".$GLOBALS['TABLA']." WHERE TAB_IdEstadoTabla = 1 ORDER BY TAB_Grupo, TAB_NombreMostrar; ";
         try {
             // Preparar sentencia
             $comando = Database::getInstance()->getDb()->prepare($consulta);
@@ -47,11 +47,11 @@ class MENU
     {
         // Consulta de la tabla de tablas
         $consulta = "SELECT ".$GLOBALS['Llave'].",
-                            TPE_Nombre,
-                            TPE_Estado".
+                            TAB_Nombre_Tabla,
+                            TAB_IdEstadoTabla".
                             " FROM ".$GLOBALS['TABLA'].
                             " WHERE ".$GLOBALS['Llave']." 
-                            = ? ORDER BY TPE_Nombre; ";
+                            = ? ORDER BY TAB_Nombre_Tabla; ";
 
         try {
             // Preparar sentencia
@@ -80,9 +80,9 @@ class MENU
     public static function getByIdEstado($IdEstadoTabla)
     {
         // Consulta de la GEN_PAIS
-        $consulta = "SELECT ".$GLOBALS['Llave'].", TPE_Nombre, TPE_Estado ".
+        $consulta = "SELECT ".$GLOBALS['Llave'].", TAB_Nombre_Tabla, TAB_IdEstadoTabla ".
                     " FROM ". $GLOBALS['TABLA'].
-                    " WHERE TPE_Estado = ? ORDER BY TPE_Nombre; ";
+                    " WHERE TAB_IdEstadoTabla = ? ORDER BY TAB_Nombre_Tabla; ";
 
         try {
             // Preparar sentencia
@@ -111,9 +111,9 @@ class MENU
     public static function getByIdExiste($IdEstadoTabla)
     {
         // Consulta de la GEN_PAIS
-        $consulta = "SELECT Count(".$GLOBALS['Llave'].") AS TotalTablas, TPE_Nombre, TPE_Estado ".
+        $consulta = "SELECT Count(".$GLOBALS['Llave'].") AS TotalTablas, TAB_Nombre_Tabla, TAB_IdEstadoTabla ".
                 " FROM ". $GLOBALS['TABLA'].
-                " WHERE TPE_IdPais = ? ;";
+                " WHERE TAB_IdTabla = ? ;";
 
         try {
             // Preparar sentencia
@@ -151,7 +151,7 @@ class MENU
     {
         // Creando consulta UPDATE
         $consulta = "UPDATE ". $GLOBALS['TABLA'].
-            " SET TPE_Nombre=?, TPE_Estado=? " .
+            " SET TAB_Nombre_Tabla=?, TAB_IdEstadoTabla=? " .
             " WHERE ". $GLOBALS['Llave'] ." =? ;";
 
         // Preparar la sentencia
@@ -220,7 +220,7 @@ class MENU
      */
     public static function existetabla($Nombre)
     {
-        $consulta = "SELECT count(". $GLOBALS['Llave']. ") existe, TPE_Nombre FROM ". $GLOBALS['TABLA'] ." WHERE ". $GLOBALS['Llave']. "= ? ; ";
+        $consulta = "SELECT count(". $GLOBALS['Llave']. ") existe, TAB_Nombre_Tabla FROM ". $GLOBALS['TABLA'] ." WHERE ". $GLOBALS['Llave']. "= ? ; ";
 
         try {
             // Preparar sentencia
