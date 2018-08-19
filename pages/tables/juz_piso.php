@@ -355,7 +355,7 @@ else
                 </div>
                 <div class="info-container">
 					<div class="name" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">                       
-                        <span id="xNom"><?php echo $_SESSION['NombreUsuario']; ?></span>                   
+                        <span id="xNom"><?php echo $_SESSION['NombreUsuario']; ?></span>
                     </div>
 
 

@@ -750,11 +750,11 @@ if( $mciudad['estado'] < 2)
 <script type="text/javascript">
  $(document).ready(function () {	 
 	$("#cerrarModal").click(function(){
-	 	 window.location="gen_ciudad.php";
+	 	 window.location="gen_<?php echo $nombre_lnk ;?>.php";
 	});
 
 	$("#cerrarModalC").click(function(){
-	 	 window.location="gen_ciudad.php";
+	 	 window.location="gen_<?php echo $nombre_lnk ;?>.php";
 	});		
 
  }); 

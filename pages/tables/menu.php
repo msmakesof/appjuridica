@@ -132,8 +132,8 @@ else
 
         <li>
             <a href="javascript:void(0);" class="menu-toggle">
-                <i class="material-icons">widgets</i>
-                <span>Cargar Datas</span>
+                <i class="material-icons">work</i>
+                <span>Procesos</span>
             </a>
             <ul class="ml-menu">
                 <li>
@@ -154,8 +154,8 @@ else
 
         <li>
             <a href="javascript:void(0);" class="menu-toggle">
-                <i class="material-icons">widgets</i>
-                <span>Comparaci&oacute;n de Cajas</span>
+                <i class="material-icons">today</i>
+                <span>AGENDA</span>
             </a>
             <ul class="ml-menu">
                 <li>
@@ -165,48 +165,7 @@ else
                 </li>
             </ul>
         </li>
-
-        <li>
-            <a href="javascript:void(0);" class="menu-toggle">
-                <i class="material-icons">widgets</i>
-                <span>Consultar Estado de Pedidos</span>
-            </a>
-            <ul class="ml-menu">
-                <li>
-                   <!--  <a href="../kal/sample.php" class="menu-toggle">
-                        <span>Comparaci&oacute;n de Cajas</span>
-                    </a>  --> 
-                </li>
-            </ul>
-        </li>
-
-        <li>
-            <a href="javascript:void(0);" class="menu-toggle">
-                <i class="material-icons">widgets</i>
-                <span>Ordenes de Cargue</span>
-            </a>
-            <ul class="ml-menu">
-                <li>
-                   <!--  <a href="../kal/sample.php" class="menu-toggle">
-                        <span>Comparaci&oacute;n de Cajas</span>
-                    </a>  --> 
-                </li>
-            </ul>
-        </li>
-
-        <li>
-            <a href="javascript:void(0);" class="menu-toggle">
-                <i class="material-icons">widgets</i>
-                <span>Boletas</span>
-            </a>
-            <ul class="ml-menu">
-                <li>
-                   <!--  <a href="../kal/sample.php" class="menu-toggle">
-                        <span>Comparaci&oacute;n de Cajas</span>
-                    </a>  --> 
-                </li>
-            </ul>
-        </li>
+        
         
         <li>
             <a href="javascript:void(0);" class="menu-toggle">
