@@ -216,7 +216,7 @@ class PRO_TIPOACTUACIONPROCESAL
      */
     public static function existetabla($Nombre)
     {
-        $consulta = "SELECT count(". $GLOBALS['Llave']. ") existe, TAP_Nombre FROM FROM ".$GLOBALS['TABLA'].
+        $consulta = "SELECT count(". $GLOBALS['Llave']. ") existe, TAP_Nombre FROM ".$GLOBALS['TABLA'].
         " WHERE TAP_Nombre = ? ; ";
 
         try {

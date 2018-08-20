@@ -216,7 +216,7 @@ class PRO_ESTADOPROCESO
      */
     public static function existetabla($Nombre)
     {
-        $consulta = "SELECT count(". $GLOBALS['Llave']. ") existe, EPR_Nombre FROM FROM ".$GLOBALS['TABLA'].
+        $consulta = "SELECT count(". $GLOBALS['Llave']. ") existe, EPR_Nombre FROM ".$GLOBALS['TABLA'].
         " WHERE EPR_Nombre = ? ; ";
 
         try {

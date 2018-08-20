@@ -4,9 +4,9 @@
  * almacenadas en la base de datos
  */
 require '../Connections/database.php';
-$TABLA ="gen_grupo";
-$Llave ="GRU_IdGrupo";
-class GEN_GRUPO
+$TABLA ="pro_subclaseproceso";
+$Llave ="SCP_IdSubClaseProceso";
+class PRO_SUBCLASEPROCESO
 {
     function __construct()
     {
@@ -20,9 +20,9 @@ class GEN_GRUPO
      */
     public static function getAll()
     {
-        $consulta = "SELECT ".$GLOBALS['Llave'].", GRU_Nombre,  
-            CASE GRU_Estado WHEN 1 THEN 'Activo' ELSE 'Inactivo' END EstadoTabla
-            FROM ".$GLOBALS['TABLA']." ORDER BY GRU_Nombre; ";
+        $consulta = "SELECT ".$GLOBALS['Llave'].", SCP_Nombre, SCP_IdClaseProceso,
+            CASE SCP_Estado WHEN 1 THEN 'Activo' ELSE 'Inactivo' END EstadoTabla
+            FROM ".$GLOBALS['TABLA']." ORDER BY SCP_Nombre; ";
         try {
             // Preparar sentencia
             $comando = Database::getInstance()->getDb()->prepare($consulta);
@@ -47,10 +47,11 @@ class GEN_GRUPO
     {
         // Consulta de la tabla de tablas
         $consulta = "SELECT ".$GLOBALS['Llave'].",
-                            GRU_Nombre,
-                            GRU_Estado
+                            SCP_Nombre,
+                            SCP_IdClaseProceso,
+                            SCP_Estado
                             FROM ".$GLOBALS['TABLA'].
-                            " WHERE ".$GLOBALS['Llave']." = ? ORDER BY GRU_Nombre; ";
+                            " WHERE ".$GLOBALS['Llave']." = ? ORDER BY SCP_Nombre; ";
 
         try {
             // Preparar sentencia
@@ -70,7 +71,7 @@ class GEN_GRUPO
 
 
     /**
-     * Obtiene los campos de una GEN_PAIS con un estado Activo
+     * Obtiene los campos de una PRO_UBICACION con un estado Activo
      * determinado
      *
      * @param $IdEstadoTabla Identificador del estado de la tabla
@@ -78,10 +79,10 @@ class GEN_GRUPO
      */
     public static function getByIdEstado($IdEstadoTabla)
     {
-        // Consulta de la GEN_PAIS
-        $consulta = "SELECT ".$GLOBALS['Llave'].", GRU_Nombre, GRU_Estado ".
+        // Consulta de PRO_UBICACION
+        $consulta = "SELECT ".$GLOBALS['Llave'].", SCP_Nombre, SCP_IdClaseProceso, SCP_Estado ".
                     " FROM ". $GLOBALS['TABLA'].
-                    " WHERE GRU_Estado = ? ORDER BY GRU_Nombre; ";
+                    " WHERE SCP_Estado = ? ORDER BY SCP_Nombre; ";
 
         try {
             // Preparar sentencia
@@ -101,7 +102,7 @@ class GEN_GRUPO
 
 
     /**
-     * Obtiene los campos de una GEN_PAIS con un estado Activo
+     * Obtiene los campos de una PRO_UBICACION con un estado Activo
      * determinado
      *
      * @param $IdEstadoTabla Identificador de Estado de la tabla
@@ -109,8 +110,8 @@ class GEN_GRUPO
      */
     public static function getByIdExiste($IdEstadoTabla)
     {
-        // Consulta de la GEN_PAIS
-        $consulta = "SELECT Count(".$GLOBALS['Llave'].") AS TotalTablas, GRU_Nombre, GRU_Estado ".
+        // Consulta de PRO_UBICACION
+        $consulta = "SELECT Count(".$GLOBALS['Llave'].") AS TotalTablas, SCP_Nombre, SCP_IdClaseProceso, SCP_Estado ".
                     " FROM ". $GLOBALS['TABLA'].
                     " WHERE ".$GLOBALS['Llave']."  = ? ;";
 
@@ -137,25 +138,27 @@ class GEN_GRUPO
      *
      * @param $IdTabla            identificador
      * @param $Nombre_Tabla        nuevo Nombre Tabla     
+     * @param $ClaseProceso        nueva Clase Proceso
      * @param $IdEstadoTabla       nueva Estado       
      * 
      */
     public static function update(
-        $NombreTabla,        
+        $NombreTabla,
+        $ClaseProceso,        
         $IdEstadoTabla,
         $IdTabla
     )
     {
         // Creando consulta UPDATE
         $consulta = "UPDATE ". $GLOBALS['TABLA']. 
-            " SET GRU_Nombre=?, GRU_Estado=? " .
+            " SET SCP_Nombre=?, SCP_IdClaseProceso=?, SCP_Estado=? " .
             " WHERE ". $GLOBALS['Llave'] ." =? ;";
 
         // Preparar la sentencia
         $cmd = Database::getInstance()->getDb()->prepare($consulta);
 
         // Relacionar y ejecutar la sentencia
-        $cmd->execute(array($NombreTabla, $IdEstadoTabla, $IdTabla ));
+        $cmd->execute(array($NombreTabla, $ClaseProceso, $IdEstadoTabla, $IdTabla ));
 
         return $cmd;
     }
@@ -165,27 +168,31 @@ class GEN_GRUPO
      *         
      * @param $IdTabla            identificador
      * @param $Nombre             nuevo Nombre Tabla     
+     * @param $ClaseProceso       Clase Proceso   
      * @param $Estado             Estado   
      * @return PDOStatement
      */
     public static function insert(        
-        $Nombre,        
+        $Nombre,
+        $ClaseProceso,        
         $Estado
     )
     {
         // Sentencia INSERT
         $comando = "INSERT INTO ". $GLOBALS['TABLA'] ." ( " . 
-            " GRU_Nombre," .            
-            " GRU_Estado" . 
+            " SCP_Nombre," . 
+            " SCP_IdClaseProceso, ".           
+            " SCP_Estado" . 
             " )".     
-            " VALUES(?,?) ;";
+            " VALUES(?,?,?) ;";
 
         // Preparar la sentencia
         $sentencia = Database::getInstance()->getDb()->prepare($comando);
 
         return $sentencia->execute(
             array(                
-                $Nombre,                
+                $Nombre,
+                $ClaseProceso,
                 $Estado
             )
         );
@@ -194,7 +201,7 @@ class GEN_GRUPO
     /**
      * Eliminar el registro con el identificador especificado
      *
-     * @param $IdTabla identificador de la GEN_GRUPO
+     * @param $IdTabla identificador de la PRO_UBICACION
      * @return bool Respuesta de la eliminación
      */
     public static function delete($IdTabla)
@@ -211,19 +218,19 @@ class GEN_GRUPO
     /**
      * Verifica si existe el Grupo
      *
-     * @param $IdUsuario identificador de la GEN_GRUPO
+     * @param $IdUsuario identificador de PRO_UBICACION
      * @return bool Respuesta de la consulta
      */
-    public static function existetabla($Nombre)
+    public static function existetabla($Nombre, $ClaseProceso)
     {
-        $consulta = "SELECT count(". $GLOBALS['Llave']. ") existe, GRU_Nombre FROM ".$GLOBALS['TABLA'].
-        " WHERE GRU_Nombre = ? ; ";
+        $consulta = "SELECT count(". $GLOBALS['Llave']. ") existe, SCP_Nombre, SCP_IdClaseProceso FROM ".$GLOBALS['TABLA'].
+        " WHERE SCP_Nombre = ? AND SCP_IdClaseProceso = ?; ";
 
         try {
             // Preparar sentencia
             $comando = Database::getInstance()->getDb()->prepare($consulta);
             // Ejecutar sentencia preparada
-            $comando->execute(array($Nombre));
+            $comando->execute(array($Nombre, $ClaseProceso));
             // Capturar primera fila del resultado
             $row = $comando->fetch(PDO::FETCH_ASSOC);
             return $row;

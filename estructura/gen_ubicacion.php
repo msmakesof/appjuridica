@@ -216,7 +216,7 @@ class PRO_UBICACION
      */
     public static function existetabla($Nombre)
     {
-        $consulta = "SELECT count(". $GLOBALS['Llave']. ") existe, UBI_Nombre FROM FROM ".$GLOBALS['TABLA'].
+        $consulta = "SELECT count(". $GLOBALS['Llave']. ") existe, UBI_Nombre FROM ".$GLOBALS['TABLA'].
         " WHERE UBI_Nombre = ? ; ";
 
         try {
