@@ -150,7 +150,8 @@ $NombreTabla ="AREA";
 
         $("#grabar").on('click', function(e) {             
             var nombre = $("#nombre").val();
-            nombre = nombre.toUpperCase();            
+            nombre = nombre.toUpperCase(); 
+            var codigo = $("#codigo").val();           
             var estado = $('input:radio[name=estado]:checked').val();
             e.preventDefault();
 
@@ -169,7 +170,7 @@ $NombreTabla ="AREA";
             else
             {
                 $.ajax({
-                    data : {"pnombre": nombre, "pestado": estado}, 
+                    data : {"pnombre": nombre, "pcodigo":codigo, "pestado": estado}, 
                     type: "POST",
                     dataType: "html",
                     url : "crea_<?php echo strtolower($NombreTabla); ?>.php",
@@ -246,6 +247,13 @@ $NombreTabla ="AREA";
                                     <label class="form-label">Nombre Area</label>
                                     <div class="form-line">
                                         <input type="text" class="form-control" name="nombre" id="nombre" value="" required>                                       
+                                    </div>
+                                </div>
+
+                                <div class="form-group form-float" style="clear: both;">
+                                    <label class="form-label">C&oacute;digo Area</label>
+                                    <div class="form-line">
+                                        <input type="text" class="form-control" name="codigo" id="codigo" value="" maxlength="4" required>
                                     </div>
                                 </div>
                                 

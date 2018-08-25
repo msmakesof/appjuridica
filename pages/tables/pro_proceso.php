@@ -47,7 +47,7 @@ else
 {
     $clave ="";
  }
- $nombre_lnk = "area";
+ $nombre_lnk = "proceso";
  $nombre = "";
  $email  = "";
  $usuario ="";
@@ -144,20 +144,20 @@ else
 
             </div>
 
-            <!-- Notificaciones
+            <!-- Notificaciones -->
             <div class="collapse navbar-collapse" id="navbar-collapse">
                 <ul class="nav navbar-nav navbar-right">
-                    <  Call Search >
+                    <!-- <  Call Search > -->
                     <li><a href="javascript:void(0);" class="js-search" data-close="true"><i class="material-icons">search</i></a></li>
-                    < #END# Call Search >
-                    < Notifications >
+                    <!-- < #END# Call Search >
+                    < Notifications > -->
                     <li class="dropdown">
                         <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button">
                             <i class="material-icons">notifications</i>
                             <span class="label-count">7</span>
                         </a>
                         <ul class="dropdown-menu">
-                            <li class="header">NOTIFICATIONES</li>
+                            <li class="header">NOTIFICACIONES</li>
                             <li class="body">
                                 <ul class="menu">
                                     <li>
@@ -166,7 +166,7 @@ else
                                                 <i class="material-icons">person_add</i>
                                             </div>
                                             <div class="menu-info">
-                                                <h4>3 Nacionalizaciones de Carga</h4>
+                                                <h4>3 Revisión Demanda Arte SAS</h4>
                                                 <p>
                                                     <i class="material-icons">access_time</i> Hace 4 mins
                                                 </p>
@@ -179,7 +179,7 @@ else
                                                 <i class="material-icons">add_shopping_cart</i>
                                             </div>
                                             <div class="menu-info">
-                                                <h4>1 Gestión de Transporte</h4>
+                                                <h4>1 Reunión Proceso Mario Soto</h4>
                                                 <p>
                                                     <i class="material-icons">access_time</i> Hace 22 mins
                                                 </p>
@@ -205,7 +205,7 @@ else
                                                 <i class="material-icons">mode_edit</i>
                                             </div>
                                             <div class="menu-info">
-                                                <h4>3 <b>Disponibilidad</b> Flota Transporte</h4>
+                                                <h4>3 <b>Visitas</b> del día</h4>
                                                 <p>
                                                     <i class="material-icons">access_time</i> Hace 45 minutos
                                                 </p>
@@ -218,7 +218,7 @@ else
                                                 <i class="material-icons">comment</i>
                                             </div>
                                             <div class="menu-info">
-                                                <h4>Revisar 3 DTA´s</h4>
+                                                <h4>Revisar Agenda</h4>
                                                 <p>
                                                     <i class="material-icons">access_time</i> Hace 1 Hora
                                                 </p>
@@ -258,8 +258,8 @@ else
                             </li>
                         </ul>
                     </li>
-                    < #END# Notifications >
-                    < Tasks >
+                    <!-- < #END# Notifications >
+                    < Tasks > -->
                     <li class="dropdown">
                         <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button">
                             <i class="material-icons">flag</i>
@@ -272,7 +272,7 @@ else
                                     <li>
                                         <a href="javascript:void(0);">
                                             <h4>
-                                                Reporte Min Transporte
+                                                Reporte Agenda
                                                 <small>32%</small>
                                             </h4>
                                             <div class="progress">
@@ -284,7 +284,7 @@ else
                                     <li>
                                         <a href="javascript:void(0);">
                                             <h4>
-                                                Revisar cumplimiento por Transportador
+                                                Revisar cumplimiento por Procesos
                                                 <small>45%</small>
                                             </h4>
                                             <div class="progress">
@@ -296,7 +296,7 @@ else
                                     <li>
                                         <a href="javascript:void(0);">
                                             <h4>
-                                                Revisar OTM´s generados en el mes
+                                                Revisar Actividades Dependiente Judicial
                                                 <small>54%</small>
                                             </h4>
                                             <div class="progress">
@@ -308,7 +308,7 @@ else
                                     <li>
                                         <a href="javascript:void(0);">
                                             <h4>
-                                                 Revisar DTA´s generados en el mes
+                                                 Revisar Actividades Abogados en el mes
                                                 <small>65%</small>
                                             </h4>
                                             <div class="progress">
@@ -320,7 +320,7 @@ else
                                     <li>
                                         <a href="javascript:void(0);">
                                             <h4>
-                                                Entrega documentación Expo Carga
+                                                Entrega documentación Clientes
                                                 <small>92%</small>
                                             </h4>
                                             <div class="progress">
@@ -336,11 +336,11 @@ else
                             </li>
                         </ul>
                     </li>
-                    < #END# Tasks >
-                    <li class="pull-right"><a href="javascript:void(0);" class="js-right-sidebar" data-close="true"><i class="material-icons">more_vert</i></a></li>
+                    <!-- < #END# Tasks > -->
+                    <!-- <li class="pull-right"><a href="javascript:void(0);" class="js-right-sidebar" data-close="true"><i class="material-icons">more_vert</i></a></li> -->
                 </ul>
             </div>
-            Fin notificaciones -->
+           <!-- Fin notificaciones -->
 
         </div>
     </nav>
@@ -567,7 +567,7 @@ else
                                     
                                     <ul class="dropdown-menu pull-right">
                                        <li>
-                                       <a  id="nuevo" class="btn btn-warning btn-xs waves-effect waves-effect m-r-20" data-toggle="modal" data-target="#defaultModal">Nuevo</a>                                        
+                                       <a id="nuevo" class="btn btn-warning btn-xs waves-effect" data-toggle="modal" data-target="#defaultModal">Nuevo</a>
                                       <!--  <button type="button" class="btn btn-default waves-effect m-r-20" data-toggle="modal" data-target="#defaultModal">Nuevo</button>-->
                                         </li>
                                         <!-- 
@@ -585,25 +585,24 @@ else
                                 <thead>
                                     <tr>
                                         <th>Nombre</th>
-                                        <th>C&oacute;digo</th>
-                                        <th>Activo</th>
+                                        <th>Activo</th> 
                                     </tr>
                                 </thead>
                                 <tfoot>
                                     <tr>
-                                        <th>Nombre</th>                                        
-                                        <th>C&oacute;digo</th>
-                                        <th>Activo</th>
+                                        <th>Nombre</th>
+                                        <th>Activo</th>                                        
+                                    </tr>
                                 </tfoot>
                                 <tbody>
 <?php
 require_once('../../Connections/DataConex.php');
 $soportecURL = "S";
-$url         = urlServicios."consultadetalle/consultadetalle_juz_area.php?IdMostrar=0";
+$url         = urlServicios."consultadetalle/consultadetalle_pro_ubicacion.php?IdMostrar=0";
 $existe      = "";
 $usulocal    = "";
 $siguex      = "";
-//echo "<script>console.log($url)</script>" ;
+
 if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
 {
     $ch = curl_init();
@@ -617,10 +616,10 @@ if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
     $resultado = curl_exec ($ch);
     curl_close($ch);
 
-    $marea =  preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $resultado);    
-    $marea = json_decode($marea, true);
-    //echo("<script>console.log('PHP: ".print_r($marea)."');</script>");
-    //echo("<script>console.log('PHP: ".count($m['juz_area'])."');</script>");
+    $mubicacion =  preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $resultado);    
+    $mubicacion = json_decode($mubicacion, true);
+    //echo("<script>console.log('PHP: ".print_r($mubicacion)."');</script>");
+    //echo("<script>console.log('PHP: ".count($m['pro_ubicacion'])."');</script>");
     
     $json_errors = array(
         JSON_ERROR_NONE => 'No se ha producido ningún error',
@@ -642,19 +641,18 @@ if($soportecURL == "N")
     $response = Unirest\Request::get($url, array("X-Mashape-Key" => "MY SECRET KEY"));
     $resultado = $response->raw_body;
     $resultado = preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $resultado);
-    $marea = json_decode($resultado, true);	        
+    $mubicacion = json_decode($resultado, true);	        
 } 
 
-if( $marea['estado'] < 2)
+if( $mubicacion['estado'] < 2)
 {
     $nombre_Tabla="";
-    for($i=0; $i<count($marea['juz_area']); $i++)
+    for($i=0; $i<count($mubicacion['pro_ubicacion']); $i++)
     {
-        $NombreTabla = trim($marea['juz_area'][$i]['ARE_Nombre']);		
+        $NombreTabla = trim($mubicacion['pro_ubicacion'][$i]['UBI_Nombre']);        
         $archivo = $NombreTabla.".php";
-        $codigo = $marea['juz_area'][$i]['ARE_Codigo'];
-        $idTabla = $marea['juz_area'][$i]['ARE_IdArea'];
-        $estadoTabla = trim($marea['juz_area'][$i]['EstadoTabla']);
+        $idTabla = $mubicacion['pro_ubicacion'][$i]['UBI_IdUbicacion'];
+        $estadoTabla = trim($mubicacion['pro_ubicacion'][$i]['EstadoTabla']);
     ?>
         <tr>
             <td>
@@ -679,8 +677,7 @@ if( $marea['estado'] < 2)
                     </div>
                 </div>         
             </td>
-            <td><?php echo $codigo; ?></td>
-            <td><?php echo $estadoTabla; ?></td>
+            <td><?php echo $estadoTabla; ?></td>               
         </tr>
     <?php                          
     }
@@ -752,12 +749,16 @@ if( $marea['estado'] < 2)
 <script type="text/javascript">
  $(document).ready(function () {	 
 	$("#cerrarModal").click(function(){
-	 	 window.location="juz_<?php echo $nombre_lnk; ?>.php";
+	 	 window.location="pro_<?php echo $nombre_lnk; ?>.php";
 	});
 
 	$("#cerrarModalC").click(function(){
-	 	 window.location="juz_<?php echo $nombre_lnk; ?>.php";
-	});		
+	 	 window.location="pro_<?php echo $nombre_lnk; ?>.php";
+	});	
+
+    $("#nuevo").on("click", function(){
+        //window.location='../forms/form-validationBasepais.php';
+    });
 
  }); 
 

@@ -188,17 +188,9 @@ else
             </a>
             <ul class="ml-menu">
                 <li>
-                    <!--
-                    <a href="../pages/tables/clases.php" class="menu-toggle">
-                     ///<a href="../actualizacion.html" class="menu-toggle"> //
-                        <span>Programación de Clases</span>
-                    </a>  
-                    -->
-
-                    <!-- <a href="../kal/sample.php" class="menu-toggle">
-                        <span>Programación de Clases</span>
-                    </a>  -->                               
-
+                    <a href="../pages/tables/pro_proceso.php" class="menu-toggle">
+                        <span>Nuevo Proceso</span>
+                    </a>
                 </li>
             </ul>
         </li>

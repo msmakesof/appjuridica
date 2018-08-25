@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head id="Head1">
-    <title>	COLEGIO - Programación Horarios</title>
+    <title>	AppJuridica - Programación Agenda</title>
     <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
     <link href="css/dailog.css" rel="stylesheet" type="text/css" />
     <link href="css/calendar.css" rel="stylesheet" type="text/css" /> 
@@ -106,7 +106,7 @@
                 if(data)
                 {
                     var url = StrFormat(eurl,data);
-                    OpenModelWindow(url,{ width: 600, height: 400, caption:"Administrar Programación de Horarios",onclose:function(){
+                    OpenModelWindow(url,{ width: 600, height: 400, caption:"Administrar Programación de Agenda",onclose:function(){
                        $("#gridcontainer").reload();
                     }});
                 }
@@ -124,7 +124,7 @@
                 
                 $.alerts.okButton="Ok";  
                 $.alerts.cancelButton="Cancelar";  
-                hiConfirm("Está seguro que desea borrar esta Programación?", 'Confirmar',function(r){ r && callback(0);});           
+                hiConfirm("Está seguro que desea borrar esta Agenda?", 'Confirmar',function(r){ r && callback(0);});           
             }
             function wtd(p)
             {
@@ -181,7 +181,7 @@
             //Add a new event
             $("#faddbtn").click(function(e) {
                 var url ="edit.php";
-                OpenModelWindow(url,{ width: 500, height: 400, caption: "Crear Nueva Programación"});
+                OpenModelWindow(url,{ width: 500, height: 400, caption: "Crear Nueva Agenda"});
             });
             //go to today
             $("#showtodaybtn").click(function(e) {
@@ -220,7 +220,7 @@
     <div>
 
       <div id="calhead" style="padding-left:1px;padding-right:1px;">          
-            <div class="cHead"><div class="ftitle">COLEGIO - Programación Horarios</div>
+            <div class="cHead"><div class="ftitle">AppJuridica - Programación Agenda</div>
             <div id="loadingpannel" class="ptogtitle loadicon" style="display: none;">Cargando datos...</div>
             <div id="errorpannel" class="ptogtitle loaderror" style="display: none;">Lo sentimos, no se pudo cargar su información, intente de nuevo más tarde.</div>
             </div>          

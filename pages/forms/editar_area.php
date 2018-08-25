@@ -49,6 +49,12 @@ if(isset($_POST['estado'])){
 	$estado = trim($_POST['estado']);
 }
 
+
+$codigo ="";
+if(isset($_POST['codigo'])){
+	$codigo = trim($_POST['codigo']);
+}
+
 $idtabla = 0;
 if(isset($_POST['idtabla'])){
 	$idtabla = trim($_POST['idtabla']);

@@ -51,6 +51,7 @@ require_once('../../apis/general/area.php');
 
 $Nombre = trim($marea['juz_area']['ARE_Nombre']);
 $estado = $marea['juz_area']['ARE_Estado'];
+$codigo = $marea['juz_area']['ARE_Codigo'];
 $idtabla = $marea['juz_area']['ARE_IdArea'];
 
 ?>
@@ -124,6 +125,13 @@ $idtabla = $marea['juz_area']['ARE_IdArea'];
                                     <label class="form-label">Nombre</label>
                                     <div class="form-line">
                                         <input type="text" class="form-control" name="nombre" id="nombre" value="<?php echo $Nombre ;?>" required>                                    
+                                    </div>
+                                </div>
+
+                                <div class="form-group form-float ">
+                                    <label class="form-label">C&oacute;digo</label>
+                                    <div class="form-line">                                        
+                                        <input type="text" class="form-control" name="codigo" id="codigo" value="<?php echo $codigo ;?>"  maxlength="4" required>
                                     </div>
                                 </div>
                                 
@@ -204,11 +212,12 @@ $idtabla = $marea['juz_area']['ARE_IdArea'];
             $("#mensaje").hide();
 			var nombre = $("#nombre").val();
             nombre = nombre.toUpperCase();
+            var codigo = $("#codigo").val();
 			var estado = $('input:radio[name=estado]:checked').val();
 			var idtabla = "<?php echo $idtabla; ?>";
 			
 			$.ajax({
-				data : {"nombre": nombre, "estado": estado, "idtabla": idtabla},
+				data : {"nombre": nombre, "codigo": codigo, "estado": estado, "idtabla": idtabla},
 				type: "POST",
 				dataType: "html",
 				url : "editar_<?php echo strtolower($Tabla); ?>.php",

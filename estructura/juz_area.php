@@ -20,7 +20,7 @@ class JUZ_AREA
      */
     public static function getAll()
     {
-        $consulta = "SELECT ".$GLOBALS['Llave'].", ARE_Nombre, ".
+        $consulta = "SELECT ".$GLOBALS['Llave'].", ARE_Nombre, ARE_Codigo, ".
             " CASE ARE_Estado WHEN 1 THEN 'Activo' ELSE 'Inactivo' END EstadoTabla ".
             " FROM ".$GLOBALS['TABLA']." ORDER BY ARE_Nombre; ";
         try {
@@ -48,7 +48,8 @@ class JUZ_AREA
         // Consulta de la tabla de tablas
         $consulta = "SELECT ".$GLOBALS['Llave'].",
                             ARE_Nombre,                            
-                            ARE_Estado ".
+                            ARE_Estado, 
+                            ARE_Codigo ".
                             " FROM ".$GLOBALS['TABLA'].
                             " WHERE ".$GLOBALS['Llave']." = ? ORDER BY ARE_Nombre; ";
 
@@ -79,7 +80,7 @@ class JUZ_AREA
     public static function getByIdEstado($IdEstadoTabla)
     {
         // Consulta de la GEN_PAIS
-        $consulta = "SELECT ".$GLOBALS['Llave'].", ARE_Nombre, ARE_Estado".
+        $consulta = "SELECT ".$GLOBALS['Llave'].", ARE_Nombre, ARE_Codigo, ARE_Estado".
                     " FROM ". $GLOBALS['TABLA'].
                     " WHERE ARE_Estado = ? ORDER BY ARE_Nombre; ";
 
@@ -136,26 +137,28 @@ class JUZ_AREA
      * en los nuevos valores relacionados con un identificador
      *
      * @param $IdTabla           identificador
-     * @param $Nombre            nuevo Nombre Tipo Cliente
+     * @param $Nombre            nuevo Nombre 
+     * @param $Codigo            nuevo Codigo
      * @param $IdEstadoTabla     nueva Estado       
      * 
      */
     public static function update(
         $nombre,        
         $estado,
+        $codigo,
         $idtabla
     )
     {
         // Creando consulta UPDATE
         $consulta = "UPDATE ". $GLOBALS['TABLA']. 
-            " SET ARE_Nombre=?, ARE_Estado=? " .
+            " SET ARE_Nombre=?, ARE_Codigo =?, ARE_Estado=? " .
             " WHERE ". $GLOBALS['Llave'] ." =? ;";
 
         // Preparar la sentencia
         $cmd = Database::getInstance()->getDb()->prepare($consulta);
 
         // Relacionar y ejecutar la sentencia
-        $cmd->execute(array($nombre, $estado, $idtabla ));
+        $cmd->execute(array($nombre, $codigo, $estado, $idtabla ));
 
         return $cmd;
     }
@@ -164,21 +167,24 @@ class JUZ_AREA
      * Insertar un nueva Tipo Documento
      *         
      * @param $IdTabla            identificador
-     * @param $Nombre             nuevo Nombre Tipo Cliente    
+     * @param $Nombre             nuevo Nombre 
+     * @param $Codigo             nuevo Codigo
      * @param $Estado             Estado   
      * @return PDOStatement
      */
     public static function insert(        
         $Nombre,       
-        $Estado
+        $Estado,
+        $Codigo
     )
     {
         // Sentencia INSERT
         $comando = "INSERT INTO ". $GLOBALS['TABLA'] ." ( " .            
             " ARE_Nombre," .            
-            " ARE_Estado" . 
+            " ARE_Estado," .
+            " ARE_Codigo". 
             " )".     
-            " VALUES(?,?) ;";
+            " VALUES(?,?,?) ;";
 
         // Preparar la sentencia
         $sentencia = Database::getInstance()->getDb()->prepare($comando);
@@ -186,7 +192,8 @@ class JUZ_AREA
         return $sentencia->execute(
             array(                
                 $Nombre,                 
-                $Estado
+                $Estado,
+                $Codigo
             )
         );
     }
