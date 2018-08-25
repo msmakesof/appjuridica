@@ -183,7 +183,7 @@ else
 
         <li>
             <a href="javascript:void(0);" class="menu-toggle">
-                <i class="material-icons">works</i>
+                <i class="material-icons">work</i>
                 <span>Gesti&oacute;n Procesos</span>
             </a>
             <ul class="ml-menu">
@@ -219,7 +219,7 @@ else
 
         <li>
             <a href="javascript:void(0);" class="menu-toggle">
-                <i class="material-icons">widgets</i>
+                <i class="material-icons">account_balance</i>
                 <span>Consultar Juzgados</span>
             </a>
             <ul class="ml-menu">
