@@ -183,7 +183,7 @@ else
 
         <li>
             <a href="javascript:void(0);" class="menu-toggle">
-                <i class="material-icons">widgets</i>
+                <i class="material-icons">works</i>
                 <span>Gesti&oacute;n Procesos</span>
             </a>
             <ul class="ml-menu">
@@ -204,10 +204,10 @@ else
         </li>
 
         <li>
-            <a href="javascript:void(0);" class="menu-toggle">
+            <!-- <a href="javascript:void(0);" class="menu-toggle">
                 <i class="material-icons">widgets</i>
                 <span>Ubicaci&oacute;n</span>
-            </a>
+            </a> -->
             <ul class="ml-menu">
                 <li>
                    <!--  <a href="../kal/sample.php" class="menu-toggle">
@@ -233,14 +233,14 @@ else
 
         <li>
             <a href="javascript:void(0);" class="menu-toggle">
-                <i class="material-icons">widgets</i>
-                <span>Agenda y Citaciones</span>
+                <i class="material-icons">today</i>
+                <span>AGENDA</span>
             </a>
             <ul class="ml-menu">
                 <li>
-                   <!--  <a href="../kal/sample.php" class="menu-toggle">
-                        <span>Comparaci&oacute;n de Cajas</span>
-                    </a>  --> 
+                    <a href="../kal/sample.php" class="menu-toggle">
+                        <span>Agenda</span>
+                    </a>  
                 </li>
             </ul>
         </li>

@@ -133,7 +133,7 @@ else
         <li>
             <a href="javascript:void(0);" class="menu-toggle">
                 <i class="material-icons">work</i>
-                <span>Procesos</span>
+                <span>Gesti&oacute;n Procesos</span>
             </a>
             <ul class="ml-menu">
                 <li>
@@ -156,6 +156,20 @@ else
             <a href="javascript:void(0);" class="menu-toggle">
                 <i class="material-icons">today</i>
                 <span>AGENDA</span>
+            </a>
+            <ul class="ml-menu">
+                <li>
+                    <a href="../../kal/sample.php" class="menu-toggle">
+                        <span>Agenda</span>
+                    </a>  
+                </li>
+            </ul>
+        </li>
+
+        <li>
+            <a href="javascript:void(0);" class="menu-toggle">
+                <i class="material-icons">widgets</i>
+                <span>Siglo XXI</span>
             </a>
             <ul class="ml-menu">
                 <li>

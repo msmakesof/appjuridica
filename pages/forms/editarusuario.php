@@ -462,6 +462,3 @@ $TipoUsuario = $muser['usu_usuario']['USU_TipoUsuario'];
     </script>    
 </body>
 </html>
-<?php
-mysqli_close($cnn_kn);
-?>

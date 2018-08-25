@@ -5,7 +5,8 @@
  * almacenadas en la base de datos
  */
 require '../Connections/database.php';
-
+$TABLA ="usu_usuario";
+$Llave ="USU_IdUsuario";
 class USU_USUARIO
 {
     function __construct()
@@ -20,7 +21,7 @@ class USU_USUARIO
      */
     public static function getAll()
     {
-        $consulta = "SELECT USU_IdUsuario ,
+        $consulta = "SELECT ".$GLOBALS['Llave']." ,
         USU_TipoDocumento,
         USU_Identificacion,
         USU_PrimerApellido,
@@ -42,7 +43,7 @@ class USU_USUARIO
         USU_Local ,
         CASE USU_Estado WHEN 1 THEN 'Activo' ELSE 'Inactivo' END EstadoUsuario,
         concat_WS(' ',USU_Nombre, USU_PrimerApellido, USU_SegundoApellido) AS NombreUsuario 
-        FROM usu_usuario";
+        FROM ".$GLOBALS['TABLA']." ORDER BY USU_Nombre; ";
         try {
             // Preparar sentencia
             $comando = Database::getInstance()->getDb()->prepare($consulta);
@@ -66,7 +67,7 @@ class USU_USUARIO
     public static function getById($IdUsuario)
     {
         // Consulta de la tabla de usuario
-        $consulta = "SELECT USU_IdUsuario,
+        $consulta = "SELECT ".$GLOBALS['Llave'].",
                         USU_TipoDocumento,
                         USU_Identificacion,
                         USU_PrimerApellido,
@@ -86,9 +87,9 @@ class USU_USUARIO
                         USU_FechaEstado,
                         USU_UsuarioEstado,
                         USU_IdInterno,
-                        USU_Local
-                        FROM usu_usuario
-                        WHERE USU_IdUsuario = ?";
+                        USU_Local ".
+                        " FROM ".$GLOBALS['TABLA'].
+                        " WHERE ".$GLOBALS['Llave']." = ? ORDER BY USU_Nombre; ";
 
         try {
             // Preparar sentencia
@@ -117,9 +118,9 @@ class USU_USUARIO
     public static function getByIdEstado($IdUsuario)
     {
         // Consulta de la usu_usuario
-        $consulta = "SELECT USU_Estado
-                        FROM usu_usuario
-                        WHERE USU_IdUsuario = ?";
+        $consulta = "SELECT ".$GLOBALS['Llave'].", USU_Nombre ".
+                        " FROM ". $GLOBALS['TABLA'].
+                        " WHERE USU_IdUsuario = ? ORDER BY USU_Nombre;";
 
         try {
             // Preparar sentencia
@@ -149,9 +150,9 @@ class USU_USUARIO
     public static function getByIdExiste($IdUsuario,$IdClave)
     {
         // Consulta de la usu_usuario
-        $consulta = "SELECT Count(USU_IdUsuario) AS TotalUsuario, Usu_IdInterno, USU_IdUsuario, USU_Local 
-                        FROM usu_usuario
-                        WHERE USU_Usuario = ? AND USU_Clave = ?";
+        $consulta = "SELECT Count(".$GLOBALS['Llave'].") AS TotalUsuario, Usu_IdInterno, USU_IdUsuario, USU_Local, USU_Estado ".
+                    " FROM ". $GLOBALS['TABLA'].
+                    " WHERE USU_Usuario = ? AND USU_Clave = ?";
 
         try {
             // Preparar sentencia
@@ -213,10 +214,10 @@ class USU_USUARIO
     )
     {
         // Creando consulta UPDATE
-        $consulta = "UPDATE usu_usuario" .
+        $consulta = "UPDATE ". $GLOBALS['TABLA']. 
             " SET USU_TipoDocumento=?, USU_Identificacion=?, USU_PrimerApellido=?, USU_SegundoApellido=?, USU_Nombre=?, USU_Email=?, ".
             " USU_Direccion=?, USU_Celular=?, USU_Usuario=?, USU_Clave=?, USU_TipoUsuario=?, USU_Estado=? " .
-            " WHERE USU_IdUsuario=? ;";
+            " WHERE ". $GLOBALS['Llave'] ."=? ;";
 
         // Preparar la sentencia
         $cmd = Database::getInstance()->getDb()->prepare($consulta);
@@ -257,7 +258,7 @@ class USU_USUARIO
         $Clave, $TipoUsuario,$Estado, $IdInterno, $Local )
     {
         // Sentencia INSERT
-        $comando = "INSERT INTO usu_usuario ( " .            
+        $comando = "INSERT INTO ". $GLOBALS['TABLA'] ." ( " .            
             " USU_TipoDocumento," .
             " USU_Identificacion," .
             " USU_PrimerApellido," . 
@@ -295,7 +296,7 @@ class USU_USUARIO
     public static function delete($IdUsuario)
     {
         // Sentencia DELETE
-        $comando = "DELETE FROM usu_usuario WHERE USU_IdUsuario =? ;";
+        $comando = "DELETE FROM ". $GLOBALS['TABLA'] ." WHERE ". $GLOBALS['Llave']. " = ? ;";
 
         // Preparar la sentencia
         $sentencia = Database::getInstance()->getDb()->prepare($comando);
@@ -311,9 +312,9 @@ class USU_USUARIO
      */
     public static function existeusuario($Identificacion, $PrimerApellido, $SegundoApellido, $Nombre, $Email)
     {
-        $consulta = "SELECT count(USU_IdUsuario) existe, USU_Identificacion, USU_PrimerApellido, USU_SegundoApellido, USU_Nombre, USU_Email
-        FROM usu_usuario
-        WHERE USU_Identificacion = ? OR (USU_PrimerApellido = ? AND USU_SegundoApellido = ? AND USU_Nombre = ?) OR USU_Email = ?";
+        $consulta = "SELECT count(". $GLOBALS['Llave']. ") existe, USU_Identificacion, USU_PrimerApellido, USU_SegundoApellido, USU_Nombre, USU_Email ".        
+        " FROM ".$GLOBALS['TABLA'].
+        " WHERE USU_Identificacion = ? OR (USU_PrimerApellido = ? AND USU_SegundoApellido = ? AND USU_Nombre = ?) OR USU_Email = ?";
 
         try {
             // Preparar sentencia

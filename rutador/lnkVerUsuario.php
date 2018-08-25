@@ -7,8 +7,10 @@
     
     require_once('./Connections/DataConex.php');    
     $clave = encryptor('encrypt', $clave);
+    //echo("<script>console.log('PHP usuario: ".$clave."');</script>");
     $soportecURL = "S";
     $url         = urlServicios."consultadetalle/consultadetalle_Usuario.php?idU=$usuario&idC=$clave";
+    //echo("<script>console.log('PHP usuario: ".$url."');</script>");
     $existe      = "";
     $usulocal    = "";
     $siguex      = "";
