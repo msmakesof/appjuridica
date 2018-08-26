@@ -584,13 +584,19 @@ else
                          <table class="table table-bordered table-striped table-hover dataTable js-exportable" id="grid">
                                 <thead>
                                     <tr>
-                                        <th>Nombre</th>
+                                        <th>Proceso</th>
+                                        <th>Asignado A</th>
+                                        <th>Ubicaci&oacute;n</th>
+                                        <th>Clase Proceso</th>
                                         <th>Activo</th> 
                                     </tr>
                                 </thead>
                                 <tfoot>
                                     <tr>
-                                        <th>Nombre</th>
+                                        <th>Proceso</th>
+                                        <th>Asignado A</th>
+                                        <th>Ubicaci&oacute;n</th>
+                                        <th>Clase Proceso</th>
                                         <th>Activo</th>                                        
                                     </tr>
                                 </tfoot>
@@ -598,7 +604,7 @@ else
 <?php
 require_once('../../Connections/DataConex.php');
 $soportecURL = "S";
-$url         = urlServicios."consultadetalle/consultadetalle_pro_ubicacion.php?IdMostrar=0";
+$url         = urlServicios."consultadetalle/consultadetalle_pro_proceso.php?IdMostrar=0";
 $existe      = "";
 $usulocal    = "";
 $siguex      = "";
@@ -616,10 +622,10 @@ if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
     $resultado = curl_exec ($ch);
     curl_close($ch);
 
-    $mubicacion =  preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $resultado);    
-    $mubicacion = json_decode($mubicacion, true);
-    //echo("<script>console.log('PHP: ".print_r($mubicacion)."');</script>");
-    //echo("<script>console.log('PHP: ".count($m['pro_ubicacion'])."');</script>");
+    $mproceso =  preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $resultado);    
+    $mproceso = json_decode($mproceso, true);
+    //echo("<script>console.log('PHP: ".print_r($mproceso)."');</script>");
+    //echo("<script>console.log('PHP: ".count($m['pro_proceso'])."');</script>");
     
     $json_errors = array(
         JSON_ERROR_NONE => 'No se ha producido ningún error',
@@ -641,18 +647,22 @@ if($soportecURL == "N")
     $response = Unirest\Request::get($url, array("X-Mashape-Key" => "MY SECRET KEY"));
     $resultado = $response->raw_body;
     $resultado = preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $resultado);
-    $mubicacion = json_decode($resultado, true);	        
+    $mproceso = json_decode($resultado, true);	        
 } 
 
-if( $mubicacion['estado'] < 2)
+if( $mproceso['estado'] < 2)
 {
     $nombre_Tabla="";
-    for($i=0; $i<count($mubicacion['pro_ubicacion']); $i++)
+    for($i=0; $i<count($mproceso['pro_proceso']); $i++)
     {
-        $NombreTabla = trim($mubicacion['pro_ubicacion'][$i]['UBI_Nombre']);        
+        $NombreTabla = trim($mproceso['pro_proceso'][$i]['PRO_NumeroProceso']);        
         $archivo = $NombreTabla.".php";
-        $idTabla = $mubicacion['pro_ubicacion'][$i]['UBI_IdUbicacion'];
-        $estadoTabla = trim($mubicacion['pro_ubicacion'][$i]['EstadoTabla']);
+        $idTabla = $mproceso['pro_proceso'][$i]['PRO_IdProceso'];
+        $AsignadoA =$mproceso['pro_proceso'][$i]['AsignadoA'];
+        $Ubicacion =$mproceso['pro_proceso'][$i]['Ubicacion'];
+        $ClaseProceso =$mproceso['pro_proceso'][$i]['ClaseProceso'];
+        $Juzgado =$mproceso['pro_proceso'][$i]['Juzgado'];
+        $estadoTabla = trim($mproceso['pro_proceso'][$i]['EstadoTabla']);
     ?>
         <tr>
             <td>
@@ -676,8 +686,12 @@ if( $mubicacion['estado'] < 2)
                         </div>
                     </div>
                 </div>         
-            </td>
-            <td><?php echo $estadoTabla; ?></td>               
+            </td>            
+            <td><?php echo $AsignadoA; ?></td>
+            <td><?php echo $Ubicacion; ?></td>
+            <td><?php echo $ClaseProceso; ?></td>            
+            <td><?php echo $Juzgado; ?></td>
+            <td><?php echo $estadoTabla; ?></td>
         </tr>
     <?php                          
     }
@@ -704,7 +718,7 @@ if( $mubicacion['estado'] < 2)
                         </div>
                         
                         <div class="modal-body">                         
-                            <object type="text/html" data="../forms/form-validationBase<?php echo $nombre_lnk ;?>.php" id="crear"></object>
+                            <object style="padding :0px; position: relative; height: 85vh; max-height:85vh; bottom:0; overflow: hidden; margin: 0;" type="text/html" data="../forms/form-validationBase<?php echo $nombre_lnk ;?>.php" id="crear"></object>
                         </div>
                         <div class="modal-footer">
                             <!-- <button type="button" class="btn btn-link waves-effect">SAVE CHANGES</button> -->

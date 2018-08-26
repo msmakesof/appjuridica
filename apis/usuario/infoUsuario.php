@@ -41,9 +41,28 @@ if (!function_exists("GetSQLValueString"))
   }
 }
 require_once('../../Connections/DataConex.php');
-
+$params ="";
+//$idTabla = 0;
+//if(isset($_GET["idTabla"]))
+if($idTabla > 0)
+{
+  $idTabla = $idTabla; //$_GET["idTabla"];
+}
+else
+{
+  $idTabla = 0;
+}
+//echo("<script>console.log('PHP idTabla: ".$idTabla."');</script>");
+if($idTabla == 0)
+{
+  $params = "IdMostrar=0";
+}
+else
+{
+  $params ="IdUsuario=$idTabla";
+}
 $soportecURL = "S";
-$url         = urlServicios."consultadetalle/consultadetalle_Usuario.php?IdUsuario=$idTabla";
+$url         = urlServicios."consultadetalle/consultadetalle_Usuario.php?".$params;
 $existe      = "";
 $usulocal    = "";
 $siguex      = "";

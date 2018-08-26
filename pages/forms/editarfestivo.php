@@ -124,19 +124,24 @@ $idtabla = $mfestivo['gen_festivo']['FES_IdFestivo'];
                         </div>
                         <div class="body  table-responsive">
                             <form id="form_validation" method="POST">
-                                <div class="form-group form-float" style="clear: both;">
-                                    <label class="form-label">Seleccione Día Festivo</label>                                    
-                                    <div class='input-group date form-line' name="nombre" id="nombre" required>
-                                        <input type='text' id="txtFecha" class="form-control" value="<?php echo $Nombre; ?>" readonly/>
-                                        <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span>
-                                        </span>
-                                    </div>
+
+                                <div class="form-group row">
+                                    <div class="col-xs-6">
+                                        <label class="form-label">Seleccione Día Festivo</label>                                    
+                                        <div class='input-group date form-line' name="nombre" id="nombre" required>
+                                            <input type='text' id="txtFecha" class="form-control" value="<?php echo $Nombre; ?>" readonly/>
+                                            <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span>
+                                            </span>
+                                        </div>
+                                    </div>    
                                 </div>                                
 
-                                <div class="form-group form-float" style="clear: both;">
-                                    <label class="form-label">Vancia Judicial</label>
-                                    <div class="form-line">
-                                        <input type="text" class="form-control" name="VanciaJudicial" id="VanciaJudicial" maxlength="1" value="<?php echo $VanciaJudicial; ?>" required>                                       
+                                <div class="form-group row">
+                                    <div class="col-xs-4">
+                                        <label class="form-label">Vancia Judicial</label>
+                                        <div class="form-line">
+                                            <input type="text" class="form-control" name="VanciaJudicial" id="VanciaJudicial" maxlength="1" value="<?php echo $VanciaJudicial; ?>" required>                                       
+                                        </div>
                                     </div>
                                 </div>               
                                 

@@ -209,6 +209,7 @@ $NombreTabla ="TIPOPERSONA";
                             <form id="form_validation" method="POST">
                                 
                                 <div class="form-group form-float">
+                                    <label class="form-label">&nbsp;</label>
                                     <div class="form-line">
                                         <input type="text" class="form-control" name="nombre"id="nombre" required>
                                         <label class="form-label">Nombre:</label>

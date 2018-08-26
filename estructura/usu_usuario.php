@@ -43,7 +43,7 @@ class USU_USUARIO
         USU_Local ,
         CASE USU_Estado WHEN 1 THEN 'Activo' ELSE 'Inactivo' END EstadoUsuario,
         concat_WS(' ',USU_Nombre, USU_PrimerApellido, USU_SegundoApellido) AS NombreUsuario 
-        FROM ".$GLOBALS['TABLA']." ORDER BY USU_Nombre; ";
+        FROM ".$GLOBALS['TABLA']." ORDER BY NombreUsuario; ";
         try {
             // Preparar sentencia
             $comando = Database::getInstance()->getDb()->prepare($consulta);
@@ -118,7 +118,8 @@ class USU_USUARIO
     public static function getByIdEstado($IdUsuario)
     {
         // Consulta de la usu_usuario
-        $consulta = "SELECT ".$GLOBALS['Llave'].", USU_Nombre ".
+        $consulta = "SELECT ".$GLOBALS['Llave'].", USU_Nombre, USU_PrimerApellido, USU_SegundoApellido, 
+						concat_WS(' ', USU_Nombre, USU_PrimerApellido, USU_SegundoApellido ) AS NombreCompleto ".
                         " FROM ". $GLOBALS['TABLA'].
                         " WHERE USU_IdUsuario = ? ORDER BY USU_Nombre;";
 

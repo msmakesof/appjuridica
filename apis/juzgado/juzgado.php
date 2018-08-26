@@ -47,7 +47,7 @@ if(isset($_GET["idTabla"])){
 }
 if($idTabla == 0)
 {
-  $params = "IdEstado=1";
+  $params = "IdMostrar=0";
 }
 else
 {

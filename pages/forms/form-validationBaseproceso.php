@@ -7,9 +7,12 @@ else
 {
     header('Location: ../../index.html');
 }
-$NombreTabla ="SUBCLASEPROCESO";
+$NombreTabla ="PROCESO";
 $idTabla = 0;
+require_once('../../apis/usuario/infoUsuario.php');
+require_once('../../apis/proceso/ubicacion.php');
 require_once('../../apis/proceso/claseproceso.php');
+require_once('../../apis/juzgado/juzgado.php');
 ?>
 <!DOCTYPE html>
 <html>
@@ -23,6 +26,9 @@ require_once('../../apis/proceso/claseproceso.php');
 
     <!-- Bootstrap Core Css -->
     <link href="../../plugins/bootstrap/css/bootstrap.css" rel="stylesheet">
+
+    <!-- DateTime Picker -->
+    <link href="../../calendar/css/bootstrap-datetimepicker.min.css" rel="stylesheet"> 
 
     <!-- Waves Effect Css -->
     <link href="../../plugins/node-waves/waves.css" rel="stylesheet" />
@@ -95,14 +101,21 @@ require_once('../../apis/proceso/claseproceso.php');
     <!-- Demo Js -->
     <script src="../../js/demo.js"></script>
 
+    <!-- DateTime picker -->
+    <script src="../../calendar/js/moment.min.js"></script>
+    <script src="../../calendar/js/bootstrap-datetimepicker.min.js"></script>
+    <script src="../../calendar/js/bootstrap-datetimepicker.es.js"></script>  
+
     <!--  <script src="../../js/alertify.min.js"></script> -->
 
     <script type="text/javascript">
     var nombre ="";
     $(document).ready(function()
-    {           
-       
+    {       
         $("#msj").hide();
+        $('#fechainicio').datetimepicker({
+          format: 'YYYY-MM-DD'       
+        });
         function reset () {
             $("#toggleCSS").attr("href", "../../css/themes2/alertify.default.css");
             alertify.set({
@@ -120,14 +133,18 @@ require_once('../../apis/proceso/claseproceso.php');
         $("#grabar").on('click', function(e) { 
            
             //var nombremostrar = $("#nombremostrar").val();
-            var nombre = $("#nombre").val();
-            nombre = nombre.toUpperCase();
-            var claseproceso = $("#claseproceso").val();
+            var nombre = $("#proceso").val();
+            //nombre = nombre.toUpperCase();
+            fechainicio = $("#txtFecha").val();
+            usuario = $("#usuario").val();
+            ubicacion = $("#ubicacion").val();
+            claseproceso = $("#claseproceso").val();
+            juzgado = $("#juzgado").val();
             var estado = $('input:radio[name=estado]:checked').val();
             e.preventDefault();
-            if( estado == undefined || nombre == "" || claseproceso == "" )
+            if( estado == undefined || nombre == "" || fechainicio == "" || usuario == "" || ubicacion == "" || claseproceso == "" || juzgado == "" )
             {                 
-                swal("Atencion:", "Debe digitar un Nombre y/o seleccionar un Estado o una Clase de Proceso.");
+                swal("Atencion:", "Debe digitar un Nombre y/o seleccionar un Estado y/o Fecha de Inicio  y/o Usuario  y/o Ubicacion  y/o  clase Proceso  y/o  Juzgado.");
                 e.stopPropagation();
                 return false;
             }
@@ -135,7 +152,7 @@ require_once('../../apis/proceso/claseproceso.php');
             else
             {
                 $.ajax({
-                    data : {"pnombre": nombre, "pclaseproceso": claseproceso, "pestado": estado},
+                    data : {"pnombre": nombre, "pfechainicio": $fechainicio, "pusuario": $usuario, "pubicacion": $ubicacion, "pclaseproceso": $claseproceso ,"pjuzgado": $juzgado,"pestado": estado},
                     type: "POST",
                     dataType: "html",
                     url : "crea_<?php echo strtolower($NombreTabla); ?>.php",
@@ -179,7 +196,7 @@ require_once('../../apis/proceso/claseproceso.php');
 
     function existe(parnombre)
         {                       
-            alertify.alert("Sub Clase Proceso: "+ parnombre +" !Ya se encuentra registrada.");
+            alertify.alert("Proceso: "+ parnombre +" !Ya se encuentra registrada.");
              $("#msj").html("Echo....");
         }
     </script>    
@@ -216,34 +233,101 @@ require_once('../../apis/proceso/claseproceso.php');
                                 <div class="form-group form-float">
                                     <label class="form-label">&nbsp;</label>
                                     <div class="form-line">
-                                        <input type="text" class="form-control" name="nombre"id="nombre" max-length="3" required>
-                                        <label class="form-label">Nombre:</label>
+                                        <input type="text" class="form-control" name="proceso"id="proceso" value="" maxlength="23" required>
+                                        <label class="form-label">Proceso:</label>   
                                     </div>
                                 </div> 
 
-                                <div style="form-group form-float">                                     
-                                    <label class="form-label">
-                                        Clase de Proceso
-                                    </label>                                    
-                                    <div class="col-sm-4">                                       
-                                        <select class="form-control show-tick" data-live-search="true" name="claseproceso" id="claseproceso" required>
-                                            <option value="" >Seleccione Opción...</option>
-                                            <?php
-                                                for($i=0; $i<count($mclaseproceso['pro_claseproceso']); $i++)
-                                                {
-                                                    $CPR_IdClaseProceso = $mclaseproceso['pro_claseproceso'][$i]['CPR_IdClaseProceso'];                                                    
-                                                    $CPR_Nombre = $mclaseproceso['pro_claseproceso'][$i]['CPR_Nombre'];
-                                                    $CPR_Estado = $mclaseproceso['pro_claseproceso'][$i]['CPR_Estado'];
-                                            ?>
-                                                    <option value="<?php echo $CPR_IdClaseProceso; ?>" >
-                                                        <?php echo $CPR_Nombre ; ?>                                                
-                                                    </option>
-                                            <?php
-                                                }
-                                            ?>
-                                        </select>
+                                <div class="form-group form-float" style="clear: both;">
+                                    <label class="form-label">&nbsp;</label>                                    
+                                    <div class='input-group date form-line' name="fechainicio" id="fechainicio" required>
+                                        <input type='text' id="txtFecha" class="form-control"  readonly/>
+                                        <span class="input-group-addon">
+                                            <span class="glyphicon glyphicon-calendar"></span>
+                                        </span>
+                                        <label class="form-label">Fecha Inicio</label>  
                                     </div>
-                                </div>                              
+                                </div>
+
+                                <div class="col-sm-4">                                       
+                                    <select class="form-control show-tick" data-live-search="true" name="usuario" id="usuario" required>
+                                        <option value="" >Seleccione Asignado...</option>
+                                        <?php
+                                            for($i=0; $i<count($muser['usu_usuario']); $i++)
+                                            {
+                                                $USU_IdUsuario = $muser['usu_usuario'][$i]['USU_IdUsuario'];                                                
+                                                $USU_Nombre = $muser['usu_usuario'][$i]['NombreUsuario'];                                                
+                                        ?>
+                                                <option value="<?php echo $USU_IdUsuario; ?>" >
+                                                    <?php echo $USU_Nombre ; ?>                                                
+                                                </option>
+                                        <?php
+                                            }
+                                        ?>
+                                    </select>
+                                </div>
+
+                                <div class="col-sm-4">                                       
+                                    <select class="form-control show-tick" data-live-search="true" name="ubicacion" id="ubicacion" required>
+                                        <option value="" >Seleccione Ubicación...</option>
+                                        <?php
+                                            for($i=0; $i<count($mubicacion['pro_ubicacion']); $i++)
+                                            {
+                                                $UBI_IdUbicacion = $mubicacion['pro_ubicacion'][$i]['UBI_IdUbicacion'];                                                
+                                                $UBI_Nombre = $mubicacion['pro_ubicacion'][$i]['UBI_Nombre'];                                                
+                                        ?>
+                                                <option value="<?php echo $UBI_IdUbicacion; ?>" >
+                                                    <?php echo $UBI_Nombre ; ?>                                                
+                                                </option>
+                                        <?php
+                                            }
+                                        ?>
+                                    </select>
+                                </div>
+
+                                <div class="col-sm-4">                                       
+                                    <select class="form-control show-tick" data-live-search="true" name="claseproceso" id="claseproceso" required>
+                                        <option value="" >Seleccione Clase Proceso...</option>
+                                        <?php
+                                            for($i=0; $i<count($mclaseproceso['pro_claseproceso']); $i++)
+                                            {
+                                                $CPR_IdClaseProceso = $mclaseproceso['pro_claseproceso'][$i]['CPR_IdClaseProceso'];                                                
+                                                $CPR_Nombre = $mclaseproceso['pro_claseproceso'][$i]['CPR_Nombre'];                                                
+                                        ?>
+                                                <option value="<?php echo $CPR_IdClaseProceso; ?>" >
+                                                    <?php echo $CPR_Nombre ; ?>                                                
+                                                </option>
+                                        <?php
+                                            }
+                                        ?>
+                                    </select>
+                                </div>
+
+                                <div class="col-sm-4">                                       
+                                    <select class="form-control show-tick" data-live-search="true" name="juzgado" id="juzgado" required>
+                                        <option value="" >Seleccione Juzgado...</option>
+                                        <?php
+                                            for($i=0; $i<count($mjuzgado['juz_juzgado']); $i++)
+                                            {
+                                                $JUZ_IdJuzgado = $mjuzgado['juz_juzgado'][$i]['JUZ_IdJuzgado'];                                                
+                                                $JUZ_Ubicacion = $mjuzgado['juz_juzgado'][$i]['JUZ_Ubicacion'];                                                
+                                        ?>
+                                                <option value="<?php echo $JUZ_IdJuzgado; ?>" >
+                                                    <?php echo $JUZ_Ubicacion ; ?>                                                
+                                                </option>
+                                        <?php
+                                            }
+                                        ?>
+                                    </select>
+                                </div>
+
+
+                                <!-- <div class="form-group form-float">
+                                    <div class="form-line">
+                                        <input type="text" class="form-control" name="nombremostrar"id="nombremostrar" required>
+                                        <label class="form-label">Nombre a Mostrar:</label>
+                                    </div>
+                                </div>                                -->
                                 
                                 <div class="form-group">
                                     <input type="radio" name="estado" id="activo" class="with-gap" value="1">

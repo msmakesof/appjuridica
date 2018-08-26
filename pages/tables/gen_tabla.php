@@ -706,7 +706,7 @@ if( $mtabla['estado'] < 2)
                         </div>
                         
                         <div class="modal-body">                         
-                            <object type="text/html" data="../forms/form-validationBase<?php echo $nombre_lnk ;?>.php" id="crear"></object>
+                            <object style="padding :0px; position: relative; height: 49vh; max-height:85vh; bottom:0; overflow: hidden; margin: 0;" type="text/html" data="../forms/form-validationBase<?php echo $nombre_lnk ;?>.php" id="crear"></object>
                         </div>
                         <div class="modal-footer">
                             <!-- <button type="button" class="btn btn-link waves-effect">SAVE CHANGES</button> -->

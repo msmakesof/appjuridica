@@ -210,6 +210,7 @@ $NombreTabla ="CLASEPROCESO";
                             <form id="form_validation" method="POST">
                                 
                                 <div class="form-group form-float">
+                                    <label class="form-label">&nbsp;</label>
                                     <div class="form-line">
                                         <input type="text" class="form-control" name="nombre"id="nombre" max-length="3" required>
                                         <label class="form-label">Nombre:</label>
@@ -217,6 +218,7 @@ $NombreTabla ="CLASEPROCESO";
                                 </div> 
 
                                 <div class="form-group form-float">
+                                    <label class="form-label">&nbsp;</label>
                                     <div class="form-line">
                                         <input type="text" class="form-control" name="dias" id="dias" required>
                                         <label class="form-label">D&iacute;as:</label>
