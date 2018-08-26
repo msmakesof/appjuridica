@@ -287,7 +287,7 @@ require_once('../../apis/general/tipousuario.php');
                                             Tipo Documento
                                         </label>                                    
                                         <div class="col-sm-4">                                       
-                                            <select class="form-control show-tick" data-live-search="true" name="tipodocumento" id="tipodocumento" required>
+                                            <select class="selectpicker show-tick" data-live-search="true" data-width="100%" name="tipodocumento" id="tipodocumento" required>
                                              <option value="" >Seleccione Opción...</option>
                                                 <?php
                                                     for($i=0; $i<count($mtipodocumento['gen_tipodocumento']); $i++)
@@ -374,7 +374,7 @@ require_once('../../apis/general/tipousuario.php');
                                         Tipo Usuario
                                     </label>                                    
                                     <div class="col-sm-4">                                       
-                                        <select class="form-control show-tick" data-live-search="true" name="tipousuario" id="tipousuario" required>
+                                        <select class="selectpicker show-tick" data-live-search="true" data-width="80%" name="tipousuario" id="tipousuario" required>
                                             <option value="" >Seleccione Opción...</option>
                                             <?php
                                                 for($i=0; $i<count($mtipousuario['usu_tipousuario']); $i++)

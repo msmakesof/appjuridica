@@ -266,7 +266,7 @@ $NombreTabla ="CIUDAD";
                                             Departamento
                                         </label>                                    
                                         <div class="col-sm-4">                                       
-                                            <select class="form-control show-tick" data-live-search="true" name="depto" id="depto" required>
+                                            <select class="selectpicker show-tick" data-live-search="true"  data-width="100%" name="depto" id="depto" required>
                                              <option value="" >Seleccione Opción...</option>
                                                 <?php
                                                     for($i=0; $i<count($mdepartamento['gen_departamento']); $i++)

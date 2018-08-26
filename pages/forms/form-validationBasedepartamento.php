@@ -257,7 +257,7 @@ $NombreTabla ="DEPARTAMENTO";
                                             Pa&iacute;s
                                         </label>                                    
                                         <div class="col-sm-4">                                       
-                                            <select class="form-control show-tick" data-live-search="true" name="pais" id="pais" required>
+                                            <select class="selectpicker show-tick" data-live-search="true" data-width="100%" name="pais" id="pais" required>
                                              <option value="" >Seleccione Opción...</option>
                                                 <?php
                                                     for($i=0; $i<count($mpais['gen_pais']); $i++)

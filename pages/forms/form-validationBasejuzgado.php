@@ -261,7 +261,7 @@ require_once('../../apis/general/area.php');
                                         Ciudad
                                     </label>                                    
                                     <div class="col-sm-4">                                       
-                                        <select class="form-control show-tick" data-live-search="true" name="ciudad" id="ciudad" required>
+                                        <select class="selectpicker show-tick" data-live-search="true" data-width="80%" name="ciudad" id="ciudad" required>
                                             <option value="" >Seleccione Opción...</option>
                                             <?php
                                                 for($i=0; $i<count($mciudad['gen_ciudad']); $i++)
@@ -294,7 +294,7 @@ require_once('../../apis/general/area.php');
                                         Piso
                                     </label>                                    
                                     <div class="col-sm-4">                                       
-                                        <select class="form-control show-tick" data-live-search="true" name="piso" id="piso" required>
+                                        <select class="selectpicker show-tick" data-live-search="true" data-width="80%" name="piso" id="piso" required>
                                             <option value="" >Seleccione Opción...</option>
                                             <?php
                                                 for($i=0; $i<count($mpiso['juz_piso']); $i++)
@@ -318,7 +318,7 @@ require_once('../../apis/general/area.php');
                                         Tipo Juzgado
                                     </label>                                    
                                     <div class="col-sm-4">                                       
-                                        <select class="form-control show-tick" data-live-search="true" name="tipojuzgado" id="tipojuzgado" required>
+                                        <select class="selectpicker show-tick" data-live-search="true" data-width="80%" name="tipojuzgado" id="tipojuzgado" required>
                                             <option value="" >Seleccione Opción...</option>
                                             <?php
                                                 for($i=0; $i<count($mtipojuzgado['juz_tipojuzgado']); $i++)
@@ -342,7 +342,7 @@ require_once('../../apis/general/area.php');
                                         Area
                                     </label>                                    
                                     <div class="col-sm-4">                                       
-                                        <select class="form-control show-tick" data-live-search="true" name="area" id="area" required>
+                                        <select class="selectpicker show-tick" data-live-search="true" data-width="80%" name="area" id="area" required>
                                             <option value="" >Seleccione Opción...</option>
                                             <?php
                                                 for($i=0; $i<count($marea['juz_area']); $i++)

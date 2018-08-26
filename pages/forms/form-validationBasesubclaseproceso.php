@@ -226,7 +226,7 @@ require_once('../../apis/proceso/claseproceso.php');
                                         Clase de Proceso
                                     </label>                                    
                                     <div class="col-sm-4">                                       
-                                        <select class="form-control show-tick" data-live-search="true" name="claseproceso" id="claseproceso" required>
+                                        <select class="selectpicker show-tick" data-live-search="true" data-width="80%" name="claseproceso" id="claseproceso" required>
                                             <option value="" >Seleccione Opción...</option>
                                             <?php
                                                 for($i=0; $i<count($mclaseproceso['pro_claseproceso']); $i++)

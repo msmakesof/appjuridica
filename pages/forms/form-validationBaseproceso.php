@@ -113,6 +113,7 @@ require_once('../../apis/juzgado/juzgado.php');
     $(document).ready(function()
     {       
         $("#msj").hide();
+        $('.selectpicker').selectpicker();
         $('#fechainicio').datetimepicker({
           format: 'YYYY-MM-DD'       
         });
@@ -250,7 +251,7 @@ require_once('../../apis/juzgado/juzgado.php');
                                 </div>
 
                                 <div class="col-sm-4">                                       
-                                    <select class="form-control show-tick" data-live-search="true" name="usuario" id="usuario" required>
+                                    <select class="selectpicker show-tick" data-live-search="true" style="width:auto;" name="usuario" id="usuario" required>
                                         <option value="" >Seleccione Asignado...</option>
                                         <?php
                                             for($i=0; $i<count($muser['usu_usuario']); $i++)
@@ -268,7 +269,7 @@ require_once('../../apis/juzgado/juzgado.php');
                                 </div>
 
                                 <div class="col-sm-4">                                       
-                                    <select class="form-control show-tick" data-live-search="true" name="ubicacion" id="ubicacion" required>
+                                    <select class="selectpicker show-tick" data-live-search="true" name="ubicacion" id="ubicacion" required>
                                         <option value="" >Seleccione Ubicación...</option>
                                         <?php
                                             for($i=0; $i<count($mubicacion['pro_ubicacion']); $i++)
@@ -286,7 +287,7 @@ require_once('../../apis/juzgado/juzgado.php');
                                 </div>
 
                                 <div class="col-sm-4">                                       
-                                    <select class="form-control show-tick" data-live-search="true" name="claseproceso" id="claseproceso" required>
+                                    <select class="selectpicker show-tick" data-live-search="true" data-width="90%" name="claseproceso" id="claseproceso" required>
                                         <option value="" >Seleccione Clase Proceso...</option>
                                         <?php
                                             for($i=0; $i<count($mclaseproceso['pro_claseproceso']); $i++)
@@ -304,7 +305,7 @@ require_once('../../apis/juzgado/juzgado.php');
                                 </div>
 
                                 <div class="col-sm-4">                                       
-                                    <select class="form-control show-tick" data-live-search="true" name="juzgado" id="juzgado" required>
+                                    <select class="selectpicker show-tick" data-live-search="true" name="juzgado" id="juzgado" required>
                                         <option value="" >Seleccione Juzgado...</option>
                                         <?php
                                             for($i=0; $i<count($mjuzgado['juz_juzgado']); $i++)
