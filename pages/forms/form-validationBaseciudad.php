@@ -245,7 +245,7 @@ $NombreTabla ="CIUDAD";
                         </div>-->
                         <div class="body">
                             <form id="form_validation" method="POST">
-                                
+                                <label class="form-label">&nbsp;</label>
                                 <div class="form-group form-float" style="clear: both;">
                                     <label class="form-label">Nombre Ciudad</label>
                                     <div class="form-line">
@@ -295,7 +295,10 @@ $NombreTabla ="CIUDAD";
                                     <label for="inactivo" class="m-l-20">Inactivo</label>
                                 </div>
                                 
-                                <button class="btn btn-primary waves-effect" type="submit" id="grabar">GRABAR</button>
+                                <label class="form-label">&nbsp;</label>
+                                <div class="form-group form-float" style="clear: both;">
+                                    <button class="btn btn-primary waves-effect" type="submit" id="grabar">GRABAR</button>
+                                </div>
 
                             </form>                        
                     	</div>

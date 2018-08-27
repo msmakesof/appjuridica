@@ -100,7 +100,7 @@ else
    <style>
     object{
        width:100%;
-       height:390px ;  
+       height:450px ;  
 	}
    </style>     
 </head>
@@ -668,7 +668,8 @@ if( $mtabla['estado'] < 2)
                             </div>
                             
                             <div class="modal-body">
-                                <object type="text/html" data="../forms/editartabla.php" id="carga"></object>                           
+                                <object type="text/html" data="../forms/editartabla.php" id="carga">
+                                </object>                           
                             </div>
 
                             <div class="modal-footer">

@@ -143,7 +143,7 @@ $TipoUsuario = $muser['usu_usuario']['USU_TipoUsuario'];
                                         </label>                                    
                                         <div class="col-sm-4">
                                            <input type="hidden" class="form-control" name="IdEstudiante" id="IdEstudiante" value="<?php echo $idtabla ;?>" readonly>
-                                            <select class="form-control show-tick" data-live-search="true" name="tipodocumento" id="tipodocumento" required>
+                                            <select class="selectpicker show-tick" data-live-search="true" data-width="90%" name="tipodocumento" id="tipodocumento" required>
                                                 <?php                                                    
                                                     for($i=0; $i<count($mtipodocumento['gen_tipodocumento']); $i++)
                                                     {                                                         
@@ -177,11 +177,11 @@ $TipoUsuario = $muser['usu_usuario']['USU_TipoUsuario'];
                                        <!-- -->
                                     </div>
                                 </div>
+								
                                 <div class="form-group form-float">
                                     <label class="form-label">Primer Apellido</label>
                                     <div class="form-line">
-                                        <input type="text" class="form-control" name="apellido1" id="apellido1" value="<?php echo $Apellido1 ;?>" required>
-                                       <!-- -->
+                                        <input type="text" class="form-control" name="apellido1" id="apellido1" value="<?php echo $Apellido1 ;?>" required>                                       
                                     </div>
                                 </div>  
 
@@ -192,15 +192,14 @@ $TipoUsuario = $muser['usu_usuario']['USU_TipoUsuario'];
                                        <!-- -->
                                     </div>
                                 </div>                                
-                                
 
                                  <div class="form-group form-float">
                                     <label class="form-label">Clave</label>
                                     <div class="form-line">
-                                        <input type="password" class="form-control" name="clave" id="clave" value="<?php echo $Clave ;?>" maxlength="30" required>
-                                       
+                                        <input type="password" class="form-control" name="clave" id="clave" value="<?php echo $Clave ;?>" maxlength="30" required>                                       
                                     </div>
                                 </div>
+								
                                 <div class="form-group form-float">
                                     <label class="form-label">Dirección</label>
                                     <div class="form-line">
@@ -208,6 +207,7 @@ $TipoUsuario = $muser['usu_usuario']['USU_TipoUsuario'];
                                        <!-- -->
                                     </div>
                                 </div>
+								
                                 <div class="form-group form-float">
                                     <label class="form-label">Email</label>
                                     <div class="form-line">
@@ -215,19 +215,19 @@ $TipoUsuario = $muser['usu_usuario']['USU_TipoUsuario'];
                                        <!-- -->
                                     </div>
                                 </div>
+								
                                 <div class="form-group form-float">
                                      <label class="form-label">Celular</label>
                                     <div class="form-line">
                                         <input type="text" class="form-control" name="celular" id="celular" value="<?php echo $Celular ;?>" maxlength="13" required>
                                        <!---->
                                     </div>
-                                </div>                              
-                                
+                                </div>                                
 
                                 <div class="form-group form-float">
                                     <label class="form-label">Tipo Usuario</label>
                                     <div class="col-sm-4">
-                                        <select class="form-control show-tick" data-live-search="true" name="tipousuario" id="tipousuario" required>
+                                        <select class="selectpicker show-tick" data-live-search="true" data-width="90%" name="tipousuario" id="tipousuario" required>
                                             <!-- <option value="">-- Seleccione --</option> -->
                                             <?php                                                 
                                                  for($i=0; $i<count($mtipousuario['usu_tipousuario']); $i++)
@@ -251,19 +251,20 @@ $TipoUsuario = $muser['usu_usuario']['USU_TipoUsuario'];
                                     <label for="activo">Activo</label>
 
                                     <input type="radio" name="estado" id="inactivo" class="with-gap" value="2"<?php if( $EstadoEst == 2){?>checked="checked"<?php } ?>>
-                                    <label for="inactivo" class="m-l-20">Inactivo</label>
-                                    
+                                    <label for="inactivo" class="m-l-20">Inactivo</label>                                    
                                 </div>
-                                                               
-                                <button class="btn btn-primary waves-effect" type="button" id="grabar">GRABAR</button>
-                               <!--  <button type="button" class="btn btn-danger waves-effect" id="borrar" onclick="borrarc(<?php echo $idtabla ; ?>);">BORRAR</button> -->
-                                <button type="button" class="btn btn-danger waves-effect" id="borrar">BORRAR</button>
+								
+                                <hr>
+                                <div class="form-group" style="clear: both; margin-top:20px; margin-bottom:20px;">
+									<button class="btn btn-primary waves-effect" type="button" id="grabar">GRABAR</button>
+								   <!--  <button type="button" class="btn btn-danger waves-effect" id="borrar" onclick="borrarc(<?php echo $idtabla ; ?>);">BORRAR</button> -->
+									<button type="button" class="btn btn-danger waves-effect" id="borrar">BORRAR</button>
+								</div>
+								
                             </form>                        
                             <div id="msj" style="margin-top:7px;"></div>
-
-
                              <form id="mensaje">
-                             <lael style="font-family: Verdana; font-size: 18; color:red;">Registro ha sido borrado correctamente.</lael>
+                             <label style="font-family: Verdana; font-size: 18; color:red;">Registro ha sido borrado correctamente.</lael>
                             </form>
 
                     	</div> 

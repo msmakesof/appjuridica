@@ -220,7 +220,7 @@ $NombreTabla ="CLASEPROCESO";
                                 <div class="form-group form-float">
                                     <label class="form-label">&nbsp;</label>
                                     <div class="form-line">
-                                        <input type="text" class="form-control" name="dias" id="dias" required>
+                                        <input type="number" class="form-control" name="dias" id="dias" min="1" max="10" required>
                                         <label class="form-label">D&iacute;as:</label>
                                     </div>
                                 </div>                               

@@ -100,7 +100,11 @@ else
    <style>
     object{
        width:100%;
-       height:390px ;  
+       height: 560px;
+       /* position: relative;
+       height: auto; */
+       /* Overflow: hidden; */
+       /*  390px ;   */
 	}
    </style>     
 </head>
@@ -667,7 +671,8 @@ if( $mciudad['estado'] < 2)
                             </div>
                             
                             <div class="modal-body">
-                                <object type="text/html" data="../forms/editar<?php echo $nombre_lnk ;?>.php" id="carga"></object>                           
+                                <object type="text/html" data="../forms/editar<?php echo $nombre_lnk ;?>.php" id="carga">
+                                </object>                           
                             </div>
 
                             <div class="modal-footer">
@@ -705,7 +710,9 @@ if( $mciudad['estado'] < 2)
                         </div>
                         
                         <div class="modal-body">                         
-                            <object type="text/html" data="../forms/form-validationBase<?php echo $nombre_lnk ;?>.php" id="crear"></object>
+                            <object type="text/html" data="../forms/form-validationBase<?php echo $nombre_lnk ;?>.php" id="crear"
+                            >
+                            </object>
                         </div>
                         <div class="modal-footer">
                             <!-- <button type="button" class="btn btn-link waves-effect">SAVE CHANGES</button> -->

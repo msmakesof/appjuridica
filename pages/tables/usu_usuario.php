@@ -95,7 +95,7 @@ if( isset($_POST['ƒ×'])  && !empty($_POST['ƒ×']) )
    <style>
     object{
        width:100%;
-       height:390px ;  
+       height:590px ;  
 	}
    </style>     
 </head>
@@ -344,7 +344,9 @@ if( $muser['estado'] < 2)
                             </div>
                             
                             <div class="modal-body">
-                                <object type="text/html" data="../forms/editartabla.php" id="carga" class="modalobj"></object>                           
+                                <object type="text/html" 
+								style="padding :0px; position: relative; height: 79vh; max-height:79vh; bottom:0; overflow: hidden; margin: 0;" 
+								data="../forms/editar<?php echo $nombre_lnk ;?>..php" id="carga"></object>                           
                             </div>
 
                             <div class="modal-footer">
@@ -384,7 +386,7 @@ if( $muser['estado'] < 2)
                         
                         <div class="modal-body" style="padding :0px; position: relative; height: 100%; max-height:100%; bottom:0; overflow: hidden; margin: 0; ">                         
                             <object class="xmodal-content" 
-                                style="padding :0px; position: relative; height: 85vh; max-height:85vh; bottom:0; overflow: hidden; margin: 0;" 
+                                style="padding :0px; position: relative; height: 80vh; max-height:80vh; bottom:0; overflow: hidden; margin: 0;" 
                                 type="text/html" data="../forms/form-validationBase<?php echo $nombre_lnk ;?>.php" id="crear">
                             </object>
                         </div>

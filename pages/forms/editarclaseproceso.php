@@ -128,24 +128,32 @@ $idtabla = $mclaseproceso['pro_claseproceso']['CPR_IdClaseProceso'];
                                 </div>
 
                                 <div class="form-group form-float">
-                                    <label class="form-label">D&iacute;s</label>
-                                    <div class="form-line">
-                                        <input type="text" class="form-control" name="dias" id="dias" value="<?php echo $Dias ;?>" required>
-                                       <!-- -->
-                                    </div>
+									
+									<label class="form-label">D&iacute;as</label>									
+
+									
+									<div class="col-sm-3">
+										<div class="">
+											<input type="number" class="form-control" name="dias" id="dias" value="<?php echo $Dias ;?>" min="1" max="10" maxlength="3" required>										
+										</div>
+									</div>	
                                 </div>
                                 
                                 <div class="form-group">
                                     <input type="radio" name="estado" id="activo" class="with-gap" value="1" <?php if( $estado == 1){?>checked="checked"<?php } ?>>
                                     <label for="activo">Activo</label>
 
-                                    <input type="radio" name="estado" id="inactivo" class="with-gap" value="2"<?php if( $estado == 2){?>checked="checked"<?php } ?>>
+                                    <input type="radio" name="estado" id="inactivo" class="with-gap" value="2" <?php if( $estado == 2){?>checked="checked"<?php } ?>>
                                     <label for="inactivo" class="m-l-20">Inactivo</label>                                    
                                 </div>
-                                                               
-                                <button class="btn btn-primary waves-effect" type="button" id="grabar">GRABAR</button>
-                               <!--  <button type="button" class="btn btn-danger waves-effect" id="borrar" onclick="borrarc(<?php echo $idtabla ; ?>);">BORRAR</button> -->
-                                <button type="button" class="btn btn-danger waves-effect" id="borrar">BORRAR</button>
+                                
+								<hr>
+                                <div class="form-group" style="clear: both; margin-top:20px; margin-bottom:20px;">
+									<button class="btn btn-primary waves-effect" type="button" id="grabar">GRABAR</button>
+								   <!--  <button type="button" class="btn btn-danger waves-effect" id="borrar" onclick="borrarc(<?php echo $idtabla ; ?>);">BORRAR</button> -->
+									<button type="button" class="btn btn-danger waves-effect" id="borrar">BORRAR</button>
+								</div>
+								
                             </form>                        
                             <div id="msj" style="margin-top:7px;"></div>
 

@@ -344,7 +344,9 @@ if( $mcliente['estado'] < 2)
                             </div>
                             
                             <div class="modal-body">
-                                <object type="text/html" data="../forms/editar<?php echo $nombre_lnk ;?>.php" id="carga" class="modalobj"></object>                           
+                                <object class="xmodal-content" type="text/html" 
+								style="padding :0px; position: relative; height: 77vh; max-height:77vh; bottom:0; overflow: hidden; margin: 0;" 
+								data="../forms/editar<?php echo $nombre_lnk ;?>.php" id="carga" ></object>
                             </div>
 
                             <div class="modal-footer">
@@ -382,9 +384,9 @@ if( $mcliente['estado'] < 2)
                             <!-- <h4 class="modal-title" id="defaultModalLabel">Crear</h4> -->
                         </div>
                         
-                        <div class="modal-body" style="padding :0px; position: relative; height: 100%; max-height:100%; bottom:0; overflow: hidden; margin: 0; ">                         
-                            <object class="xmodal-content" 
-                                style="padding :0px; position: relative; height: 85vh; max-height:85vh; bottom:0; overflow: hidden; margin: 0;" 
+                        <div class="modal-body">
+                            <object 
+                                style="padding :0px; position: relative; height: 75vh; max-height:75vh; bottom:0; overflow: hidden; margin: 0;" 
                                 type="text/html" data="../forms/form-validationBase<?php echo $nombre_lnk ;?>.php" id="crear">
                             </object>
                         </div>

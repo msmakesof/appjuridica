@@ -142,7 +142,7 @@ $idtabla = $mtabla['gen_tabla']['TAB_IdTabla'];
                                         Grupo
                                     </label>                                    
                                     <div class="col-sm-4">                                       
-                                        <select class="form-control show-tick" data-live-search="true" name="grupo" id="grupo" required>
+                                        <select class="selectpicker show-tick" data-live-search="true" data-width="90%" name="grupo" id="grupo" required>
                                             <option value="" >Seleccione Opción...</option>
                                             <?php
                                                 for($i=0; $i<count($mgrupo['gen_grupo']); $i++)
@@ -162,6 +162,7 @@ $idtabla = $mtabla['gen_tabla']['TAB_IdTabla'];
                                 </div>                                
                                 
                                 <div class="form-group">
+									<label class="form-label">Estado: </label>
                                     <input type="radio" name="estado" id="activo" class="with-gap" value="1" <?php if( $estado == 1){?>checked="checked"<?php } ?>>
                                     <label for="activo">Activo</label>
 
@@ -169,16 +170,20 @@ $idtabla = $mtabla['gen_tabla']['TAB_IdTabla'];
                                     <label for="inactivo" class="m-l-20">Inactivo</label>
                                     
                                 </div>
-                                                               
-                                <button class="btn btn-primary waves-effect" type="button" id="grabar">GRABAR</button>
-                               <!--  <button type="button" class="btn btn-danger waves-effect" id="borrar" onclick="borrarc(<?php echo $idtabla ; ?>);">BORRAR</button> -->
-                                <button type="button" class="btn btn-danger waves-effect" id="borrar">BORRAR</button>
+                                
+								<hr>
+                                <div class="form-group" style="clear: both; margin-top:20px; margin-bottom:20px;">								
+									<button class="btn btn-primary waves-effect" type="button" id="grabar">GRABAR</button>
+									<!--  <button type="button" class="btn btn-danger waves-effect" id="borrar" onclick="borrarc(<?php echo $idtabla ; ?>);">BORRAR</button> -->
+									<button type="button" class="btn btn-danger waves-effect" id="borrar">BORRAR</button>
+								</div>
+								
                             </form>                        
                             <div id="msj" style="margin-top:7px;"></div>
 
 
                              <form id="mensaje">
-                             <lael style="font-family: Verdana; font-size: 18; color:red;">Registro ha sido borrado correctamente.</lael>
+                             <label style="font-family: Verdana; font-size: 18; color:red;">Registro ha sido borrado correctamente.</lael>
                             </form>
 
                     	</div> 

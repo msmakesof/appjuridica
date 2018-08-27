@@ -131,7 +131,7 @@ $idtabla = $mdepartamento['gen_departamento']['DEP_IdDepartamento'];
                                 <div class="form-group">
                                     <label class="form-label">Pa&iacute;s</label>
                                     <div class="col-sm-4">
-                                        <select class="form-control show-tick" data-live-search="true" name="depto" id="depto" required>                                            
+                                        <select class="selectpicker show-tick" data-live-search="true" data-width="90%" name="depto" id="depto" required>                                            
                                             <?php 
                                                 $idTabla = 0;
                                                 require_once('../../apis/general/pais.php');                                                
@@ -159,16 +159,20 @@ $idtabla = $mdepartamento['gen_departamento']['DEP_IdDepartamento'];
                                     <label for="inactivo" class="m-l-20">Inactivo</label>
                                     
                                 </div>
-                                                               
-                                <button class="btn btn-primary waves-effect" type="button" id="grabar">GRABAR</button>
-                               <!--  <button type="button" class="btn btn-danger waves-effect" id="borrar" onclick="borrarc(<?php echo $idtabla ; ?>);">BORRAR</button> -->
-                                <button type="button" class="btn btn-danger waves-effect" id="borrar">BORRAR</button>
+                                
+								<hr>
+                                <div class="form-group" style="clear: both; margin-top:20px; margin-bottom:20px;">
+									<button class="btn btn-primary waves-effect" type="button" id="grabar">GRABAR</button>
+								   <!--  <button type="button" class="btn btn-danger waves-effect" id="borrar" onclick="borrarc(<?php echo $idtabla ; ?>);">BORRAR</button> -->
+									<button type="button" class="btn btn-danger waves-effect" id="borrar">BORRAR</button>
+								</div>
+								
                             </form>                        
                             <div id="msj" style="margin-top:7px;"></div>
 
 
                              <form id="mensaje">
-                             <lael style="font-family: Verdana; font-size: 18; color:red;">Registro ha sido borrado correctamente.</lael>
+                             <label style="font-family: Verdana; font-size: 18; color:red;">Registro ha sido borrado correctamente.</lael>
                             </form>
 
                     	</div> 

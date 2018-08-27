@@ -143,7 +143,7 @@ $TipoCliente = $mcliente['cli_cliente']['CLI_IdTipoCliente'];
                                         </label>                                    
                                         <div class="col-sm-4">
                                            <input type="hidden" class="form-control" name="IdEstudiante" id="IdEstudiante" value="<?php echo $idtabla ;?>" readonly>
-                                            <select class="form-control show-tick" data-live-search="true" name="tipodocumento" id="tipodocumento" required>
+                                            <select class="selectpicker show-tick" data-live-search="true" data-width="90%" name="tipodocumento" id="tipodocumento" required>
                                                 <?php                                                    
                                                     for($i=0; $i<count($mtipodocumento['gen_tipodocumento']); $i++)
                                                     {                                                         
@@ -227,7 +227,7 @@ $TipoCliente = $mcliente['cli_cliente']['CLI_IdTipoCliente'];
                                 <div class="form-group form-float">
                                     <label class="form-label">Tipo Usuario</label>
                                     <div class="col-sm-4">
-                                        <select class="form-control show-tick" data-live-search="true" name="tipocliente" id="tipocliente" required>
+                                        <select class="selectpicker show-tick" data-live-search="true" data-width="90%" name="tipocliente" id="tipocliente" required>
                                             <!-- <option value="">-- Seleccione --</option> -->
                                             <?php                                                 
                                                  for($i=0; $i<count($mtipocliente['cli_tipocliente']); $i++)
@@ -255,9 +255,13 @@ $TipoCliente = $mcliente['cli_cliente']['CLI_IdTipoCliente'];
                                     
                                 </div>
                                                                
-                                <button class="btn btn-primary waves-effect" type="button" id="grabar">GRABAR</button>
-                               <!--  <button type="button" class="btn btn-danger waves-effect" id="borrar" onclick="borrarc(<?php echo $idtabla ; ?>);">BORRAR</button> -->
-                                <button type="button" class="btn btn-danger waves-effect" id="borrar">BORRAR</button>
+								<hr>
+                                <div class="form-group" style="clear: both; margin-top:20px; margin-bottom:15px;">
+									<button class="btn btn-primary waves-effect" type="button" id="grabar">GRABAR</button>
+								   <!--  <button type="button" class="btn btn-danger waves-effect" id="borrar" onclick="borrarc(<?php echo $idtabla ; ?>);">BORRAR</button> -->
+									<button type="button" class="btn btn-danger waves-effect" id="borrar">BORRAR</button>
+								</div>
+								
                             </form>                        
                             <div id="msj" style="margin-top:7px;"></div>
 

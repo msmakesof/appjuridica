@@ -144,16 +144,20 @@ $idtabla = $mtipodocumento['gen_tipodocumento']['TDO_IdTipoDocumento'];
                                     <label for="inactivo" class="m-l-20">Inactivo</label>
                                     
                                 </div>
-                                                               
-                                <button class="btn btn-primary waves-effect" type="button" id="grabar">GRABAR</button>
-                               <!--  <button type="button" class="btn btn-danger waves-effect" id="borrar" onclick="borrarc(<?php echo $idtabla ; ?>);">BORRAR</button> -->
-                                <button type="button" class="btn btn-danger waves-effect" id="borrar">BORRAR</button>
+                                
+								<hr>
+                                <div class="form-group" style="clear: both; margin-top:20px; margin-bottom:20px;">
+									<button class="btn btn-primary waves-effect" type="button" id="grabar">GRABAR</button>
+								   <!--  <button type="button" class="btn btn-danger waves-effect" id="borrar" onclick="borrarc(<?php echo $idtabla ; ?>);">BORRAR</button> -->
+									<button type="button" class="btn btn-danger waves-effect" id="borrar">BORRAR</button>
+								</div>
+								
                             </form>                        
                             <div id="msj" style="margin-top:7px;"></div>
 
 
                              <form id="mensaje">
-                             <lael style="font-family: Verdana; font-size: 18; color:red;">Registro ha sido borrado correctamente.</lael>
+                             <label style="font-family: Verdana; font-size: 18; color:red;">Registro ha sido borrado correctamente.</lael>
                             </form>
 
                     	</div> 

@@ -44,13 +44,13 @@ if( isset($_GET['f'])  && !empty($_GET['f']) )
     $idTabla = trim($_GET['f']);
 }
 //echo $idTabla."<br>";
-$Tabla ="TIPOUSUARIO";
+$Tabla ="TIPOPERSONA";
 $idtabla = 0;
 
-require_once('../../apis/general/tipousuario.php');
-$Nombre = trim($mtipouser['usu_tipousuario']['TUS_Nombre']);
-$estado = $mtipouser['usu_tipousuario']['TUS_Estado'];
-$idtabla = $mtipouser['usu_tipousuario']['TUS_ID_TipoUsuario'];
+require_once('../../apis/general/tipopersona.php');
+$Nombre = trim($mtipopersona['gen_tipopersona']['TPE_Nombre']);
+$estado = $mtipopersona['gen_tipopersona']['TPE_Estado'];
+$idtabla = $mtipopersona['gen_tipopersona']['TPE_IdTipoPersona'];
 ?>
 <!DOCTYPE html>
 <html>
@@ -133,10 +133,14 @@ $idtabla = $mtipouser['usu_tipousuario']['TUS_ID_TipoUsuario'];
                                     <input type="radio" name="estado" id="inactivo" class="with-gap" value="2"<?php if( $estado == 2){?>checked="checked"<?php } ?>>
                                     <label for="inactivo" class="m-l-20">Inactivo</label>                                    
                                 </div>
-                                                               
-                                <button class="btn btn-primary waves-effect" type="button" id="grabar">GRABAR</button>
-                               <!--  <button type="button" class="btn btn-danger waves-effect" id="borrar" onclick="borrarc(<?php echo $idtabla ; ?>);">BORRAR</button> -->
-                                <button type="button" class="btn btn-danger waves-effect" id="borrar">BORRAR</button>
+
+                                <hr>
+                                <div class="form-group" style="clear: both; margin-top:20px; margin-bottom:20px;">                           
+                                    <button class="btn btn-primary waves-effect" type="button" id="grabar">GRABAR</button>
+                                <!--  <button type="button" class="btn btn-danger waves-effect" id="borrar" onclick="borrarc(<?php echo $idtabla ; ?>);">BORRAR</button> -->
+                                    <button type="button" class="btn btn-danger waves-effect" id="borrar">BORRAR</button>
+                                </div>
+
                             </form>                        
                             <div id="msj" style="margin-top:7px;"></div>
 

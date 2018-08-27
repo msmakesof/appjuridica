@@ -144,7 +144,7 @@ $EstadoUsuario = $mjuzgado['juz_juzgado']['EstadoTabla'];
                                         Ciudad
                                     </label>                                    
                                     <div class="col-sm-4">                                       
-                                        <select class="form-control show-tick" data-live-search="true" name="ciudad" id="ciudad" required>
+                                        <select class="selectpicker show-tick" data-live-search="true" data-width="90%" name="ciudad" id="ciudad" required>
                                             <option value="" >Seleccione Opción...</option>
                                             <?php
                                                 for($i=0; $i<count($mciudad['gen_ciudad']); $i++)
@@ -175,7 +175,7 @@ $EstadoUsuario = $mjuzgado['juz_juzgado']['EstadoTabla'];
                                         Piso
                                     </label>                                    
                                     <div class="col-sm-4">                                       
-                                        <select class="form-control show-tick" data-live-search="true" name="piso" id="piso" required>
+                                        <select class="selectpicker show-tick" data-live-search="true" data-width="90%" name="piso" id="piso" required>
                                             <option value="" >Seleccione Opción...</option>
                                             <?php
                                                 for($i=0; $i<count($mpiso['juz_piso']); $i++)
@@ -199,7 +199,7 @@ $EstadoUsuario = $mjuzgado['juz_juzgado']['EstadoTabla'];
                                         Tipo Juzgado
                                     </label>                                    
                                     <div class="col-sm-4">                                       
-                                        <select class="form-control show-tick" data-live-search="true" name="tipojuzgado" id="tipojuzgado" required>
+                                        <select class="selectpicker show-tick" data-live-search="true" data-width="90%" name="tipojuzgado" id="tipojuzgado" required>
                                             <option value="" >Seleccione Opción...</option>
                                             <?php
                                                 for($i=0; $i<count($mtipojuzgado['juz_tipojuzgado']); $i++)
@@ -223,7 +223,7 @@ $EstadoUsuario = $mjuzgado['juz_juzgado']['EstadoTabla'];
                                         Area
                                     </label>                                    
                                     <div class="col-sm-4">                                       
-                                        <select class="form-control show-tick" data-live-search="true" name="area" id="area" required>
+                                        <select class="selectpicker show-tick" data-live-search="true" data-width="90%" name="area" id="area" required>
                                             <option value="" >Seleccione Opción...</option>
                                             <?php
                                                 for($i=0; $i<count($marea['juz_area']); $i++)
@@ -250,16 +250,20 @@ $EstadoUsuario = $mjuzgado['juz_juzgado']['EstadoTabla'];
                                     <label for="inactivo" class="m-l-20">Inactivo</label>
                                     
                                 </div>
-                                                               
-                                <button class="btn btn-primary waves-effect" type="button" id="grabar">GRABAR</button>
-                               <!--  <button type="button" class="btn btn-danger waves-effect" id="borrar" onclick="borrarc(<?php echo $idtabla ; ?>);">BORRAR</button> -->
-                                <button type="button" class="btn btn-danger waves-effect" id="borrar">BORRAR</button>
+								
+                                <hr>
+                                <div class="form-group" style="clear: both; margin-top:20px; margin-bottom:20px;">                               
+									<button class="btn btn-primary waves-effect" type="button" id="grabar">GRABAR</button>
+								   <!--  <button type="button" class="btn btn-danger waves-effect" id="borrar" onclick="borrarc(<?php echo $idtabla ; ?>);">BORRAR</button> -->
+									<button type="button" class="btn btn-danger waves-effect" id="borrar">BORRAR</button>
+								</div>
+								
                             </form>                        
                             <div id="msj" style="margin-top:7px;"></div>
 
 
                              <form id="mensaje">
-                             <lael style="font-family: Verdana; font-size: 18; color:red;">Registro ha sido borrado correctamente.</lael>
+                             <label style="font-family: Verdana; font-size: 18; color:red;">Registro ha sido borrado correctamente.</lael>
                             </form>
 
                     	</div> 
