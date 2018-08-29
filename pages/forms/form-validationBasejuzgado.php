@@ -151,7 +151,7 @@ require_once('../../apis/general/area.php');
 
         $("#grabar").on('click', function(e) { 
             var ubicacion = $("#ubicacion").val();
-            ubicacion = strtoupper(ubicacion);
+            ubicacion = ubicacion.toUpperCase();
             var ciudad = $("#ciudad").val();
             var direccion = $("#direccion").val();
             var piso = $("#piso").val();            

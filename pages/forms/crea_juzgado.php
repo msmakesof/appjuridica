@@ -126,10 +126,10 @@ if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
     $m = preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $resultado);    
     $m = json_decode($m, true);
     //print_r ($m);
-    $existe = $m['juzgado']['existe'];
+    $existe = $m['juz_juzgado']['existe'];
     if($existe > 0)
     {
-      $sigue = "E-Existe un Tipo Juzgado registrado con el mismo Nombre.";
+      $sigue = "E-Existe un Juzgado registrado con el mismo Nombre.";
     }
     else
     {
@@ -170,7 +170,7 @@ if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
             //echo "Curl Err_no returned.... $curl_errno <br/>";
             $m = preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $resultado);    
             $m = json_decode($m, true);
-            $grabadoOK = $m['juzgado'];
+            $grabadoOK = $m['juz_juzgado'];
             if(!$grabadoOK)
             {
               $sigue = "N-Registro NO ha sido grabado.";

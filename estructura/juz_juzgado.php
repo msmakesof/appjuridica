@@ -263,7 +263,7 @@ class JUZ_JUZGADO
     {
         $consulta = "SELECT count(". $GLOBALS['Llave']. ") existe, JUZ_Ubicacion, JUZ_IdCiudad, JUZ_Direccion, JUZ_Piso, JUZ_IdTipoJuzgado, JUZ_IdArea
         FROM " .$GLOBALS['TABLA'].
-        " WHERE JUZ_Ubicacion = ? OR JUZ_IdCiudad = ? OR JUZ_Direccion = ? OR JUZ_Piso = ? OR JUZ_IdTipoJuzgado =? OR JUZ_IdArea =? ;";
+        " WHERE JUZ_Ubicacion = ? AND JUZ_IdCiudad = ? AND JUZ_Direccion = ? AND JUZ_Piso = ? AND JUZ_IdTipoJuzgado =? AND JUZ_IdArea =? ;";
 
         try {
             // Preparar sentencia

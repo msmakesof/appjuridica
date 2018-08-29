@@ -141,8 +141,7 @@ $TipoCliente = $mcliente['cli_cliente']['CLI_IdTipoCliente'];
                                         <label class="form-label">
                                             Tipo Documento
                                         </label>                                    
-                                        <div class="col-sm-4">
-                                           <input type="hidden" class="form-control" name="IdEstudiante" id="IdEstudiante" value="<?php echo $idtabla ;?>" readonly>
+                                        <div class="col-sm-4">                                           
                                             <select class="selectpicker show-tick" data-live-search="true" data-width="90%" name="tipodocumento" id="tipodocumento" required>
                                                 <?php                                                    
                                                     for($i=0; $i<count($mtipodocumento['gen_tipodocumento']); $i++)

@@ -141,7 +141,8 @@ $NombreTabla ="FESTIVO";
     var nombre ="";
     $(document).ready(function()
     {                        
-        $("#msj").hide();        
+        $("#msj").hide();
+        $('#VanciaJudicial').numeric();        
         
         $('#nombre').datetimepicker({
           format: 'YYYY-MM-DD'       

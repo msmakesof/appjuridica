@@ -122,7 +122,7 @@ $idtabla = $mfestivo['gen_festivo']['FES_IdFestivo'];
                                 </li>
                             </ul>-->
                         </div>
-                        <div class="body  table-responsive">
+                        <div class="body table-responsive">
                             <form id="form_validation" method="POST">
 
                                 <div class="form-group row">
@@ -162,7 +162,7 @@ $idtabla = $mfestivo['gen_festivo']['FES_IdFestivo'];
 
 
                              <form id="mensaje">
-                             <lael style="font-family: Verdana; font-size: 18; color:red;">Registro ha sido borrado correctamente.</lael>
+                             <label style="font-family: Verdana; font-size: 18; color:red;">Registro ha sido borrado correctamente.</lael>
                             </form>
 
                     	</div> 

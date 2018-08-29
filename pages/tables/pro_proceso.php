@@ -676,7 +676,9 @@ if( $mproceso['estado'] < 2)
                             </div>
                             
                             <div class="modal-body">
-                                <object type="text/html" data="../forms/editar<?php echo $nombre_lnk ;?>.php" id="carga"></object>                           
+                                <object type="text/html" 
+                                style="padding :0px; position: relative; height: 85vh; max-height:85vh; bottom:0; overflow: hidden; margin: 0;"
+                                data="../forms/editar<?php echo $nombre_lnk ;?>.php" id="carga"></object>                           
                             </div>
 
                             <div class="modal-footer">
@@ -718,7 +720,8 @@ if( $mproceso['estado'] < 2)
                         </div>
                         
                         <div class="modal-body">                         
-                            <object style="padding :0px; position: relative; height: 85vh; max-height:85vh; bottom:0; overflow: hidden; margin: 0;" type="text/html" data="../forms/form-validationBase<?php echo $nombre_lnk ;?>.php" id="crear"></object>
+                            <object style="padding :0px; position: relative; height: 85vh; max-height:85vh; bottom:0; overflow: hidden; margin: 0;" 
+                            type="text/html" data="../forms/form-validationBase<?php echo $nombre_lnk ;?>.php" id="crear"></object>
                         </div>
                         <div class="modal-footer">
                             <!-- <button type="button" class="btn btn-link waves-effect">SAVE CHANGES</button> -->
