@@ -691,7 +691,7 @@ if( $marea['estado'] < 2)
                 </div>
                 
                 <div class="modal-body">                                
-                    <object style="padding :0px; position: relative; height: 50vh; max-height:50vh; bottom:0; overflow: hidden; margin: 0px;" 
+                    <object style="padding :0px; position: relative; height: 55vh; max-height:55vh; bottom:0; overflow: hidden; margin: 0px;" 
                     type="text/html" data="../forms/editar<?php echo $nombre_lnk ;?>.php" id="carga"></object>                           
                 </div>
 

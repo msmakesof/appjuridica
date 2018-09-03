@@ -50,12 +50,11 @@ class JUZ_AREA
     {
         // Consulta de la tabla de tablas
         $consulta = "SELECT ".$GLOBALS['Llave'].",
-                            ARE_Nombre,                            
-                            ARE_Estado, 
-                            ARE_Codigo, 
-							ARE_IdTipoJuzgado ".
-                            " FROM ".$GLOBALS['TABLA'].							
-                            " WHERE ".$GLOBALS['Llave']." = ? ORDER BY ARE_Nombre; ";
+					ARE_Nombre,                            
+					ARE_Estado, 
+					ARE_Codigo, ".
+					" FROM ".$GLOBALS['TABLA'].
+					" WHERE ".$GLOBALS['Llave']." = ? ORDER BY ARE_Nombre; ";
 
         try {
             // Preparar sentencia

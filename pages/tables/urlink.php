@@ -13,8 +13,8 @@ if(isset($_GET['funcion']) && !empty($_GET['funcion'])) {
     $soportecURL = "S";
     $url = "";
     $funcion = $_GET['funcion'];
-    $origen = $_GET['origen'];
-    $idTabla = $origen;
+    $idTabla = $_GET['origen'];
+    //$idTabla = $origen;
 
     switch ($funcion)
     {
@@ -33,6 +33,14 @@ if(isset($_GET['funcion']) && !empty($_GET['funcion'])) {
             $mjuzgadox= str_replace(")","",$mjuzgadox);    
             $mretorno= "{".$mjuzgadox;
             break;
+
+        case "ja":
+            include('../../apis/combos/areasxtipojuzgado.php');
+            $mjuzgado= json_encode($mjuzgado, JSON_PRETTY_PRINT);
+            $mjuzgadox = substr($mjuzgado, 1);
+            $mjuzgadox= str_replace(")","",$mjuzgadox);    
+            $mretorno= "{".$mjuzgadox;
+            break;    
     }    
         
     print_r($mretorno);

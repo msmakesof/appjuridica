@@ -148,6 +148,22 @@ require_once('../../apis/general/area.php');
             });
         }
         
+        $("#tipojuzgado").on('change', function(e) {
+            var _tipojuzgado = $("#tipojuzgado").val();
+            $.ajax({
+                url: "urlink.php",
+                method: "GET",                
+                data: {funcion: "ja", origen: _tipojuzgado},                
+                dataType: "text",
+                success: function(data) {
+                    var zz =JSON.parse(data);
+                    var _NombreArea = zz.juz_juzgado.ARE_Nombre;
+                    $("#area").attr("value",_NombreArea);
+                    _area = zz.juz_juzgado.JUZ_IdArea;
+                    //nroProceso();
+                }
+            });
+        });
 
         $("#grabar").on('click', function(e) { 
             var ubicacion = $("#ubicacion").val();
@@ -256,10 +272,34 @@ require_once('../../apis/general/area.php');
                                     </div>
 									</div>
                                 </div>
+
+                                <div style="form-group form-float"> 
+                                    <label class="form-label">
+                                        Tipo Juzgado: Entidad, Corporaci&oacute;n o Juzgado
+                                    </label>                                    
+                                    <div class="col-sm-4">                                       
+                                        <select class="selectpicker show-tick" data-live-search="true" data-width="80%" name="tipojuzgado" id="tipojuzgado" required>
+                                            <option value="" >Seleccione Opción...</option>
+                                            <?php
+                                                for($i=0; $i<count($mtipojuzgado['juz_tipojuzgado']); $i++)
+                                                {
+                                                    $TJU_IdTipoJuzgado = $mtipojuzgado['juz_tipojuzgado'][$i]['TJU_IdTipoJuzgado'];                                                    
+                                                    $TJU_Nombre = $mtipojuzgado['juz_tipojuzgado'][$i]['TJU_Nombre'];
+                                                    $TJU_Estado = $mtipojuzgado['juz_tipojuzgado'][$i]['TJU_Estado'];
+                                            ?>
+                                                    <option value="<?php echo $TJU_IdTipoJuzgado; ?>" >
+                                                        <?php echo $TJU_Nombre ; ?>                                                
+                                                    </option>
+                                            <?php
+                                                }
+                                            ?>
+                                        </select>
+                                    </div>
+                                </div>
 								
 								<div style="form-group form-float">                                     
                                     <label class="form-label">
-                                        Area
+                                        Area SALA / SECCION Y/O ESPECIALIDAD
                                     </label>                                    
                                     <div class="col-sm-4">                                       
                                         <select class="selectpicker show-tick" data-live-search="true" data-width="80%" name="area" id="area" required>
@@ -281,30 +321,7 @@ require_once('../../apis/general/area.php');
                                     </div>
                                 </div>
 								
-								<div style="form-group form-float"> 
-                                    <label class="form-label">
-                                        Tipo Juzgado
-                                    </label>                                    
-                                    <div class="col-sm-4">                                       
-                                        <select class="selectpicker show-tick" data-live-search="true" data-width="80%" name="tipojuzgado" id="tipojuzgado" required>
-                                            <option value="" >Seleccione Opción...</option>
-                                            <?php
-                                                for($i=0; $i<count($mtipojuzgado['juz_tipojuzgado']); $i++)
-                                                {
-                                                    $TJU_IdTipoJuzgado = $mtipojuzgado['juz_tipojuzgado'][$i]['TJU_IdTipoJuzgado'];                                                    
-                                                    $TJU_Nombre = $mtipojuzgado['juz_tipojuzgado'][$i]['TJU_Nombre'];
-                                                    $TJU_Estado = $mtipojuzgado['juz_tipojuzgado'][$i]['TJU_Estado'];
-                                            ?>
-                                                    <option value="<?php echo $TJU_IdTipoJuzgado; ?>" >
-                                                        <?php echo $TJU_Nombre ; ?>                                                
-                                                    </option>
-                                            <?php
-                                                }
-                                            ?>
-                                        </select>
-                                    </div>
-                                </div>
-
+								
                                 <div style="form-group form-float">                                     
                                     <label class="form-label">
                                         Ciudad
