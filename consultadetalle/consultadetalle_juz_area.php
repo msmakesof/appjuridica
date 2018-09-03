@@ -85,9 +85,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 
     elseif (isset($_GET['ExisteTabla']) )
     {
-        $par1 = $_GET['Nombre'];       
+        $par1 = $_GET['Nombre'];
+        $par2 = $_GET['Codigo'];
+        $par3 = $_GET['TipoJuzgado'];       
 
-        $retorno = JUZ_AREA::existetabla($par1);
+        $retorno = JUZ_AREA::existetabla($par1,$par2,$par3);
         if ($retorno) 
         {
             $juz_area["estado"] = "1";
@@ -145,8 +147,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         $par1 = $_GET['Nombre'];        
         $par2 = $_GET['Estado'];
         $par3 = $_GET['Codigo'];
+        $par4 = $_GET['Tipojuzgado'];
 
-        $retorno = JUZ_AREA::insert($par1, $par2, $par3);
+        $retorno = JUZ_AREA::insert($par1, $par2, $par3, $par4);
         $msj = $retorno;
         if($retorno)
         {
@@ -170,12 +173,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     elseif(isset($_GET['update']) )
     {
         //Obtener Parametros
-        $par1 = $_GET['nombre'];        
-        $par2 = $_GET['estado'];
-        $par3 = $_GET['codigo'];
-        $par4 = $_GET['idtabla'];
+        $par1 = $_GET['nombre'];                
+        $par2 = $_GET['codigo'];
+        $par3 = $_GET['tipojuzgado'];
+        $par4 = $_GET['estado'];
+        $par5 = $_GET['idtabla'];
 
-        $retorno = JUZ_AREA::update($par1, $par2, $par3, $par4);
+        $retorno = JUZ_AREA::update($par1, $par2, $par3, $par4, $par5);
         $msj = $retorno;
         if($retorno)
         {

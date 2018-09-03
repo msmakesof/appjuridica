@@ -44,6 +44,7 @@ if (!function_exists("GetSQLValueString"))
     }
 }
 $idTabla = 0;
+require_once('../../apis/general/tipojuzgado.php');
 $NombreTabla ="AREA";
 
 ?>
@@ -151,11 +152,12 @@ $NombreTabla ="AREA";
         $("#grabar").on('click', function(e) {             
             var nombre = $("#nombre").val();
             nombre = nombre.toUpperCase(); 
-            var codigo = $("#codigo").val();           
+            var codigo = $("#codigo").val();
+            var tipojuzgado = $("#tipojuzgado").val();
             var estado = $('input:radio[name=estado]:checked').val();
             e.preventDefault();
 
-            if( estado == undefined || nombre == "" )
+            if( estado == undefined || nombre == "" || codigo == "" || tipojuzgado == "" )
             {               
                 swal({
                   title: "Atención:  Ingrese información en todos los campos...",
@@ -170,7 +172,7 @@ $NombreTabla ="AREA";
             else
             {
                 $.ajax({
-                    data : {"pnombre": nombre, "pcodigo":codigo, "pestado": estado}, 
+                    data : {"pnombre": nombre, "pcodigo":codigo, "ptipojuzgado": tipojuzgado, "pestado": estado}, 
                     type: "POST",
                     dataType: "html",
                     url : "crea_<?php echo strtolower($NombreTabla); ?>.php",
@@ -221,7 +223,7 @@ $NombreTabla ="AREA";
         <div class="container-fluid">
             <div class="block-header">
                 <h2>
-                    FORMULARIO: <?php echo $NombreTabla; ?>.
+                    FORMULARIO: <?php echo $NombreTabla; ?> - SALA / SECCION Y/O ESPECIALIDAD.
                     <small>acción: Crear.</small>
                 </h2>
             </div>
@@ -243,8 +245,8 @@ $NombreTabla ="AREA";
                         <div class="body">
                             <form id="form_validation" method="POST">
                                 
-                                <div class="form-group form-float" style="clear: both;">
-                                    <label class="form-label">Nombre Area</label>
+                                <div class="form-group form-float" style="clear: both; margin-top: 10px;">
+                                    <label class="form-label">Nombre Area - SALA / SECCION Y/O ESPECIALIDAD</label>
                                     <div class="form-line">
                                         <input type="text" class="form-control" name="nombre" id="nombre" value="" required>                                       
                                     </div>
@@ -256,6 +258,27 @@ $NombreTabla ="AREA";
                                         <input type="text" class="form-control" name="codigo" id="codigo" value="" maxlength="4" required>
                                     </div>
                                 </div>
+
+                                <div class="form-group form-float" style="clear: both;">
+                                    <div class="col-xs-7" style="margin-top:15px;">
+                                        <label class="form-label">Despacho / Corporaci&oacute;n / Juzgado:</label>                                        
+                                        <select class="selectpicker show-tick" data-live-search="true" data-width="100%" name="tipojuzgado" id="tipojuzgado" required>
+                                        <option value="" >Seleccione Despacho...</option>
+                                        <?php
+                                            for($i=0; $i<count($mtipojuzgado['juz_tipojuzgado']); $i++)
+                                            {
+                                                $TJU_IdTipoJuzgado = $mtipojuzgado['juz_tipojuzgado'][$i]['TJU_IdTipoJuzgado'];
+                                                $TJU_Nombre = $mtipojuzgado['juz_tipojuzgado'][$i]['TJU_Nombre'];                                                                                              
+                                        ?>
+                                                <option value="<?php echo $TJU_IdTipoJuzgado; ?>" >
+                                                    <?php echo $TJU_Nombre ; ?>                                                
+                                                </option>
+                                        <?php
+                                            }
+                                        ?>
+                                        </select>
+                                    </div>
+                                </div>    
                                 
                                 <div class="form-group form-float" style="clear: both;">
                                     <label class="form-label">Estado</label>
@@ -265,8 +288,10 @@ $NombreTabla ="AREA";
                                     <input type="radio" name="estado" id="inactivo" class="with-gap" value="2">
                                     <label for="inactivo" class="m-l-20">Inactivo</label>
                                 </div>
-                                
-                                <button class="btn btn-primary waves-effect" type="submit" id="grabar">GRABAR</button>
+                                <hr>
+                                <div class="form-group form-float" style="clear: both;">
+                                    <button class="btn btn-primary waves-effect" type="submit" id="grabar">GRABAR</button>
+                                </div>    
 
                             </form>                        
                     	</div>

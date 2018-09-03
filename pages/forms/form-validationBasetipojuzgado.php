@@ -126,13 +126,14 @@ $NombreTabla ="TIPOJUZGADO";
     <script src="../../js/demo.js"></script>
 
     <!-- <script src="../../js/alertify.min.js"></script> -->
-     <script src="../../js/jquery.numeric.js"></script>
+    <script src="../../js/jquery.numeric.js"></script>
 
     <script type="text/javascript">
     var nombre ="";
     $(document).ready(function()
     {       
-        $("#msj").hide();        
+        $("#msj").hide();
+        $("#codigo").numeric();        
 
         function reset () {
             $("#toggleCSS").attr("href", "../../css/themes2/alertify.default.css");
@@ -150,11 +151,12 @@ $NombreTabla ="TIPOJUZGADO";
 
         $("#grabar").on('click', function(e) {             
             var nombre = $("#nombre").val();
-            nombre = nombre.toUpperCase();            
+            nombre = nombre.toUpperCase();
+            var codigo = $("#codigo").val();
             var estado = $('input:radio[name=estado]:checked').val();
             e.preventDefault();
 
-            if( estado == undefined || nombre == "" )
+            if( estado == undefined || nombre == "" || codigo == "")
             {               
                 swal({
                   title: "Atención:  Ingrese información en todos los campos...",
@@ -169,7 +171,7 @@ $NombreTabla ="TIPOJUZGADO";
             else
             {
                 $.ajax({
-                    data : {"pnombre": nombre, "pestado": estado}, 
+                    data : {"pnombre": nombre, "pcodigo": codigo, "pestado": estado}, 
                     type: "POST",
                     dataType: "html",
                     url : "crea_<?php echo strtolower($NombreTabla); ?>.php",
@@ -220,7 +222,7 @@ $NombreTabla ="TIPOJUZGADO";
         <div class="container-fluid">
             <div class="block-header">
                 <h2>
-                    FORMULARIO: <?php echo $NombreTabla; ?>.
+                    FORMULARIO: <?php echo $NombreTabla; ?> - C&oacute;digo Entidad, Corporaci&oacute;n o Juzgado.
                     <small>acción: Crear.</small>
                 </h2>
             </div>
@@ -246,6 +248,13 @@ $NombreTabla ="TIPOJUZGADO";
                                     <label class="form-label">Nombre Area</label>
                                     <div class="form-line">
                                         <input type="text" class="form-control" name="nombre" id="nombre" value="" required>                                       
+                                    </div>
+                                </div>
+
+                                <div class="form-group form-float" style="clear: both;">
+                                    <label class="form-label">C&oacute;digo Entidad, Corporaci&oacute;n o Juzgado</label>
+                                    <div class="form-line">
+                                        <input type="text" class="form-control" name="codigo" id="codigo" value="" maxlength="2" required>
                                     </div>
                                 </div>
                                 

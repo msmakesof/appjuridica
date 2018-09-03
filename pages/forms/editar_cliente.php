@@ -91,10 +91,10 @@ if(isset($_POST['celular'])){
   $celular = trim($_POST['celular']);
 }
 
-$tipocliente ="";
-if(isset($_POST['tipocliente'])){
-  $tipocliente = trim($_POST['tipocliente']);
-}
+// $tipocliente ="";
+// if(isset($_POST['tipocliente'])){
+//   $tipocliente = trim($_POST['tipocliente']);
+// }
 
 $estado ="";
 if(isset($_POST['estado'])){

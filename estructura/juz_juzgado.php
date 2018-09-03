@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Representa el la estructura de las $IdJuzgado
  * almacenadas en la base de datos

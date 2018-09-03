@@ -19,7 +19,7 @@ class GEN_DEPARTAMENTO
      */
     public static function getAll()
     {
-        $consulta = "SELECT DEP_IdDepartamento, DEP_Nombre, DEP_Pais,
+        $consulta = "SELECT DEP_IdDepartamento, DEP_Nombre, DEP_Pais, DEP_CodigoDane, 
         CASE DEP_Estado WHEN 1 THEN 'Activo' ELSE 'Inactivo' END EstadoTabla
             FROM gen_departamento ORDER BY DEP_Nombre; ";
         try {
@@ -48,7 +48,8 @@ class GEN_DEPARTAMENTO
         $consulta = "SELECT DEP_IdDepartamento,
                             DEP_Nombre,
                             DEP_Pais,
-                            DEP_Estado
+                            DEP_Estado,
+                            DEP_CodigoDane
                             FROM gen_departamento
                             WHERE DEP_IdDepartamento = ? ORDER BY DEP_Nombre; ";
 
@@ -79,7 +80,7 @@ class GEN_DEPARTAMENTO
     public static function getByIdEstado($IdEstadoTabla)
     {
         // Consulta de la GEN_DEPARTAMENTO
-        $consulta = "SELECT DEP_IdDepartamento, DEP_Nombre, DEP_Pais, DEP_Estado
+        $consulta = "SELECT DEP_IdDepartamento, DEP_Nombre, DEP_Pais, DEP_Estado, DEP_CodigoDane
                     FROM gen_departamento
                     WHERE DEP_Estado = ? ORDER BY DEP_Nombre; ";
 
@@ -137,12 +138,14 @@ class GEN_DEPARTAMENTO
      *
      * @param $IdTabla            identificador
      * @param $Nombre_Tabla        nuevo Nombre Tabla
+     * @param $CodigoDane         Codigo Dane
      * @param $NombreMostrar       nueva Nombre Tabla a mostrar
      * @param $IdEstadoTabla       nueva Estado       
      * 
      */
     public static function update(
         $NombreTabla,
+        $CodigoDane,
         $Pais,
         $IdEstadoTabla,
         $IdTabla
@@ -150,14 +153,14 @@ class GEN_DEPARTAMENTO
     {
         // Creando consulta UPDATE
         $consulta = "UPDATE gen_departamento" .
-            " SET DEP_Nombre=?, DEP_Pais=?, DEP_Estado=? " .
+            " SET DEP_Nombre=?, DEP_CodigoDane=?, DEP_Pais=?, DEP_Estado=? " .
             " WHERE DEP_IdDepartamento=? ;";
 
         // Preparar la sentencia
         $cmd = Database::getInstance()->getDb()->prepare($consulta);
 
         // Relacionar y ejecutar la sentencia
-        $cmd->execute(array($NombreTabla, $Pais, $IdEstadoTabla, $IdTabla ));
+        $cmd->execute(array($NombreTabla, $CodigoDane, $Pais, $IdEstadoTabla, $IdTabla ));
 
         return $cmd;
     }
@@ -167,23 +170,26 @@ class GEN_DEPARTAMENTO
      *         
      * @param $IdTabla            identificador
      * @param $Nombre             nuevo Nombre Tabla
+     * @param $CodigoDane         Codigo Dane
      * @param $NombreMostrar      nueva Nombre Tabla a mostrar
      * @param $Estado             Estado   
      * @return PDOStatement
      */
     public static function insert(        
         $Nombre,
+        $CodigoDane,
         $Pais,        
         $Estado
     )
     {
         // Sentencia INSERT
         $comando = "INSERT INTO gen_departamento ( " .            
-            " DEP_Nombre," . 
+            " DEP_Nombre," .
+            " DEP_CodigoDane," .
             " DEP_Pais," .            
             " DEP_Estado" . 
             " )".     
-            " VALUES(?,?,?) ;";
+            " VALUES(?,?,?,?) ;";
 
         // Preparar la sentencia
         $sentencia = Database::getInstance()->getDb()->prepare($comando);
@@ -191,6 +197,7 @@ class GEN_DEPARTAMENTO
         return $sentencia->execute(
             array(                
                 $Nombre, 
+                $CodigoDane,
                 $Pais,               
                 $Estado
             )

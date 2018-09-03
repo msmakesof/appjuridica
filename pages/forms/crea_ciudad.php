@@ -73,7 +73,7 @@ require_once('../../Connections/DataConex.php');
 // Nombres iguales 
 if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
 {
-  $parameters = "ExisteTabla=1&Nombre=$pnombre&Abreviatura=$pabreviatura";
+  $parameters = "ExisteTabla=1&Nombre=$pnombre&Abreviatura=$pabreviatura&Departamento=$pdepto";
   $url = urlServicios."consultadetalle/consultadetalle_gen_ciudad.php?".$parameters;
   $ch = curl_init();
   curl_setopt($ch, CURLOPT_VERBOSE, true);

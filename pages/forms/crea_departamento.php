@@ -56,6 +56,12 @@ if( isset($_POST['ppais']) )
     //$ppais = str_replace(' ', '%20',  $pnombremostrar);
 }
 
+$pcodigodane ="";
+if( isset($_POST['pcodigodane']) )
+{
+	  $pcodigodane = trim($_POST['pcodigodane']);
+}
+
 $pestado ="";
 if( isset($_POST['pestado']) )
 {
@@ -102,7 +108,7 @@ if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
     else
     {
       
-      $parameters = "insert=insert&Nombre=$pnombre&Pais=$ppais&Estado=$pestado";
+      $parameters = "insert=insert&Nombre=$pnombre&CodigoDane=$pcodigodane&Pais=$ppais&Estado=$pestado";
       $soportecURL = "S";
       $url         = urlServicios."consultadetalle/consultadetalle_gen_departamento.php?".$parameters;
       $existe      = "";

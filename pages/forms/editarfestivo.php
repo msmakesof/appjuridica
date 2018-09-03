@@ -138,7 +138,7 @@ $idtabla = $mfestivo['gen_festivo']['FES_IdFestivo'];
 
                                 <div class="form-group row">
                                     <div class="col-xs-4">
-                                        <label class="form-label">Vancia Judicial</label>
+                                        <label class="form-label">Vacancia Judicial</label>
                                         <div class="form-line">
                                             <input type="text" class="form-control" name="VanciaJudicial" id="VanciaJudicial" maxlength="1" value="<?php echo $VanciaJudicial; ?>" required>                                       
                                         </div>

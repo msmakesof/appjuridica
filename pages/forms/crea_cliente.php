@@ -85,10 +85,10 @@ if(isset($_POST['celular'])){
   $celular = trim($_POST['celular']);
 }
 
-$tipocliente ="";
-if(isset($_POST['tipocliente'])){
-  $tipocliente = trim($_POST['tipocliente']);
-}
+// $tipocliente ="";
+// if(isset($_POST['tipocliente'])){
+//   $tipocliente = trim($_POST['tipocliente']);
+// }
 
 $estado ="";
 if(isset($_POST['estado'])){
@@ -140,9 +140,8 @@ if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
       $local = rand(10000000,1234567890000);
       $clave = encryptor('encrypt',$clave);
 
-      $parameters = "insert=insert&TipoDocumento=$tipodocumento&Identificacion=$numerodocumento&PrimerApellido=$apellido1&SegundoApellido=$apellido2&Nombre=$nombre&Email=$email&Direccion=$direccion&Celular=$celular&Usuario=$email&Clave=$clave&TipoCliente=$tipocliente&Estado=$estado&IdInterno=$interno&Local=$local";
-      //$parameters = array("insert" => "insert", "TipoDocumento" => "$tipodocumento","Identificacion" => "$numerodocumento","PrimerApellido" => "$apellido1", "SegundoApellido" => "$apellido2","Nombre" => "$nombre","Email" => "$email", "Direccion" => "$direccion","Celular" => "$celular", "Usuario" => "$email", "Clave" => "$clave", "TipoUsuario" => "$tipousuario", "Estado" => "$estado", "IdInterno" => "$interno", "Local" => "$local");
-     
+      $parameters = "insert=insert&TipoDocumento=$tipodocumento&Identificacion=$numerodocumento&PrimerApellido=$apellido1&SegundoApellido=$apellido2&Nombre=$nombre&Email=$email&Direccion=$direccion&Celular=$celular&Usuario=$email&Clave=$clave&Estado=$estado&IdInterno=$interno&Local=$local";
+           
       $soportecURL = "S";
       $url         = urlServicios."consultadetalle/consultadetalle_Cliente.php?".$parameters;
       $existe      = "";

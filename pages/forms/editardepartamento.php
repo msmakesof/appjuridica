@@ -50,6 +50,7 @@ $idtabla = 0;
 require_once('../../apis/general/departamento.php');
 
 $Nombre = trim($mdepartamento['gen_departamento']['DEP_Nombre']);
+$CodigoDane = trim($mdepartamento['gen_departamento']['DEP_CodigoDane']);
 $Pais = trim($mdepartamento['gen_departamento']['DEP_Pais']);
 $estado = $mdepartamento['gen_departamento']['DEP_Estado'];
 $idtabla = $mdepartamento['gen_departamento']['DEP_IdDepartamento'];
@@ -125,6 +126,13 @@ $idtabla = $mdepartamento['gen_departamento']['DEP_IdDepartamento'];
                                     <label class="form-label">Nombre</label>
                                     <div class="form-line">
                                         <input type="text" class="form-control" name="nombre" id="nombre" value="<?php echo $Nombre ;?>" required>                                    
+                                    </div>
+                                </div>
+
+                                <div class="form-group form-float">
+                                    <label class="form-label">C&oacute;digo DANE</label>
+                                    <div class="form-line">
+                                        <input type="text" class="form-control" name="codigodane" id="codigodane" value="<?php echo $CodigoDane ;?>" maxlength="2" required>                                    
                                     </div>
                                 </div>                                                             
 
@@ -232,12 +240,13 @@ $idtabla = $mdepartamento['gen_departamento']['DEP_IdDepartamento'];
             $("#mensaje").hide();
 			var nombre = $("#nombre").val();
             nombre = nombre.toUpperCase();
+            var codigodane = $("#codigodane").val();
             var pais = $("#pais").val();			
 			var estado = $('input:radio[name=estado]:checked').val();
 			var idtabla = "<?php echo $idtabla; ?>";
 			
 			$.ajax({
-				data : {"nombre": nombre, "pais": pais, "estado": estado, "idtabla": idtabla},
+				data : {"nombre": nombre, "codigodane": codigodane, "pais": pais, "estado": estado, "idtabla": idtabla},
 				type: "POST",
 				dataType: "html",
 				url : "editar_departamento.php",

@@ -20,7 +20,7 @@ class JUZ_TIPOJUZGADO
      */
     public static function getAll()
     {
-        $consulta = "SELECT ".$GLOBALS['Llave'].", TJU_Nombre, ".
+        $consulta = "SELECT ".$GLOBALS['Llave'].", TJU_Nombre, TJU_Codigo, ".
             " CASE TJU_Estado WHEN 1 THEN 'Activo' ELSE 'Inactivo' END EstadoTabla ".
             " FROM ".$GLOBALS['TABLA']." ORDER BY TJU_Nombre; ";
         try {
@@ -47,7 +47,8 @@ class JUZ_TIPOJUZGADO
     {
         // Consulta de la tabla de tablas
         $consulta = "SELECT ".$GLOBALS['Llave'].",
-            TJU_Nombre,                            
+            TJU_Nombre, 
+            TJU_Codigo,                             
             TJU_Estado ".
             " FROM ".$GLOBALS['TABLA'].
             " WHERE ".$GLOBALS['Llave']." = ? ORDER BY TJU_Nombre; ";
@@ -110,7 +111,7 @@ class JUZ_TIPOJUZGADO
     public static function getByIdExiste($IdEstadoTabla)
     {
         // Consulta de la gen_departamento
-        $consulta = "SELECT Count(".$GLOBALS['Llave'].") AS TotalTablas, TJU_Nombre, TJU_Estado ".
+        $consulta = "SELECT Count(".$GLOBALS['Llave'].") AS TotalTablas, TJU_Nombre, TJU_Codigo, TJU_Estado ".
                     " FROM ". $GLOBALS['TABLA'].
                     " WHERE ".$GLOBALS['Llave']." = ? ;";
 
@@ -136,26 +137,28 @@ class JUZ_TIPOJUZGADO
      * en los nuevos valores relacionados con un identificador
      *
      * @param $IdTabla           identificador
-     * @param $Nombre            nuevo Nombre Tipo Cliente
-     * @param $IdEstadoTabla     nueva Estado       
+     * @param $nombre            nuevo Nombre Tipo Cliente
+     * @param $codigo            codigo
+     * @param $idtabla           nueva Estado       
      * 
      */
     public static function update(
         $nombre,        
-        $estado,
+        $codigo,
+        $estado,        
         $idtabla
     )
     {
         // Creando consulta UPDATE
         $consulta = "UPDATE ". $GLOBALS['TABLA']. 
-            " SET TJU_Nombre=?, TJU_Estado=? " .
+            " SET TJU_Nombre=?, TJU_Codigo=?,  TJU_Estado=? " .
             " WHERE ". $GLOBALS['Llave'] ." =? ;";
 
         // Preparar la sentencia
         $cmd = Database::getInstance()->getDb()->prepare($consulta);
 
         // Relacionar y ejecutar la sentencia
-        $cmd->execute(array($nombre, $estado, $idtabla ));
+        $cmd->execute(array($nombre, $codigo, $estado, $idtabla ));
 
         return $cmd;
     }
@@ -163,29 +166,33 @@ class JUZ_TIPOJUZGADO
     /**
      * Insertar un nueva Tipo Documento
      *         
-     * @param $IdTabla            identificador
-     * @param $Nombre             nuevo Nombre Tipo Cliente    
-     * @param $Estado             Estado   
+     * @param $IdTabla           identificador
+     * @param $Nombre            nuevo Nombre Tipo Cliente
+     * @param $codigo            codigo    
+     * @param $Estado            Estado   
      * @return PDOStatement
      */
     public static function insert(        
-        $Nombre,       
+        $Nombre,
+        $Codigo,       
         $Estado
     )
     {
         // Sentencia INSERT
         $comando = "INSERT INTO ". $GLOBALS['TABLA'] ." ( " .            
-            " TJU_Nombre," .            
-            " TJU_Estado" . 
+            " TJU_Nombre," . 
+            " TJU_Codigo, ".           
+            " TJU_Estado " .             
             " )".     
-            " VALUES(?,?) ;";
+            " VALUES(?,?,?) ;";
 
         // Preparar la sentencia
         $sentencia = Database::getInstance()->getDb()->prepare($comando);
 
         return $sentencia->execute(
             array(                
-                $Nombre,                 
+                $Nombre,
+                $Codigo,
                 $Estado
             )
         );

@@ -13,7 +13,7 @@ class JUZ_AREA
     }
 
     /**
-     * Retorna todas las filas especificadas de la Ciudad '$IdTabla'
+     * Retorna todas las filas especificadas de la juz_area '$IdTabla'
      *
      * @param $IdTabla Identificador del registro
      * @return array Datos del registro
@@ -21,8 +21,11 @@ class JUZ_AREA
     public static function getAll()
     {
         $consulta = "SELECT ".$GLOBALS['Llave'].", ARE_Nombre, ARE_Codigo, ".
-            " CASE ARE_Estado WHEN 1 THEN 'Activo' ELSE 'Inactivo' END EstadoTabla ".
-            " FROM ".$GLOBALS['TABLA']." ORDER BY ARE_Nombre; ";
+            " CASE ARE_Estado WHEN 1 THEN 'Activo' ELSE 'Inactivo' END EstadoTabla, ".
+			" TJU_Nombre ".
+            " FROM ".$GLOBALS['TABLA'].
+			" LEFT JOIN juz_tipojuzgado ON juz_tipojuzgado.TJU_IdTipoJuzgado = ARE_IdTipoJuzgado ".
+			" ORDER BY ARE_Nombre; ";
         try {
             // Preparar sentencia
             $comando = Database::getInstance()->getDb()->prepare($consulta);
@@ -49,8 +52,9 @@ class JUZ_AREA
         $consulta = "SELECT ".$GLOBALS['Llave'].",
                             ARE_Nombre,                            
                             ARE_Estado, 
-                            ARE_Codigo ".
-                            " FROM ".$GLOBALS['TABLA'].
+                            ARE_Codigo, 
+							ARE_IdTipoJuzgado ".
+                            " FROM ".$GLOBALS['TABLA'].							
                             " WHERE ".$GLOBALS['Llave']." = ? ORDER BY ARE_Nombre; ";
 
         try {
@@ -102,7 +106,7 @@ class JUZ_AREA
 
 
     /**
-     * Obtiene los campos de una GEN_PAIS con un estado Activo
+     * Obtiene los campos de una juz_area con un estado Activo
      * determinado
      *
      * @param $IdEstadoTabla Identificador de Estado de la tabla
@@ -110,7 +114,7 @@ class JUZ_AREA
      */
     public static function getByIdExiste($IdEstadoTabla)
     {
-        // Consulta de la gen_departamento
+        // Consulta de la juz_area
         $consulta = "SELECT Count(".$GLOBALS['Llave'].") AS TotalTablas, ARE_Nombre, ARE_Estado ".
                     " FROM ". $GLOBALS['TABLA'].
                     " WHERE ".$GLOBALS['Llave']." = ? ;";
@@ -139,52 +143,57 @@ class JUZ_AREA
      * @param $IdTabla           identificador
      * @param $Nombre            nuevo Nombre 
      * @param $Codigo            nuevo Codigo
+	 * @param $Tipojuzgado       Tipo Juzgado
      * @param $IdEstadoTabla     nueva Estado       
      * 
      */
     public static function update(
-        $nombre,        
-        $estado,
+        $nombre,
         $codigo,
+		$tipojuzgado,
+		$estado,
         $idtabla
     )
     {
         // Creando consulta UPDATE
         $consulta = "UPDATE ". $GLOBALS['TABLA']. 
-            " SET ARE_Nombre=?, ARE_Codigo =?, ARE_Estado=? " .
+            " SET ARE_Nombre=?, ARE_Codigo =?, ARE_IdTipoJuzgado=?, ARE_Estado=? " .
             " WHERE ". $GLOBALS['Llave'] ." =? ;";
 
         // Preparar la sentencia
         $cmd = Database::getInstance()->getDb()->prepare($consulta);
 
         // Relacionar y ejecutar la sentencia
-        $cmd->execute(array($nombre, $codigo, $estado, $idtabla ));
+        $cmd->execute(array($nombre, $codigo, $tipojuzgado, $estado, $idtabla ));
 
         return $cmd;
     }
 
     /**
-     * Insertar un nueva Tipo Documento
+     * Insertar un nueva juz_area
      *         
      * @param $IdTabla            identificador
      * @param $Nombre             nuevo Nombre 
      * @param $Codigo             nuevo Codigo
-     * @param $Estado             Estado   
+     * @param $Estado             Estado
+     * @param $Tipojuzgado        Tipo Juzgado 
      * @return PDOStatement
      */
     public static function insert(        
         $Nombre,       
         $Estado,
-        $Codigo
+        $Codigo,
+		$Tipojuzgado
     )
     {
         // Sentencia INSERT
         $comando = "INSERT INTO ". $GLOBALS['TABLA'] ." ( " .            
             " ARE_Nombre," .            
             " ARE_Estado," .
-            " ARE_Codigo". 
+            " ARE_Codigo,". 
+			" ARE_IdTipoJuzgado".
             " )".     
-            " VALUES(?,?,?) ;";
+            " VALUES(?,?,?,?) ;";
 
         // Preparar la sentencia
         $sentencia = Database::getInstance()->getDb()->prepare($comando);
@@ -193,7 +202,8 @@ class JUZ_AREA
             array(                
                 $Nombre,                 
                 $Estado,
-                $Codigo
+                $Codigo,
+				$Tipojuzgado
             )
         );
     }
@@ -201,7 +211,7 @@ class JUZ_AREA
     /**
      * Eliminar el registro con el identificador especificado
      *
-     * @param $IdTabla identificador de la gen_Tipo Documento
+     * @param $IdTabla identificador de juz_area
      * @return bool Respuesta de la eliminación
      */
     public static function delete($IdTabla)
@@ -216,21 +226,21 @@ class JUZ_AREA
     }
 
     /**
-     * Verifica si existe el Pais
+     * Verifica si existe el Area
      *
-     * @param $IdUsuario identificador de la gen_Tipo Documento
+     * @param $IdUsuario identificador de juz_area
      * @return bool Respuesta de la consulta
      */
-    public static function existetabla($Nombre)
+    public static function existetabla($Nombre,$Codigo,$TipoJuzgado)
     {
         $consulta = "SELECT count(". $GLOBALS['Llave']. ") existe, ARE_Nombre FROM ".$GLOBALS['TABLA'].
-        " WHERE ARE_Nombre = ? ; ";
+        " WHERE ARE_Nombre = ? AND ARE_Codigo = ? AND ARE_IdTipoJuzgado = ?; ";
 
         try {
             // Preparar sentencia
             $comando = Database::getInstance()->getDb()->prepare($consulta);
             // Ejecutar sentencia preparada
-            $comando->execute(array($Nombre));
+            $comando->execute(array($Nombre,$Codigo,$TipoJuzgado));
             // Capturar primera fila del resultado
             $row = $comando->fetch(PDO::FETCH_ASSOC);
             return $row;

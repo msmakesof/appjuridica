@@ -132,10 +132,59 @@ $EstadoUsuario = $mjuzgado['juz_juzgado']['EstadoTabla'];
                         </div>
                         <div class="body  table-responsive">
                             <form id="form_validation" method="POST">
+                                
                                 <div class="form-group form-float">
-                                    <label class="form-label">Ubicaci&oacute;n</label>
+                                    <label class="form-label">Nombre</label>
                                     <div class="form-line">                                        
                                         <input type="text" class="form-control" name="ubicacion" id="ubicacion" value="<?php echo $Nombre ;?>" required>                                    
+                                    </div>
+                                </div>
+
+                                <div style="form-group form-float">                                     
+                                    <label class="form-label">
+                                        Area
+                                    </label>                                    
+                                    <div class="col-sm-4">                                       
+                                        <select class="selectpicker show-tick" data-live-search="true" data-width="90%" name="area" id="area" required>
+                                            <option value="" >Seleccione Opción...</option>
+                                            <?php
+                                                for($i=0; $i<count($marea['juz_area']); $i++)
+                                                {
+                                                    $ARE_IdArea = $marea['juz_area'][$i]['ARE_IdArea'];                                                    
+                                                    $ARE_Nombre = $marea['juz_area'][$i]['ARE_Nombre'];
+                                                    $ARE_Estado = $marea['juz_area'][$i]['ARE_Estado'];
+                                            ?>
+                                                    <option value="<?php echo $ARE_IdArea; ?>" <?php if ($ARE_IdArea == $Area){ echo "selected";} else{ echo "";} ?>>
+                                                        <?php echo $ARE_Nombre ; ?>                                                
+                                                    </option>
+                                            <?php
+                                                }
+                                            ?>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div style="form-group form-float"> 
+                                    <label class="form-label">
+                                        Tipo Juzgado
+                                    </label>                                    
+                                    <div class="col-sm-4">                                       
+                                        <select class="selectpicker show-tick" data-live-search="true" data-width="90%" name="tipojuzgado" id="tipojuzgado" required>
+                                            <option value="" >Seleccione Opción...</option>
+                                            <?php
+                                                for($i=0; $i<count($mtipojuzgado['juz_tipojuzgado']); $i++)
+                                                {
+                                                    $TJU_IdTipoJuzgado = $mtipojuzgado['juz_tipojuzgado'][$i]['TJU_IdTipoJuzgado'];                                                    
+                                                    $TJU_Nombre = $mtipojuzgado['juz_tipojuzgado'][$i]['TJU_Nombre'];
+                                                    $TJU_Estado = $mtipojuzgado['juz_tipojuzgado'][$i]['TJU_Estado'];
+                                            ?>
+                                                    <option value="<?php echo $TJU_IdTipoJuzgado; ?>" <?php if ($TJU_IdTipoJuzgado == $TipoJuzgado){ echo "selected";} else{ echo "";} ?>>
+                                                        <?php echo $TJU_Nombre ; ?>                                                
+                                                    </option>
+                                            <?php
+                                                }
+                                            ?>
+                                        </select>
                                     </div>
                                 </div>
 
@@ -194,53 +243,9 @@ $EstadoUsuario = $mjuzgado['juz_juzgado']['EstadoTabla'];
                                     </div>
                                 </div>
 
-                                <div style="form-group form-float"> 
-                                    <label class="form-label">
-                                        Tipo Juzgado
-                                    </label>                                    
-                                    <div class="col-sm-4">                                       
-                                        <select class="selectpicker show-tick" data-live-search="true" data-width="90%" name="tipojuzgado" id="tipojuzgado" required>
-                                            <option value="" >Seleccione Opción...</option>
-                                            <?php
-                                                for($i=0; $i<count($mtipojuzgado['juz_tipojuzgado']); $i++)
-                                                {
-                                                    $TJU_IdTipoJuzgado = $mtipojuzgado['juz_tipojuzgado'][$i]['TJU_IdTipoJuzgado'];                                                    
-                                                    $TJU_Nombre = $mtipojuzgado['juz_tipojuzgado'][$i]['TJU_Nombre'];
-                                                    $TJU_Estado = $mtipojuzgado['juz_tipojuzgado'][$i]['TJU_Estado'];
-                                            ?>
-                                                    <option value="<?php echo $TJU_IdTipoJuzgado; ?>" <?php if ($TJU_IdTipoJuzgado == $TipoJuzgado){ echo "selected";} else{ echo "";} ?>>
-                                                        <?php echo $TJU_Nombre ; ?>                                                
-                                                    </option>
-                                            <?php
-                                                }
-                                            ?>
-                                        </select>
-                                    </div>
-                                </div>
+                                
 
-                                 <div style="form-group form-float">                                     
-                                    <label class="form-label">
-                                        Area
-                                    </label>                                    
-                                    <div class="col-sm-4">                                       
-                                        <select class="selectpicker show-tick" data-live-search="true" data-width="90%" name="area" id="area" required>
-                                            <option value="" >Seleccione Opción...</option>
-                                            <?php
-                                                for($i=0; $i<count($marea['juz_area']); $i++)
-                                                {
-                                                    $ARE_IdArea = $marea['juz_area'][$i]['ARE_IdArea'];                                                    
-                                                    $ARE_Nombre = $marea['juz_area'][$i]['ARE_Nombre'];
-                                                    $ARE_Estado = $marea['juz_area'][$i]['ARE_Estado'];
-                                            ?>
-                                                    <option value="<?php echo $ARE_IdArea; ?>" <?php if ($ARE_IdArea == $Area){ echo "selected";} else{ echo "";} ?>>
-                                                        <?php echo $ARE_Nombre ; ?>                                                
-                                                    </option>
-                                            <?php
-                                                }
-                                            ?>
-                                        </select>
-                                    </div>
-                                </div>  
+                                  
                                 
                                 <div class="form-group" style="clear: both;">
                                     <input type="radio" name="estado" id="activo" class="with-gap" value="1" <?php if( $Estado == 1){?>checked="checked"<?php } ?>>

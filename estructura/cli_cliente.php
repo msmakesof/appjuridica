@@ -29,8 +29,7 @@ class CLI_CLIENTE
         CLI_Email,
         CLI_Celular,
         CLI_Usuario,
-        CLI_Clave,
-        CLI_IdTipoCliente,
+        CLI_Clave,        
         CLI_Estado,
         CLI_FechaCreado,
         CLI_UsuarioCrea,
@@ -75,8 +74,7 @@ class CLI_CLIENTE
                         CLI_Direccion,
                         CLI_Celular,
                         CLI_Usuario,
-                        CLI_Clave,
-                        CLI_IdTipoCliente,
+                        CLI_Clave,                       
                         CLI_Estado,
                         CLI_FechaCreado,
                         CLI_UsuarioCrea,
@@ -204,8 +202,7 @@ class CLI_CLIENTE
         $Direccion,
         $Celular,
         $Usuario,
-        $Clave,
-        $TipoCliente,
+        $Clave,        
         $Estado,
         $IdUsuario
     )
@@ -213,14 +210,14 @@ class CLI_CLIENTE
         // Creando consulta UPDATE
         $consulta = "UPDATE ". $GLOBALS['TABLA']. 
             " SET CLI_TipoDocumento=?, CLI_Identificacion=?, CLI_PrimerApellido=?, CLI_SegundoApellido=?, CLI_Nombre=?, CLI_Email=?, ".
-            " CLI_Direccion=?, CLI_Celular=?, CLI_Usuario=?, CLI_Clave=?, CLI_IdTipoCliente=?, CLI_Estado=? " .
+            " CLI_Direccion=?, CLI_Celular=?, CLI_Usuario=?, CLI_Clave=?, CLI_Estado=? " .
             " WHERE ". $GLOBALS['Llave'] ."=? ;";
 
         // Preparar la sentencia
         $cmd = Database::getInstance()->getDb()->prepare($consulta);
 
         // Relacionar y ejecutar la sentencia
-        $cmd->execute(array($TipoDocumento, $Identificacion, $PrimerApellido, $SegundoApellido, $Nombre, $Email, $Direccion, $Celular, $Usuario, $Clave, $TipoCliente, $Estado, $IdUsuario ));
+        $cmd->execute(array($TipoDocumento, $Identificacion, $PrimerApellido, $SegundoApellido, $Nombre, $Email, $Direccion, $Celular, $Usuario, $Clave, $Estado, $IdUsuario ));
 
         return $cmd;
     }
@@ -252,7 +249,7 @@ class CLI_CLIENTE
      */
 
     public static function insert( $TipoDocumento, $Identificacion, $PrimerApellido, $SegundoApellido, $Nombre, $Email, $Direccion, $Celular, $Usuario,
-        $Clave, $TipoCliente, $Estado, $IdInterno, $Local )
+        $Clave, $Estado, $IdInterno, $Local )
     {
         // Sentencia INSERT
         $comando = "INSERT INTO ". $GLOBALS['TABLA'] ." ( " .            
@@ -266,15 +263,15 @@ class CLI_CLIENTE
             " CLI_Celular," .
             " CLI_Usuario," .
             " CLI_Clave," .
-            " CLI_IdTipoCliente," .
+            //" CLI_IdTipoCliente," .
             " CLI_Estado, " .
-            " CLI_IdInterno, CLI_Local ) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?);";
+            " CLI_IdInterno, CLI_Local ) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?);";
         try {
             // Preparar la sentencia
             $sentencia = Database::getInstance()->getDb()->prepare($comando);
             return $sentencia->execute(
                 array($TipoDocumento, $Identificacion,$PrimerApellido, $SegundoApellido, $Nombre,$Email,
-                $Direccion, $Celular, $Usuario, $Clave, $TipoCliente, $Estado, $IdInterno, $Local )    
+                $Direccion, $Celular, $Usuario, $Clave, $Estado, $IdInterno, $Local )    
             );
            
         } catch (PDOException $e) {

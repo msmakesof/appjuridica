@@ -545,7 +545,7 @@ else
         <div class="container-fluid">
             <div class="block-header">
                 <h2>
-                    INFORMACION DE: <?php echo strtoupper($nombre_lnk); ?>
+                    INFORMACION DE: <?php echo strtoupper($nombre_lnk); ?> - SALA / SECCION Y/O ESPECIALIDAD
                     <small>Opciones: <a href="#" target="_blank">consultar, crear, modificar.</a></small>
                 </h2>
             </div>
@@ -586,6 +586,7 @@ else
                                     <tr>
                                         <th>Nombre</th>
                                         <th>C&oacute;digo</th>
+                                        <th>Despacho, Corporaci&oacute;n o Juzgado</th>
                                         <th>Activo</th>
                                     </tr>
                                 </thead>
@@ -593,6 +594,7 @@ else
                                     <tr>
                                         <th>Nombre</th>                                        
                                         <th>C&oacute;digo</th>
+                                        <th>Despacho, Corporaci&oacute;n o Juzgado</th>
                                         <th>Activo</th>
                                 </tfoot>
                                 <tbody>
@@ -653,33 +655,16 @@ if( $marea['estado'] < 2)
         $NombreTabla = trim($marea['juz_area'][$i]['ARE_Nombre']);		
         $archivo = $NombreTabla.".php";
         $codigo = $marea['juz_area'][$i]['ARE_Codigo'];
+        $tipojuzgado = $marea['juz_area'][$i]['TJU_Nombre'];
         $idTabla = $marea['juz_area'][$i]['ARE_IdArea'];
         $estadoTabla = trim($marea['juz_area'][$i]['EstadoTabla']);
     ?>
         <tr>
             <td>
-                <a href="javascript:void(0);" onclick="cambiar('../forms/editar<?php echo $nombre_lnk ;?>.php?f=<?php echo $idTabla; ?>')" class="nav nav-tabs nav-stacked" data-toggle="modal" data-target="#defaultModalEditar" style="text-decoration:none;"><?php echo $NombreTabla; ?></a>        	
-                <!-- Default Editar -->
-                <div class="modal fade" id="defaultModalEditar" tabindex="-1" role="dialog">
-                    <div class="modal-dialog" role="document">
-                        <div class="modal-content" >
-                            <div class="modal-header">
-                                <h4 class="modal-title" id="defaultModalLabel">Editar</h4>
-                            </div>
-                            
-                            <div class="modal-body">
-                                <object type="text/html" data="../forms/editar<?php echo $nombre_lnk ;?>.php" id="carga"></object>                           
-                            </div>
-
-                            <div class="modal-footer">
-                                <!-- <button type="button" class="btn btn-link waves-effect">SAVE CHANGES</button> -->                            
-                                <button type="button" class="btn btn-info waves-effect" data-dismiss="modal" id="cerrarModal">CERRAR</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>         
+                <a href="javascript:void(0);" onclick="cambiar('../forms/editar<?php echo $nombre_lnk ;?>.php?f=<?php echo $idTabla; ?>')" class="nav nav-tabs nav-stacked" data-toggle="modal" data-target="#defaultModalEditar" style="text-decoration:none;"><?php echo $NombreTabla; ?></a>
             </td>
             <td><?php echo $codigo; ?></td>
+            <td><?php echo $tipojuzgado; ?></td>
             <td><?php echo $estadoTabla; ?></td>
         </tr>
     <?php                          
@@ -697,25 +682,44 @@ if( $marea['estado'] < 2)
         </div>
     </section>
 
+    <!-- Default Editar -->
+    <div class="modal fade" id="defaultModalEditar" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content" >
+                <div class="modal-header">
+                    <h4 class="modal-title" id="defaultModalLabel">Editar</h4>
+                </div>
+                
+                <div class="modal-body">                                
+                    <object style="padding :0px; position: relative; height: 50vh; max-height:50vh; bottom:0; overflow: hidden; margin: 0px;" 
+                    type="text/html" data="../forms/editar<?php echo $nombre_lnk ;?>.php" id="carga"></object>                           
+                </div>
 
- <!-- Default Size -->
-            <div class="modal fade" id="defaultModal" tabindex="-1" role="dialog">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content" >
-                        <div class="modal-header">
-                            <!-- <h4 class="modal-title" id="defaultModalLabel">Crear</h4> -->
-                        </div>
-                        
-                        <div class="modal-body">                         
-                            <object type="text/html" data="../forms/form-validationBase<?php echo $nombre_lnk ;?>.php" id="crear"></object>
-                        </div>
-                        <div class="modal-footer">
-                            <!-- <button type="button" class="btn btn-link waves-effect">SAVE CHANGES</button> -->
-                            <button type="button" class="btn btn-info waves-effect" data-dismiss="modal" id="cerrarModalC">CERRAR Crear.</button>
-                        </div>
-                    </div>
+                <div class="modal-footer">                    
+                    <button type="button" class="btn btn-info waves-effect" data-dismiss="modal" id="cerrarModal">CERRAR</button>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <!-- Default Size -->
+    <div class="modal fade" id="defaultModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content" >
+                <div class="modal-header">                    
+                </div>
+                
+                <div class="modal-body">                         
+                    <object style="padding :0px; position: relative; height: 50vh; max-height:50vh; bottom:0; overflow: hidden; margin: 0px;" 
+                    type="text/html" data="../forms/form-validationBase<?php echo $nombre_lnk ;?>.php" id="crear">                            
+                    </object>
+                </div>
+                <div class="modal-footer">                    
+                    <button type="button" class="btn btn-info waves-effect" data-dismiss="modal" id="cerrarModalC">CERRAR Crear.</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
 
     <!-- Bootstrap Core Js -->

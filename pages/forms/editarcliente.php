@@ -42,7 +42,7 @@ if (!function_exists("GetSQLValueString"))
 
 $idTabla = 0;
 require_once('../../apis/general/tipodocumento.php');
-require_once('../../apis/general/tipocliente.php');
+//require_once('../../apis/general/tipocliente.php');
 
 if( isset($_GET['f'])  && !empty($_GET['f']) )
 {    
@@ -68,7 +68,7 @@ $Celular = trim($mcliente['cli_cliente']['CLI_Celular']);
 $Usuario = trim($mcliente['cli_cliente']['CLI_Usuario']);
 $Clave = $mcliente['cli_cliente']['CLI_Clave'];
 $EstadoEst = $mcliente['cli_cliente']['CLI_Estado'];
-$TipoCliente = $mcliente['cli_cliente']['CLI_IdTipoCliente'];
+//$TipoCliente = $mcliente['cli_cliente']['CLI_IdTipoCliente'];
 ?>
 <!DOCTYPE html>
 <html>
@@ -223,27 +223,26 @@ $TipoCliente = $mcliente['cli_cliente']['CLI_IdTipoCliente'];
                                 </div>                              
                                 
 
-                                <div class="form-group form-float">
+                                <!-- <div class="form-group form-float">
                                     <label class="form-label">Tipo Usuario</label>
                                     <div class="col-sm-4">
-                                        <select class="selectpicker show-tick" data-live-search="true" data-width="90%" name="tipocliente" id="tipocliente" required>
-                                            <!-- <option value="">-- Seleccione --</option> -->
+                                        <select class="selectpicker show-tick" data-live-search="true" data-width="90%" name="tipocliente" id="tipocliente" required>                                           
                                             <?php                                                 
-                                                 for($i=0; $i<count($mtipocliente['cli_tipocliente']); $i++)
-                                                {           
-                                                    $TCL_IdTipoCliente = $mtipocliente['cli_tipocliente'][$i]['TCL_IdTipoCliente'];                                                    
-                                                    $TCL_Nombre = $mtipocliente['cli_tipocliente'][$i]['TCL_Nombre'];
-                                                    $TCL_Estado = $mtipocliente['cli_tipocliente'][$i]['TCL_Estado'];
+                                                //for($i=0; $i<count($mtipocliente['cli_tipocliente']); $i++)
+                                                //{           
+                                                    //$TCL_IdTipoCliente = $mtipocliente['cli_tipocliente'][$i]['TCL_IdTipoCliente'];                                                    
+                                                    //$TCL_Nombre = $mtipocliente['cli_tipocliente'][$i]['TCL_Nombre'];
+                                                    //$TCL_Estado = $mtipocliente['cli_tipocliente'][$i]['TCL_Estado'];
                                             ?>                                            
-                                            <option value="<?php echo $TCL_IdTipoCliente; ?>" <?php if ($TCL_IdTipoCliente == $TipoCliente){ echo "selected";} else{ echo "";} ?>>
-                                                <?php echo $TCL_Nombre ; ?>                                                
+                                            <option value="<?php //echo $TCL_IdTipoCliente; ?>" <?php //if ($TCL_IdTipoCliente == $TipoCliente){ echo "selected";} else{ echo "";} ?>>
+                                                <?php //echo $TCL_Nombre ; ?>                                                
                                             </option>
                                             <?php                    
-                                                } 
+                                                //} 
                                             ?>
                                         </select>
                                     </div>   
-                                </div>
+                                </div> -->
                                 
                                 <div class="form-group">
                                     <input type="radio" name="estado" id="activo" class="with-gap" value="1" <?php if( $EstadoEst == 1){?>checked="checked"<?php } ?>>
@@ -359,11 +358,11 @@ $TipoCliente = $mcliente['cli_cliente']['CLI_IdTipoCliente'];
             var direccion = $("#direccion").val();
             var email = $("#email").val();
             var celular = $("#celular").val();            
-            var tipocliente = $("#tipocliente").val();			
+            //var tipocliente = $("#tipocliente").val();			
 			var estado = $('input:radio[name=estado]:checked').val();
 			var idtabla =  "<?php echo $idtabla; ?>";
             var OldClave = "<?php echo $Clave; ?>";
-            if( tipodocumento == "" || numerodocumento =="" || nombre == "" || apellido1 == "" || apellido2 == "" || clave =="" || direccion == "" || email == "" || celular == "" || estado == undefined  || tipocliente == "" )
+            if( tipodocumento == "" || numerodocumento =="" || nombre == "" || apellido1 == "" || apellido2 == "" || clave =="" || direccion == "" || email == "" || celular == "" || estado == undefined )
             {               
                 swal({
                   title: "Error:  Ingrese información en todos los campos...",
@@ -377,7 +376,7 @@ $TipoCliente = $mcliente['cli_cliente']['CLI_IdTipoCliente'];
             else
             {
     			$.ajax({
-    				data : {"tipodocumento": tipodocumento, "numerodocumento": numerodocumento, "nombre": nombre, "apellido1": apellido1, "apellido2": apellido2, "clave": clave, "direccion": direccion, "email": email, "celular": celular, "estado": estado, "tipocliente": tipocliente, "idtabla": idtabla, "OldClave": OldClave },
+    				data : {"tipodocumento": tipodocumento, "numerodocumento": numerodocumento, "nombre": nombre, "apellido1": apellido1, "apellido2": apellido2, "clave": clave, "direccion": direccion, "email": email, "celular": celular, "estado": estado, "idtabla": idtabla, "OldClave": OldClave },
     				type: "POST",				
     				url : "editar_<?php echo strtolower($Tabla); ?>.php",
                 })  

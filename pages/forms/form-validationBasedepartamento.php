@@ -153,10 +153,11 @@ $NombreTabla ="DEPARTAMENTO";
             var nombre = $("#nombre").val();
             nombre = nombre.toUpperCase();
             var pais = $("#pais").val();
+            var codigodane = $("#codigodane").val();
             var estado = $('input:radio[name=estado]:checked').val();
             e.preventDefault();
 
-            if( estado == undefined || nombre == "" || pais == "" )
+            if( estado == undefined || nombre == "" || pais == "" || codigodane == "" )
             {               
                 swal({
                   title: "Atención:  Ingrese información en todos los campos...",
@@ -171,7 +172,7 @@ $NombreTabla ="DEPARTAMENTO";
             else
             {
                 $.ajax({
-                    data : {"pnombre": nombre, "ppais": pais, "pestado": estado}, 
+                    data : {"pnombre": nombre, "pcodigodane": codigodane, "ppais": pais, "pestado": estado}, 
                     type: "POST",
                     dataType: "html",
                     url : "crea_departamento.php",
@@ -182,19 +183,19 @@ $NombreTabla ="DEPARTAMENTO";
                     var msj = xrespstr.substr(2);
                     if(respstr == "E")
                     {                         
-                       swal("Atencion:", msj);
+                       swal("Atención:", msj);
                     }
                     else
                     {    
                         if( respstr == "S" )
                         {                        
-                            swal("Atencion: ", msj, "success");
+                            swal("Atención: ", msj, "success");
                             return false;                            
                         }
                         else
                         {                            
                             swal({
-                                title: "Atencion: ",   
+                                title: "Atención: ",   
                                 text: msj,   
                                 type: "error" 
                             });
@@ -251,6 +252,13 @@ $NombreTabla ="DEPARTAMENTO";
                                     </div>
                                 </div>
 
+                                <div class="form-group form-float" style="clear: both;">
+                                    <label class="form-label">C&oacute;digo DANE</label>
+                                    <div class="form-line">
+                                        <input type="text" class="form-control" name="codigodane" id="codigodane" value="" maxlength="2" required>                                       
+                                    </div>
+                                </div>
+
                                 <div class="form-group" style="clear: both;">
                                     <div style="float: left;">                                     
                                         <label class="form-label">
@@ -293,7 +301,7 @@ $NombreTabla ="DEPARTAMENTO";
                 	</div>    
                 </div>               
             </div>
-            <!-- #END# Basic Validation --> 
+            <!-- END Basic Validation --> 
              <div class="row clearfix">         
                 <div id="msj">
 

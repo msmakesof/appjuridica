@@ -21,8 +21,11 @@ class GEN_CIUDAD
     public static function getAll()
     {
         $consulta = "SELECT ".$GLOBALS['Llave'].", CIU_Nombre, CIU_Abreviatura, CIU_IdDepartamento, ".
-            " CASE CIU_Estado WHEN 1 THEN 'Activo' ELSE 'Inactivo' END EstadoTabla ".
-            " FROM ".$GLOBALS['TABLA']." ORDER BY CIU_Nombre; ";
+            " CASE CIU_Estado WHEN 1 THEN 'Activo' ELSE 'Inactivo' END EstadoTabla, ".
+            " DEP_Nombre ".
+            " FROM ".$GLOBALS['TABLA'].
+            " JOIN gen_departamento ON DEP_IdDepartamento = CIU_IdDepartamento ".
+            " ORDER BY CIU_Nombre; ";
         try {
             // Preparar sentencia
             $comando = Database::getInstance()->getDb()->prepare($consulta);
@@ -50,8 +53,10 @@ class GEN_CIUDAD
                             CIU_Nombre,
                             CIU_Abreviatura,
                             CIU_IdDepartamento,
-                            CIU_Estado ".
+                            CIU_Estado, 
+                            DEP_CodigoDane ".
                             " FROM ".$GLOBALS['TABLA'].
+                            " JOIN gen_departamento ON gen_departamento.DEP_IdDepartamento = CIU_IdDepartamento ".
                             " WHERE ".$GLOBALS['Llave']." = ? ORDER BY CIU_Nombre; ";
 
         try {
@@ -228,16 +233,16 @@ class GEN_CIUDAD
      * @param $IdUsuario identificador de la gen_departamento
      * @return bool Respuesta de la consulta
      */
-    public static function existetabla($Nombre,$Abreviatura)
+    public static function existetabla($Nombre,$Abreviatura, $Departamento)
     {
         $consulta = "SELECT count(". $GLOBALS['Llave']. ") existe, CIU_Nombre FROM ".$GLOBALS['TABLA'].
-        " WHERE CIU_Nombre = ? OR CIU_Abreviatura = ?; ";
+        " WHERE CIU_Nombre = ? AND CIU_Abreviatura = ? AND CIU_IdDepartamento = ?; ";
 
         try {
             // Preparar sentencia
             $comando = Database::getInstance()->getDb()->prepare($consulta);
             // Ejecutar sentencia preparada
-            $comando->execute(array($Nombre,$Abreviatura));
+            $comando->execute(array($Nombre,$Abreviatura, $Departamento));
             // Capturar primera fila del resultado
             $row = $comando->fetch(PDO::FETCH_ASSOC);
             return $row;

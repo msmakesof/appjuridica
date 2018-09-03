@@ -61,13 +61,18 @@ if( isset($_POST['pcodigo']) )
     $pcodigo = trim($_POST['pcodigo']);
 }
 
+$ptipojuzgado ="";
+if( isset($_POST['ptipojuzgado']) )
+{
+    $ptipojuzgado = trim($_POST['ptipojuzgado']);
+}
 
 require_once('../../Connections/DataConex.php');
 //Verifico si existe una Tabla con las siguientes caracteristicas
 // Nombres iguales 
 if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
 {
-  $parameters = "ExisteTabla=1&Nombre=$pnombre&Codigo=$pcodigo";
+  $parameters = "ExisteTabla=1&Nombre=$pnombre&Codigo=$pcodigo&TipoJuzgado=$ptipojuzgado";
   $url = urlServicios."consultadetalle/consultadetalle_juz_area.php?".$parameters;
   $ch = curl_init();
   curl_setopt($ch, CURLOPT_VERBOSE, true);
@@ -97,12 +102,12 @@ if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
     $existe = $m['juz_area']['existe'];
     if($existe > 0)
     {
-      $sigue = "E-Existe un Tipo Documento registrado con el mismo Nombre Código.";
+      $sigue = "E-Existe un Area / Despacho registrado con el mismo Nombre Código.";
     }
     else
     {
       
-      $parameters = "insert=insert&Nombre=$pnombre&Estado=$pestado&Codigo=$pcodigo";
+      $parameters = "insert=insert&Nombre=$pnombre&Estado=$pestado&Codigo=$pcodigo&Tipojuzgado=$ptipojuzgado";
       $soportecURL = "S";
       $url         = urlServicios."consultadetalle/consultadetalle_juz_area.php?".$parameters;
       $existe      = "";

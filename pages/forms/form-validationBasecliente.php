@@ -42,7 +42,7 @@ if (!function_exists("GetSQLValueString"))
 $NombreTabla ="CLIENTE";
 $idTabla = 0;
 require_once('../../apis/general/tipodocumento.php');
-require_once('../../apis/general/tipocliente.php');
+//require_once('../../apis/general/tipocliente.php');
 
 ?>
 <!DOCTYPE html>
@@ -184,13 +184,13 @@ require_once('../../apis/general/tipocliente.php');
             var direccion = $("#direccion").val();
             var email = $("#email").val();
             var celular = $("#celular").val();
-            var tipocliente = $("#tipocliente").val();
+            //var tipocliente = $("#tipocliente").val();
             //var telefonofijo = $("#telefonofijo").val();
             //var sucursal = $("#sucursal").val();            
             var estado = $('input:radio[name=estado]:checked').val();
             e.preventDefault();
 
-            if( tipodocumento == "" || numerodocumento =="" || nombre == "" || apellido1 == "" || apellido2 == "" || clave =="" || direccion == "" || email == "" || celular == "" || estado == undefined || tipocliente == "" )
+            if( tipodocumento == "" || numerodocumento =="" || nombre == "" || apellido1 == "" || apellido2 == "" || clave =="" || direccion == "" || email == "" || celular == "" || estado == undefined )
             {
                //swal("Atencion:", "Estudiante " + nombre + " !Ya se encuentra registrado(a)...");
                 swal({
@@ -206,7 +206,7 @@ require_once('../../apis/general/tipocliente.php');
             else
             {
                 $.ajax({
-                    data : {"tipodocumento": tipodocumento, "numerodocumento": numerodocumento, "nombre": nombre, "apellido1": apellido1, "apellido2": apellido2, "clave": clave, "direccion": direccion, "email": email, "celular": celular, "estado": estado, "tipocliente": tipocliente}, 
+                    data : {"tipodocumento": tipodocumento, "numerodocumento": numerodocumento, "nombre": nombre, "apellido1": apellido1, "apellido2": apellido2, "clave": clave, "direccion": direccion, "email": email, "celular": celular, "estado": estado}, 
                     type: "POST",
                     dataType: "html",
                     url : "crea_<?php echo strtolower($NombreTabla); ?>.php",
@@ -369,7 +369,7 @@ require_once('../../apis/general/tipocliente.php');
                                     </div>
                                 </div> 
 
-                                <div style="form-group form-float">                                     
+                                <!-- <div style="form-group form-float">                                     
                                     <label class="form-label">
                                         Tipo Cliente
                                     </label>                                    
@@ -377,21 +377,21 @@ require_once('../../apis/general/tipocliente.php');
                                         <select class="selectpicker show-tick" data-live-search="true" data-width="80%" name="tipocliente" id="tipocliente" required>
                                             <option value="" >Seleccione Opción...</option>
                                             <?php
-                                                for($i=0; $i<count($mtipocliente['cli_tipocliente']); $i++)
-                                                {
-                                                    $TCL_IdTipoCliente = $mtipocliente['cli_tipocliente'][$i]['TCL_IdTipoCliente'];                                                    
-                                                    $TCL_Nombre = $mtipocliente['cli_tipocliente'][$i]['TCL_Nombre'];
-                                                    $TCL_Estado = $mtipocliente['cli_tipocliente'][$i]['TCL_Estado'];
+                                                //for($i=0; $i<count($mtipocliente['cli_tipocliente']); $i++)
+                                                //{
+                                                //    $TCL_IdTipoCliente = $mtipocliente['cli_tipocliente'][$i]['TCL_IdTipoCliente'];                                                    
+                                                //    $TCL_Nombre = $mtipocliente['cli_tipocliente'][$i]['TCL_Nombre'];
+                                                //    $TCL_Estado = $mtipocliente['cli_tipocliente'][$i]['TCL_Estado'];
                                             ?>
-                                                    <option value="<?php echo $TCL_IdTipoCliente; ?>" >
-                                                        <?php echo $TCL_Nombre ; ?>                                                
+                                                    <option value="<?php //echo $TCL_IdTipoCliente; ?>" >
+                                                        <?php //echo $TCL_Nombre ; ?>                                                
                                                     </option>
                                             <?php
-                                                }
+                                                //}
                                             ?>
                                         </select>
                                     </div>
-                                </div>
+                                </div> -->
 
                                 <!-- 
                                 <div class="form-group form-float">

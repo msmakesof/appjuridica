@@ -224,22 +224,22 @@ else
                          <table class="table table-bordered table-striped table-hover dataTable js-exportable" id="grid">
                                 <thead>
                                     <tr>
-                                        <th>Ubicaci&oacute;n</th>
-                                        <th>Ciudad</th>
-                                        <th>Dirección</th>
-                                        <th>Tipo</th>
+                                        <th>N&uacute;mero</th>
+                                        <th>Ciudad</th>                                        
                                         <th>Area</th>
+                                        <th>Tipo</th>
+                                        <th>Dirección</th>
                                         <th>Piso</th>
 										<th>Estado</th>
                                     </tr>
                                 </thead>
                                 <tfoot>
                                     <tr>
-                                        <th>Ubicaci&oacute;n</th>
+                                        <th>N&uacute;mero</th>
                                         <th>Ciudad</th>
-                                        <th>Dirección</th>
-                                        <th>Tipo</th>
                                         <th>Area</th>
+                                        <th>Tipo</th>
+                                        <th>Dirección</th>                                      
                                         <th>Piso</th>
 										<th>Estado</th>
                                     </tr>
@@ -313,29 +313,11 @@ if( $mjuzgado['estado'] < 2)
     <tr>
         <td>
            <a href="javascript:void(0);" onclick="cambiar('../forms/editar<?php echo $nombre_lnk ;?>.php?f=<?php echo $idTabla; ?>')" class="nav nav-tabs nav-stacked" data-toggle="modal" data-target="#defaultModalEditar"  style="text-decoration:none;"><?php echo $NombreUsuario; ?></a>
-            <div class="modal fade" id="defaultModalEditar" tabindex="-1" role="dialog">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                         <div class="modal-header">
-                            <h4 class="modal-title" id="defaultModalLabel">Editar</h4>
-                        </div>
-                         
-                        <div class="modal-body">
-                            <object type="text/html" data="../forms/editartabla.php" id="carga" class="modalobj"></object>
-                        </div>
-
-                        <div class="modal-footer">
-                                                       
-                            <button type="button" class="btn btn-info waves-effect" data-dismiss="modal" id="cerrarModal">CERRAR</button>
-                        </div>
-                    </div>
-                </div>
-            </div>         
         </td>        
-        <td><?php echo $NombreCiudad; ?></td>
-        <td><?php echo $Direccion; ?></td>
+        <td><?php echo $NombreCiudad; ?></td>        
+        <td><?php echo $NombreArea; ?></td> 
         <td><?php echo $NombreTipoJuzgado; ?></td>
-        <td><?php echo $NombreArea; ?></td>        
+        <td><?php echo $Direccion; ?></td>
         <td><?php echo $Piso; ?></td>
 		<td><?php echo $EstadoUsuario; ?></td>
     </tr>
@@ -353,25 +335,47 @@ if( $mjuzgado['estado'] < 2)
             <!-- #END# Exportable Table -->
         </div>
     </section>
+	
+	<!-- Default Editar -->
+	<div class="modal fade" id="defaultModalEditar" tabindex="-1" role="dialog">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				 <div class="modal-header">
+					<h4 class="modal-title" id="defaultModalLabel">Editar</h4>
+				</div>
+				 
+				<div class="modal-body">
+					<object type="text/html" data="../forms/editartabla.php" id="carga" class="modalobj"></object>
+				</div>
 
- <!-- Default Size -->
-            <div class="modal fade" id="defaultModal" tabindex="-1" role="dialog">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content" >
-                        <div class="modal-header">
-                            <!-- <h4 class="modal-title" id="defaultModalLabel">Crear</h4> -->
-                        </div>
-                        
-                        <div class="modal-body">                         
-                            <object type="text/html" data="../forms/form-validationBase<?php echo $nombre_lnk ;?>.php" id="crear"></object>
-                        </div>
-                        <div class="modal-footer">
-                            <!-- <button type="button" class="btn btn-link waves-effect">SAVE CHANGES</button> -->
-                            <button type="button" class="btn btn-info waves-effect" data-dismiss="modal" id="cerrarModalC">CERRAR Crear.</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
+				<div class="modal-footer">
+											   
+					<button type="button" class="btn btn-info waves-effect" data-dismiss="modal" id="cerrarModal">CERRAR</button>
+				</div>
+			</div>
+		</div>
+	</div>	
+
+	<!-- Default Size -->
+	<div class="modal fade" id="defaultModal" tabindex="-1" role="dialog">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content" >
+				<div class="modal-header">
+					<!-- <h4 class="modal-title" id="defaultModalLabel">Crear</h4> -->
+				</div>
+				
+				<div class="modal-body">                         
+					<object type="text/html" 
+					style="padding :0px; position: relative; height: 70vh; max-height:70vh; bottom:0; overflow: hidden; margin: 0;" 
+					data="../forms/form-validationBase<?php echo $nombre_lnk ;?>.php" id="crear"></object>
+				</div>
+				<div class="modal-footer">
+					<!-- <button type="button" class="btn btn-link waves-effect">SAVE CHANGES</button> -->
+					<button type="button" class="btn btn-info waves-effect" data-dismiss="modal" id="cerrarModalC">CERRAR Crear.</button>
+				</div>
+			</div>
+		</div>
+	</div>
 
     <!-- Bootstrap Core Js -->
     <script src="../../plugins/bootstrap/js/bootstrap.js"></script>

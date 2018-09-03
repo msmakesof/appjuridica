@@ -142,10 +142,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     elseif(isset($_GET['insert']) )
     {
         //Obtener Parametros
-        $par1 = $_GET['Nombre'];        
-        $par2 = $_GET['Estado'];
+        $par1 = $_GET['Nombre'];
+        $par2 = $_GET['Codigo'];        
+        $par3 = $_GET['Estado'];
 
-        $retorno = JUZ_TIPOJUZGADO::insert($par1, $par2);
+        $retorno = JUZ_TIPOJUZGADO::insert($par1, $par2, $par3);
         $msj = $retorno;
         if($retorno)
         {
@@ -169,11 +170,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     elseif(isset($_GET['update']) )
     {
         //Obtener Parametros
-        $par1 = $_GET['nombre'];        
-        $par2 = $_GET['estado'];
-        $par3 = $_GET['idtabla'];
+        $par1 = $_GET['nombre'];
+        $par2 = $_GET['codigo'];        
+        $par3 = $_GET['estado'];
+        $par4 = $_GET['idtabla'];
 
-        $retorno = JUZ_TIPOJUZGADO::update($par1, $par2, $par3);
+        $retorno = JUZ_TIPOJUZGADO::update($par1, $par2, $par3, $par4);
         $msj = $retorno;
         if($retorno)
         {

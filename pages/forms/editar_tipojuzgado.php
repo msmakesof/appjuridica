@@ -44,6 +44,11 @@ if(isset($_POST['nombre'])){
     $nombre = str_replace(' ', '%20', $nombre);
 }
 
+$codigo ="";
+if(isset($_POST['codigo'])){
+	$codigo = trim($_POST['codigo']);
+}
+
 $estado ="";
 if(isset($_POST['estado'])){
 	$estado = trim($_POST['estado']);

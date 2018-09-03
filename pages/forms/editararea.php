@@ -46,12 +46,12 @@ if( isset($_GET['f'])  && !empty($_GET['f']) )
 
 $Tabla ="AREA";
 $idtabla = 0;
-
 require_once('../../apis/general/area.php');
 
 $Nombre = trim($marea['juz_area']['ARE_Nombre']);
 $estado = $marea['juz_area']['ARE_Estado'];
 $codigo = $marea['juz_area']['ARE_Codigo'];
+$tipojuzgado = $marea['juz_area']['ARE_IdTipoJuzgado'];
 $idtabla = $marea['juz_area']['ARE_IdArea'];
 
 ?>
@@ -101,7 +101,7 @@ $idtabla = $marea['juz_area']['ARE_IdArea'];
         <div class="container-fluid">
             <div class="block-header">
                 <h2>
-                    FORMULARIO: <?php echo $Tabla; ?>.
+                    FORMULARIO: <?php echo $Tabla; ?> - SALA / SECCION Y/O ESPECIALIDAD.
                     <!--<small>Editar.</small>-->
                 </h2>
             </div>
@@ -122,7 +122,7 @@ $idtabla = $marea['juz_area']['ARE_IdArea'];
                         <div class="body  table-responsive">
                             <form id="form_validation" method="POST">
                                 <div class="form-group form-float">
-                                    <label class="form-label">Nombre</label>
+                                    <label class="form-label">Nombre SALA / SECCION Y/O ESPECIALIDAD</label>
                                     <div class="form-line">
                                         <input type="text" class="form-control" name="nombre" id="nombre" value="<?php echo $Nombre ;?>" required>                                    
                                     </div>
@@ -132,6 +132,29 @@ $idtabla = $marea['juz_area']['ARE_IdArea'];
                                     <label class="form-label">C&oacute;digo</label>
                                     <div class="form-line">                                        
                                         <input type="text" class="form-control" name="codigo" id="codigo" value="<?php echo $codigo ;?>"  maxlength="4" required>
+                                    </div>
+                                </div>
+
+                                 <div class="form-group form-float">
+                                    <div class="col-sm-4" style="margin-top:15px;">
+                                        <label class="form-label">Despacho / Corporaci&oacute;n / Juzgado:</label>                                        
+                                        <select class="selectpicker show-tick" data-live-search="true" data-width="100%" name="tipojuzgado" id="tipojuzgado" required>
+                                        <option value="" >Seleccione Despacho...</option>
+                                        <?php
+                                            $idTabla = 0;
+                                            require_once('../../apis/general/tipojuzgado.php');
+                                            for($i=0; $i<count($mtipojuzgado['juz_tipojuzgado']); $i++)
+                                            {
+                                                $TJU_IdTipoJuzgado = $mtipojuzgado['juz_tipojuzgado'][$i]['TJU_IdTipoJuzgado'];
+                                                $TJU_Nombre = $mtipojuzgado['juz_tipojuzgado'][$i]['TJU_Nombre'];                                                                                              
+                                        ?>
+                                                <option value="<?php echo $TJU_IdTipoJuzgado; ?>"  <?php if ($TJU_IdTipoJuzgado == $tipojuzgado){ echo "selected";} else{ echo "";} ?>>
+                                                    <?php echo $TJU_Nombre ; ?>                                                
+                                                </option>
+                                        <?php
+                                            }
+                                        ?>
+                                        </select>
                                     </div>
                                 </div>
                                 
@@ -215,11 +238,12 @@ $idtabla = $marea['juz_area']['ARE_IdArea'];
 			var nombre = $("#nombre").val();
             nombre = nombre.toUpperCase();
             var codigo = $("#codigo").val();
+            var tipojuzgado= $("#tipojuzgado").val();
 			var estado = $('input:radio[name=estado]:checked').val();
 			var idtabla = "<?php echo $idtabla; ?>";
 			
 			$.ajax({
-				data : {"nombre": nombre, "codigo": codigo, "estado": estado, "idtabla": idtabla},
+				data : {"nombre": nombre, "codigo": codigo, "tipojuzgado": tipojuzgado, "estado": estado, "idtabla": idtabla},
 				type: "POST",
 				dataType: "html",
 				url : "editar_<?php echo strtolower($Tabla); ?>.php",
@@ -280,7 +304,7 @@ $idtabla = $marea['juz_area']['ARE_IdArea'];
                     else
                     {                    
                         swal({
-                            title: "Atencion: ",   
+                            title: "Atención: ",   
                             text: msj,   
                             type: "error" 
                         });                    

@@ -51,6 +51,7 @@ require_once('../../apis/general/tipojuzgado.php');
 
 $Nombre = trim($mtipojuzgado['juz_tipojuzgado']['TJU_Nombre']);
 $estado = $mtipojuzgado['juz_tipojuzgado']['TJU_Estado'];
+$codigo = $mtipojuzgado['juz_tipojuzgado']['TJU_Codigo'];
 $idtabla = $mtipojuzgado['juz_tipojuzgado']['TJU_IdTipoJuzgado'];
 
 ?>
@@ -90,8 +91,7 @@ $idtabla = $mtipojuzgado['juz_tipojuzgado']['TJU_IdTipoJuzgado'];
     <link href="../../css/themes/all-themes.css" rel="stylesheet" />
 
     <link rel="stylesheet" href="../../css/themes2/alertify.core.css" />
-    <link rel="stylesheet" href="../../css/themes2/alertify.default.css" id="toggleCSS" />
-
+    <link rel="stylesheet" href="../../css/themes2/alertify.default.css" id="toggleCSS" />    
 </head>
 
 <body class="theme-indigo">
@@ -120,10 +120,18 @@ $idtabla = $mtipojuzgado['juz_tipojuzgado']['TJU_IdTipoJuzgado'];
                         </div>
                         <div class="body  table-responsive">
                             <form id="form_validation" method="POST">
+                                
                                 <div class="form-group form-float">
                                     <label class="form-label">Nombre</label>
                                     <div class="form-line">
-                                        <input type="text" class="form-control" name="nombre" id="nombre" value="<?php echo $Nombre ;?>" required>                                    
+                                        <input type="text" class="form-control" name="nombre" id="nombre" value="<?php echo $Nombre ;?>" required>
+                                    </div>
+                                </div>
+
+                                <div class="form-group form-float">
+                                    <label class="form-label">Código Entidad, Corporación o Juzgado</label>
+                                    <div class="form-line">
+                                        <input type="text" class="form-control" name="codigo" id="codigo" value="<?php echo $codigo ;?>" maxlength="2" required>
                                     </div>
                                 </div>
                                 
@@ -191,15 +199,16 @@ $idtabla = $mtipojuzgado['juz_tipojuzgado']['TJU_IdTipoJuzgado'];
 
     <script src="../../js/pages/ui/dialogs.js"></script>
     <!-- Demo Js -->
-    <script src="../../js/demo.js"></script>
-    
+    <script src="../../js/demo.js"></script>    
 
     <script src="../../js/alertify.min.js"></script>
+    <script src="../../js/jquery.numeric.js"></script>
 
     <script type="text/javascript">    
     $(document).ready(function()
 	{			
 		$("#mensaje").hide();
+        $("#codigo").numeric();
         $("#form_validation").show();
         $("#form_validation").click(function() {
 			$("#msj").html("");
@@ -209,11 +218,12 @@ $idtabla = $mtipojuzgado['juz_tipojuzgado']['TJU_IdTipoJuzgado'];
             $("#mensaje").hide();
 			var nombre = $("#nombre").val();
             nombre = nombre.toUpperCase();
+            var codigo = $("#codigo").val();
 			var estado = $('input:radio[name=estado]:checked').val();
 			var idtabla = "<?php echo $idtabla; ?>";
 			
 			$.ajax({
-				data : {"nombre": nombre, "estado": estado, "idtabla": idtabla},
+				data : {"nombre": nombre, "codigo": codigo, "estado": estado, "idtabla": idtabla},
 				type: "POST",
 				dataType: "html",
 				url : "editar_<?php echo strtolower($Tabla); ?>.php",

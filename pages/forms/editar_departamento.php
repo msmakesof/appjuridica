@@ -49,6 +49,11 @@ if(isset($_POST['pais'])){
   $pais = trim($_POST['pais']);  
 }
 
+$codigodane ="";
+if(isset($_POST['codigodane'])){
+  $codigodane = trim($_POST['codigodane']);  
+}
+
 $estado ="";
 if(isset($_POST['estado'])){
 	$estado = trim($_POST['estado']);

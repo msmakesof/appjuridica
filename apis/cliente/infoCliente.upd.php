@@ -42,7 +42,7 @@ if (!function_exists("GetSQLValueString"))
 }
 
 require_once('../../Connections/DataConex.php');
-$parameters = "update=update&tipodocumento=$tipodocumento&numerodocumento=$numerodocumento&apellido1=$apellido1&apellido2=$apellido2&nombre=$nombre&email=$email&direccion=$direccion&celular=$celular&usuario=$email&clave=$clave&tipocliente=$tipocliente&estado=$estado&idtabla=$idUsuario";
+$parameters = "update=update&tipodocumento=$tipodocumento&numerodocumento=$numerodocumento&apellido1=$apellido1&apellido2=$apellido2&nombre=$nombre&email=$email&direccion=$direccion&celular=$celular&usuario=$email&clave=$clave&estado=$estado&idtabla=$idUsuario";
 $soportecURL = "S";
 $url         = urlServicios."consultadetalle/consultadetalle_Cliente.php?".$parameters;
 $existe      = "";

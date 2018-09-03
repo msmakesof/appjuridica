@@ -74,7 +74,7 @@ if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
 
     $mjuzgado =  preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $resultado);    
     $mjuzgado = json_decode($mjuzgado, true);
-    //echo("<script>console.log('PHP: ".print_r($mtjuzgado)."');</script>");
+    //echo("<script>console.log('PHP: ".print_r($mjuzgado)."');</script>");
     //echo("<script>console.log('PHP: ".count($m['juzgado'])."');</script>");
     
     $json_errors = array(
@@ -99,4 +99,5 @@ if($soportecURL == "N")
     $resultado = preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $resultado);
     $mjuzgado = json_decode($resultado, true);	        
 } 
+
 ?>

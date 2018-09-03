@@ -49,6 +49,12 @@ if( isset($_POST['pnombre']) )
     $pnombre = str_replace(' ','%20', $pnombre);
 }
 
+$pcodigo ="";
+if( isset($_POST['pcodigo']) )
+{
+    $pcodigo = trim($_POST['pcodigo']);
+}
+
 $pestado ="";
 if( isset($_POST['pestado']) )
 {
@@ -95,7 +101,7 @@ if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
     else
     {
       
-      $parameters = "insert=insert&Nombre=$pnombre&Estado=$pestado";
+      $parameters = "insert=insert&Nombre=$pnombre&Codigo=$pcodigo&Estado=$pestado";
       $soportecURL = "S";
       $url         = urlServicios."consultadetalle/consultadetalle_juz_tipojuzgado.php?".$parameters;
       $existe      = "";

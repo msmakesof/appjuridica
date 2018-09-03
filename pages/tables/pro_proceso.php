@@ -567,7 +567,11 @@ else
                                     
                                     <ul class="dropdown-menu pull-right">
                                        <li>
-                                       <a id="nuevo" class="btn btn-warning btn-xs waves-effect" data-toggle="modal" data-target="#defaultModal">Nuevo</a>
+                                       <!-- <a id="nuevo" class="btn btn-warning btn-xs waves-effect" data-toggle="modal" data-target="#defaultModal">Nuevo</a> -->
+
+                                       <a id="nuevo" class="btn btn-warning btn-xs waves-effect">Nuevo</a>
+
+
                                       <!--  <button type="button" class="btn btn-default waves-effect m-r-20" data-toggle="modal" data-target="#defaultModal">Nuevo</button>-->
                                         </li>
                                         <!-- 
@@ -667,27 +671,6 @@ if( $mproceso['estado'] < 2)
         <tr>
             <td>
                 <a href="javascript:void(0);" onclick="cambiar('../forms/editar<?php echo $nombre_lnk ;?>.php?f=<?php echo $idTabla; ?>')" class="nav nav-tabs nav-stacked" data-toggle="modal" data-target="#defaultModalEditar" style="text-decoration:none;"><?php echo $NombreTabla; ?></a>        	
-                <!-- Default Editar -->
-                <div class="modal fade" id="defaultModalEditar" tabindex="-1" role="dialog">
-                    <div class="modal-dialog" role="document">
-                        <div class="modal-content" >
-                            <div class="modal-header">
-                                <h4 class="modal-title" id="defaultModalLabel">Editar</h4>
-                            </div>
-                            
-                            <div class="modal-body">
-                                <object type="text/html" 
-                                style="padding :0px; position: relative; height: 85vh; max-height:85vh; bottom:0; overflow: hidden; margin: 0;"
-                                data="../forms/editar<?php echo $nombre_lnk ;?>.php" id="carga"></object>                           
-                            </div>
-
-                            <div class="modal-footer">
-                                <!-- <button type="button" class="btn btn-link waves-effect">SAVE CHANGES</button> -->                            
-                                <button type="button" class="btn btn-info waves-effect" data-dismiss="modal" id="cerrarModal">CERRAR</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>         
             </td>            
             <td><?php echo $AsignadoA; ?></td>
             <td><?php echo $Ubicacion; ?></td>
@@ -710,26 +693,46 @@ if( $mproceso['estado'] < 2)
         </div>
     </section>
 
+	<!-- Default Editar -->
+	<div class="modal fade" id="defaultModalEditar" tabindex="-1" role="dialog">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content" >
+				<div class="modal-header">
+					<h4 class="modal-title" id="defaultModalLabel">Editar</h4>
+				</div>
+				
+				<div class="modal-body">
+					<object type="text/html" 
+					style="padding :0px; position: relative; height: 85vh; max-height:85vh; bottom:0; overflow: hidden; margin: 0;"
+					data="../forms/editar<?php echo $nombre_lnk ;?>.php" id="carga"></object>                           
+				</div>
 
- <!-- Default Size -->
-            <div class="modal fade" id="defaultModal" tabindex="-1" role="dialog">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content" >
-                        <div class="modal-header">
-                            <!-- <h4 class="modal-title" id="defaultModalLabel">Crear</h4> -->
-                        </div>
-                        
-                        <div class="modal-body">                         
-                            <object style="padding :0px; position: relative; height: 85vh; max-height:85vh; bottom:0; overflow: hidden; margin: 0;" 
-                            type="text/html" data="../forms/form-validationBase<?php echo $nombre_lnk ;?>.php" id="crear"></object>
-                        </div>
-                        <div class="modal-footer">
-                            <!-- <button type="button" class="btn btn-link waves-effect">SAVE CHANGES</button> -->
-                            <button type="button" class="btn btn-info waves-effect" data-dismiss="modal" id="cerrarModalC">CERRAR Crear.</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
+				<div class="modal-footer">
+					<!-- <button type="button" class="btn btn-link waves-effect">SAVE CHANGES</button> -->                            
+					<button type="button" class="btn btn-info waves-effect" data-dismiss="modal" id="cerrarModal">CERRAR</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- Default Size -->
+	<div class="modal fade" id="defaultModal" tabindex="-1" role="dialog">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content" >
+				<div class="modal-header">
+					<!-- <h4 class="modal-title" id="defaultModalLabel">Crear</h4> -->
+				</div>
+				
+				<div class="modal-body">                         
+					<object style="padding :0px; position: relative; height: 85vh; max-height:85vh; bottom:0; overflow: hidden; margin: 0;" 
+					type="text/html" data="../forms/form-validationBase<?php echo $nombre_lnk ;?>.php" id="crear"></object>
+				</div>
+				<div class="modal-footer">
+					<!-- <button type="button" class="btn btn-link waves-effect">SAVE CHANGES</button> -->
+					<button type="button" class="btn btn-info waves-effect" data-dismiss="modal" id="cerrarModalC">CERRAR Crear.</button>
+				</div>
+			</div>
+		</div>
+	</div>
 
 
     <!-- Bootstrap Core Js -->
@@ -775,6 +778,7 @@ if( $mproceso['estado'] < 2)
 
     $("#nuevo").on("click", function(){
         //window.location='../forms/form-validationBasepais.php';
+        window.location = 'pro_procesoforma.php';
     });
 
  }); 
