@@ -151,15 +151,16 @@ require_once('../../apis/general/area.php');
         $("#tipojuzgado").on('change', function(e) {
             var _tipojuzgado = $("#tipojuzgado").val();
             $.ajax({
-                url: "urlink.php",
+                url: "../tables/urlink.php",
                 method: "GET",                
                 data: {funcion: "ja", origen: _tipojuzgado},                
                 dataType: "text",
                 success: function(data) {
                     var zz =JSON.parse(data);
-                    var _NombreArea = zz.juz_juzgado.ARE_Nombre;
-                    $("#area").attr("value",_NombreArea);
-                    _area = zz.juz_juzgado.JUZ_IdArea;
+					
+                    //var _NombreArea = zz.juz_juzgado.ARE_Nombre;
+                    //$("#area").attr("value",_NombreArea);
+                    //_area = zz.juz_juzgado.JUZ_IdArea;
                     //nroProceso();
                 }
             });

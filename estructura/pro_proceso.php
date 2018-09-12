@@ -21,7 +21,7 @@ class PRO_PROCESO
     public static function getAll()
     {
         $consulta = "SELECT ".$GLOBALS['Llave'].", PRO_NumeroProceso, PRO_FechaInicio, 
-            PRO_IdUsuario, concat_WS(' ', USU_Nombre, USU_PrimerApellido,USU_SegundoApellido) AS AsginadoA,
+            PRO_IdUsuario, concat_WS(' ', USU_Nombre, USU_PrimerApellido,USU_SegundoApellido) AS AsignadoA,
             PRO_IdUbicacion, UBI_Nombre AS Ubicacion, 
             PRO_IdClaseProceso, CPR_Nombre AS ClaseProceso,
             PRO_IdJuzgadoOrigen, JUZ_Ubicacion AS Juzgado, 
@@ -31,7 +31,7 @@ class PRO_PROCESO
             " JOIN usu_usuario ON usu_usuario.USU_IdUsuario = PRO_IdUsuario ".
             " JOIN pro_ubicacion ON pro_ubicacion.UBI_IdUbicacion = PRO_IdUbicacion ".
             " JOIN pro_claseproceso ON pro_claseproceso.CPR_IdClaseProceso = PRO_IdClaseProceso ".
-            " JOIN juz_juzgado ON juz_juzgado.JUZ_IdJuzgado = PRO_IdJuzgadoOrigen ".
+            " LEFT JOIN juz_juzgado ON juz_juzgado.JUZ_IdJuzgado = PRO_IdJuzgadoOrigen ".
             " ORDER BY PRO_NumeroProceso; ";
         try {
             // Preparar sentencia
@@ -80,7 +80,7 @@ class PRO_PROCESO
 
 
     /**
-     * Obtiene los campos de una GEN_PAIS con un estado Activo
+     * Obtiene los campos de una PRO_PROCESO con un estado Activo
      * determinado
      *
      * @param $IdEstadoTabla Identificador del estado de la tabla
@@ -88,7 +88,7 @@ class PRO_PROCESO
      */
     public static function getByIdEstado($IdEstadoTabla)
     {
-        // Consulta de la GEN_PAIS
+        // Consulta de la PRO_PROCESO
         $consulta = "SELECT ".$GLOBALS['Llave'].", UBI_Nombre, UBI_Estado ".
                     " FROM ". $GLOBALS['TABLA'].
                     " WHERE UBI_Estado = ? ORDER BY UBI_Nombre; ";
@@ -111,7 +111,7 @@ class PRO_PROCESO
 
 
     /**
-     * Obtiene los campos de una GEN_PAIS con un estado Activo
+     * Obtiene los campos de una PRO_PROCESO con un estado Activo
      * determinado
      *
      * @param $IdEstadoTabla Identificador de Estado de la tabla
@@ -119,7 +119,7 @@ class PRO_PROCESO
      */
     public static function getByIdExiste($IdEstadoTabla)
     {
-        // Consulta de la GEN_PAIS
+        // Consulta de la PRO_PROCESO
         $consulta = "SELECT Count(".$GLOBALS['Llave'].") AS TotalTablas, UBI_Nombre, UBI_Estado ".
                     " FROM ". $GLOBALS['TABLA'].
                     " WHERE ".$GLOBALS['Llave']."  = ? ;";
@@ -173,29 +173,56 @@ class PRO_PROCESO
     /**
      * Insertar un nueva Tabla
      *         
-     * @param $IdTabla            identificador
-     * @param $Nombre             nuevo Nombre Tabla     
-     * @param $Estado             Estado   
+     * @param $IdTabla               identificador
+     * @param $Proceso               Proceso     
+     * @param $Fechainicio           Fechainicio
+     * @param $Asignadoa             Asignadoa     
+     * @param $Ubicacion             Ubicacion   
+     * @param $Claseproceso          Claseproceso      
+     * @param $Demandante            Demandante 
+     * @param $Demandado             Demandado
+     * @param $Estado                Estado 
      * @return PDOStatement
      */
     public static function insert(        
-        $Nombre,        
+        $Demandante,
+        $Demandado,
+        $Proceso,
+        $Fechainicio,
+        $Asignadoa,
+        $Ubicacion,
+        $Claseproceso,                
+        $JuzgadoOrigen,                
         $Estado
     )
     {
         // Sentencia INSERT
         $comando = "INSERT INTO ". $GLOBALS['TABLA'] ." ( " . 
-            " UBI_Nombre," .            
-            " UBI_Estado" . 
+            " PRO_IdDemandante, " .            
+            " PRO_IdDemandado, " . 
+            " PRO_NumeroProceso, " .            
+            " PRO_FechaInicio, " . 
+            " PRO_IdUsuario, " .            
+            " PRO_IdUbicacion, " . 
+            " PRO_IdClaseProceso, " .            
+            " PRO_IdJuzgadoOrigen, " . 
+            " PRO_EstadoProceso " . 
             " )".     
-            " VALUES(?,?) ;";
+            " VALUES(?,?,?,?,?,?,?,?,?) ;";
 
         // Preparar la sentencia
         $sentencia = Database::getInstance()->getDb()->prepare($comando);
 
         return $sentencia->execute(
-            array(                
-                $Nombre,                
+            array(
+                $Demandante,
+                $Demandado,
+                $Proceso,
+                $Fechainicio,
+                $Asignadoa,
+                $Ubicacion,
+                $Claseproceso,                
+                $JuzgadoOrigen,                
                 $Estado
             )
         );

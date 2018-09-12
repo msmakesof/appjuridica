@@ -57,9 +57,9 @@ if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
     $resultado = curl_exec ($ch);
     curl_close($ch);
 
-    $mareasxtipojuzgado =  preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $resultado);    
-    $mareasxtipojuzgado = json_decode($mareasxtipojuzgado, true);
-    //echo("<script>console.log('PHP: ".print_r($mareasxtipojuzgado)."');</script>");
+    $mjuzgado =  preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $resultado);    
+    $mjuzgado = json_decode($mjuzgado, true);
+    //echo("<script>console.log('PHP: ".print_r($mjuzgado)."');</script>");
     //echo("<script>console.log('PHP: ".count($m['juz_area'])."');</script>");
     
     $json_errors = array(
@@ -82,6 +82,6 @@ if($soportecURL == "N")
     $response = Unirest\Request::get($url, array("X-Mashape-Key" => "MY SECRET KEY"));
     $resultado = $response->raw_body;
     $resultado = preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $resultado);
-    $mareasxtipojuzgado = json_decode($resultado, true);	        
+    $mjuzgado = json_decode($resultado, true);	        
 } 
 ?>

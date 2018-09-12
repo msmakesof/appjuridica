@@ -174,42 +174,21 @@ else
 
    <script type="text/javascript">
     var nombre ="";
-    // var _zipDeptoCiudad = "";
-    // var _zip = "";
-    // var _juzgado = "";
-    // var _area = "";
-    // var _nProceso = "";
-    // var _nDv = "";
-    // var _Proceso = "";
-
-    function init_contador(idtextarea, idcontador)
-    {
-        function update_contador(idtextarea, idcontador)
-        {
-            var contador = $(idcontador);
-            var ta = $(idtextarea);
-            contador.html(ta.val().length);
-        }
-
-        $(idtextarea).keyup(function()
-        {
-            update_contador(idtextarea, idcontador);
-        });
-
-        $(idtextarea).change(function()
-        {
-            update_contador(idtextarea, idcontador);
-        });            
-    }
-
+    var _zipDeptoCiudad = "";
+    var _zip = "";
+    var _juzgado = "";
+    var _area = "";
+    var _nProceso = "";
+    var _nDv = "";
+    var _Proceso = "";
     $(document).ready(function()
     {       
         $("#msj").hide();
-		//$("#area").attr("value", "");
-        //$('#zip').numeric();        
-		//$('#ndv').numeric();
-        $('#proceso').numeric();
+		$("#area").attr("value", "");
+        //$('#zip').numeric();
         $('#anio').numeric();
+		$('#ndv').numeric();
+        $('#nproceso').numeric(); 
         $('.selectpicker').selectpicker();
         $('#fechainicio').datetimepicker({
           format: 'YYYY-MM-DD'       
@@ -227,7 +206,53 @@ else
             });
         }
 
-        init_contador("#proceso","#muestrocantidadcaracteresid");        
+        $("#zip").on('change', function(e) {
+            _zip = $("#zip").val();
+            $.ajax({
+                url: "urlink.php",
+                method: "GET",                
+                data: {funcion: "c", origen: _zip},                
+                dataType: "text",
+                success: function(data) {
+                    var zz =JSON.parse(data);
+                    _zipDeptoCiudad = zz.gen_ciudad.DEP_CodigoDane+zz.gen_ciudad.CIU_Abreviatura;                   
+                    nroProceso();
+                }
+            });
+            nroProceso();
+        });           
+
+        $("#juzgado").on('change', function(e) {
+            _juzgado = $("#juzgado").val();
+            $.ajax({
+                url: "urlink.php",
+                method: "GET",                
+                data: {funcion: "j", origen: _juzgado},                
+                dataType: "text",
+                success: function(data) {
+                    var zz =JSON.parse(data);
+                    var _NombreArea = zz.juz_juzgado.ARE_Nombre;
+                    $("#area").attr("value",_NombreArea);
+                    _area = zz.juz_juzgado.JUZ_IdArea;
+                    nroProceso();
+                }
+            });            
+        });
+
+        $("#nproceso").on('change', function(e) {
+            _nProceso = $("#nproceso").val();
+            nroProceso();
+        });
+		
+		$("#ndv").on('change', function(e) {
+            _nDv = $("#ndv").val();
+            nroProceso();
+        });
+
+        function nroProceso(){
+            _Proceso = _zipDeptoCiudad + _area + _juzgado + $("#anio").val() + _nProceso + _nDv;
+            $("#proceso").attr("value",_Proceso);    
+        } 
 
         $("#cerrar").on('click', function(e) {
             e.preventDefault();
@@ -236,29 +261,28 @@ else
 
         $("#grabar").on('click', function(e) {
 
-            var proceso = $("#proceso").val();            
-            var fechainicio = $("#txtFecha").val();
-            var asignadoa = $("#usuario").val();
-            var ubicacion = $("#ubicacion").val();
-            var claseproceso = $("#claseproceso").val();
-            //juzgado = $("#juzgado").val();
-            var demandante = $("#demandante").val();
-            var demandado = $("#demandado").val();
+            var nombre = $("#proceso").val();
+            //nombre = nombre.toUpperCase();
+            fechainicio = $("#txtFecha").val();
+            usuario = $("#usuario").val();
+            ubicacion = $("#ubicacion").val();
+            claseproceso = $("#claseproceso").val();
+            juzgado = $("#juzgado").val();
             var estado = $('input:radio[name=estado]:checked').val();
             e.preventDefault();
-            if( estado == undefined || proceso == "" || fechainicio == "" || asignadoa == "" || ubicacion == "" || claseproceso == "" || demandante == "" || demandado == "")
+            if( estado == undefined || nombre == "" || fechainicio == "" || usuario == "" || ubicacion == "" || claseproceso == "" || juzgado == "" )
             {                 
-                swal("Atención:", "Debe digitar un Nro. Proceso y/o seleccionar un Estado y/o Fecha de Inicio  y/o Asignado A  y/o Ubicación  y/o  clase Proceso  y/o Demandante y/o Demandado.");
+                swal("Atencion:", "Debe digitar un Nombre y/o seleccionar un Estado y/o Fecha de Inicio  y/o Usuario  y/o Ubicacion  y/o  clase Proceso  y/o  Juzgado.");
                 e.stopPropagation();
                 return false;
             }
             else
             {
                 $.ajax({
-                    data : {"pproceso": proceso, "pfechainicio": fechainicio, "pasignadoa": asignadoa, "pubicacion": ubicacion, "pclaseproceso": claseproceso ,"pdemandante": demandante, "pdemandado": demandado, "pestado": estado},
+                    data : {"pnombre": nombre, "pfechainicio": $fechainicio, "pusuario": $usuario, "pubicacion": $ubicacion, "pclaseproceso": $claseproceso ,"pjuzgado": $juzgado,"pestado": estado},
                     type: "POST",
                     dataType: "html",
-                    url : "../forms/crea_<?php echo strtolower($NombreTabla); ?>.php",
+                    url : "crea_<?php echo strtolower($NombreTabla); ?>.php",
                 })
                 .done(function( data, textStatus, jqXHR){                 
                     var xrespstr = data.trim();
@@ -627,7 +651,7 @@ $url         = urlServicios."consultadetalle/consultadetalle_pro_proceso.php?IdM
 $existe      = "";
 $usulocal    = "";
 $siguex      = "";
-//echo("<script>console.log('PHP proproceso: $url');</script>");
+
 if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
 {
     $ch = curl_init();
@@ -693,17 +717,109 @@ if( $mproceso['estado'] < 2)
                         <!-- form -->
                         <form id="form_validation" method="POST"  autocomplete="ÑÖcompletes">
 
+                                <div class="form-group" style="clear: both; margin-top:15px;">
+                                    <div class="form-group">
+										<div class="col-xs-12 caja">
+											<div class="row">
+												<div class="col-xs-5">                                                
+													<label class="form-label">C&oacute;digo DANE Municipio:</label>
+													<div class="form-line">
+														<!-- <input type="number" onkeypress="return isNumeric(event)" oninput="maxLengthCheck(this)" class="form-control" name="zip" id="zip" min="1" max="99999" maxlength="5" required> -->
+                                                        <select class="selectpicker show-tick" data-live-search="true" data-width="100%" name="zip" id="zip" required>
+                                                        <option value="" >Seleccione Municipio...</option>
+                                                        <?php
+                                                            for($i=0; $i<count($mciudad['gen_ciudad']); $i++)
+                                                            {
+                                                                $CIU_IdCiudades = $mciudad['gen_ciudad'][$i]['CIU_IdCiudades'];
+                                                                $CIU_Nombre = $mciudad['gen_ciudad'][$i]['CIU_Nombre'];
+                                                                $CIU_Abreviatura = $mciudad['gen_ciudad'][$i]['CIU_Abreviatura'];                                                                
+                                                                $CIU_IdDepartamento = $mciudad['gen_ciudad'][$i]['CIU_IdDepartamento'];
+                                                        ?>
+                                                                <option value="<?php echo $CIU_IdCiudades; ?>" >
+                                                                    <?php echo $CIU_Nombre ; ?>                                                
+                                                                </option>
+                                                        <?php
+                                                            }
+                                                        ?>
+                                                        </select>
+													</div>
+												</div>
+
+												<div class="col-xs-7">
+													<label class="form-label">Corporaci&oacute;n / Juzgado:</label>                                        
+													<select class="selectpicker show-tick" data-live-search="true" data-width="100%" name="juzgado" id="juzgado" required>
+													<option value="" >Seleccione Juzgado...</option>
+													<?php
+														for($i=0; $i<count($mjuzgado['juz_juzgado']); $i++)
+														{
+															$JUZ_IdJuzgado = $mjuzgado['juz_juzgado'][$i]['JUZ_IdJuzgado'];
+															$JUZ_Ubicacion = $mjuzgado['juz_juzgado'][$i]['JUZ_Ubicacion'];
+															$JUZ_Area = $mjuzgado['juz_juzgado'][$i]['ARE_Nombre'];
+															$JUZ_IdArea = $mjuzgado['juz_juzgado'][$i]['JUZ_IdArea'];                                                        
+													?>
+															<option value="<?php echo $JUZ_IdJuzgado; ?>" >
+																<?php echo $JUZ_Ubicacion ; ?>                                                
+															</option>
+													<?php
+														}
+													?>
+													</select>
+												</div>
+											</div>
+										</div>
+									</div>	
+                                </div>                                
+
+                                <div class="form-group">                               
+                                    <div class="col-xs-12 caja">
+                                        <div class="row">
+                                            <div class="col-xs-7">                                                
+                                                <label class="form-label">Area:</label>
+                                                <div class="form-line">
+                                                    <input type="text" class="form-control" name="area" id="area" value="<?php echo $JUZ_Area ;?>" maxlength="5" autocomplete="ÑÖcompletes" required>                                                
+                                                </div>                                                
+                                            </div>
+                                            
+                                            <div class="col-xs-5">
+                                                <label class="form-label">Año</label>                                        
+                                                <div class="form-line">
+                                                    <input type="text" class="form-control" name="anio" id="anio" value="<?php echo $yy; ?>" maxlength="4" autocomplete="ÑÖcompletes" required>
+                                                    <label class="form-label"></label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>                                    
+                                </div>
+                                
+                                
+                                <div class="form-group">                                    
+                                    <div class="col-xs-12 caja">
+                                        <div class="row">
+											<div class="col-xs-6">
+												<label class="form-label">Proceso:</label>
+													<div class="form-line">
+														<input type="number" onkeypress="return isNumeric(event)" oninput="maxLengthCheck(this)" class="form-control" name="nproceso"id="nproceso" min="1" max="99999" maxlength="5" autocomplete="off" required>
+													</div>												
+											</div>
+											
+											<div class="col-xs-3">
+												<label class="form-label">Control:</label>
+													<div class="form-line">
+														<input type="number" onkeypress="return isNumeric(event)" oninput="maxLengthCheck(this)" class="form-control" name="ndv"id="ndv" min="0" max="99" maxlength="2" autocomplete="off" required>
+													</div>												
+											</div>											
+										</div>	
+									</div>	
+								</div>	
+
                                 <div class="form-group">
 									<div class="col-xs-12 caja">
                                         <div class="row">
 											<div class="col-sm-6">
 												<label class="form-label">C&oacute;digo &Uacute;nico del Proceso:</label>
 												<div class="form-line">
-													<input type="number" onkeypress="return isNumeric(event)" oninput="maxLengthCheck(this)" class="form-control" name="proceso" id="proceso" value="" maxlength="23" required />                                                    
+													<input type="text" class="form-control" name="proceso"id="proceso" value="" maxlength="23" required readonly/>													
 												</div>
-                                                <div style="font-size:11px;">
-                                                        Caracteres: <span id="muestrocantidadcaracteresid">0</span> de 23
-                                                    </div>
 											</div>
 											
 											<div class="col-sm-6">
@@ -799,7 +915,7 @@ if( $mproceso['estado'] < 2)
 										<div class="row">											
 											<div class="col-sm-8">
                                                 <label class="form-label">Demandante:</label>
-												<select class="selectpicker show-tick" data-live-search="true" data-width="100%" name="demandante" id="demandante" required>
+												<select class="selectpicker show-tick" data-live-search="true" data-width="100%" name="cliente" id="cliente" required>
 												<option value="" >Seleccione Cliente...</option>
 												<?php
 													for($i=0; $i<count($mcliente['cli_cliente']); $i++)

@@ -588,19 +588,21 @@ else
                          <table class="table table-bordered table-striped table-hover dataTable js-exportable" id="grid">
                                 <thead>
                                     <tr>
-                                        <th>Proceso</th>
+                                        <th>No. Proceso</th>
                                         <th>Asignado A</th>
                                         <th>Ubicaci&oacute;n</th>
                                         <th>Clase Proceso</th>
+                                        <th>Juzgado</th>
                                         <th>Activo</th> 
                                     </tr>
                                 </thead>
                                 <tfoot>
                                     <tr>
-                                        <th>Proceso</th>
+                                        <th>No. Proceso</th>
                                         <th>Asignado A</th>
                                         <th>Ubicaci&oacute;n</th>
                                         <th>Clase Proceso</th>
+                                        <th>Juzgado</th>
                                         <th>Activo</th>                                        
                                     </tr>
                                 </tfoot>
@@ -612,7 +614,7 @@ $url         = urlServicios."consultadetalle/consultadetalle_pro_proceso.php?IdM
 $existe      = "";
 $usulocal    = "";
 $siguex      = "";
-
+//echo("<script>console.log('PHP proproceso: $url');</script>");
 if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
 {
     $ch = curl_init();

@@ -139,10 +139,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     elseif(isset($_GET['insert']) )
     {
         //Obtener Parametros
-        $par1 = $_GET['Nombre'];        
-        $par3 = $_GET['Estado'];
+        $par1 = $_GET['Demandante'];
+        $par2 = $_GET['Demandado'];        
+        $par3 = $_GET['Proceso'];        
+        $par4 = $_GET['Fechainicio'];
+        $par5 = $_GET['Asignadoa'];        
+        $par6 = $_GET['Ubicacion'];
+        $par7 = $_GET['Claseproceso'];
+        $par8 = $_GET['JuzgadoOrigen'];
+        $par9 = $_GET['Estado'];
 
-        $retorno = PRO_PROCESO::insert($par1, $par3);
+        $retorno = PRO_PROCESO::insert($par1, $par2, $par3, $par4, $par5, $par6, $par7, $par8, $par9);
         $msj = $retorno;
         if($retorno)
         {
