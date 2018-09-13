@@ -88,8 +88,8 @@ else
     <!-- Bootstrap Core Css -->
     <link href="../../plugins/bootstrap/css/bootstrap.css" rel="stylesheet">
 
-        <!-- DateTime Picker -->
-        <link href="../../calendar/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
+    <!-- DateTime Picker -->
+    <link href="../../calendar/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
 
     <!-- Waves Effect Css -->
     <link href="../../plugins/node-waves/waves.css" rel="stylesheet" />
@@ -103,12 +103,12 @@ else
     <!-- JQuery DataTable Css 20160903 MKS-->
     <link href="../../plugins/jquery-datatable/skin/bootstrap/css/dataTables.bootstrap.css" rel="stylesheet">
 
-        <!-- Sweet Alert Css -->
-        <link href="../../css/sweet/sweetalert.css" rel="stylesheet" />
-        <link href="../../css/sweet/main.css" rel="stylesheet" />
+    <!-- Sweet Alert Css -->
+    <link href="../../css/sweet/sweetalert.css" rel="stylesheet" />
+    <link href="../../css/sweet/main.css" rel="stylesheet" />
 
-        <!-- Bootstrap Select Css -->
-        <link href="../../plugins/bootstrap-select/css/bootstrap-select.css" rel="stylesheet" />
+    <!-- Bootstrap Select Css -->
+    <link href="../../plugins/bootstrap-select/css/bootstrap-select.css" rel="stylesheet" />
 
     <!-- Custom Css -->
     <link href="../../css/style.css" rel="stylesheet">
@@ -119,7 +119,7 @@ else
     <!-- Jquery Core Js -->
     <script src="../../plugins/jquery/jquery.min.js"></script>
 
-       <!-- Sweet Alert Plugin Js -->
+    <!-- Sweet Alert Plugin Js -->
     <!--  <script src="../../plugins/sweetalert/sweetalert.min.js"></script> -->
     <script src="../../js/sweet/functions.js"></script>
     <script src="../../js/sweet/sweetalert.min.js"></script>
@@ -695,7 +695,7 @@ if( $mproceso['estado'] < 2)
 
                                 <div class="form-group">
 									<div class="col-xs-12 caja">
-                                        <div class="row">
+                                        <div class="row" style="margin-bottom:-6px !important;">
 											<div class="col-sm-6">
 												<label class="form-label">C&oacute;digo &Uacute;nico del Proceso:</label>
 												<div class="form-line">
@@ -720,7 +720,7 @@ if( $mproceso['estado'] < 2)
                                 
                                 <div class="form-group">
                                     <div class="col-xs-12 caja">
-										<div class="row">											
+										<div class="row" style="margin-bottom:-6px !important;">											
 											<div class="col-sm-8">
                                                 <label class="form-label">Asignado a:</label>
 												<select class="selectpicker show-tick" data-live-search="true" data-width="100%" name="usuario" id="usuario" required>
@@ -745,7 +745,7 @@ if( $mproceso['estado'] < 2)
 
                                 <div class="form-group form-float" style="clear: both;">
                                     <div class="col-xs-12 caja">
-                                        <div class="row">
+                                        <div class="row" style="margin-bottom:-6px !important;">
                                             <div class="col-sm-6">
                                                 <label class="form-label">Ubicación:</label>                                                                                   
                                                 <select class="selectpicker show-tick" data-live-search="true" data-width="100%" name="ubicacion" id="ubicacion" required>
@@ -768,10 +768,9 @@ if( $mproceso['estado'] < 2)
                                     </div>                                       
                                 </div>
 
-
                                 <div class="form-group form-float" style="clear: both;">
                                     <div class="col-xs-12 caja">
-                                        <div class="row">
+                                        <div class="row" style="margin-bottom:-6px !important;">
                                             <div class="col-sm-8">
                                                 <label class="form-label">Clase Proceso:</label>                                                
                                                     <select class="selectpicker show-tick" data-live-search="true" data-width="100%" name="claseproceso" id="claseproceso" required>
@@ -796,7 +795,7 @@ if( $mproceso['estado'] < 2)
 								
 								<div class="form-group">
                                     <div class="col-xs-12 caja">
-										<div class="row">											
+										<div class="row" style="margin-bottom:-6px !important;">											
 											<div class="col-sm-8">
                                                 <label class="form-label">Demandante:</label>
 												<select class="selectpicker show-tick" data-live-search="true" data-width="100%" name="demandante" id="demandante" required>
@@ -816,12 +815,12 @@ if( $mproceso['estado'] < 2)
 												</select>
 											</div>
 										</div>	
-                                    </div>                                       
+                                    </div>
                                 </div>
 								
 								<div class="form-group">
                                     <div class="col-xs-12 caja">
-										<div class="row">											
+										<div class="row" style="margin-bottom:-6px !important;">											
 											<div class="col-sm-8">
                                                 <label class="form-label">Demandado:</label>
 												<select class="selectpicker show-tick" data-live-search="true" data-width="100%" name="demandado" id="demandado" required>
@@ -841,7 +840,7 @@ if( $mproceso['estado'] < 2)
 												</select>
 											</div>
 										</div>	
-                                    </div>                                       
+                                    </div>
                                 </div>
                                 
                                 <div class="form-group form-float" style="clear: both;">

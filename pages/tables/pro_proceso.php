@@ -705,7 +705,7 @@ if( $mproceso['estado'] < 2)
 				
 				<div class="modal-body">
 					<object type="text/html" 
-					style="padding :0px; position: relative; height: 85vh; max-height:85vh; bottom:0; overflow: hidden; margin: 0;"
+					style="padding :0px; position: relative; height: 76vh; max-height:76vh; bottom:0; overflow: hidden; margin: 0;"
 					data="../forms/editar<?php echo $nombre_lnk ;?>.php" id="carga"></object>                           
 				</div>
 

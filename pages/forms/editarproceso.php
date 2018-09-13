@@ -41,34 +41,36 @@ if (!function_exists("GetSQLValueString"))
 
 
 $idTabla = 0;
-require_once('../../apis/general/tipodocumento.php');
-require_once('../../apis/general/tipousuario.php');
+require_once('../../apis/general/ciudad.php');
+require_once('../../apis/usuario/infoUsuario.php');
+require_once('../../apis/proceso/ubicacion.php');
+require_once('../../apis/proceso/claseproceso.php');
+require_once('../../apis/juzgado/juzgado.php');
+require_once('../../apis/cliente/infoCliente.php');
 
 if( isset($_GET['f'])  && !empty($_GET['f']) )
 {    
     $idTabla = trim($_GET['f']);
 }
-$Tabla ="USUARIOS";
+$Tabla ="PROCESO";
 $strowreg =0;
 $idtabla = 0;
 $row_rs_tabla = 0;
 $Nombreciudad = "";
 
-require_once('../../apis/usuario/infoUsuario.php');
+require_once('../../apis/proceso/proceso.php');
 
-$idtabla = $muser['usu_usuario']['USU_IdUsuario'];
-$TipoDocumento = $muser['usu_usuario']['USU_TipoDocumento'];
-$NumeroDocumento = trim($muser['usu_usuario']['USU_Identificacion']);
-$Apellido1 = trim($muser['usu_usuario']['USU_PrimerApellido']);
-$Apellido2 = trim($muser['usu_usuario']['USU_SegundoApellido']);
-$NombreAlumno = trim($muser['usu_usuario']['USU_Nombre']);
-$Email = trim($muser['usu_usuario']['USU_Email']);
-$Direccion = trim($muser['usu_usuario']['USU_Direccion']);
-$Celular = trim($muser['usu_usuario']['USU_Celular']);
-$Usuario = trim($muser['usu_usuario']['USU_Usuario']);
-$Clave = $muser['usu_usuario']['USU_Clave'];
-$EstadoEst = $muser['usu_usuario']['USU_Estado'];
-$TipoUsuario = $muser['usu_usuario']['USU_TipoUsuario'];
+$idtabla = $mproceso['pro_proceso']['PRO_IdProceso'];
+$IdDemandante = $mproceso['pro_proceso']['PRO_IdDemandante'];
+$IdDemandado = trim($mproceso['pro_proceso']['PRO_IdDemandado']);
+$NumeroProceso = trim($mproceso['pro_proceso']['PRO_NumeroProceso']);
+$FechaInicio = trim($mproceso['pro_proceso']['PRO_FechaInicio']);
+$FechaInicio = date('Y-m-d', strtotime($FechaInicio));
+$IdUsuario = trim($mproceso['pro_proceso']['PRO_IdUsuario']);
+$IdUbicacion = trim($mproceso['pro_proceso']['PRO_IdUbicacion']);
+$IdClaseProceso = trim($mproceso['pro_proceso']['PRO_IdClaseProceso']);
+$IdJuzgadoOrigen = trim($mproceso['pro_proceso']['PRO_IdJuzgadoOrigen']);
+$EstadoProceso = trim($mproceso['pro_proceso']['PRO_EstadoProceso']);
 ?>
 <!DOCTYPE html>
 <html>
@@ -83,6 +85,9 @@ $TipoUsuario = $muser['usu_usuario']['USU_TipoUsuario'];
 
     <!-- Bootstrap Core Css -->
     <link href="../../plugins/bootstrap/css/bootstrap.css" rel="stylesheet">
+
+    <!-- DateTime Picker -->
+    <link href="../../calendar/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
 
     <!-- Waves Effect Css -->
     <link href="../../plugins/node-waves/waves.css" rel="stylesheet" />
@@ -107,7 +112,21 @@ $TipoUsuario = $muser['usu_usuario']['USU_TipoUsuario'];
 
     <link rel="stylesheet" href="../../css/themes2/alertify.core.css" />
     <link rel="stylesheet" href="../../css/themes2/alertify.default.css" id="toggleCSS" />
+    <style>
+        .caja
+        {
+            margin-top:-10px;
+        }
+        .cajax
+        {
+            margin-top:10px;
+        }
 
+        .rowx
+        {
+            margin-bottom:-24px !important;
+        }
+    </style>
 </head>
 
 <body class="theme-indigo">
@@ -136,135 +155,178 @@ $TipoUsuario = $muser['usu_usuario']['USU_TipoUsuario'];
                         </div>-->
                         <div class="body  table-responsive">
                             <form id="form_validation" method="POST">
+
                                 <div class="form-group">
-                                    <div style="float: left;">                                    
-                                        <label class="form-label">
-                                            Tipo Documento
-                                        </label>                                    
-                                        <div class="col-sm-4">
-                                           <input type="hidden" class="form-control" name="IdEstudiante" id="IdEstudiante" value="<?php echo $idtabla ;?>" readonly>
-                                            <select class="selectpicker show-tick" data-live-search="true" data-width="90%" name="tipodocumento" id="tipodocumento" required>
-                                                <?php                                                    
-                                                    for($i=0; $i<count($mtipodocumento['gen_tipodocumento']); $i++)
-                                                    {                                                         
-                                                        $TDO_IdTipoDocumento = $mtipodocumento['gen_tipodocumento'][$i]['TDO_IdTipoDocumento'];
-                                                        $TDO_Abreviatura = $mtipodocumento['gen_tipodocumento'][$i]['TDO_Abreviatura'];
-                                                        $TDO_Nombre = $mtipodocumento['gen_tipodocumento'][$i]['TDO_Nombre'];
-                                                ?>                                                
-                                                        <option value="<?php echo $TDO_IdTipoDocumento; ?>" <?php if (trim($TDO_IdTipoDocumento) == trim($TipoDocumento)){ echo "selected/=selected/";} else{ echo "";} ?>>
-                                                            <?php echo $TDO_Nombre ; ?>                                                
-                                                        </option>
-                                                <?php                    
-                                                    } 
-                                                ?>
-                                            </select>
-                                        </div> 
-                                    </div>                                    
-                                    <!-- </div>
-                                    <div class="form-group form-float"> -->
-                                    <div style="float: left;">
-                                        <label class="form-label">Número Documento</label>
-                                        <div class="form-line">
-                                            <input type="text" class="form-control" name="numerodocumento" id="numerodocumento" value="<?php echo $NumeroDocumento ;?>" maxlength="13" required>
+									<div class="col-xs-12 cajax">
+                                        <div class="row rowx">
+											<div class="col-sm-6">
+												<label class="form-label">C&oacute;digo &Uacute;nico del Proceso:</label>
+												<div class="form-line">
+													<input type="number" onkeypress="return isNumeric(event)" oninput="maxLengthCheck(this)" class="form-control" name="proceso" id="proceso" value="<?php echo $NumeroProceso; ?>" maxlength="23" required />                                                    
+												</div>
+                                                <div style="font-size:11px;">
+                                                        Caracteres: <span id="muestrocantidadcaracteresid">0</span> de 23
+                                                    </div>
+											</div>
+											
+											<div class="col-sm-6">
+												<label class="form-label">Fecha Inicio</label>												
+												<div class='input-group date form-line' name="fechainicio" id="fechainicio" required>
+													<input type='text' id="txtFecha" class="form-control" value="<?php echo $FechaInicio ;?>" readonly/>
+													<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span>
+													</span>
+												</div>
+											</div>																						
 										</div>
-									</div>    
-								</div>
+									</div>	
+                                </div>
 
-                                <div class="form-group form-float" style="clear: both;">
-                                    <label class="form-label">Nombre Usuario</label>
-                                    <div class="form-line">
-                                        <input type="text" class="form-control" name="nombre" id="nombre" value="<?php echo $NombreAlumno ;?>" required>
-                                       <!-- -->
-                                    </div>
-                                </div>
-								
-                                <div class="form-group form-float">
-                                    <label class="form-label">Primer Apellido</label>
-                                    <div class="form-line">
-                                        <input type="text" class="form-control" name="apellido1" id="apellido1" value="<?php echo $Apellido1 ;?>" required>                                       
-                                    </div>
-                                </div>  
 
-                                <div class="form-group form-float">
-                                    <label class="form-label">Segundo Apellido</label>
-                                    <div class="form-line">
-                                        <input type="text" class="form-control" name="apellido2" id="apellido2" value="<?php echo $Apellido2 ;?>" required>
-                                       <!-- -->
-                                    </div>
-                                </div>                                
+                                <div class="xform-group">
+                                    <div class="col-xs-12">
+										<div class="row rowx">											
+											<div class="col-sm-8">
+                                                <label class="form-label">Asignado a:</label>
+												<select class="selectpicker show-tick" data-live-search="true" data-width="100%" name="usuario" id="usuario" required>
+												<option value="" >Seleccione Asignado...</option>
+												<?php
+													for($i=0; $i<count($muser['usu_usuario']); $i++)
+													{
+														$USU_IdUsuario = $muser['usu_usuario'][$i]['USU_IdUsuario'];                                                
+														$USU_Nombre = $muser['usu_usuario'][$i]['NombreUsuario'];                                                
+												?>
+														<option value="<?php echo $USU_IdUsuario; ?>" <?php if ($USU_IdUsuario == $IdUsuario){ echo "selected";} else{ echo "";} ?>>
+															<?php echo $USU_Nombre ; ?>                                                
+														</option>
+												<?php
+													}
+												?>
+												</select>
+											</div>
+										</div>	
+                                    </div>                                       
+                                </div>
 
-                                 <div class="form-group form-float">
-                                    <label class="form-label">Clave</label>
-                                    <div class="form-line">
-                                        <input type="password" class="form-control" name="clave" id="clave" value="<?php echo $Clave ;?>" maxlength="30" required>                                       
+                                <div class="xform-group form-float" style="clear: both;">
+                                    <div class="col-xs-12">
+                                        <div class="row rowx">
+                                            <div class="col-sm-6">
+                                                <label class="form-label">Ubicación:</label>                                                                                   
+                                                <select class="selectpicker show-tick" data-live-search="true" data-width="100%" name="ubicacion" id="ubicacion" required>
+                                                <option value="" >Seleccione Ubicación...</option>
+                                                <?php
+                                                    for($i=0; $i<count($mubicacion['pro_ubicacion']); $i++)
+                                                    {
+                                                        $UBI_IdUbicacion = $mubicacion['pro_ubicacion'][$i]['UBI_IdUbicacion'];                                                
+                                                        $UBI_Nombre = $mubicacion['pro_ubicacion'][$i]['UBI_Nombre'];                                                
+                                                ?>
+                                                        <option value="<?php echo $UBI_IdUbicacion; ?>" <?php if ($UBI_IdUbicacion == $IdUbicacion){ echo "selected";} else{ echo "";} ?>>
+                                                            <?php echo $UBI_Nombre ; ?>                                                
+                                                        </option>
+                                                <?php
+                                                    }
+                                                ?>
+                                                </select>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-								
-                                <div class="form-group form-float">
-                                    <label class="form-label">Dirección</label>
-                                    <div class="form-line">
-                                        <input type="text" class="form-control" name="direccion" id="direccion" value="<?php echo $Direccion ;?>" maxlength="50" required>
-                                       <!-- -->
-                                    </div>
-                                </div>
-								
-                                <div class="form-group form-float">
-                                    <label class="form-label">Email</label>
-                                    <div class="form-line">
-                                        <input type="text" class="form-control" name="email" id="email" value="<?php echo $Email ;?>" maxlength="60" required>
-                                       <!-- -->
-                                    </div>
-                                </div>
-								
-                                <div class="form-group form-float">
-                                     <label class="form-label">Celular</label>
-                                    <div class="form-line">
-                                        <input type="text" class="form-control" name="celular" id="celular" value="<?php echo $Celular ;?>" maxlength="13" required>
-                                       <!---->
-                                    </div>
-                                </div>                                
 
-                                <div class="form-group form-float">
-                                    <label class="form-label">Tipo Usuario</label>
-                                    <div class="col-sm-4">
-                                        <select class="selectpicker show-tick" data-live-search="true" data-width="90%" name="tipousuario" id="tipousuario" required>
-                                            <!-- <option value="">-- Seleccione --</option> -->
-                                            <?php                                                 
-                                                 for($i=0; $i<count($mtipousuario['usu_tipousuario']); $i++)
-                                                {           
-                                                    $TUS_IdTipoDocumento = $mtipousuario['usu_tipousuario'][$i]['TUS_ID_TipoUsuario'];                                                    
-                                                    $TUS_Nombre = $mtipousuario['usu_tipousuario'][$i]['TUS_Nombre'];
-                                                    $TUS_Estado = $mtipousuario['usu_tipousuario'][$i]['TUS_Estado'];
-                                            ?>                                            
-                                            <option value="<?php echo $TUS_IdTipoDocumento; ?>" <?php if ($TUS_IdTipoDocumento == $TipoUsuario){ echo "selected";} else{ echo "";} ?>>
-                                                <?php echo $TUS_Nombre ; ?>                                                
-                                            </option>
-                                            <?php                    
-                                                } 
-                                            ?>
-                                        </select>
-                                    </div>   
+                                <div class="xform-group form-float" style="clear: both;">
+                                    <div class="col-xs-12">
+                                        <div class="row rowx">
+                                            <div class="col-sm-8">
+                                                <label class="form-label">Clase Proceso:</label>                                                
+                                                    <select class="selectpicker show-tick" data-live-search="true" data-width="100%" name="claseproceso" id="claseproceso" required>
+                                                    <option value="" >Seleccione Clase Proceso...</option>
+                                                    <?php
+                                                        for($i=0; $i<count($mclaseproceso['pro_claseproceso']); $i++)
+                                                        {
+                                                            $CPR_IdClaseProceso = $mclaseproceso['pro_claseproceso'][$i]['CPR_IdClaseProceso'];                                                
+                                                            $CPR_Nombre = $mclaseproceso['pro_claseproceso'][$i]['CPR_Nombre'];                                                
+                                                    ?>
+                                                            <option value="<?php echo $CPR_IdClaseProceso; ?>" <?php if ($CPR_IdClaseProceso == $IdClaseProceso){ echo "selected";} else{ echo "";} ?>>
+                                                                <?php echo $CPR_Nombre ; ?>                                                
+                                                            </option>
+                                                    <?php
+                                                        }
+                                                    ?>
+                                                    </select>                                                
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
+
+                                <div class="xform-group">
+                                    <div class="col-xs-12">
+										<div class="row rowx">											
+											<div class="col-sm-8">
+                                                <label class="form-label">Demandante:</label>
+												<select class="selectpicker show-tick" data-live-search="true" data-width="100%" name="demandante" id="demandante" required>
+												<option value="" >Seleccione Cliente...</option>
+												<?php
+													for($i=0; $i<count($mcliente['cli_cliente']); $i++)
+													{
+														$CLI_IdCliente = $mcliente['cli_cliente'][$i]['CLI_IdCliente'];                                                
+														$CLI_Nombre = $mcliente['cli_cliente'][$i]['NombreUsuario'];                                                
+												?>
+														<option value="<?php echo $CLI_IdCliente; ?>" <?php if ($CLI_IdCliente == $IdDemandante){ echo "selected";} else{ echo "";} ?>>
+															<?php echo $CLI_Nombre ; ?>                                                
+														</option>
+												<?php
+													}
+												?>
+												</select>
+											</div>
+										</div>	
+                                    </div>
+                                </div>
+
+                                <div class="xform-group">
+                                    <div class="col-xs-12">
+										<div class="row rowx">											
+											<div class="col-sm-8">
+                                                <label class="form-label">Demandado:</label>
+												<select class="selectpicker show-tick" data-live-search="true" data-width="100%" name="demandado" id="demandado" required>
+												<option value="" >Seleccione Demandado...</option>
+												<?php
+													for($i=0; $i<count($mcliente['cli_cliente']); $i++)
+													{
+														$CLI_IdCliente = $mcliente['cli_cliente'][$i]['CLI_IdCliente'];                                                
+														$CLI_Nombre = $mcliente['cli_cliente'][$i]['NombreUsuario'];                                                
+												?>
+														<option value="<?php echo $CLI_IdCliente; ?>" <?php if ($CLI_IdCliente == $IdDemandado){ echo "selected";} else{ echo "";} ?>>
+															<?php echo $CLI_Nombre ; ?>                                                
+														</option>
+												<?php
+													}
+												?>
+												</select>
+											</div>
+										</div>	
+                                    </div>                                       
+                                </div>
+
                                 
                                 <div class="form-group">
-                                    <input type="radio" name="estado" id="activo" class="with-gap" value="1" <?php if( $EstadoEst == 1){?>checked="checked"<?php } ?>>
+                                    <input type="radio" name="estado" id="activo" class="with-gap" value="1" <?php if( $EstadoProceso == 1){?>checked="checked"<?php } ?>>
                                     <label for="activo">Activo</label>
 
-                                    <input type="radio" name="estado" id="inactivo" class="with-gap" value="2"<?php if( $EstadoEst == 2){?>checked="checked"<?php } ?>>
+                                    <input type="radio" name="estado" id="inactivo" class="with-gap" value="2"<?php if( $EstadoProceso == 2){?>checked="checked"<?php } ?>>
                                     <label for="inactivo" class="m-l-20">Inactivo</label>                                    
                                 </div>
 								
                                 <hr>
-                                <div class="form-group" style="clear: both; margin-top:20px; margin-bottom:20px;">
+                                <div class="form-group" style="clear: both; margin-top:10px; margin-bottom:10px;">
 									<button class="btn btn-primary waves-effect" type="button" id="grabar">GRABAR</button>
 								   <!--  <button type="button" class="btn btn-danger waves-effect" id="borrar" onclick="borrarc(<?php echo $idtabla ; ?>);">BORRAR</button> -->
-									<button type="button" class="btn btn-danger waves-effect" id="borrar">BORRAR</button>
+									<button type="button" class="btn btn-danger waves-effect" id="borrar">CERRAR</button>
 								</div>
 								
                             </form>                        
                             <div id="msj" style="margin-top:7px;"></div>
                              <form id="mensaje">
-                             <label style="font-family: Verdana; font-size: 18; color:red;">Registro ha sido borrado correctamente.</lael>
+                             <label style="font-family: Verdana; font-size: 18; color:red;">Registro ha sido borrado correctamente.</label>
                             </form>
 
                     	</div> 
@@ -294,7 +356,9 @@ $TipoUsuario = $muser['usu_usuario']['USU_TipoUsuario'];
     <script src="../../plugins/jquery-steps/jquery.steps.js"></script>
 
     <!-- Sweet Alert Plugin Js -->
-    <script src="../../plugins/sweetalert/sweetalert.min.js"></script>
+    <script src="../../js/sweet/functions.js"></script>
+    <script src="../../js/sweet/sweetalert.min.js"></script>
+    <script src="../../plugins/sweetalert/sweetalert.min.js"></script>    
 
     <!-- Waves Effect Plugin Js -->
     <script src="../../plugins/node-waves/waves.js"></script>
@@ -311,57 +375,65 @@ $TipoUsuario = $muser['usu_usuario']['USU_TipoUsuario'];
     <script src="../../js/alertify.min.js"></script>
     <script src="../../js/jquery.numeric.js"></script>
 
-    <script type="text/javascript">    
+    <!-- DateTime picker -->
+    <script src="../../calendar/js/moment.min.js"></script>
+    <script src="../../calendar/js/bootstrap-datetimepicker.min.js"></script>
+    <script src="../../calendar/js/bootstrap-datetimepicker.es.js"></script>  
+
+    <script type="text/javascript"> 
+
+    function init_contador(idtextarea, idcontador)
+    {
+        function update_contador(idtextarea, idcontador)
+        {
+            var contador = $(idcontador);
+            var ta = $(idtextarea);
+            contador.html(ta.val().length);
+        }
+
+        $(idtextarea).keyup(function()
+        {
+            update_contador(idtextarea, idcontador);
+        });
+
+        $(idtextarea).change(function()
+        {
+            update_contador(idtextarea, idcontador);
+        });            
+    }
+
     $(document).ready(function()
 	{			
 		$("#mensaje").hide();
         $("#form_validation").show();
-        $("#numerodocumento").numeric();
-        $("#celular").numeric();
-        //$("#telefonoFijo").numeric(); 
-        $('#email').on('blur', function() {
-            // Expresion regular para validar el correo
-            var regex = /[\w-\.]{2,}@([\w-]{2,}\.)*([\w-]{2,}\.)[\w-]{2,4}/;
-
-            // Se utiliza la funcion test() nativa de JavaScript
-            if (regex.test($('#email').val().trim())) 
-            {                
-            } 
-            else 
-            {                
-                swal({
-                  title: "Error:  La dirección de correo no es valida...",
-                  text: "un momento por favor.",
-                  imageUrl: "../../js/sweet/3red.gif",
-                  timer: 1500,
-                  showConfirmButton: false
-                });
-                return false;   
-                $("#email").focus();
-            }
+        $('#proceso').numeric();
+        $('#anio').numeric();
+        $('.selectpicker').selectpicker();
+        $('#fechainicio').datetimepicker({
+          format: 'YYYY-MM-DD'       
         });
 
+        init_contador("#proceso","#muestrocantidadcaracteresid");        
 
-        $("#form_validation").click(function() {
-			$("#msj").html("");
-		})
+        $("#cerrar").on('click', function(e) {
+            e.preventDefault();
+            window.location = 'pro_proceso.php';
+        }); 
+        
 		
 		$("#grabar").on('click', function(e) {
             $("#mensaje").hide();
-            var tipodocumento = $("#tipodocumento").val();
-            var numerodocumento = $("#numerodocumento").val();
-            var nombre = $("#nombre").val();
-            var apellido1 = $("#apellido1").val();
-            var apellido2 = $("#apellido2").val();
-            var clave = $("#clave").val();            
-            var direccion = $("#direccion").val();
-            var email = $("#email").val();
-            var celular = $("#celular").val();            
-            var tipousuario = $("#tipousuario").val();			
-			var estado = $('input:radio[name=estado]:checked').val();
-			var idtabla =  "<?php echo $idtabla; ?>";
-            var OldClave = "<?php echo $Clave; ?>";
-            if( tipodocumento == "" || numerodocumento =="" || nombre == "" || apellido1 == "" || apellido2 == "" || clave =="" || direccion == "" || email == "" || celular == "" || estado == undefined  || tipousuario == "" )
+            var proceso = $("#proceso").val();            
+            var fechainicio = $("#txtFecha").val();
+            var asignadoa = $("#usuario").val();
+            var ubicacion = $("#ubicacion").val();
+            var claseproceso = $("#claseproceso").val();
+            //juzgado = $("#juzgado").val();
+            var demandante = $("#demandante").val();
+            var demandado = $("#demandado").val();
+            var estado = $('input:radio[name=estado]:checked').val();
+            var idtabla = "<?php echo $idtabla; ?>";
+            if( estado == undefined || proceso == "" || fechainicio == "" || asignadoa == "" || ubicacion == "" || claseproceso == "" || demandante == "" || demandado == "")
             {               
                 swal({
                   title: "Error:  Ingrese información en todos los campos...",
@@ -375,9 +447,9 @@ $TipoUsuario = $muser['usu_usuario']['USU_TipoUsuario'];
             else
             {
     			$.ajax({
-    				data : {"tipodocumento": tipodocumento, "numerodocumento": numerodocumento, "nombre": nombre, "apellido1": apellido1, "apellido2": apellido2, "clave": clave, "direccion": direccion, "email": email, "celular": celular, "estado": estado, "tipousuario": tipousuario, "idtabla": idtabla, "OldClave": OldClave },
+    				data : {"proceso": proceso, "fechainicio": fechainicio, "asignadoa": asignadoa, "ubicacion": ubicacion, "claseproceso": claseproceso, "demandante": demandante, "demandado": demandado, "estado": estado, "idtabla": idtabla },
     				type: "POST",				
-    				url : "editar_usuario.php",
+    				url : "editar_<?php echo strtolower($Tabla); ?>.php",
                 })  
     			.done(function( dataX, textStatus, jqXHR ){	    			    
     				var xrespstr = dataX.trim();
@@ -385,13 +457,13 @@ $TipoUsuario = $muser['usu_usuario']['USU_TipoUsuario'];
                     var msj = xrespstr.substr(2);    				
     				if( respstr == "S" )
                     {
-                        swal("Atencion: ", msj, "success");
+                        swal("Atención: ", msj, "success");
                         return false;
                     }
     				else
     				{
                         swal({
-                            title: "Atencion: ",   
+                            title: "Atención: ",   
                             text: msj,   
                             type: "error" 
                         });
@@ -412,16 +484,15 @@ $TipoUsuario = $muser['usu_usuario']['USU_TipoUsuario'];
 	
         $("#borrar").on('click', function() {
             var idtabla  = "<?php echo $idtabla; ?>";            
-            var nomtabla = "<?php echo $NombreAlumno; ?>";
-
-            alertify.confirm( 'Desea borrar este registro?', function (e) {
+            var estado = 2;
+            alertify.confirm( 'Desea Cerrar este Proceso?', function (e) {
                 if (e) {
                     //after clicking OK
                     $.ajax({
-                        data : {"pidtabla": idtabla},
+                        data : {"pidtabla": idtabla, "estado": estado},
                         type: "POST",
                         dataType: "html",
-                        url : "../forms/borrar_usuario.php",
+                        url : "../forms/borrar_<?php echo strtolower($Tabla) ; ?>.php",
                     })  
                     .done(function( dataX, textStatus, jqXHR ){                       
                         var xrespstr = dataX.trim();
@@ -431,7 +502,7 @@ $TipoUsuario = $muser['usu_usuario']['USU_TipoUsuario'];
                         {            
                             //$("#form_validation").hide();
                             //$("#mensaje").show();
-                            swal("Atencion: ", msj, "success");
+                            swal("Atención: ", msj, "success");
                         }
                         else
                         {                    
@@ -439,7 +510,7 @@ $TipoUsuario = $muser['usu_usuario']['USU_TipoUsuario'];
                             //$("#form_validation").show();
                             //$("#msj").html('<div class="alert alert-danger"><span class="glyphicon-hand-right"></span><strong>  Atención: </strong> <?php echo $Tabla; ?> NO Borrada.</div>').fadeIn(3000);
                             swal({
-                                title: "Atencion: ",   
+                                title: "Atención: ",   
                                 text: msj,   
                                 type: "error" 
                             });

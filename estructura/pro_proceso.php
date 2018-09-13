@@ -55,12 +55,19 @@ class PRO_PROCESO
      */
     public static function getById($IdTabla)
     {
-        // Consulta de la tabla de tablas
+        // Consulta de la tabla Proceso
         $consulta = "SELECT ".$GLOBALS['Llave'].",
-                            UBI_Nombre,
-                            UBI_Estado
+							PRO_IdDemandante,
+							PRO_IdDemandado,
+                            PRO_NumeroProceso, 
+							PRO_FechaInicio, 
+							PRO_IdUsuario,
+							PRO_IdUbicacion,
+							PRO_IdClaseProceso,
+							PRO_IdJuzgadoOrigen,
+							PRO_EstadoProceso
                             FROM ".$GLOBALS['TABLA'].
-                            " WHERE ".$GLOBALS['Llave']." = ? ORDER BY UBI_Nombre; ";
+                            " WHERE ".$GLOBALS['Llave']." = ? ; ";
 
         try {
             // Preparar sentencia
@@ -120,7 +127,7 @@ class PRO_PROCESO
     public static function getByIdExiste($IdEstadoTabla)
     {
         // Consulta de la PRO_PROCESO
-        $consulta = "SELECT Count(".$GLOBALS['Llave'].") AS TotalTablas, UBI_Nombre, UBI_Estado ".
+        $consulta = "SELECT Count(".$GLOBALS['Llave'].") AS TotalTablas, PRO_NumeroProceso, PRO_EstadoProceso ".
                     " FROM ". $GLOBALS['TABLA'].
                     " WHERE ".$GLOBALS['Llave']."  = ? ;";
 
@@ -145,27 +152,40 @@ class PRO_PROCESO
      * Actualiza un registro de la bases de datos basado
      * en los nuevos valores relacionados con un identificador
      *
-     * @param $IdTabla            identificador
-     * @param $Nombre_Tabla        nuevo Nombre Tabla     
-     * @param $IdEstadoTabla       nueva Estado       
+     * @param $Proceso            identificador
+     * @param $Fechainicio        nuevo Nombre Tabla     
+     * @param $Asignadoa       nueva Estado      
+     * @param $Ubicacion,
+     * @param $Claseproceso
+     * @param $Demandante,
+     * @param $Demandado,
+     * @param $Estado,
+     * @param $IdTabla      
      * 
      */
     public static function update(
-        $NombreTabla,        
-        $IdEstadoTabla,
+        $Proceso,
+        $Fechainicio,
+        $Asignadoa,
+        $Ubicacion,
+        $Claseproceso,
+        $Demandante,
+        $Demandado,
+        $Estado,
         $IdTabla
     )
     {
         // Creando consulta UPDATE
         $consulta = "UPDATE ". $GLOBALS['TABLA']. 
-            " SET UBI_Nombre=?, UBI_Estado=? " .
+            " SET PRO_NumeroProceso=?, PRO_Fechainicio=?, PRO_IdUsuario=?, PRO_IdUbicacion=?, PRO_IdClaseProceso=?, ".
+            " PRO_IdDemandante =?, PRO_IdDemandado=?, PRO_EstadoProceso=? ".
             " WHERE ". $GLOBALS['Llave'] ." =? ;";
 
         // Preparar la sentencia
         $cmd = Database::getInstance()->getDb()->prepare($consulta);
 
         // Relacionar y ejecutar la sentencia
-        $cmd->execute(array($NombreTabla, $IdEstadoTabla, $IdTabla ));
+        $cmd->execute(array($Proceso, $Fechainicio, $Asignadoa, $Ubicacion, $Claseproceso, $Demandante, $Demandado, $Estado, $IdTabla ));
 
         return $cmd;
     }
@@ -229,26 +249,35 @@ class PRO_PROCESO
     }
 
     /**
-     * Eliminar el registro con el identificador especificado
+     * Cambia estado al registro con el identificador especificado
      *
-     * @param $IdTabla identificador de la GEN_GRUPO
+     * @param $IdTabla identificador de la PRO_Proceso
      * @return bool Respuesta de la eliminación
      */
-    public static function delete($IdTabla)
+    public static function delete($Estado, $IdTabla)
     {
         // Sentencia DELETE
-        $comando = "DELETE FROM ". $GLOBALS['TABLA'] ." WHERE ". $GLOBALS['Llave']. " = ? ;";
+        $comando = "UPDATE ". $GLOBALS['TABLA'] ." SET PRO_EstadoProceso = ? WHERE ". $GLOBALS['Llave']. " = ? ;";
 
         // Preparar la sentencia
-        $sentencia = Database::getInstance()->getDb()->prepare($comando);
+        $cmd = Database::getInstance()->getDb()->prepare($comando);
 
-        return $sentencia->execute(array($IdTabla));
+        // Relacionar y ejecutar la sentencia
+        $cmd->execute(array($Estado, $IdTabla ));
+
+        return $cmd;
+
+        /*  Para borrar
+        // Preparar la sentencia
+        $sentencia = Database::getInstance()->getDb()->prepare($comando);
+        return $sentencia->execute(array($Estado, $IdTabla));
+        */
     }
 
     /**
-     * Verifica si existe el Grupo
+     * Verifica si existe el PRO_Proceso
      *
-     * @param $IdUsuario identificador de la GEN_GRUPO
+     * @param $IdUsuario identificador de la PRO_Proceso
      * @return bool Respuesta de la consulta
      */
     public static function existetabla($Nombre)

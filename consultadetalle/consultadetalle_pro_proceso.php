@@ -173,11 +173,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     elseif(isset($_GET['update']) )
     {
         //Obtener Parametros
-        $par1 = $_GET['nombre'];        
-        $par3 = $_GET['estado'];
-        $par4 = $_GET['idtabla'];
+        $par1 = $_GET['proceso'];        
+        $par2 = $_GET['fechainicio'];
+        $par3 = $_GET['asignadoa'];
+		$par4 = $_GET['ubicacion'];        
+        $par5 = $_GET['claseproceso'];
+        $par6 = $_GET['demandante'];
+		$par7 = $_GET['demandado'];        
+        $par8 = $_GET['estado'];
+        $par9 = $_GET['idtabla'];
 
-        $retorno = PRO_PROCESO::update($par1, $par3, $par4);
+        $retorno = PRO_PROCESO::update($par1, $par2, $par3, $par4, $par5, $par6, $par7, $par8, $par9);
         $msj = $retorno;
         if($retorno)
         {
@@ -193,16 +199,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             print json_encode(
                 array(
                     'estado' => '2',
-                    'mensaje' => 'No se obtuvo el registro al Actualizar'
+                    'mensaje' => 'No se obtuvo el registro al Actualizar Proceso'
                 )
             );
         }
     }
     elseif(isset($_GET['delete']) )
     {
-        $par0  = $_GET['pidtabla'];
+        $par1 = $_GET['estado'];
+        $par0 = $_GET['pidtabla'];
 
-        $retorno = PRO_PROCESO::delete($par0);
+        $retorno = PRO_PROCESO::delete($par1, $par0);
         if ($retorno) 
         {
             $pro_proceso["estado"] = "1";
