@@ -224,23 +224,23 @@ else
                          <table class="table table-bordered table-striped table-hover dataTable js-exportable" id="grid">
                                 <thead>
                                     <tr>
-                                        <th>N&uacute;mero</th>
-                                        <th>Ciudad</th>                                        
-                                        <th>Area</th>
-                                        <th>Tipo</th>
+                                        <th>N&uacute;mero Juzgado</th>                                                                               
+                                        <th>Corporación</th>
+                                        <th>Especialidad</th>
                                         <th>Dirección</th>
                                         <th>Piso</th>
+                                        <th>Ciudad</th> 
 										<th>Estado</th>
                                     </tr>
                                 </thead>
                                 <tfoot>
                                     <tr>
-                                        <th>N&uacute;mero</th>
-                                        <th>Ciudad</th>
-                                        <th>Area</th>
-                                        <th>Tipo</th>
-                                        <th>Dirección</th>                                      
+                                        <th>N&uacute;mero Juzgado</th>                                        
+                                        <th>Corporación</th>
+                                        <th>Especialidad</th>
+                                        <th>Dirección</th>
                                         <th>Piso</th>
+                                        <th>Ciudad</th> 
 										<th>Estado</th>
                                     </tr>
                                 </tfoot>
@@ -313,12 +313,12 @@ if( $mjuzgado['estado'] < 2)
     <tr>
         <td>
            <a href="javascript:void(0);" onclick="cambiar('../forms/editar<?php echo $nombre_lnk ;?>.php?f=<?php echo $idTabla; ?>')" class="nav nav-tabs nav-stacked" data-toggle="modal" data-target="#defaultModalEditar"  style="text-decoration:none;"><?php echo $NombreUsuario; ?></a>
-        </td>        
-        <td><?php echo $NombreCiudad; ?></td>        
-        <td><?php echo $NombreArea; ?></td> 
+        </td>
         <td><?php echo $NombreTipoJuzgado; ?></td>
+        <td><?php echo $NombreArea; ?></td> 
         <td><?php echo $Direccion; ?></td>
         <td><?php echo $Piso; ?></td>
+        <td><?php echo $NombreCiudad; ?></td>        
 		<td><?php echo $EstadoUsuario; ?></td>
     </tr>
 <?php                          
@@ -366,7 +366,7 @@ if( $mjuzgado['estado'] < 2)
 				
 				<div class="modal-body">                         
 					<object type="text/html" 
-					style="padding :0px; position: relative; height: 70vh; max-height:70vh; bottom:0; overflow: hidden; margin: 0;" 
+					style="padding :0px; position: relative; height: 72vh; max-height:72vh; bottom:0; overflow: hidden; margin: 0;" 
 					data="../forms/form-validationBase<?php echo $nombre_lnk ;?>.php" id="crear"></object>
 				</div>
 				<div class="modal-footer">

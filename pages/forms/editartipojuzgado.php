@@ -44,7 +44,7 @@ if( isset($_GET['f'])  && !empty($_GET['f']) )
     $idTabla = trim($_GET['f']);
 }
 
-$Tabla ="TIPOJUZGADO";
+$Tabla ="CORPORACION";
 $idtabla = 0;
 
 require_once('../../apis/general/tipojuzgado.php');
@@ -122,14 +122,14 @@ $idtabla = $mtipojuzgado['juz_tipojuzgado']['TJU_IdTipoJuzgado'];
                             <form id="form_validation" method="POST">
                                 
                                 <div class="form-group form-float">
-                                    <label class="form-label">Nombre</label>
+                                    <label class="form-label">Nombre Corporación</label>
                                     <div class="form-line">
                                         <input type="text" class="form-control" name="nombre" id="nombre" value="<?php echo $Nombre ;?>" required>
                                     </div>
                                 </div>
 
                                 <div class="form-group form-float">
-                                    <label class="form-label">Código Entidad, Corporación o Juzgado</label>
+                                    <label class="form-label">Código Corporación, Entidad o Juzgado</label>
                                     <div class="form-line">
                                         <input type="text" class="form-control" name="codigo" id="codigo" value="<?php echo $codigo ;?>" maxlength="2" required>
                                     </div>

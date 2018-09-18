@@ -127,13 +127,14 @@ $NombreTabla ="AREA";
     <script src="../../js/demo.js"></script>
 
     <!-- <script src="../../js/alertify.min.js"></script> -->
-     <script src="../../js/jquery.numeric.js"></script>
+    <script src="../../js/jquery.numeric.js"></script>
 
     <script type="text/javascript">
     var nombre ="";
     $(document).ready(function()
     {       
-        $("#msj").hide();        
+        $("#msj").hide();
+        $("#codigo").numeric();        
 
         function reset () {
             $("#toggleCSS").attr("href", "../../css/themes2/alertify.default.css");
@@ -223,7 +224,7 @@ $NombreTabla ="AREA";
         <div class="container-fluid">
             <div class="block-header">
                 <h2>
-                    FORMULARIO: <?php echo $NombreTabla; ?> - SALA / SECCION Y/O ESPECIALIDAD.
+                    FORMULARIO: <?php echo $NombreTabla; ?> - ESPECIALIDAD - SALA / SECCION.
                     <small>acción: Crear.</small>
                 </h2>
             </div>
@@ -244,26 +245,12 @@ $NombreTabla ="AREA";
                         </div>-->
                         <div class="body">
                             <form id="form_validation" method="POST">
-                                
-                                <div class="form-group form-float" style="clear: both; margin-top: 10px;">
-                                    <label class="form-label">Nombre Area - SALA / SECCION Y/O ESPECIALIDAD</label>
-                                    <div class="form-line">
-                                        <input type="text" class="form-control" name="nombre" id="nombre" value="" required>                                       
-                                    </div>
-                                </div>
-
-                                <div class="form-group form-float" style="clear: both;">
-                                    <label class="form-label">C&oacute;digo Area</label>
-                                    <div class="form-line">
-                                        <input type="text" class="form-control" name="codigo" id="codigo" value="" maxlength="4" required>
-                                    </div>
-                                </div>
 
                                 <div class="form-group form-float" style="clear: both;">
                                     <div class="col-xs-7" style="margin-top:15px;">
-                                        <label class="form-label">Despacho / Corporaci&oacute;n / Juzgado:</label>                                        
+                                        <label class="form-label">Corporaci&oacute;n:</label>                                        
                                         <select class="selectpicker show-tick" data-live-search="true" data-width="100%" name="tipojuzgado" id="tipojuzgado" required>
-                                        <option value="" >Seleccione Despacho...</option>
+                                        <option value="" >Seleccione Corporaci&oacute;n...</option>
                                         <?php
                                             for($i=0; $i<count($mtipojuzgado['juz_tipojuzgado']); $i++)
                                             {
@@ -278,7 +265,21 @@ $NombreTabla ="AREA";
                                         ?>
                                         </select>
                                     </div>
-                                </div>    
+                                </div>
+
+                                <div class="form-group form-float" style="clear: both;">
+                                    <label class="form-label">C&oacute;digo Especialidad</label>
+                                    <div class="form-line">
+                                        <input type="text" class="form-control" name="codigo" id="codigo" value="" maxlength="2" required>
+                                    </div>
+                                </div>
+
+                                <div class="form-group form-float" style="clear: both; margin-top: 10px;">
+                                    <label class="form-label">Nombre Especialidad</label>
+                                    <div class="form-line">
+                                        <input type="text" class="form-control" name="nombre" id="nombre" value="" required>                                       
+                                    </div>
+                                </div>                                    
                                 
                                 <div class="form-group form-float" style="clear: both;">
                                     <label class="form-label">Estado</label>

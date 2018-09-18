@@ -131,42 +131,11 @@ $EstadoUsuario = $mjuzgado['juz_juzgado']['EstadoTabla'];
                             </ul>-->
                         </div>
                         <div class="body  table-responsive">
-                            <form id="form_validation" method="POST">
-                                
-                                <div class="form-group form-float">
-                                    <label class="form-label">Nombre</label>
-                                    <div class="form-line">                                        
-                                        <input type="text" class="form-control" name="ubicacion" id="ubicacion" value="<?php echo $Nombre ;?>" required>                                    
-                                    </div>
-                                </div>
-
-                                <div style="form-group form-float">                                     
-                                    <label class="form-label">
-                                        Area
-                                    </label>                                    
-                                    <div class="col-sm-4">                                       
-                                        <select class="selectpicker show-tick" data-live-search="true" data-width="90%" name="area" id="area" required>
-                                            <option value="" >Seleccione Opción...</option>
-                                            <?php
-                                                for($i=0; $i<count($marea['juz_area']); $i++)
-                                                {
-                                                    $ARE_IdArea = $marea['juz_area'][$i]['ARE_IdArea'];                                                    
-                                                    $ARE_Nombre = $marea['juz_area'][$i]['ARE_Nombre'];
-                                                    $ARE_Estado = $marea['juz_area'][$i]['ARE_Estado'];
-                                            ?>
-                                                    <option value="<?php echo $ARE_IdArea; ?>" <?php if ($ARE_IdArea == $Area){ echo "selected";} else{ echo "";} ?>>
-                                                        <?php echo $ARE_Nombre ; ?>                                                
-                                                    </option>
-                                            <?php
-                                                }
-                                            ?>
-                                        </select>
-                                    </div>
-                                </div>
+                            <form id="form_validation" method="POST">                                
 
                                 <div style="form-group form-float"> 
                                     <label class="form-label">
-                                        Tipo Juzgado
+                                        Tipo Juzgado: Juzgado: Entidad, Corporación o Juzgado
                                     </label>                                    
                                     <div class="col-sm-4">                                       
                                         <select class="selectpicker show-tick" data-live-search="true" data-width="90%" name="tipojuzgado" id="tipojuzgado" required>
@@ -190,6 +159,41 @@ $EstadoUsuario = $mjuzgado['juz_juzgado']['EstadoTabla'];
 
                                 <div style="form-group form-float">                                     
                                     <label class="form-label">
+                                        Area Sala / Sección y/o Especialidad
+                                    </label>                                    
+                                    <div class="col-sm-4">                                       
+                                        <select class="selectpicker show-tick" data-live-search="true" data-width="90%" name="area" id="area" required>
+                                            <option value="" >Seleccione Opción...</option>
+                                            <?php
+                                                for($i=0; $i<count($marea['juz_area']); $i++)
+                                                {
+                                                    $ARE_IdArea = $marea['juz_area'][$i]['ARE_IdArea'];                                                    
+                                                    $ARE_Nombre = $marea['juz_area'][$i]['ARE_Nombre'];
+                                                    $ARE_Estado = $marea['juz_area'][$i]['ARE_Estado'];
+                                            ?>
+                                                    <option value="<?php echo $ARE_IdArea; ?>" <?php if ($ARE_IdArea == $Area){ echo "selected";} else{ echo "";} ?>>
+                                                        <?php echo $ARE_Nombre ; ?>                                                
+                                                    </option>
+                                            <?php
+                                                }
+                                            ?>
+                                        </select>
+                                    </div>
+                                </div>
+                                
+
+                                <div class="form-group form-float" style="clear:both;">
+                                    <div class="col-xs-4">
+                                        <label class="form-label">N&uacute;mero o Nombre</label>
+                                        <div class="form-line">                                        
+                                            <input type="text" class="form-control" name="ubicacion" id="ubicacion" value="<?php echo $Nombre ;?>" maxlength="3" required>                                    
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-8">&nbsp;</div>
+                                </div>
+
+                                <div class="form-group form-float" style="clear:both;">                                     
+                                    <label class="form-label">
                                         Ciudad
                                     </label>                                    
                                     <div class="col-sm-4">                                       
@@ -212,11 +216,11 @@ $EstadoUsuario = $mjuzgado['juz_juzgado']['EstadoTabla'];
                                     </div>
                                 </div>
 
-                                <div class="form-group form-float" style="clear: both;">
+                                <div class="form-group">
                                     <label class="form-label">Direcci&oacute;n</label>
                                     <div class="form-line">
                                         <input type="text" class="form-control" name="direccion" id="direccion" value="<?php echo $Direccion; ?>" required>                                      
-                                    </div>
+                                    </div>                                
                                 </div>
 
                                 <div style="form-group form-float">                                     
@@ -242,12 +246,9 @@ $EstadoUsuario = $mjuzgado['juz_juzgado']['EstadoTabla'];
                                         </select>
                                     </div>
                                 </div>
-
-                                
-
                                   
                                 
-                                <div class="form-group" style="clear: both;">
+                                <div class="form-group" style="clear: both;">Estado: 
                                     <input type="radio" name="estado" id="activo" class="with-gap" value="1" <?php if( $Estado == 1){?>checked="checked"<?php } ?>>
                                     <label for="activo">Activo</label>
 
@@ -256,8 +257,8 @@ $EstadoUsuario = $mjuzgado['juz_juzgado']['EstadoTabla'];
                                     
                                 </div>
 								
-                                <hr>
-                                <div class="form-group" style="clear: both; margin-top:20px; margin-bottom:20px;">                               
+                                <hr style="clear: both; margin-top:-5px;">
+                                <div class="form-group" style="clear: both; margin-top:20px; margin-bottom:20px;">                                                                  
 									<button class="btn btn-primary waves-effect" type="button" id="grabar">GRABAR</button>
 								   <!--  <button type="button" class="btn btn-danger waves-effect" id="borrar" onclick="borrarc(<?php echo $idtabla ; ?>);">BORRAR</button> -->
 									<button type="button" class="btn btn-danger waves-effect" id="borrar">BORRAR</button>
@@ -311,7 +312,7 @@ $EstadoUsuario = $mjuzgado['juz_juzgado']['EstadoTabla'];
     <script src="../../js/pages/ui/dialogs.js"></script>
     <!-- Demo Js -->
     <script src="../../js/demo.js"></script>
-    
+    <script src="../../js/jquery.numeric.js"></script>
 
     <script src="../../js/alertify.min.js"></script>
 
@@ -319,6 +320,7 @@ $EstadoUsuario = $mjuzgado['juz_juzgado']['EstadoTabla'];
     $(document).ready(function()
 	{			
 		$("#mensaje").hide();
+        $("#ubicacion").numeric();
         $("#form_validation").show();
         $("#form_validation").click(function() {
 			$("#msj").html("");
@@ -327,7 +329,7 @@ $EstadoUsuario = $mjuzgado['juz_juzgado']['EstadoTabla'];
 		$("#grabar").on('click', function(e) {
             $("#mensaje").hide();
 			var ubicacion = $("#ubicacion").val();
-            ubicacion = ubicacion.toUpperCase();
+            //ubicacion = ubicacion.toUpperCase();
             var ciudad = $("#ciudad").val();
             var direccion = $("#direccion").val();
             var piso = $("#piso").val();            

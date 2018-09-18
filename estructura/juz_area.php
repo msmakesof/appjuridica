@@ -52,7 +52,8 @@ class JUZ_AREA
         $consulta = "SELECT ".$GLOBALS['Llave'].",
 					ARE_Nombre,                            
 					ARE_Estado, 
-					ARE_Codigo, ".
+                    ARE_Codigo, 
+                    ARE_IdTipoJuzgado ".
 					" FROM ".$GLOBALS['TABLA'].
 					" WHERE ".$GLOBALS['Llave']." = ? ORDER BY ARE_Nombre; ";
 

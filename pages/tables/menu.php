@@ -140,6 +140,9 @@ else
                     <a href="pro_proceso.php" class="menu-toggle active">
                         <span>Nuevo Proceso</span>
                     </a>
+                    <a href="pro_actuacionprocesal.php" class="menu-toggle active">
+                        <span>Actuaci&oacute;n Procesal</span>
+                    </a>
                 </li>
             </ul>
         </li>

@@ -58,7 +58,7 @@ $url         = urlServicios."consultadetalle/consultadetalle_juz_area.php?".$par
 $existe      = "";
 $usulocal    = "";
 $siguex      = "";
-//echo("<script>console.log('PHP: ".$url."');</script>");
+//echo("<script>console.log('PHP especial: ".$url."');</script>");
 if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
 {
     $ch = curl_init();

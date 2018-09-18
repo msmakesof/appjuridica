@@ -44,7 +44,7 @@ if (!function_exists("GetSQLValueString"))
     }
 }
 $idTabla = 0;
-$NombreTabla ="TIPOJUZGADO";
+$NombreTabla ="CORPORACIÓN";
 
 ?>
 <!DOCTYPE html>
@@ -222,7 +222,7 @@ $NombreTabla ="TIPOJUZGADO";
         <div class="container-fluid">
             <div class="block-header">
                 <h2>
-                    FORMULARIO: <?php echo $NombreTabla; ?> - C&oacute;digo Entidad, Corporaci&oacute;n o Juzgado.
+                    FORMULARIO: <?php echo $NombreTabla; ?> - Corporaci&oacute;n, Entidad o Juzgado.
                     <small>acción: Crear.</small>
                 </h2>
             </div>
@@ -245,14 +245,14 @@ $NombreTabla ="TIPOJUZGADO";
                             <form id="form_validation" method="POST">
                                 
                                 <div class="form-group form-float" style="clear: both;">
-                                    <label class="form-label">Nombre Area</label>
+                                    <label class="form-label">Nombre Corporaci&oacute;n</label>
                                     <div class="form-line">
                                         <input type="text" class="form-control" name="nombre" id="nombre" value="" required>                                       
                                     </div>
                                 </div>
 
                                 <div class="form-group form-float" style="clear: both;">
-                                    <label class="form-label">C&oacute;digo Entidad, Corporaci&oacute;n o Juzgado</label>
+                                    <label class="form-label">C&oacute;digo Corporaci&oacute;n, Entidad o Juzgado</label>
                                     <div class="form-line">
                                         <input type="text" class="form-control" name="codigo" id="codigo" value="" maxlength="2" required>
                                     </div>

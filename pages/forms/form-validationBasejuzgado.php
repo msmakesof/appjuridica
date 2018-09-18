@@ -126,14 +126,17 @@ require_once('../../apis/general/area.php');
     <script src="../../js/demo.js"></script>
 
     <!-- <script src="../../js/alertify.min.js"></script> -->
-     <script src="../../js/jquery.numeric.js"></script>
+    <script src="../../js/jquery.numeric.js"></script>
 
     <script type="text/javascript">
     var nombre ="";
     $(document).ready(function()
     {       
         $("#msj").hide();
-        $("#piso").numeric();        
+        $("#ubicacion").numeric(); 
+        $("#piso").numeric();
+        $("#area").attr('disabled', 'disabled');
+
 
         function reset () {
             $("#toggleCSS").attr("href", "../../css/themes2/alertify.default.css");
@@ -265,22 +268,13 @@ require_once('../../apis/general/area.php');
                         <div class="body">
                             <form id="form_validation" method="POST">
 
-                                <div class="form-group form-float" style="clear: both;">
-                                    <label class="form-label">Nombre</label>
-									<div class="col-sm-4">
-                                    <div class="form-line">
-                                        <input type="text" class="form-control" name="ubicacion" id="ubicacion" value="" placeholder="Número del Juzgado" required>
-                                    </div>
-									</div>
-                                </div>
-
                                 <div style="form-group form-float"> 
                                     <label class="form-label">
-                                        Tipo Juzgado: Entidad, Corporaci&oacute;n o Juzgado
+                                        Tipo Corporaci&oacute;n
                                     </label>                                    
                                     <div class="col-sm-4">                                       
                                         <select class="selectpicker show-tick" data-live-search="true" data-width="80%" name="tipojuzgado" id="tipojuzgado" required>
-                                            <option value="" >Seleccione Opción...</option>
+                                            <option value="" >Seleccione Corporaci&oacute;n...</option>
                                             <?php
                                                 for($i=0; $i<count($mtipojuzgado['juz_tipojuzgado']); $i++)
                                                 {
@@ -300,11 +294,11 @@ require_once('../../apis/general/area.php');
 								
 								<div style="form-group form-float">                                     
                                     <label class="form-label">
-                                        Area SALA / SECCION Y/O ESPECIALIDAD
+                                    Especialidad - Area
                                     </label>                                    
                                     <div class="col-sm-4">                                       
                                         <select class="selectpicker show-tick" data-live-search="true" data-width="80%" name="area" id="area" required>
-                                            <option value="" >Seleccione Opción...</option>
+                                            <option value="" >Seleccione Especialidad...</option>
                                             <?php
                                                 for($i=0; $i<count($marea['juz_area']); $i++)
                                                 {
@@ -321,15 +315,21 @@ require_once('../../apis/general/area.php');
                                         </select>
                                     </div>
                                 </div>
+
+                                <div class="form-group form-float" style="clear:both;">
+                                    <label class="form-label">N&uacute;mero Despacho</label>
+                                    <div class="form-line">                                        
+                                        <input type="text" class="form-control" name="ubicacion" id="ubicacion" value="" maxlength="3" required>                                    
+                                    </div>
+                                </div>								
 								
-								
-                                <div style="form-group form-float">                                     
-                                    <label class="form-label">
+                                <div style="form-group form-float" style="clear:both;">                                     
+                                    <label class="form-label" style="text-align:left;">
                                         Ciudad
                                     </label>                                    
                                     <div class="col-sm-4">                                       
                                         <select class="selectpicker show-tick" data-live-search="true" data-width="80%" name="ciudad" id="ciudad" required>
-                                            <option value="" >Seleccione Opción...</option>
+                                            <option value="" >Seleccione Ciudad...</option>
                                             <?php
                                                 for($i=0; $i<count($mciudad['gen_ciudad']); $i++)
                                                 {

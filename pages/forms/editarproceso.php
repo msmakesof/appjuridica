@@ -40,13 +40,7 @@ if (!function_exists("GetSQLValueString"))
 }
 
 
-$idTabla = 0;
-require_once('../../apis/general/ciudad.php');
-require_once('../../apis/usuario/infoUsuario.php');
-require_once('../../apis/proceso/ubicacion.php');
-require_once('../../apis/proceso/claseproceso.php');
-require_once('../../apis/juzgado/juzgado.php');
-require_once('../../apis/cliente/infoCliente.php');
+
 
 if( isset($_GET['f'])  && !empty($_GET['f']) )
 {    
@@ -190,6 +184,8 @@ $EstadoProceso = trim($mproceso['pro_proceso']['PRO_EstadoProceso']);
 												<select class="selectpicker show-tick" data-live-search="true" data-width="100%" name="usuario" id="usuario" required>
 												<option value="" >Seleccione Asignado...</option>
 												<?php
+                                                    $idTabla = 0;
+                                                    require_once('../../apis/usuario/infoUsuario.php');
 													for($i=0; $i<count($muser['usu_usuario']); $i++)
 													{
 														$USU_IdUsuario = $muser['usu_usuario'][$i]['USU_IdUsuario'];                                                
@@ -215,6 +211,8 @@ $EstadoProceso = trim($mproceso['pro_proceso']['PRO_EstadoProceso']);
                                                 <select class="selectpicker show-tick" data-live-search="true" data-width="100%" name="ubicacion" id="ubicacion" required>
                                                 <option value="" >Seleccione Ubicación...</option>
                                                 <?php
+                                                    $idTabla = 0;
+                                                    require_once('../../apis/proceso/ubicacion.php');
                                                     for($i=0; $i<count($mubicacion['pro_ubicacion']); $i++)
                                                     {
                                                         $UBI_IdUbicacion = $mubicacion['pro_ubicacion'][$i]['UBI_IdUbicacion'];                                                
@@ -240,6 +238,8 @@ $EstadoProceso = trim($mproceso['pro_proceso']['PRO_EstadoProceso']);
                                                     <select class="selectpicker show-tick" data-live-search="true" data-width="100%" name="claseproceso" id="claseproceso" required>
                                                     <option value="" >Seleccione Clase Proceso...</option>
                                                     <?php
+                                                        $idTabla = 0;
+                                                        require_once('../../apis/proceso/claseproceso.php');
                                                         for($i=0; $i<count($mclaseproceso['pro_claseproceso']); $i++)
                                                         {
                                                             $CPR_IdClaseProceso = $mclaseproceso['pro_claseproceso'][$i]['CPR_IdClaseProceso'];                                                
@@ -265,6 +265,8 @@ $EstadoProceso = trim($mproceso['pro_proceso']['PRO_EstadoProceso']);
 												<select class="selectpicker show-tick" data-live-search="true" data-width="100%" name="demandante" id="demandante" required>
 												<option value="" >Seleccione Cliente...</option>
 												<?php
+                                                    $idTabla = 0;
+                                                    require_once('../../apis/cliente/infoCliente.php');
 													for($i=0; $i<count($mcliente['cli_cliente']); $i++)
 													{
 														$CLI_IdCliente = $mcliente['cli_cliente'][$i]['CLI_IdCliente'];                                                
@@ -290,6 +292,8 @@ $EstadoProceso = trim($mproceso['pro_proceso']['PRO_EstadoProceso']);
 												<select class="selectpicker show-tick" data-live-search="true" data-width="100%" name="demandado" id="demandado" required>
 												<option value="" >Seleccione Demandado...</option>
 												<?php
+                                                    $idTabla = 0;
+                                                    require_once('../../apis/cliente/infoCliente.php');
 													for($i=0; $i<count($mcliente['cli_cliente']); $i++)
 													{
 														$CLI_IdCliente = $mcliente['cli_cliente'][$i]['CLI_IdCliente'];                                                

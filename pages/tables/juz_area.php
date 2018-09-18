@@ -545,7 +545,7 @@ else
         <div class="container-fluid">
             <div class="block-header">
                 <h2>
-                    INFORMACION DE: <?php echo strtoupper($nombre_lnk); ?> - SALA / SECCION Y/O ESPECIALIDAD
+                    INFORMACION DE: <?php echo strtoupper($nombre_lnk); ?> - ESPECIALIDAD - SALA / SECCION
                     <small>Opciones: <a href="#" target="_blank">consultar, crear, modificar.</a></small>
                 </h2>
             </div>
@@ -584,17 +584,17 @@ else
                          <table class="table table-bordered table-striped table-hover dataTable js-exportable" id="grid">
                                 <thead>
                                     <tr>
-                                        <th>Nombre</th>
+                                        <th>Nombre Especialidad</th>
                                         <th>C&oacute;digo</th>
-                                        <th>Despacho, Corporaci&oacute;n o Juzgado</th>
+                                        <th>Corporaci&oacute;n</th>
                                         <th>Activo</th>
                                     </tr>
                                 </thead>
                                 <tfoot>
                                     <tr>
-                                        <th>Nombre</th>                                        
+                                        <th>Nombre Especialidad</th>                                        
                                         <th>C&oacute;digo</th>
-                                        <th>Despacho, Corporaci&oacute;n o Juzgado</th>
+                                        <th>Corporaci&oacute;n</th>
                                         <th>Activo</th>
                                 </tfoot>
                                 <tbody>

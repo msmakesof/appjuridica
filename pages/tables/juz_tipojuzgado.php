@@ -545,7 +545,7 @@ else
         <div class="container-fluid">
             <div class="block-header">
                 <h2>
-                    INFORMACION DE: <?php echo strtoupper($nombre_lnk); ?> -  C&oacute;digo Entidad, Corporaci&oacute;n o Juzgado
+                    INFORMACION DE: <?php echo strtoupper($nombre_lnk); ?> -  Corporaci&oacute;n,  Entidad o Juzgado
                     <small>Opciones: <a href="#" target="_blank">consultar, crear, modificar.</a></small>
                 </h2>
             </div>
@@ -584,15 +584,15 @@ else
                          <table class="table table-bordered table-striped table-hover dataTable js-exportable" id="grid">
                                 <thead>
                                     <tr>
-                                        <th>Nombre</th>
-                                        <th>Código Entidad, Corporación o Juzgado</th>
+                                        <th>Nombre Corporaci&oacute;n</th>
+                                        <th>Código Corporaci&oacute;n, Entidad o Juzgado</th>
                                         <th>Activo</th> 
                                     </tr>
                                 </thead>
                                 <tfoot>
                                     <tr>
-                                        <th>Nombre</th>
-                                        <th>Código Entidad, Corporación o Juzgado</th>
+                                        <th>Nombre Corporaci&oacute;n</th>
+                                        <th>Código Corporaci&oacute;n, Entidad o Juzgado</th>
                                         <th>Activo</th>                                        
                                     </tr>
                                 </tfoot>
