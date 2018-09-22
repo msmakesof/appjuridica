@@ -74,6 +74,7 @@ else
 
     <!-- Bootstrap Core Css -->
     <link href="../../plugins/bootstrap/css/bootstrap.css" rel="stylesheet">
+    <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"> -->
 
     <!-- Waves Effect Css -->
     <link href="../../plugins/node-waves/waves.css" rel="stylesheet" />
@@ -94,7 +95,9 @@ else
     <link href="../../css/themes/all-themes.css" rel="stylesheet" />
 
     <!-- Jquery Core Js -->
-    <script src="../../plugins/jquery/jquery.min.js"></script>
+    <!-- <script src="../../plugins/jquery/jquery.min.js"></script> -->
+    <script src="../../plugins/jquery/jquery-2.1.1.js"></script>
+    <!-- <script src="https://code.jquery.com/jquery-3.2.1.js"></script> -->
 
    <style>
     object{
@@ -379,6 +382,8 @@ if( $mjuzgado['estado'] < 2)
 
     <!-- Bootstrap Core Js -->
     <script src="../../plugins/bootstrap/js/bootstrap.js"></script>
+    <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script> -->
+
     <!-- Select Plugin Js -->
     <script src="../../plugins/bootstrap-select/js/bootstrap-select.js"></script>
     <!-- Slimscroll Plugin Js -->

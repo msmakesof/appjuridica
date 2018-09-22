@@ -45,6 +45,7 @@ require_once('../../apis/general/ciudad.php');
 require_once('../../apis/general/piso.php');
 require_once('../../apis/general/tipojuzgado.php');
 require_once('../../apis/general/area.php');
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -57,14 +58,22 @@ require_once('../../apis/general/area.php');
     <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&subset=latin,cyrillic-ext" rel="stylesheet" type="text/css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" type="text/css">
 
+    
     <!-- Bootstrap Core Css -->
     <link href="../../plugins/bootstrap/css/bootstrap.css" rel="stylesheet">
-    
+    <!-- <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"> -->
+    <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"> -->
+
     <!-- Jquery Core Js -->
     <script src="../../plugins/jquery/jquery-2.1.1.js"></script>
-    
+    <!-- <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script> -->
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script> -->
+
+
     <!-- Bootstrap Core Js -->
     <script src="../../plugins/bootstrap/js/bootstrap.js"></script>
+    <!-- <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script> --> 
+    <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script> -->    
 
     <!-- Bootstrap Select Css -->
     <link href="../../plugins/bootstrap-select/css/bootstrap-select.css" rel="stylesheet" />   
@@ -78,6 +87,7 @@ require_once('../../apis/general/area.php');
     <!-- Preloader Css -->
     <link href="../../plugins/material-design-preloader/md-preloader.css" rel="stylesheet" />
 
+
     <!-- Custom Css -->
     <link href="../../css/style.css" rel="stylesheet">
 
@@ -87,6 +97,7 @@ require_once('../../apis/general/area.php');
     <!-- Sweet Alert Css -->
     <link href="../../css/sweet/sweetalert.css" rel="stylesheet" />
     <link href="../../css/sweet/main.css" rel="stylesheet" />
+
   
     <!-- Select Plugin Js -->
     <script src="../../plugins/bootstrap-select/js/bootstrap-select.js"></script>
@@ -111,10 +122,14 @@ require_once('../../apis/general/area.php');
     <!-- Custom Js -->
     <script src="../../js/admin.js"></script>
     <script src="../../js/pages/forms/form-validation.js"></script>
-    <script src="../../plugins/jquery-validation/localization/messages_es.js"></script>
-    <script src="../../js/jquery.numeric.js"></script>    
+    <script src="../../plugins/jquery-validation/localization/messages_es.js"></script>  
+
+    <!-- <script src="../../js/alertify.min.js"></script> -->
+    <script src="../../js/jquery.numeric.js"></script>
+    
 
     <script type="text/javascript">
+
         function populateFruitVariety() {
             $.getJSON('../tables/urlink.php', {funcion: "ja", origen: $('#tipojuzgado').val()}, function (data) {
                 var zdata= data.juz_areasxtipojuzgado;
@@ -379,6 +394,7 @@ require_once('../../apis/general/area.php');
             <!-- #END# Basic Validation --> 
              <div class="row clearfix">         
                 <div id="msj">
+
                      <div class="modal fade" id="defaultModal" tabindex="-1" role="dialog">
                         <div class="modal-dialog" role="document">
                             <div class="modal-content" >
@@ -389,7 +405,9 @@ require_once('../../apis/general/area.php');
                                 <div class="modal-body">                         
                                     <object type="text/html" data="mensajes.php?id=ES" ></object>
                                 </div>
-                                <div class="modal-footer">                                    
+                                <div class="modal-footer">
+                                    <!-- <button type="button" class="btn btn-link waves-effect">SAVE CHANGES</button> 
+                                    <button type="button" class="btn btn-info waves-effect" data-dismiss="modal" id="cerrarModalC">CERRAR Crear.</button>-->
                                 </div>
                             </div>
                         </div>

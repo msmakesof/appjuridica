@@ -1,0 +1,188 @@
+<!doctype html>
+<html>
+<head>
+	<title>Load JSON data with jQuery, PHP and MySQL Example</title>
+	<!-- <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script> -->
+
+<meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <title></title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&subset=latin,cyrillic-ext" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" type="text/css">
+
+    <!-- Bootstrap Core Css -->
+    <link href="../plugins/bootstrap/css/bootstrap.css" rel="stylesheet">
+
+    <!-- Waves Effect Css -->
+    <link href="../plugins/node-waves/waves.css" rel="stylesheet" />
+
+    <!-- Animation Css -->
+    <link href="../plugins/animate-css/animate.css" rel="stylesheet" />
+
+    <!-- Preloader Css -->
+    <link href="../plugins/material-design-preloader/md-preloader.css" rel="stylesheet" />
+
+    <!-- Sweet Alert Css -->
+    <!-- <link href="../../plugins/sweetalert/sweetalert.css" rel="stylesheet" /> -->
+    <link href="../css/sweet/sweetalert.css" rel="stylesheet" />
+    <link href="../css/sweet/main.css" rel="stylesheet" />
+
+    <!-- Bootstrap Select Css -->
+    <link href="../../plugins/bootstrap-select/css/bootstrap-select.css" rel="stylesheet" />
+	<!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" /> -->
+	
+
+    <!-- Custom Css -->
+    <link href="../css/style.css" rel="stylesheet">
+
+    <!-- AdminBSB Themes. You can choose a theme from css/themes instead of get all themes -->
+    <link href="../css/themes/all-themes.css" rel="stylesheet" />
+
+    <!-- mks 20170128
+    <link rel="stylesheet" href="../../css/themes2/alertify.core.css" />
+    <link rel="stylesheet" href="../../css/themes2/alertify.default.css" id="toggleCSS" /> -->
+    <!-- Jquery Core Js -->
+    <script src="../plugins/jquery/jquery-2.1.1.js"></script>
+    <!-- <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script> -->
+
+    <!-- Bootstrap Core Js -->
+    <script src="../plugins/bootstrap/js/bootstrap.js"></script>
+
+    <!-- Sweet Alert Plugin Js -->
+    <!--  <script src="../../plugins/sweetalert/sweetalert.min.js"></script> -->
+    <script src="../js/sweet/functions.js"></script>
+    <script src="../js/sweet/sweetalert.min.js"></script>
+    <script src="../plugins/sweetalert/sweetalert.min.js"></script>
+
+    
+
+    <!-- Select Plugin Js -->
+    <script src="../../plugins/bootstrap-select/js/bootstrap-select.js"></script>
+
+    <!-- Slimscroll Plugin Js -->
+    <script src="../plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
+
+    <!-- Jquery Validation Plugin Css -->
+    <script src="../plugins/jquery-validation/jquery.validate.js"></script>
+
+    <!-- JQuery Steps Plugin Js -->
+    <script src="../plugins/jquery-steps/jquery.steps.js"></script>
+
+    <!-- Waves Effect Plugin Js -->
+    <script src="../plugins/node-waves/waves.js"></script>
+
+    <!-- Waves Effect bootbox.min.js Js -->
+    <script src="../js/bootbox.min.js"></script>
+
+    <!-- Custom Js -->
+    <script src="../js/admin.js"></script>
+    <script src="../js/pages/forms/form-validation.js"></script>
+    <script src="../plugins/jquery-validation/localization/messages_es.js"></script>
+
+    <!-- Demo Js -->
+    <script src="../js/demo.js"></script>
+
+    <!-- <script src="../../js/alertify.min.js"></script> -->
+    <script src="../js/jquery.numeric.js"></script>
+	
+	<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script> -->
+
+</head>
+<body  class="theme-indigo">
+
+<section class="content" style="margin-top:15px;">
+     <div class="container-fluid">
+		<form>
+			<div style="form-group form-float"> 
+				<label class="form-label">
+					Tipo Corporaci&oacute;n
+				</label>                                    
+				<div class="col-sm-4">
+					Fruit:
+					<select class="selectpicker show-tick" data-live-search="true" data-width="80%" name="name" id="fruitName">
+						<option value="3">Apple</option>
+						<option value="4">Banana</option>
+						<option value="8">Orange</option>
+						<option value="9">Pear</option>
+					</select>
+					<br>
+					Variety:
+					<select class="selectpicker show-tick" data-live-search="true" data-width="80%" name="variety" id="fruitVariety">
+					</select>
+				</div>
+			</div>
+		</form>
+	</div>
+</section>
+
+<script>
+
+function populateFruitVariety() {
+
+	/*
+	$.getJSON('fruit-varities.php', {fruitName: $('#fruitName').val()}, function (data) {	
+		---/* ok
+		var select = $('#fruitVariety');
+		var options = select.prop('options');
+		$('option', select).remove();
+
+		$.each(data, function (index, array) {
+			options[options.length] = new Option(array['variety']);
+		});
+		---/ ---
+		var selectedOption = '1';
+		var newOptions = data;
+		var select = $('#fruitVariety');
+		if(select.prop) {
+		  var options = select.prop('options');
+		}
+		else {
+		  var options = select.attr('options');
+		}
+		$('option', select).remove();
+
+		$.each(newOptions, function(val, text) {
+			options[options.length] = new Option(text.variety, val.fruit_id);
+		});
+		select.val(selectedOption);
+
+	});
+	*/
+	
+	
+	$.getJSON('../pages/tables/urlink.php', {funcion: "ja", origen: $('#fruitName').val()}, function (data) {
+		var zdata= data.juz_areasxtipojuzgado;
+		var selectedOption = '0';
+		var newOptions = zdata;
+		var select = $('#fruitVariety');
+		if(select.prop) {
+		  var options = select.prop('options');
+		}
+		else {
+		  var options = select.attr('options');
+		}
+		$('option', select).remove();
+
+		$.each(newOptions, function(val, text) {
+			options[options.length] = new Option(text.ARE_Nombre, val.ARE_IdArea);
+		});
+		select.val(selectedOption);
+	});
+	
+
+}
+
+$(document).ready(function () {
+	populateFruitVariety();
+
+	//$('.selectpicker').selectpicker();
+
+	$('#fruitName').change(function () {
+		populateFruitVariety();
+	});
+});
+</script>
+
+</body>
+</html>
