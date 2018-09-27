@@ -67,6 +67,7 @@ if( isset($_POST['direccion']) )
 {
     $pdireccion = trim($_POST['direccion']);
     $pdireccion = str_replace(' ','%20', $pdireccion);
+    $pdireccion = str_replace('#','No.', $pdireccion);
 }
 
 $ppiso ="";

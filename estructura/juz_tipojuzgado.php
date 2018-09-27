@@ -80,7 +80,7 @@ class JUZ_TIPOJUZGADO
     public static function getByIdEstado($IdEstadoTabla)
     {
         // Consulta de la GEN_PAIS
-        $consulta = "SELECT ".$GLOBALS['Llave'].", TJU_Nombre, TJU_Estado".
+        $consulta = "SELECT ".$GLOBALS['Llave'].", TJU_Nombre, TJU_Codigo, TJU_Estado".
                     " FROM ". $GLOBALS['TABLA'].
                     " WHERE TJU_Estado = ? ORDER BY TJU_Nombre; ";
 

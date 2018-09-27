@@ -29,8 +29,8 @@
     <link href="../css/sweet/main.css" rel="stylesheet" />
 
     <!-- Bootstrap Select Css -->
-    <link href="../../plugins/bootstrap-select/css/bootstrap-select.css" rel="stylesheet" />
-	<!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" /> -->
+    <!-- <link href="../../plugins/bootstrap-select/css/bootstrap-select.css" rel="stylesheet" /> -->
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
 	
 
     <!-- Custom Css -->
@@ -164,18 +164,29 @@ function populateFruitVariety() {
 		}
 		$('option', select).remove();
 
-		$.each(newOptions, function(val, text) {
-			options[options.length] = new Option(text.ARE_Nombre, val.ARE_IdArea);
+		$.each(newOptions, function(val, text) {			
+			options[options.length] = new Option(text.ARE_Nombre, text.ARE_IdArea);
 		});
 		select.val(selectedOption);
 	});
+	
+	/*
+	$.getJSON('../pages/tables/urlink.php', {funcion: "ja", origen: $('#fruitName').val()}, function (data) {
+		var zdata= data.juz_areasxtipojuzgado;
+		var select = document.getElementById("fruitVariety");
+		for(index in zdata) {
+			console.log(zdata.ARE_IdArea);
+			select.options[select.options.length] = new Option(zdata[index].ARE_Nombre, zdata[index].ARE_IdArea);
+		}
+	});
+	*/
+	
 	
 
 }
 
 $(document).ready(function () {
 	populateFruitVariety();
-
 	//$('.selectpicker').selectpicker();
 
 	$('#fruitName').change(function () {

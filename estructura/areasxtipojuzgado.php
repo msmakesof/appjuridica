@@ -20,10 +20,16 @@ class AREASXTIPOJUZGADO
     public static function getById($IdTabla)
     {
         // Consulta de la tabla de tablas
-        $consulta = "SELECT ARE_IdArea,
-					ARE_Nombre,                            
-					ARE_Estado, 
-					ARE_Codigo 
+        // $consulta = "SELECT ARE_IdArea,
+		// 			ARE_Nombre,                            
+		// 			ARE_Estado, 
+		// 			ARE_Codigo 
+		// 			FROM juz_area
+		// 			WHERE ARE_IdTipoJuzgado = ? AND ARE_Estado = 1 
+        //             ORDER BY ARE_Nombre; ";
+
+            $consulta = "SELECT ARE_IdArea,
+					ARE_Nombre, ARE_Codigo
 					FROM juz_area
 					WHERE ARE_IdTipoJuzgado = ? AND ARE_Estado = 1 
                     ORDER BY ARE_Nombre; ";

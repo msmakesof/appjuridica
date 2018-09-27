@@ -135,7 +135,7 @@ $EstadoUsuario = $mjuzgado['juz_juzgado']['EstadoTabla'];
 
                                 <div style="form-group form-float"> 
                                     <label class="form-label">
-                                        Tipo Juzgado: Juzgado: Entidad, Corporación o Juzgado
+                                        Tipo Corporación o Juzgado
                                     </label>                                    
                                     <div class="col-sm-4">                                       
                                         <select class="selectpicker show-tick" data-live-search="true" data-width="90%" name="tipojuzgado" id="tipojuzgado" required>
@@ -159,23 +159,25 @@ $EstadoUsuario = $mjuzgado['juz_juzgado']['EstadoTabla'];
 
                                 <div style="form-group form-float">                                     
                                     <label class="form-label">
-                                        Area Sala / Sección y/o Especialidad
+                                    Especialidad - Area 
                                     </label>                                    
                                     <div class="col-sm-4">                                       
                                         <select class="selectpicker show-tick" data-live-search="true" data-width="90%" name="area" id="area" required>
-                                            <option value="" >Seleccione Opción...</option>
+                                            <option value="">-- Seleccione Especializacion.... --</option>
                                             <?php
-                                                for($i=0; $i<count($marea['juz_area']); $i++)
-                                                {
-                                                    $ARE_IdArea = $marea['juz_area'][$i]['ARE_IdArea'];                                                    
-                                                    $ARE_Nombre = $marea['juz_area'][$i]['ARE_Nombre'];
-                                                    $ARE_Estado = $marea['juz_area'][$i]['ARE_Estado'];
+                                                // for($i=0; $i<count($marea['juz_area']); $i++)
+                                                // {
+                                                //     $ARE_IdArea = $marea['juz_area'][$i]['ARE_IdArea'];                                                    
+                                                //     $ARE_Nombre = $marea['juz_area'][$i]['ARE_Nombre'];
+                                                //     $ARE_Estado = $marea['juz_area'][$i]['ARE_Estado'];
                                             ?>
-                                                    <option value="<?php echo $ARE_IdArea; ?>" <?php if ($ARE_IdArea == $Area){ echo "selected";} else{ echo "";} ?>>
-                                                        <?php echo $ARE_Nombre ; ?>                                                
+                                            <!--
+                                                    <option value="<?php //echo $ARE_IdArea; ?>" <?php //if ($ARE_IdArea == $Area){ echo "selected";} else{ echo "";} ?>>
+                                                        <?php //echo $ARE_Nombre ; ?>                                                
                                                     </option>
+                                            -->        
                                             <?php
-                                                }
+                                                // }
                                             ?>
                                         </select>
                                     </div>
@@ -316,7 +318,31 @@ $EstadoUsuario = $mjuzgado['juz_juzgado']['EstadoTabla'];
 
     <script src="../../js/alertify.min.js"></script>
 
-    <script type="text/javascript">    
+    <script type="text/javascript">
+        function populateFruitVariety() {
+            $.getJSON('../tables/urlink.php', {funcion: "ja", origen: $('#tipojuzgado').val()}, function (data) {
+                var zdata= data.juz_areasxtipojuzgado;
+                var selectedOption = "<?php echo $Area; ?>";    //'0'; // el valor por defecto
+                var newOptions = zdata;
+                var select = $('#area');
+                if(select.prop) 
+                {
+                    var options = select.prop('options');
+                }
+                else 
+                {
+                    var options = select.attr('options');
+                }
+                $('option', select).remove();
+
+                $.each(newOptions, function(val, text) {
+                    options[options.length] = new Option(text.ARE_Nombre, text.ARE_IdArea);
+                });
+                select.val(selectedOption);
+                $('#area').selectpicker('refresh');
+            });
+        } 
+
     $(document).ready(function()
 	{			
 		$("#mensaje").hide();
@@ -325,6 +351,11 @@ $EstadoUsuario = $mjuzgado['juz_juzgado']['EstadoTabla'];
         $("#form_validation").click(function() {
 			$("#msj").html("");
 		})
+
+        populateFruitVariety();
+        $('#tipojuzgado').change(function() {
+            populateFruitVariety();
+        });
 		
 		$("#grabar").on('click', function(e) {
             $("#mensaje").hide();

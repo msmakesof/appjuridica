@@ -52,7 +52,8 @@ if(isset($_POST['ciudad'])){
 $direccion ="";
 if(isset($_POST['direccion'])){
     $direccion = trim($_POST['direccion']);
-    $direccion = str_replace(' ', '%20', $direccion);    
+    $direccion = str_replace(' ', '%20', $direccion);
+    $direccion = str_replace('#', 'No.', $direccion);    
 }
 
 $piso ="";

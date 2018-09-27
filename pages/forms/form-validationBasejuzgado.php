@@ -120,7 +120,7 @@ require_once('../../apis/general/area.php');
                 var zdata= data.juz_areasxtipojuzgado;
                 var selectedOption = '0';
                 var newOptions = zdata;
-                var select = $('#xarea');
+                var select = $('#area');
                 if(select.prop) 
                 {
                     var options = select.prop('options');
@@ -132,10 +132,10 @@ require_once('../../apis/general/area.php');
                 $('option', select).remove();
 
                 $.each(newOptions, function(val, text) {
-                    options[options.length] = new Option(text.ARE_Nombre, val.ARE_IdArea);
+                    options[options.length] = new Option(text.ARE_Nombre, text.ARE_IdArea);
                 });
                 select.val(selectedOption);
-                $('#xarea').selectpicker('refresh');
+                $('#area').selectpicker('refresh');
             });
         }    
 
@@ -291,7 +291,7 @@ require_once('../../apis/general/area.php');
                                     Especialidad - Area
                                     </label>                                    
                                     <div class="col-sm-4">                                       
-                                        <select id="xarea" name="xarea" class="selectpicker show-tick" data-live-search="true" data-width="80%" required>
+                                        <select id="area" name="area" class="selectpicker show-tick" data-live-search="true" data-width="80%" required>
                                             <option value="">-- Seleccione Especializacion.... --</option>
                                         </select> 
                                     </div>                                    

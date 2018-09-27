@@ -41,11 +41,7 @@ if (!function_exists("GetSQLValueString"))
 
 $NombreTabla ="PROCESO";
 $idTabla = 0;
-require_once('../../apis/general/ciudad.php');
-require_once('../../apis/usuario/infoUsuario.php');
-require_once('../../apis/proceso/ubicacion.php');
-require_once('../../apis/proceso/claseproceso.php');
-require_once('../../apis/juzgado/juzgado.php');
+//require_once('../../apis/juzgado/juzgado.php');
 require_once('../../apis/cliente/infoCliente.php');
 $yy = date("Y");
 $empresa = "AppJuridica";
@@ -176,11 +172,91 @@ else
     var nombre ="";
     var _zipDeptoCiudad = "";
     var _zip = "";
+    var _tipojuzgado = "";
     var _juzgado = "";
     var _area = "";
+    var _txtarea = "";
+    var _despacho ="";
     var _nProceso = "";
     var _nDv = "";
     var _Proceso = "";
+
+    function populateFruitVariety() {
+        $.getJSON('../tables/urlink.php', {funcion: "ja", origen: $('#tipojuzgado').val()}, function (data) {
+            var zdata= data.juz_areasxtipojuzgado;
+            var selectedOption = '0';
+            var newOptions = zdata;
+            var select = $('#area');
+            if(select.prop) 
+            {
+                var options = select.prop('options');
+            }
+            else 
+            {
+                var options = select.attr('options');
+            }
+            $('option', select).remove();
+
+            $.each(newOptions, function(val, text) {
+                options[options.length] = new Option(text.ARE_Nombre, text.ARE_Codigo);
+            });
+            select.val(selectedOption);
+            $('#area').selectpicker('refresh');
+            _area = $('#area').val();
+            goDespachos();                 
+            nroProceso();            
+        });
+    }
+
+    function goDespachos() {
+        var __area = $('#area').val();
+        if( __area == "")
+        {
+            __area = _area;
+        }
+        $.getJSON('../tables/urlink.php', {funcion: "jd", origen: $('#tipojuzgado').val() +'-'+ __area }, function (data) {
+            var zdata= data.juz_areasxjuzgado;
+            var selectedOption = '0';
+            var newOptions = zdata;
+            var select = $('#despacho');
+            if(select.prop) 
+            {
+                var options = select.prop('options');
+            }
+            else 
+            {
+                var options = select.attr('options');
+            }
+            $('option', select).remove();
+            $.each(newOptions, function(val, text) {
+                options[options.length] = new Option(text.JUZ_Ubicacion, text.JUZ_IdJuzgado);
+            });
+            select.val(selectedOption);
+            $('#despacho').selectpicker('refresh');
+            _txtdespacho = $('#despacho option:selected').text();
+            _txtdespacho = _txtdespacho.trim();
+            _despacho = _txtdespacho.substring(0, 3);
+            nroProceso();
+        });
+    }
+
+    function nroProceso(){
+            _area = "";
+            if(_tipojuzgado != "")
+            {
+                _area =  $("#area").val();
+            }
+            _Proceso = _zipDeptoCiudad + _tipojuzgado + _area + _despacho + $("#anio").val() + _nProceso + _nDv;
+            $("#proceso").attr("value",_Proceso);
+            init_contador("#proceso","#muestrocantidadcaracteresid");
+        }
+
+    function init_contador(idtextarea, idcontador)
+    {        
+        var contador = $(idcontador);
+        contador.html( $(idtextarea).val().length);
+    }
+
     $(document).ready(function()
     {       
         $("#msj").hide();
@@ -188,11 +264,13 @@ else
         //$('#zip').numeric();
         $('#anio').numeric();
 		$('#ndv').numeric();
+        $('#consecutivo').numeric();
         $('#nproceso').numeric(); 
         $('.selectpicker').selectpicker();
         $('#fechainicio').datetimepicker({
-          format: 'YYYY-MM-DD'       
+           format: 'YYYY-MM-DD'       
         });
+        
         function reset () {
             $("#toggleCSS").attr("href", "../../css/themes2/alertify.default.css");
             alertify.set({
@@ -205,6 +283,30 @@ else
                 buttonFocus   : "ok"
             });
         }
+
+
+        $('#tipojuzgado').change(function() {
+            populateFruitVariety();
+            var nameARE_Codigo = $('#tipojuzgado option:selected').text();
+            _tipojuzgado = nameARE_Codigo.trim();
+            _tipojuzgado = _tipojuzgado.substring(0, 2);            
+            nroProceso();            
+        });
+
+        $('#area').change(function() {
+            goDespachos();
+            nroProceso();            
+        });
+
+         $('#area').focusin(function() {           
+            _area = $('#area').val();            
+            nroProceso();        
+        });
+
+        $('#area').focusout(function() {           
+            _area = $('#area').val();            
+            nroProceso();        
+        });
 
         $("#zip").on('change', function(e) {
             _zip = $("#zip").val();
@@ -219,40 +321,19 @@ else
                     nroProceso();
                 }
             });
-            nroProceso();
+            nroProceso();            
         });           
 
-        $("#juzgado").on('change', function(e) {
-            _juzgado = $("#juzgado").val();
-            $.ajax({
-                url: "urlink.php",
-                method: "GET",                
-                data: {funcion: "j", origen: _juzgado},                
-                dataType: "text",
-                success: function(data) {
-                    var zz =JSON.parse(data);
-                    var _NombreArea = zz.juz_juzgado.ARE_Nombre;
-                    $("#area").attr("value",_NombreArea);
-                    _area = zz.juz_juzgado.JUZ_IdArea;
-                    nroProceso();
-                }
-            });            
-        });
 
         $("#nproceso").on('change', function(e) {
             _nProceso = $("#nproceso").val();
-            nroProceso();
+            nroProceso();            
         });
 		
 		$("#ndv").on('change', function(e) {
             _nDv = $("#ndv").val();
-            nroProceso();
+            nroProceso();            
         });
-
-        function nroProceso(){
-            _Proceso = _zipDeptoCiudad + _area + _juzgado + $("#anio").val() + _nProceso + _nDv;
-            $("#proceso").attr("value",_Proceso);    
-        } 
 
         $("#cerrar").on('click', function(e) {
             e.preventDefault();
@@ -267,7 +348,8 @@ else
             usuario = $("#usuario").val();
             ubicacion = $("#ubicacion").val();
             claseproceso = $("#claseproceso").val();
-            juzgado = $("#juzgado").val();
+            pproceso = $("#proceso").val();
+            juzgado = $("#tipojuzgado").val();
             var estado = $('input:radio[name=estado]:checked').val();
             e.preventDefault();
             if( estado == undefined || nombre == "" || fechainicio == "" || usuario == "" || ubicacion == "" || claseproceso == "" || juzgado == "" )
@@ -279,10 +361,10 @@ else
             else
             {
                 $.ajax({
-                    data : {"pnombre": nombre, "pfechainicio": $fechainicio, "pusuario": $usuario, "pubicacion": $ubicacion, "pclaseproceso": $claseproceso ,"pjuzgado": $juzgado,"pestado": estado},
+                    data : {"pnombre": nombre, "pfechainicio": fechainicio, "pusuario": usuario, "pubicacion": ubicacion, "pclaseproceso": claseproceso ,"pjuzgado": juzgado,"pestado": estado},
                     type: "POST",
                     dataType: "html",
-                    url : "crea_<?php echo strtolower($NombreTabla); ?>.php",
+                    url : "../forms/crea_<?php echo strtolower($NombreTabla); ?>.php",
                 })
                 .done(function( data, textStatus, jqXHR){                 
                     var xrespstr = data.trim();
@@ -722,12 +804,14 @@ if( $mproceso['estado'] < 2)
 										<div class="col-xs-12 caja">
 											<div class="row">
 												<div class="col-xs-5">                                                
-													<label class="form-label">C&oacute;digo DANE Municipio:</label>
+													<label class="form-label">C&oacute;digo DANE Departamento / Municipio:</label>
 													<div class="form-line">
 														<!-- <input type="number" onkeypress="return isNumeric(event)" oninput="maxLengthCheck(this)" class="form-control" name="zip" id="zip" min="1" max="99999" maxlength="5" required> -->
                                                         <select class="selectpicker show-tick" data-live-search="true" data-width="100%" name="zip" id="zip" required>
                                                         <option value="" >Seleccione Municipio...</option>
                                                         <?php
+                                                            $idTabla = 0;
+                                                            require_once('../../apis/general/ciudad.php');
                                                             for($i=0; $i<count($mciudad['gen_ciudad']); $i++)
                                                             {
                                                                 $CIU_IdCiudades = $mciudad['gen_ciudad'][$i]['CIU_IdCiudades'];
@@ -746,23 +830,25 @@ if( $mproceso['estado'] < 2)
 												</div>
 
 												<div class="col-xs-7">
-													<label class="form-label">Corporaci&oacute;n / Juzgado:</label>                                        
-													<select class="selectpicker show-tick" data-live-search="true" data-width="100%" name="juzgado" id="juzgado" required>
-													<option value="" >Seleccione Juzgado...</option>
-													<?php
-														for($i=0; $i<count($mjuzgado['juz_juzgado']); $i++)
-														{
-															$JUZ_IdJuzgado = $mjuzgado['juz_juzgado'][$i]['JUZ_IdJuzgado'];
-															$JUZ_Ubicacion = $mjuzgado['juz_juzgado'][$i]['JUZ_Ubicacion'];
-															$JUZ_Area = $mjuzgado['juz_juzgado'][$i]['ARE_Nombre'];
-															$JUZ_IdArea = $mjuzgado['juz_juzgado'][$i]['JUZ_IdArea'];                                                        
-													?>
-															<option value="<?php echo $JUZ_IdJuzgado; ?>" >
-																<?php echo $JUZ_Ubicacion ; ?>                                                
-															</option>
-													<?php
-														}
-													?>
+													<label class="form-label">Corporaci&oacute;n:</label>                                        
+													<select class="selectpicker show-tick" data-live-search="true" data-width="100%" name="tipojuzgado" id="tipojuzgado" required>
+													    <option value="" >Seleccione Corporaci&oacute;n...</option>
+													    <?php
+                                                            $idTabla = 0;
+                                                            require_once('../../apis/general/tipojuzgado.php');
+                                                            for($i=0; $i<count($mtipojuzgado['juz_tipojuzgado']); $i++)
+                                                            {
+                                                                $TJU_IdTipoJuzgado = $mtipojuzgado['juz_tipojuzgado'][$i]['TJU_IdTipoJuzgado'];                                                    
+                                                                $TJU_Nombre = trim($mtipojuzgado['juz_tipojuzgado'][$i]['TJU_Nombre']);
+                                                                $TJU_Codigo = trim($mtipojuzgado['juz_tipojuzgado'][$i]['TJU_Codigo']);
+                                                                $TJU_Estado = $mtipojuzgado['juz_tipojuzgado'][$i]['TJU_Estado'];
+                                                        ?>
+                                                                <option value="<?php echo $TJU_IdTipoJuzgado; ?>" >
+                                                                    <?php echo  $TJU_Codigo .'-'. $TJU_Nombre ; ?>                                                
+                                                                </option>
+                                                        <?php
+                                                            }
+                                                        ?>
 													</select>
 												</div>
 											</div>
@@ -773,14 +859,28 @@ if( $mproceso['estado'] < 2)
                                 <div class="form-group">                               
                                     <div class="col-xs-12 caja">
                                         <div class="row">
-                                            <div class="col-xs-7">                                                
-                                                <label class="form-label">Area:</label>
+                                            <div class="col-xs-6">                                                
+                                                <label class="form-label">Especialidad:</label>
                                                 <div class="form-line">
-                                                    <input type="text" class="form-control" name="area" id="area" value="<?php echo $JUZ_Area ;?>" maxlength="5" autocomplete="ÑÖcompletes" required>                                                
+                                                    <!-- <input type="text" class="form-control" name="area" id="area" value="<?php //echo $JUZ_Area ;?>" maxlength="5" autocomplete="ÑÖcompletes" required> -->
+                                                    <select id="area" name="area" class="selectpicker show-tick" data-live-search="true" data-width="80%" required>
+                                                        <option value="">-- Seleccione Especializacion.... --</option>
+                                                    </select> 
                                                 </div>                                                
                                             </div>
+
+                                            <div class="col-xs-3">
+                                                <label class="form-label">Despacho</label>                                        
+                                                <div class="form-line">
+                                                    <!-- <input type="text" class="form-control" name="despacho" id="despacho" value="" maxlength="3" autocomplete="ÑÖcompletes" required>
+                                                    <label class="form-label"></label> -->
+                                                    <select id="despacho" name="despacho" class="selectpicker show-tick" data-live-search="true" data-width="80%" required>
+                                                        <option value="">-- Seleccione Despacho.... --</option>
+                                                    </select> 
+                                                </div>
+                                            </div>
                                             
-                                            <div class="col-xs-5">
+                                            <div class="col-xs-3">
                                                 <label class="form-label">Año</label>                                        
                                                 <div class="form-line">
                                                     <input type="text" class="form-control" name="anio" id="anio" value="<?php echo $yy; ?>" maxlength="4" autocomplete="ÑÖcompletes" required>
@@ -797,9 +897,9 @@ if( $mproceso['estado'] < 2)
                                         <div class="row">
 											<div class="col-xs-6">
 												<label class="form-label">Proceso:</label>
-													<div class="form-line">
-														<input type="number" onkeypress="return isNumeric(event)" oninput="maxLengthCheck(this)" class="form-control" name="nproceso"id="nproceso" min="1" max="99999" maxlength="5" autocomplete="off" required>
-													</div>												
+                                                <div class="form-line">
+                                                    <input type="number" onkeypress="return isNumeric(event)" oninput="maxLengthCheck(this)" class="form-control" name="nproceso"id="nproceso" min="1" max="99999" maxlength="5" autocomplete="off" required>
+                                                </div>                                                    											
 											</div>
 											
 											<div class="col-xs-3">
@@ -820,6 +920,9 @@ if( $mproceso['estado'] < 2)
 												<div class="form-line">
 													<input type="text" class="form-control" name="proceso"id="proceso" value="" maxlength="23" required readonly/>													
 												</div>
+                                                <div style="font-size:11px; text-align:right;">
+                                                    Caracteres: <span id="muestrocantidadcaracteresid">0</span> de 23
+                                                </div>	
 											</div>
 											
 											<div class="col-sm-6">
@@ -842,6 +945,8 @@ if( $mproceso['estado'] < 2)
 												<select class="selectpicker show-tick" data-live-search="true" data-width="100%" name="usuario" id="usuario" required>
 												<option value="" >Seleccione Asignado...</option>
 												<?php
+                                                    $idTabla = 0;
+                                                    require_once('../../apis/usuario/infoUsuario.php');
 													for($i=0; $i<count($muser['usu_usuario']); $i++)
 													{
 														$USU_IdUsuario = $muser['usu_usuario'][$i]['USU_IdUsuario'];                                                
@@ -867,6 +972,8 @@ if( $mproceso['estado'] < 2)
                                                 <select class="selectpicker show-tick" data-live-search="true" data-width="100%" name="ubicacion" id="ubicacion" required>
                                                 <option value="" >Seleccione Ubicación...</option>
                                                 <?php
+                                                    $idTabla = 0;
+                                                    require_once('../../apis/proceso/ubicacion.php');
                                                     for($i=0; $i<count($mubicacion['pro_ubicacion']); $i++)
                                                     {
                                                         $UBI_IdUbicacion = $mubicacion['pro_ubicacion'][$i]['UBI_IdUbicacion'];                                                
@@ -893,6 +1000,8 @@ if( $mproceso['estado'] < 2)
                                                     <select class="selectpicker show-tick" data-live-search="true" data-width="100%" name="claseproceso" id="claseproceso" required>
                                                     <option value="" >Seleccione Clase Proceso...</option>
                                                     <?php
+                                                        $idTabla = 0;
+                                                        require_once('../../apis/proceso/claseproceso.php');
                                                         for($i=0; $i<count($mclaseproceso['pro_claseproceso']); $i++)
                                                         {
                                                             $CPR_IdClaseProceso = $mclaseproceso['pro_claseproceso'][$i]['CPR_IdClaseProceso'];                                                
