@@ -4,8 +4,9 @@ require_once('../../Connections/config2.php');
 if(!isset($_SESSION)) 
 { 
   session_start(); 
-}
-
+} 
+?>
+<?php
 if (!function_exists("GetSQLValueString")) 
 {
   function GetSQLValueString($theValue, $theType, $theDefinedValue = "", $theNotDefinedValue = "") 
@@ -40,10 +41,35 @@ if (!function_exists("GetSQLValueString"))
   }
 }
 require_once('../../Connections/DataConex.php');
+
+$params ="";
+$idTabla = 0;
+if(isset($_GET["idTabla"])){
+  $idTabla = $_GET["idTabla"];
+}
+
+$deptoproceso="";
+if(isset($_GET["deptoproceso"])){
+    $deptoproceso = $_GET["deptoproceso"];
+}
+
+$ciudadproceso ="";
+if(isset($_GET["ciudadproceso"])){
+    $ciudadproceso = $_GET["ciudadproceso"];
+}
+
+if($deptoproceso != "" && $ciudadproceso != "")
+{
+  $params = "Deptoproceso=$deptoproceso&Ciudadproceso=$ciudadproceso";
+}
+else
+{
+  $params ="IdTablacxd=$idTabla";
+}
+
 $soportecURL = "S";
-$params ="IdTabla=$idTabla&fn=$funcion";
-$url         = urlServicios."consultadetalle/cd_areasxtipojuzgado.php?".$params;
-//echo("<script>console.log('PHP areaxtipojuzgado: ".$url."');</script>");
+$url         = urlServicios."consultadetalle/consultadetalle_gen_ciudad.php?".$params;
+echo("<script>console.log('PHP: ".$url."');</script>");
 if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
 {
     $ch = curl_init();
@@ -57,16 +83,16 @@ if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
     $resultado = curl_exec ($ch);
     curl_close($ch);
 
-    $mjuzgado =  preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $resultado);    
-    $mjuzgado = json_decode($mjuzgado, true);
-    //echo("<script>console.log('PHP: ".print_r($mjuzgado)."');</script>");
-    //echo("<script>console.log('PHP: ".count($m['juz_area'])."');</script>");
+    $mciudad =  preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $resultado);    
+    $mciudad = json_decode($mciudad, true);
+    //echo("<script>console.log('PHP: ".print_r($mciudad)."');</script>");
+    //echo("<script>console.log('PHP: ".count($m['gen_ciudad'])."');</script>");
     
     $json_errors = array(
-      JSON_ERROR_NONE => 'No se ha producido ningún error',
-      JSON_ERROR_DEPTH => 'Maxima profundidad de pila ha sido excedida',
-      JSON_ERROR_CTRL_CHAR => 'Error de carácter de control, posiblemente codificado incorrectamente',
-      JSON_ERROR_SYNTAX => 'Error de Sintaxis',
+        JSON_ERROR_NONE => 'No se ha producido ningún error',
+        JSON_ERROR_DEPTH => 'Maxima profundidad de pila ha sido excedida',
+        JSON_ERROR_CTRL_CHAR => 'Error de carácter de control, posiblemente codificado incorrectamente',
+        JSON_ERROR_SYNTAX => 'Error de Sintaxis',
     );
     //echo "Error : ", $json_errors[json_last_error()], PHP_EOL, PHP_EOL."<br>";        
 }
@@ -74,7 +100,7 @@ else
 {
     $soportecURL = "N";
     echo "No hay soporte para cURL";
-}
+} 
 
 if($soportecURL == "N")
 {
@@ -82,6 +108,6 @@ if($soportecURL == "N")
     $response = Unirest\Request::get($url, array("X-Mashape-Key" => "MY SECRET KEY"));
     $resultado = $response->raw_body;
     $resultado = preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $resultado);
-    $mjuzgado = json_decode($resultado, true);	        
-} 
+    $mciudad = json_decode($resultado, true);	        
+}
 ?>

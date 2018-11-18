@@ -72,17 +72,17 @@ if( isset($_POST['pclaseproceso']) )
     $pclaseproceso = trim($_POST['pclaseproceso']);
 }
 
-$pdemandante ="";
-if( isset($_POST['pdemandante']) )
-{
-    $pdemandante = trim($_POST['pdemandante']);
-}
+// $pdemandante ="";
+// if( isset($_POST['pdemandante']) )
+// {
+//     $pdemandante = trim($_POST['pdemandante']);
+// }
 
-$pdemandado ="";
-if( isset($_POST['pdemandado']) )
-{
-    $pdemandado = trim($_POST['pdemandado']);
-}
+// $pdemandado ="";
+// if( isset($_POST['pdemandado']) )
+// {
+//     $pdemandado = trim($_POST['pdemandado']);
+// }
 
 $pidjuzgado = substr($pproceso,9,3);
 
@@ -92,12 +92,36 @@ if( isset($_POST['pestado']) )
     $pestado = trim($_POST['pestado']);
 }
 
+$pcliente ="";
+if( isset($_POST['pcliente']) )
+{
+    $pcliente = trim($_POST['pcliente']);
+}
+
+$pdemandado ="";
+if( isset($_POST['pdemandado']) )
+{
+    $pdemandado = trim($_POST['pdemandado']);
+}
+
+$pespecialidad ="";
+if( isset($_POST['pespecialidad']) )
+{
+    $pespecialidad = trim($_POST['pespecialidad']);
+}
+
+$pdespacho ="";
+if( isset($_POST['pdespacho']) )
+{
+    $pdespacho = trim($_POST['pdespacho']);
+}
+
 require_once('../../Connections/DataConex.php');
 //Verifico si existe una Tabla con las siguientes caracteristicas
 // Nombres iguales 
 if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
 {
-  $parameters = "ExisteTabla=1&Proceso=$pproceso&Demandante=$pdemandante&Demandado=$pdemandado";
+  $parameters = "ExisteTabla=1&Proceso=$pproceso&Demandante=$pcliente&Demandado=$pdemandado";
   $url = urlServicios."consultadetalle/consultadetalle_pro_proceso.php?".$parameters;
   $ch = curl_init();
   curl_setopt($ch, CURLOPT_VERBOSE, true);
@@ -132,7 +156,7 @@ if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
     else
     {
       
-      $parameters = "insert=insert&Proceso=$pproceso&Fechainicio=$pfechainicio&Asignadoa=$pasignadoa&Ubicacion=$pubicacion&Claseproceso=$pclaseproceso&Demandante=$pdemandante&Demandado=$pdemandado&JuzgadoOrigen=$pidjuzgado&Estado=$pestado";
+      $parameters = "insert=insert&Proceso=$pproceso&Fechainicio=$pfechainicio&Asignadoa=$pasignadoa&Ubicacion=$pubicacion&Claseproceso=$pclaseproceso&Demandante=$pcliente&Demandado=$pdemandado&JuzgadoOrigen=$pidjuzgado&Estado=$pestado&Especialidad=$pespecialidad&Despacho=$pdespacho";
       $soportecURL = "S";
       $url         = urlServicios."consultadetalle/consultadetalle_pro_proceso.php?".$parameters;
       $existe      = "";

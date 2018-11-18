@@ -28,10 +28,11 @@ class PRO_PROCESO
             PRO_EstadoProceso, 
             CASE PRO_EstadoProceso WHEN 1 THEN 'Activo' ELSE 'Inactivo' END EstadoTabla 
             FROM ".$GLOBALS['TABLA'].
-            " JOIN usu_usuario ON usu_usuario.USU_IdUsuario = PRO_IdUsuario ".
+            " LEFT JOIN usu_usuario ON usu_usuario.USU_IdUsuario = PRO_IdUsuario ".
             " JOIN pro_ubicacion ON pro_ubicacion.UBI_IdUbicacion = PRO_IdUbicacion ".
             " JOIN pro_claseproceso ON pro_claseproceso.CPR_IdClaseProceso = PRO_IdClaseProceso ".
             " LEFT JOIN juz_juzgado ON juz_juzgado.JUZ_IdJuzgado = PRO_IdJuzgadoOrigen ".
+            " WHERE PRO_NumeroProceso > '' ".
             " ORDER BY PRO_NumeroProceso; ";
         try {
             // Preparar sentencia
@@ -201,7 +202,9 @@ class PRO_PROCESO
      * @param $Claseproceso          Claseproceso      
      * @param $Demandante            Demandante 
      * @param $Demandado             Demandado
-     * @param $Estado                Estado 
+     * @param $Estado                Estado
+     * @param $Especialidad          Especialidad o Area
+     * @param $Despacho              Despacho
      * @return PDOStatement
      */
     public static function insert(        
@@ -213,7 +216,9 @@ class PRO_PROCESO
         $Ubicacion,
         $Claseproceso,                
         $JuzgadoOrigen,                
-        $Estado
+        $Estado,
+        $Especialidad,
+        $Despacho
     )
     {
         // Sentencia INSERT
@@ -226,9 +231,11 @@ class PRO_PROCESO
             " PRO_IdUbicacion, " . 
             " PRO_IdClaseProceso, " .            
             " PRO_IdJuzgadoOrigen, " . 
-            " PRO_EstadoProceso " . 
+            " PRO_EstadoProceso, " . 
+            " PRO_IdArea, ".
+            " PRO_IdJuzgado".
             " )".     
-            " VALUES(?,?,?,?,?,?,?,?,?) ;";
+            " VALUES(?,?,?,?,?,?,?,?,?,?,?) ;";
 
         // Preparar la sentencia
         $sentencia = Database::getInstance()->getDb()->prepare($comando);
@@ -243,7 +250,9 @@ class PRO_PROCESO
                 $Ubicacion,
                 $Claseproceso,                
                 $JuzgadoOrigen,                
-                $Estado
+                $Estado,
+                $Especialidad,
+                $Despacho
             )
         );
     }
@@ -280,16 +289,16 @@ class PRO_PROCESO
      * @param $IdUsuario identificador de la PRO_Proceso
      * @return bool Respuesta de la consulta
      */
-    public static function existetabla($Nombre)
+    public static function existetabla($Proceso, $Demandante, $Demandado)
     {
-        $consulta = "SELECT count(". $GLOBALS['Llave']. ") existe, UBI_Nombre FROM ".$GLOBALS['TABLA'].
-        " WHERE UBI_Nombre = ? ; ";
+        $consulta = "SELECT count(". $GLOBALS['Llave']. ") existe, PRO_NumeroProceso FROM ".$GLOBALS['TABLA'].
+        " WHERE PRO_NumeroProceso = ? AND PRO_IdDemandante = ? AND PRO_IdDemandado = ? ; ";
 
         try {
             // Preparar sentencia
             $comando = Database::getInstance()->getDb()->prepare($consulta);
             // Ejecutar sentencia preparada
-            $comando->execute(array($Nombre));
+            $comando->execute(array($Proceso, $Demandante, $Demandado));
             // Capturar primera fila del resultado
             $row = $comando->fetch(PDO::FETCH_ASSOC);
             return $row;

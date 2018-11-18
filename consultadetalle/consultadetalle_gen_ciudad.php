@@ -82,6 +82,28 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             );
         }
     }
+    elseif ( isset($_GET['IdTablacxd']) ){
+        $parametro = $_GET['IdTablacxd'];
+        $retorno = GEN_CIUDAD::ciudadesxdepto($parametro);
+        if ($retorno) 
+        {
+            $gen_ciudad["estado"] = "1";
+            $gen_ciudad["gen_ciudad"] = $retorno;
+            // Enviar objeto json de la gen_ciudad
+            header('Content-Type: application/json');
+            echo json_encode($gen_ciudad);
+        } 
+        else 
+        {
+            // Enviar respuesta de error general
+            print json_encode(
+                array(
+                    'estado' => '2',
+                    'mensaje' => 'No se obtuvo el registro Ciudades x Departamento'
+                )
+            );
+        }
+    }
 
     elseif (isset($_GET['ExisteTabla']) )
     {

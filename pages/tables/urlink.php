@@ -48,7 +48,15 @@ if(isset($_GET['funcion']) && !empty($_GET['funcion'])) {
             $mjuzgadox = substr($mjuzgado, 1);
             $mjuzgadox= str_replace(")","",$mjuzgadox);    
             $mretorno= "{".$mjuzgadox;
-            break;        
+            break;
+        
+        case "cd": 
+            include('../../apis/combos/clientexdemandado.php');
+            $mjuzgado= json_encode($mjuzgado, JSON_PRETTY_PRINT);
+            $mjuzgadox = substr($mjuzgado, 1);
+            $mjuzgadox= str_replace(")","",$mjuzgadox);    
+            $mretorno= "{".$mjuzgadox;
+            break;
     }    
         
     print_r($mretorno);

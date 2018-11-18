@@ -253,6 +253,38 @@ class GEN_CIUDAD
             return -1;
         }
     }
+
+    /**
+     * Verifica si existe el Pais
+     *
+     * @param $IdUsuario identificador de la gen_departamento
+     * @return bool Respuesta de la consulta
+     */
+    public static function ciudadesxdepto($parametro) //($Deptoproceso, $Ciudadproceso)
+    {
+        $consulta = "SELECT CIU_IdCiudades, CIU_Nombre, CIU_Abreviatura, CIU_IdDepartamento, 
+                CIU_Estado, gen_departamento.DEP_CodigoDane
+            FROM gen_departamento
+            JOIN gen_ciudad 
+                ON gen_ciudad.CIU_IdDepartamento = gen_departamento.DEP_IdDepartamento
+                AND gen_ciudad.CIU_Abreviatura > ''
+            WHERE gen_departamento.DEP_CodigoDane > '' ORDER BY CIU_Nombre; ";        
+
+        try {
+            // Preparar sentencia
+            $comando = Database::getInstance()->getDb()->prepare($consulta);
+            // Ejecutar sentencia preparada
+            $comando->execute(array($parametro)); //$Deptoproceso, $Ciudadproceso));
+
+            // Muestra todos los rows
+            return $comando->fetchAll(PDO::FETCH_ASSOC);
+
+        } catch (PDOException $e) {
+            // Aquí puedes clasificar el error dependiendo de la excepción
+            // para presentarlo en la respuesta Json
+            return -1;
+        }
+    }
 }
 
 ?>

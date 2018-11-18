@@ -196,10 +196,14 @@ else
                 var options = select.attr('options');
             }
             $('option', select).remove();
-
-            $.each(newOptions, function(val, text) {
-                options[options.length] = new Option(text.ARE_Nombre, text.ARE_Codigo);
-            });
+            
+            if(newOptions != 'undefined')
+            {
+                $.each(newOptions, function(val, text) {
+                    options[options.length] = new Option(text.ARE_Nombre, text.ARE_Codigo);
+                });
+            }
+            
             select.val(selectedOption);
             $('#area').selectpicker('refresh');
             _area = $('#area').val();
@@ -216,8 +220,9 @@ else
         }
         $.getJSON('../tables/urlink.php', {funcion: "jd", origen: $('#tipojuzgado').val() +'-'+ __area }, function (data) {
             var zdata= data.juz_areasxjuzgado;
-            var selectedOption = '0';
+            var selectedOption = '';
             var newOptions = zdata;
+            
             var select = $('#despacho');
             if(select.prop) 
             {
@@ -228,9 +233,12 @@ else
                 var options = select.attr('options');
             }
             $('option', select).remove();
-            $.each(newOptions, function(val, text) {
-                options[options.length] = new Option(text.JUZ_Ubicacion, text.JUZ_IdJuzgado);
-            });
+            if(newOptions != undefined)
+            {
+                $.each(newOptions, function(val, text) {
+                    options[options.length] = new Option(text.JUZ_Ubicacion, text.JUZ_IdJuzgado);
+                });
+            }    
             select.val(selectedOption);
             $('#despacho').selectpicker('refresh');
             _txtdespacho = $('#despacho option:selected').text();
@@ -241,15 +249,15 @@ else
     }
 
     function nroProceso(){
-            _area = "";
-            if(_tipojuzgado != "")
-            {
-                _area =  $("#area").val();
-            }
-            _Proceso = _zipDeptoCiudad + _tipojuzgado + _area + _despacho + $("#anio").val() + _nProceso + _nDv;
-            $("#proceso").attr("value",_Proceso);
-            init_contador("#proceso","#muestrocantidadcaracteresid");
+        _area = "";
+        if(_tipojuzgado != "")
+        {
+            _area =  $("#area").val();
         }
+        _Proceso = _zipDeptoCiudad + _tipojuzgado + _area + _despacho + $("#anio").val() + _nProceso + _nDv;
+        $("#proceso").attr("value",_Proceso);
+        init_contador("#proceso","#muestrocantidadcaracteresid");
+    }
 
     function init_contador(idtextarea, idcontador)
     {        
@@ -270,6 +278,10 @@ else
         $('#fechainicio').datetimepicker({
            format: 'YYYY-MM-DD'       
         });
+        $("#ndv").attr("value", "00");
+        _nDv = $("#ndv").val();
+
+        $("#actoprocesal").hide();
         
         function reset () {
             $("#toggleCSS").attr("href", "../../css/themes2/alertify.default.css");
@@ -283,6 +295,14 @@ else
                 buttonFocus   : "ok"
             });
         }
+
+        $('#cliente').change(function() {
+            var __cliente =$('#cliente').val();
+            var __demandado =$('#cliente').val();
+            $.getJSON('../tables/urlink.php', {funcion: "cd", origen: __cliente +'-'+ __demandado }, function (data) {
+            
+            });        
+        });
 
 
         $('#tipojuzgado').change(function() {
@@ -350,18 +370,23 @@ else
             claseproceso = $("#claseproceso").val();
             pproceso = $("#proceso").val();
             juzgado = $("#tipojuzgado").val();
+            especialidad = $("#area").val();
+            despacho = $("#despacho").val();
+            cliente = $("#cliente").val();
+            demandado = $("#demandado").val();
+
             var estado = $('input:radio[name=estado]:checked').val();
             e.preventDefault();
-            if( estado == undefined || nombre == "" || fechainicio == "" || usuario == "" || ubicacion == "" || claseproceso == "" || juzgado == "" )
+            if( estado == undefined || nombre == "" || fechainicio == "" || ubicacion == "" || claseproceso == "" || juzgado == "" || cliente == "" || demandado == "" || especialidad == "" | despacho == "")
             {                 
-                swal("Atencion:", "Debe digitar un Nombre y/o seleccionar un Estado y/o Fecha de Inicio  y/o Usuario  y/o Ubicacion  y/o  clase Proceso  y/o  Juzgado.");
+                swal("Atencion:", "Debe digitar un Nombre y/o seleccionar un Estado y/o Fecha de Inicio  y/o Usuario  y/o Ubicacion  y/o  clase Proceso  y/o  Juzgado y/o especialidad y/o despacho.");
                 e.stopPropagation();
                 return false;
             }
             else
             {
                 $.ajax({
-                    data : {"pnombre": nombre, "pfechainicio": fechainicio, "pusuario": usuario, "pubicacion": ubicacion, "pclaseproceso": claseproceso ,"pjuzgado": juzgado,"pestado": estado},
+                    data : {"pnombre": nombre, "pfechainicio": fechainicio, "pusuario": usuario, "pubicacion": ubicacion, "pclaseproceso": claseproceso ,"pjuzgado": juzgado,"pestado": estado, "pproceso": pproceso,"pcliente": cliente, "pdemandado":demandado, "pespecialidad":especialidad, "pdespacho":despacho},
                     type: "POST",
                     dataType: "html",
                     url : "../forms/crea_<?php echo strtolower($NombreTabla); ?>.php",
@@ -379,7 +404,8 @@ else
                         if( respstr == "S" )
                         {                        
                             swal("Atención: ", msj, "success");
-                            return false;                           
+                            return false;
+                            $("#actoprocesal").show();                          
                         }
                         else
                         {                            
@@ -1079,6 +1105,7 @@ if( $mproceso['estado'] < 2)
                                 </div>
                                 <hr>
                                 <button class="btn btn-primary waves-effect" type="submit" id="grabar">GRABAR</button>
+                                <button class="btn btn-info waves-effect" type="button" id="actoprocesal">ACTUACION PROCESAL</button>
                                 <button class="btn btn-danger waves-effect" type="submit" id="cerrar">CERRAR</button>
 
                                 <!-- <div id="g" class='alert'>GRabado</div> -->

@@ -42,8 +42,8 @@ if (!function_exists("GetSQLValueString"))
 require_once('../../Connections/DataConex.php');
 $soportecURL = "S";
 $params ="IdTabla=$idTabla&fn=$funcion";
-$url         = urlServicios."consultadetalle/cd_areasxtipojuzgado.php?".$params;
-//echo("<script>console.log('PHP areaxtipojuzgado: ".$url."');</script>");
+$url         = urlServicios."consultadetalle/cd_clientexdemandado.php?".$params;
+//echo "<script>console.log('PHP: ".$url."');</script>";
 if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
 {
     $ch = curl_init();
@@ -59,8 +59,8 @@ if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
 
     $mjuzgado =  preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $resultado);    
     $mjuzgado = json_decode($mjuzgado, true);
-    //echo("<script>console.log('PHP: ".print_r($mjuzgado)."');</script>");
-    //echo("<script>console.log('PHP: ".count($m['juz_area'])."');</script>");
+    //echo "<script>console.log('PHP: ".print_r($mjuzgado)."');</script>";
+    //echo "<script>console.log('PHP: ".count($m['juz_areasxjuzgado'])."');</script>";
     
     $json_errors = array(
       JSON_ERROR_NONE => 'No se ha producido ningún error',

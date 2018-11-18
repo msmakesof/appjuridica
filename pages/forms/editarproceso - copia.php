@@ -1,4 +1,4 @@
-﻿<?php
+﻿<?php 
 require_once('../../Connections/cnn_kn.php'); 
 require_once('../../Connections/config2.php');
 if(!isset($_SESSION)) 
@@ -40,23 +40,17 @@ if (!function_exists("GetSQLValueString"))
 }
 
 
-require_once('../../apis/general/ciudadesxdepto.php');
 
-//echo $_REQUEST['hf'];
-$idTabla = ""; 
-if ( isset( $_POST["id"]))
-{ 
-    $idTabla = $_POST["id"];
+
+if( isset($_GET['f'])  && !empty($_GET['f']) )
+{    
+    $idTabla = trim($_GET['f']);
 }
-
-//echo "post....".$idTabla;
-
 $Tabla ="PROCESO";
 $strowreg =0;
 $idtabla = 0;
 $row_rs_tabla = 0;
 $Nombreciudad = "";
-$yy = date("Y");
 
 require_once('../../apis/proceso/proceso.php');
 
@@ -71,8 +65,6 @@ $IdUbicacion = trim($mproceso['pro_proceso']['PRO_IdUbicacion']);
 $IdClaseProceso = trim($mproceso['pro_proceso']['PRO_IdClaseProceso']);
 $IdJuzgadoOrigen = trim($mproceso['pro_proceso']['PRO_IdJuzgadoOrigen']);
 $EstadoProceso = trim($mproceso['pro_proceso']['PRO_EstadoProceso']);
-
-//GLOBAL $deptoproceso ;GLOBAL $ciudadproceso ;
 ?>
 <!DOCTYPE html>
 <html>
@@ -157,105 +149,6 @@ $EstadoProceso = trim($mproceso['pro_proceso']['PRO_EstadoProceso']);
                         </div>-->
                         <div class="body  table-responsive">
                             <form id="form_validation" method="POST">
-
-                                <div class="form-group" style="clear: both; margin-top:15px;">
-                                    <div class="form-group">
-										<div class="col-xs-12 caja">
-											<div class="row">
-												<div class="col-xs-5">                                                
-													<label class="form-label" style="font-size: 12;">C&oacute;digo DANE Departamento / Municipio:</label>
-													<div class="form-line">
-                                                        <?php                                                      
-                                                            $deptoproceso = substr($NumeroProceso,0,2);
-                                                            $ciudadproceso = substr($NumeroProceso,2,3);                                                        
-                                                        ?>    
-														<!-- <input type="number" onkeypress="return isNumeric(event)" oninput="maxLengthCheck(this)" class="form-control" name="zip" id="zip" min="1" max="99999" maxlength="5" required> -->
-                                                        <select class="selectpicker show-tick" data-live-search="true" data-width="100%" name="zip" id="zip" required>
-                                                        <option value="" >Seleccione Municipio...</option>
-                                                        <?php                                                             
-                                                            $idTabla = 0;   //sxdepto
-                                                            
-                                                            for($i=0; $i<count($mciudad['gen_ciudad']); $i++)
-                                                            {
-                                                                $CIU_IdCiudades = $mciudad['gen_ciudad'][$i]['CIU_IdCiudades'];
-                                                                $CIU_Nombre = $mciudad['gen_ciudad'][$i]['CIU_Nombre'];
-                                                                $CIU_Abreviatura = $mciudad['gen_ciudad'][$i]['CIU_Abreviatura'];                                                                
-                                                                $CIU_IdDepartamento = $mciudad['gen_ciudad'][$i]['CIU_IdDepartamento'];
-                                                                $DEP_CodigoDane = $mciudad['gen_ciudad'][$i]['DEP_CodigoDane'];                                                                
-                                                        ?>
-                                                                <option value="<?php echo $CIU_Abreviatura; ?>" <?php if ($DEP_CodigoDane == $deptoproceso && $CIU_Abreviatura == $ciudadproceso){ echo "selected";} else{ echo "";} ?>>
-                                                                    <?php echo $CIU_Nombre ; ?>                                                
-                                                                </option>
-                                                        <?php
-                                                            }
-                                                        ?>
-                                                        </select>
-													</div>
-												</div>
-
-												<div class="col-xs-7">
-													<label class="form-label">Corporaci&oacute;n:</label>
-                                                    <?php $corpoproceso = substr($NumeroProceso,5,2); ?>
-													<select class="selectpicker show-tick" data-live-search="true" data-width="100%" name="tipojuzgado" id="tipojuzgado" required>                                                       
-													    <option value="" >Seleccione Corporaci&oacute;n...</option>
-													    <?php                                                            
-                                                            $idTabla = 0;
-                                                            require_once('../../apis/general/tipojuzgado.php');
-                                                            for($i=0; $i<count($mtipojuzgado['juz_tipojuzgado']); $i++)
-                                                            {
-                                                                $TJU_IdTipoJuzgado = $mtipojuzgado['juz_tipojuzgado'][$i]['TJU_IdTipoJuzgado'];                                                    
-                                                                $TJU_Nombre = trim($mtipojuzgado['juz_tipojuzgado'][$i]['TJU_Nombre']);
-                                                                $TJU_Codigo = trim($mtipojuzgado['juz_tipojuzgado'][$i]['TJU_Codigo']);
-                                                                $TJU_Estado = $mtipojuzgado['juz_tipojuzgado'][$i]['TJU_Estado'];
-                                                        ?>
-                                                            <option value="<?php echo $TJU_IdTipoJuzgado; ?>" <?php if (trim($TJU_Codigo) == trim($corpoproceso)){ echo "selected";} else{ echo "";} ?>>
-                                                                <?php echo  $TJU_Codigo .'-'. $TJU_Nombre ; ?>                                                
-                                                            </option>
-                                                        <?php
-                                                            }
-                                                        ?>
-													</select>                                                    
-												</div>
-											</div>
-										</div>
-									</div>	
-                                </div>
-                                <!-- -->
-
-                                <div class="form-group">                               
-                                    <div class="col-xs-12 caja">
-                                        <div class="row">
-                                            <div class="col-xs-6">                                                
-                                                <label class="form-label">Especialidad o Area:</label>
-                                                <div class="form-line">
-                                                    <!-- <input type="text" class="form-control" name="area" id="area" value="<?php //echo $JUZ_Area ;?>" maxlength="5" autocomplete="ÑÖcompletes" required> -->
-                                                    <select id="area" name="area" class="selectpicker show-tick" data-live-search="true" data-width="80%" required>
-                                                        <!-- <option value="">-- Seleccione Especializacion.... --</option>                                                         -->
-                                                    </select> 
-                                                </div>                                                
-                                            </div>
-
-                                            <div class="col-xs-3">
-                                                <label class="form-label">Despacho</label>                                        
-                                                <div class="form-line">
-                                                    <!-- <input type="text" class="form-control" name="despacho" id="despacho" value="" maxlength="3" autocomplete="ÑÖcompletes" required>
-                                                    <label class="form-label"></label> -->
-                                                    <select id="despacho" name="despacho" class="selectpicker show-tick" data-live-search="true" data-width="80%" required>
-                                                        <option value="">-- Seleccione Despacho.... --</option>
-                                                    </select> 
-                                                </div>
-                                            </div>
-                                            
-                                            <div class="col-xs-3">
-                                                <label class="form-label">Año</label>                                        
-                                                <div class="form-line">
-                                                    <input type="text" class="form-control" name="anio" id="anio" value="<?php echo $yy; ?>" maxlength="4" autocomplete="ÑÖcompletes" required>
-                                                    <label class="form-label"></label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>                                    
-                                </div>
 
                                 <div class="form-group">
 									<div class="col-xs-12 cajax">
@@ -429,11 +322,9 @@ $EstadoProceso = trim($mproceso['pro_proceso']['PRO_EstadoProceso']);
 								
                                 <hr>
                                 <div class="form-group" style="clear: both; margin-top:10px; margin-bottom:10px;">
-									<button class="btn btn-success waves-effect" type="button" id="grabar">GRABAR</button>
-                                    <button class="btn btn-primary waves-effect" type="button" id="actoprocesal">ACTUACION PROCESAL</button>
+									<button class="btn btn-primary waves-effect" type="button" id="grabar">GRABAR</button>
 								   <!--  <button type="button" class="btn btn-danger waves-effect" id="borrar" onclick="borrarc(<?php echo $idtabla ; ?>);">BORRAR</button> -->
-									<button type="button" class="btn btn-info waves-effect" id="borrar">CERRAR</button>
-                                    <button type="submit" class="btn btn-danger waves-effect" id="salir">SALIR</button>
+									<button type="button" class="btn btn-danger waves-effect" id="borrar">CERRAR</button>
 								</div>
 								
                             </form>                        
@@ -493,103 +384,7 @@ $EstadoProceso = trim($mproceso['pro_proceso']['PRO_EstadoProceso']);
     <script src="../../calendar/js/bootstrap-datetimepicker.min.js"></script>
     <script src="../../calendar/js/bootstrap-datetimepicker.es.js"></script>  
 
-    <script type="text/javascript">
-
-    var nombre ="";
-    var _zipDeptoCiudad = "";
-    var _zip = "";
-    var _tipojuzgado = "";
-    var _juzgado = "";
-    var _area = "";
-    var _txtarea = "";
-    var _despacho ="";
-    var _nProceso = "";
-    var _nDv = "";
-    var _Proceso = "";
-    var EspecialidadHTML ="";
-
-    function populateFruitVariety() {
-        alert($('#tipojuzgado').val());
-        $.getJSON('../tables/urlink.php', {funcion: "ja", origen: $('#tipojuzgado').val()}, function (data) {
-            var zdata= data.juz_areasxtipojuzgado;
-            var selectedOption = '0';
-            var newOptions = zdata;
-            var select = $('#area');
-            if(select.prop) 
-            {
-                var options = select.prop('options');
-            }
-            else 
-            {
-                var options = select.attr('options');
-            }
-            $('option', select).remove();
-
-            $.each(newOptions, function(val, text) {
-                options[options.length] = new Option(text.ARE_Nombre, text.ARE_Codigo);
-            });
-            select.val(selectedOption);
-            $('#area').selectpicker('refresh');
-            _area = $('#area').val();
-            goDespachos();                 
-            nroProceso();            
-        });
-    }
-
-    function goDespachos() {
-        var __area = $('#area').val();
-        //alert("__area:..."+__area);
-        if( __area == "" || __area == null)
-        {
-            __area = _area;
-        }
-        //alert("_area :..."+__area);
-        
-        if( __area != "" && __area != null)
-        {
-            $.getJSON('../tables/urlink.php', {funcion: "jd", origen: $('#tipojuzgado').val() +'-'+ __area }, function (data) {
-                var zdata= data.juz_areasxjuzgado;
-                var selectedOption = '0';
-                var newOptions = zdata;
-                var select = $('#despacho');
-                if(select.prop) 
-                {
-                    var options = select.prop('options');
-                }
-                else 
-                {
-                    var options = select.attr('options');
-                }
-                $('option', select).remove();
-                $.each(newOptions, function(val, text) {
-                    options[options.length] = new Option(text.JUZ_Ubicacion, text.JUZ_IdJuzgado);
-                });
-                select.val(selectedOption);
-                $('#despacho').selectpicker('refresh');
-                _txtdespacho = $('#despacho option:selected').text();
-                _txtdespacho = _txtdespacho.trim();
-                _despacho = _txtdespacho.substring(0, 3);
-                nroProceso();
-            });
-        }    
-    }
-    
-    
-    function nroProceso(){
-        _area = "";
-        if(_tipojuzgado != "")
-        {
-            _area =  $("#area").val();
-        }
-        //alert("_area en nroProceso :..."+_area);
-        if(_area != "")
-        {
-            _Proceso = _zipDeptoCiudad + _tipojuzgado + _area + _despacho + $("#anio").val() + _nProceso + _nDv;
-            $("#proceso").attr("value",_Proceso);
-            init_contador("#proceso","#muestrocantidadcaracteresid");
-        }
-    }
- 
+    <script type="text/javascript"> 
 
     function init_contador(idtextarea, idcontador)
     {
@@ -620,7 +415,7 @@ $EstadoProceso = trim($mproceso['pro_proceso']['PRO_EstadoProceso']);
         $('.selectpicker').selectpicker();
         $('#fechainicio').datetimepicker({
           format: 'YYYY-MM-DD'       
-        });        
+        });
 
         init_contador("#proceso","#muestrocantidadcaracteresid");        
 
@@ -628,111 +423,6 @@ $EstadoProceso = trim($mproceso['pro_proceso']['PRO_EstadoProceso']);
             e.preventDefault();
             window.location = 'pro_proceso.php';
         }); 
-
-        $('#tipojuzgado').change(function() {
-            populateFruitVariety();
-            var nameARE_Codigo = $('#tipojuzgado option:selected').text();
-            _tipojuzgado = nameARE_Codigo.trim();
-            _tipojuzgado = _tipojuzgado.substring(0, 2);            
-            nroProceso();            
-        });
-
-        $('#area').change(function() {
-            goDespachos();
-            nroProceso();            
-        });
-
-         $('#area').focusin(function() {           
-            _area = $('#area').val();            
-            nroProceso();        
-        });
-
-        $('#area').focusout(function() {           
-            _area = $('#area').val();            
-            nroProceso();        
-        });
-
-        $("#ndv").val('00');
-        //$("#actoprocesal").hide();
-
-
-        if( $('#tipojuzgado').val() != "" )
-        {          
-            $.ajax({                
-                type: "GET",				
-                url : "../../consultadetalle/consultadetalle_juzgado.php?IdMostrar=0",
-            })
-            .done(function( dataX, textStatus, jqXHR ){	
-                var zdata= dataX.juz_juzgado;
-                var xrespstr = "";
-                var IdArea = "";
-                var ARE_Nombre = "";
-                var IdJuzgado = "";
-                var Ubicacion = "";
-                var IdCiudad = "";
-                var IdTipoJuzgado = "";  
-
-                var selectedOption = '0';
-                var newOptions = zdata;
-                var select = $('#area');                
-                if(select.prop) 
-                {
-                    var options = select.prop('options');
-                }
-                else 
-                {
-                    var options = select.attr('options');
-                }
-                $('option', select).remove();
-
-                $.each(newOptions, function(val, text) {
-                    options[options.length] = new Option(text.ARE_Nombre, text.JUZ_IdArea);
-                });
-                select.val(selectedOption);
-                $('#area').selectpicker('refresh');
-
-                /*
-                EspecialidadHTML+='<option value="">-- Seleccione Especializacion.... --</option>';              
-                $.each(dataX.juz_juzgado, function(i, item) 
-                {                        
-                    IdArea = dataX.juz_juzgado[i].JUZ_IdArea;
-                    ARE_Nombre = dataX.juz_juzgado[i].ARE_Nombre;
-                    IdJuzgado = dataX.juz_juzgado[i].JUZ_IdJuzgado;
-                    Ubicacion = dataX.juz_juzgado[i].JUZ_Ubicacion;
-                    IdCiudad = dataX.juz_juzgado[i].JUZ_IdCiudad;                       
-                    IdTipoJuzgado = dataX.juz_juzgado[i].JUZ_IdTipoJuzgado;
-                    EspecialidadHTML+='<option value="'+IdArea+'">'+ ARE_Nombre +'</option>';
-                    //var option = document.createElement("option");
-                    //$(option).html(EspecialidadHTML);
-                    //$(option).appendTo("#area"); 
-                }); 
-                */
-
-                /*    
-                if(EspecialidadHTML != "")
-                {                    
-                   // $('#area').append(EspecialidadHTML);
-                   $(EspecialidadHTML).appendTo("#area"); 
-                }
-                else
-                {
-                    //$('#EspecialidadHTML').hide();
-                }
-                */
-
-            })
-            .fail(function( jqXHR, textStatus, errorThrown ) {
-                i
-                f ( console && console.log ) 
-                {						
-                    console.log( "La solicitud a fallado: " +  textStatus);
-                    $("#msj").html("");
-                }
-            });
-
-            goDespachos();
-            nroProceso(); 
-        }
         
 		
 		$("#grabar").on('click', function(e) {
@@ -773,7 +463,6 @@ $EstadoProceso = trim($mproceso['pro_proceso']['PRO_EstadoProceso']);
                     {
                         swal("Atención: ", msj, "success");
                         return false;
-                        $("#actoprocesal").show();
                     }
     				else
     				{
@@ -844,13 +533,7 @@ $EstadoProceso = trim($mproceso['pro_proceso']['PRO_EstadoProceso']);
                     //after clicking Cancel
                 }
             });
-        });
-
-        $("#salir").on('click', function(e) {
-            e.preventDefault();
-            window.location = '../tables/pro_proceso.php';
-        });
-
+         });
     });
     </script>    
 </body>

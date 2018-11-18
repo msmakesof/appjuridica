@@ -82,9 +82,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 
     elseif (isset($_GET['ExisteTabla']) )
     {
-        $par1 = $_GET['Nombre'];        
+        $par1 = $_GET['Proceso'];
+        $par2 = $_GET['Demandante'];
+        $par3 = $_GET['Demandado'];                
 
-        $retorno = PRO_PROCESO::existetabla($par1);
+        $retorno = PRO_PROCESO::existetabla($par1, $par2, $par3);
         if ($retorno) 
         {
             $pro_proceso["estado"] = "1";
@@ -148,8 +150,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         $par7 = $_GET['Claseproceso'];
         $par8 = $_GET['JuzgadoOrigen'];
         $par9 = $_GET['Estado'];
+        $par10 = $_GET['Especialidad'];
+        $par11 = $_GET['Despacho'];
 
-        $retorno = PRO_PROCESO::insert($par1, $par2, $par3, $par4, $par5, $par6, $par7, $par8, $par9);
+        $retorno = PRO_PROCESO::insert($par1, $par2, $par3, $par4, $par5, $par6, $par7, $par8, $par9, $par10, $par11);
         $msj = $retorno;
         if($retorno)
         {

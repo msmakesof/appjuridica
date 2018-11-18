@@ -585,6 +585,7 @@ else
                             </ul>
                         </div>
                         <div class="body table-responsive" id="zonaquery">
+                        <form class='contact_form' ACTION='../forms/editarproceso.php' METHOD='POST' id='formulario'>
                          <table class="table table-bordered table-striped table-hover dataTable js-exportable" id="grid">
                                 <thead>
                                     <tr>
@@ -656,8 +657,8 @@ if($soportecURL == "N")
     $mproceso = json_decode($resultado, true);	        
 } 
 
-if( $mproceso['estado'] < 2)
-{
+//if( $mproceso['estado'] < 2)
+//{
     $nombre_Tabla="";
     for($i=0; $i<count($mproceso['pro_proceso']); $i++)
     {
@@ -669,10 +670,14 @@ if( $mproceso['estado'] < 2)
         $ClaseProceso =$mproceso['pro_proceso'][$i]['ClaseProceso'];
         $Juzgado =$mproceso['pro_proceso'][$i]['Juzgado'];
         $estadoTabla = trim($mproceso['pro_proceso'][$i]['EstadoTabla']);
+       
     ?>
         <tr>
             <td>
-                <a href="javascript:void(0);" onclick="cambiar('../forms/editar<?php echo $nombre_lnk ;?>.php?f=<?php echo $idTabla; ?>')" class="nav nav-tabs nav-stacked" data-toggle="modal" data-target="#defaultModalEditar" style="text-decoration:none;"><?php echo $NombreTabla; ?></a>        	
+                <input type='hidden' id="hf" name="hf" value="<?php echo $idTabla; ?>">
+                <a href='javascript:void(0)' onclick="cambiar(<?php echo $idTabla; ?>)">   
+                    <?php echo $NombreTabla; ?>
+                </a>
             </td>            
             <td><?php echo $AsignadoA; ?></td>
             <td><?php echo $Ubicacion; ?></td>
@@ -682,10 +687,11 @@ if( $mproceso['estado'] < 2)
         </tr>
     <?php                          
     }
-}
+//}
 ?>
  </tbody>
 </table>
+</form>
                                
                         </div>
                     </div>
@@ -769,6 +775,7 @@ if( $mproceso['estado'] < 2)
     <script src="../../js/demo.js"></script>
 
 <script type="text/javascript">
+var variableValue;
  $(document).ready(function () {	 
 	$("#cerrarModal").click(function(){
 	 	 window.location="pro_<?php echo $nombre_lnk; ?>.php";
@@ -783,9 +790,28 @@ if( $mproceso['estado'] < 2)
         window.location = 'pro_procesoforma.php';
     });
 
+    $("#cambiar").on("click", function(id){
+        alert(id);
+        <?php  $_SESSION["f"] = $idTabla;?>
+        //document.getElementById("formulario").submit();
+        
+        window.location = '../forms/editarproceso.php';
+    });
+
  }); 
 
-function cambiar(nuevaurl) 
+function cambiar(id) 
+{
+    //alert(id);    	
+    $.post('../forms/editarproceso.php', { 'id': id }, function (result) {
+        WinId = window.open('','_self');
+        WinId.document.open();
+        WinId.document.write(result);
+        WinId.document.close();
+    });
+}
+
+function xcambiar(nuevaurl) 
 { 
     var obj       = $('#carga');
     var container = $(obj).parent();
@@ -804,6 +830,6 @@ function crear(nuevaurl)
     $(obj).remove();
     $(container).append(newobj);
 }
-</script>	
+</script>
 </body>
 </html>
