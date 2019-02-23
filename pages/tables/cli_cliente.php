@@ -388,7 +388,7 @@ if( $mcliente['estado'] < 2)
 				
 				<div class="modal-body">
 					<object 
-						style="padding :0px; position: relative; height: 75vh; max-height:75vh; bottom:0; overflow: hidden; margin: 0;" 
+						style="padding :0px; position: relative; height: 77vh; max-height:77vh; bottom:0; overflow: hidden; margin: 0;" 
 						type="text/html" data="../forms/form-validationBase<?php echo $nombre_lnk ;?>.php" id="crear">
 					</object>
 				</div>

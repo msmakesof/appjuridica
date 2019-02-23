@@ -65,7 +65,7 @@ $url         = urlServicios."consultadetalle/consultadetalle_Cliente.php?".$para
 $existe      = "";
 $usulocal    = "";
 $siguex      = "";
-echo("<script>console.log('PHP cliente: ".$url."');</script>");
+//echo("<script>console.log('PHP cliente: ".$url."');</script>");
 if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
 {
     $ch = curl_init();

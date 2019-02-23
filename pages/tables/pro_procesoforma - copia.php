@@ -165,8 +165,6 @@ else
 
     .caja{
         margin-bottom:-10px !important;
-        margin-left: 2%;
-        margin-right: 20%;
     }
    </style>
 
@@ -298,42 +296,11 @@ else
             });
         }
 
-        $('#demandado').prop('disabled', 'disabled');
-
         $('#cliente').change(function() {
-            var __cliente = $('#cliente').val();
-            // var __demandado =$('#cliente').val(); //original
-            var __demandado = $('#demandado').val();
+            var __cliente =$('#cliente').val();
+            var __demandado =$('#cliente').val();
             $.getJSON('../tables/urlink.php', {funcion: "cd", origen: __cliente +'-'+ __demandado }, function (data) {
-                console.log("cliente......"+data);               
-
-            });
-            //$("#demandado option:selected").remove();
-            $("#demandado.selectpicker.show-tick option[value='"+ __cliente+"']").remove();
-            //$("#demandado").siblings().find("option[value='"+ __cliente+"']").remove();
-            if (__cliente != "")
-            {
-                $('#demandado').prop('disabled', false);
-            }
-            else
-            {
-                $('#demandado').prop('disabled','disabled');
-                $('#demandado').val("");;
-            }            
-
-        });
-        
-        $('#demandado').on('click', function() {
-            $("#demandado option[value='"+ __cliente+"']").remove();
-        });
-
-        $('#demandado').change(function() {
-            var __cliente = $('#cliente').val();
-            //alert(__cliente);
-            // var __demandado =$('#cliente').val(); //original
-            var __demandado = $('#demandado').val();
-            $.getJSON('../tables/urlink.php', {funcion: "cd", origen: __cliente +'-'+ __demandado }, function (data) {
-                console.log("demandado......"+data);
+            
             });        
         });
 
@@ -731,10 +698,7 @@ else
             </div>
             <!-- #User Info -->
             <!-- Menu -->
-            <?php 
-                $_SESSION["opcMenu"]="P";
-                require_once('menu.php'); 
-            ?> 
+            <?php require_once('menu.php'); ?> 
             <!-- #Menu -->
             <!-- Footer -->
             <div class="legal">
@@ -858,104 +822,93 @@ if( $mproceso['estado'] < 2)
 ?>
  <!-- </tbody> -->
 <!-- </table> -->
-                        <div >
                         <!-- form -->
-                        <form id="form_validation" method="POST" autocomplete="ÑÖcompletes">
-                                
-                                <div class="form-group">
-                                    <div class="col-lg-6 col-md-6 col-sm-6">
+                        <form id="form_validation" method="POST"  autocomplete="ÑÖcompletes">
+
+                                <div class="form-group" style="clear: both; margin-top:15px;">
+                                    <div class="form-group">
+										<div class="col-xs-12 caja">
+											<div class="row">
+												<div class="col-xs-5">                                                
+													<label class="form-label">C&oacute;digo DANE Departamento / Municipio:</label>
+													<div class="form-line">
+														<!-- <input type="number" onkeypress="return isNumeric(event)" oninput="maxLengthCheck(this)" class="form-control" name="zip" id="zip" min="1" max="99999" maxlength="5" required> -->
+                                                        <select class="selectpicker show-tick" data-live-search="true" data-width="100%" name="zip" id="zip" required>
+                                                        <option value="" >Seleccione Municipio...</option>
+                                                        <?php
+                                                            $idTabla = 0;
+                                                            require_once('../../apis/general/ciudad.php');
+                                                            for($i=0; $i<count($mciudad['gen_ciudad']); $i++)
+                                                            {
+                                                                $CIU_IdCiudades = $mciudad['gen_ciudad'][$i]['CIU_IdCiudades'];
+                                                                $CIU_Nombre = $mciudad['gen_ciudad'][$i]['CIU_Nombre'];
+                                                                $CIU_Abreviatura = $mciudad['gen_ciudad'][$i]['CIU_Abreviatura'];                                                                
+                                                                $CIU_IdDepartamento = $mciudad['gen_ciudad'][$i]['CIU_IdDepartamento'];
+                                                        ?>
+                                                                <option value="<?php echo $CIU_IdCiudades; ?>" >
+                                                                    <?php echo $CIU_Nombre ; ?>                                                
+                                                                </option>
+                                                        <?php
+                                                            }
+                                                        ?>
+                                                        </select>
+													</div>
+												</div>
+
+												<div class="col-xs-7">
+													<label class="form-label">Corporaci&oacute;n:</label>                                        
+													<select class="selectpicker show-tick" data-live-search="true" data-width="100%" name="tipojuzgado" id="tipojuzgado" required>
+													    <option value="" >Seleccione Corporaci&oacute;n...</option>
+													    <?php
+                                                            $idTabla = 0;
+                                                            require_once('../../apis/general/tipojuzgado.php');
+                                                            for($i=0; $i<count($mtipojuzgado['juz_tipojuzgado']); $i++)
+                                                            {
+                                                                $TJU_IdTipoJuzgado = $mtipojuzgado['juz_tipojuzgado'][$i]['TJU_IdTipoJuzgado'];                                                    
+                                                                $TJU_Nombre = trim($mtipojuzgado['juz_tipojuzgado'][$i]['TJU_Nombre']);
+                                                                $TJU_Codigo = trim($mtipojuzgado['juz_tipojuzgado'][$i]['TJU_Codigo']);
+                                                                $TJU_Estado = $mtipojuzgado['juz_tipojuzgado'][$i]['TJU_Estado'];
+                                                        ?>
+                                                                <option value="<?php echo $TJU_IdTipoJuzgado; ?>" >
+                                                                    <?php echo  $TJU_Codigo .'-'. $TJU_Nombre ; ?>                                                
+                                                                </option>
+                                                        <?php
+                                                            }
+                                                        ?>
+													</select>
+												</div>
+											</div>
+										</div>
+									</div>	
+                                </div>                                
+
+                                <div class="form-group">                               
+                                    <div class="col-xs-12 caja">
                                         <div class="row">
-                                            <div class="xcol-xs-10">                                                
-                                                <label class="form-label">C&oacute;digo DANE Departamento / Municipio:</label>
-                                                <div class="xform-line">                                                    
-                                                    <select class="selectpicker show-tick" data-live-search="true" data-width="95%" name="zip" id="zip" required>
-                                                    <option value="" >Seleccione Municipio...</option>
-                                                    <?php
-                                                        $idTabla = 0;
-                                                        require_once('../../apis/general/ciudad.php');
-                                                        for($i=0; $i<count($mciudad['gen_ciudad']); $i++)
-                                                        {
-                                                            $CIU_IdCiudades = $mciudad['gen_ciudad'][$i]['CIU_IdCiudades'];
-                                                            $CIU_Nombre = $mciudad['gen_ciudad'][$i]['CIU_Nombre'];
-                                                            $CIU_Abreviatura = $mciudad['gen_ciudad'][$i]['CIU_Abreviatura'];                                                                
-                                                            $CIU_IdDepartamento = $mciudad['gen_ciudad'][$i]['CIU_IdDepartamento'];
-                                                    ?>
-                                                            <option value="<?php echo $CIU_IdCiudades; ?>" >
-                                                                <?php echo $CIU_Nombre ; ?>                                                
-                                                            </option>
-                                                    <?php
-                                                        }
-                                                    ?>
-                                                    </select>
+                                            <div class="col-xs-6">                                                
+                                                <label class="form-label">Especialidad:</label>
+                                                <div class="form-line">
+                                                    <!-- <input type="text" class="form-control" name="area" id="area" value="<?php //echo $JUZ_Area ;?>" maxlength="5" autocomplete="ÑÖcompletes" required> -->
+                                                    <select id="area" name="area" class="selectpicker show-tick" data-live-search="true" data-width="80%" required>
+                                                        <option value="">-- Seleccione Especializacion.... --</option>
+                                                    </select> 
+                                                </div>                                                
+                                            </div>
+
+                                            <div class="col-xs-3">
+                                                <label class="form-label">Despacho</label>                                        
+                                                <div class="form-line">
+                                                    <!-- <input type="text" class="form-control" name="despacho" id="despacho" value="" maxlength="3" autocomplete="ÑÖcompletes" required>
+                                                    <label class="form-label"></label> -->
+                                                    <select id="despacho" name="despacho" class="selectpicker show-tick" data-live-search="true" data-width="80%" required>
+                                                        <option value="">-- Seleccione Despacho.... --</option>
+                                                    </select> 
                                                 </div>
                                             </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="form-group">
-                                    <div class="col-lg-6 col-md-6 col-sm-6">
-                                        <div class="row">
-                                            <div class="xcol-xs-10">
-                                                <label class="form-label">Corporaci&oacute;n:</label>                                        
-                                                <select class="selectpicker show-tick" data-live-search="true" data-width="95%" name="tipojuzgado" id="tipojuzgado" required>
-                                                    <option value="" >Seleccione Corporaci&oacute;n...</option>
-                                                    <?php
-                                                        $idTabla = 0;
-                                                        require_once('../../apis/general/tipojuzgado.php');
-                                                        for($i=0; $i<count($mtipojuzgado['juz_tipojuzgado']); $i++)
-                                                        {
-                                                            $TJU_IdTipoJuzgado = $mtipojuzgado['juz_tipojuzgado'][$i]['TJU_IdTipoJuzgado'];                                                    
-                                                            $TJU_Nombre = trim($mtipojuzgado['juz_tipojuzgado'][$i]['TJU_Nombre']);
-                                                            $TJU_Codigo = trim($mtipojuzgado['juz_tipojuzgado'][$i]['TJU_Codigo']);
-                                                            $TJU_Estado = $mtipojuzgado['juz_tipojuzgado'][$i]['TJU_Estado'];
-                                                    ?>
-                                                            <option value="<?php echo $TJU_IdTipoJuzgado; ?>" >
-                                                                <?php echo  $TJU_Codigo .'-'. $TJU_Nombre ; ?>                                                
-                                                            </option>
-                                                    <?php
-                                                        }
-                                                    ?>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>                                                               
-
-                                <div class="form-group">                               
-                                    <div class="col-lg-6 col-md-6 col-sm-6">
-                                        <div class="row">
-                                            <div class="xcol-xs-10">
-                                                <label class="form-label">Especialidad o &Aacute;rea:</label>                                                
-                                                <!-- <input type="text" class="form-control" name="area" id="area" value="<?php //echo $JUZ_Area ;?>" maxlength="5" autocomplete="ÑÖcompletes" required> -->
-                                                <select id="area" name="area" class="selectpicker show-tick" data-live-search="true" data-width="95%" required>
-                                                    <option value="">-- Seleccione Especializacion.... --</option>
-                                                </select>                                                
-                                            </div>
-                                        </div>	
-									</div>	
-								</div>
-
-                                <div class="form-group">                               
-                                    <div class="col-lg-6 col-md-6 col-sm-6">
-                                        <div class="row">
-                                            <div class="xcol-xs-9">
-                                                <label class="form-label">Despacho</label>                                                
-                                                <select id="despacho" name="despacho" class="selectpicker show-tick" data-live-search="true" data-width="95%" required>
-                                                    <option value="">-- Seleccione Despacho.... --</option>
-                                                </select> 
-                                                
-                                            </div>
-                                        </div>	
-									</div>	
-								</div>
-
-                                <div class="form-group">                               
-                                    <div class="col-lg-3 col-md-3 col-sm-3">
-                                        <div class="row">                                            
-                                            <div class="ccol-xs-3">
+                                            
+                                            <div class="col-xs-3">
                                                 <label class="form-label">Año</label>                                        
-                                                <div class="form-line" style="width: 20%">
+                                                <div class="form-line">
                                                     <input type="text" class="form-control" name="anio" id="anio" value="<?php echo $yy; ?>" maxlength="4" autocomplete="ÑÖcompletes" required>
                                                     <label class="form-label"></label>
                                                 </div>
@@ -966,50 +919,39 @@ if( $mproceso['estado'] < 2)
                                 
                                 
                                 <div class="form-group">                                    
-                                    <div class="col-lg-6 col-md-6 col-sm-5">
+                                    <div class="col-xs-12 caja">
                                         <div class="row">
-											<div class="xcol-xs-9">
-												<label class="form-label">Nro. Consecutivo Radicaci&oacute;n:</label>
-                                                <div class="form-line" style="width: 70%">
+											<div class="col-xs-6">
+												<label class="form-label">Proceso:</label>
+                                                <div class="form-line">
                                                     <input type="number" onkeypress="return isNumeric(event)" oninput="maxLengthCheck(this)" class="form-control" name="nproceso"id="nproceso" min="1" max="99999" maxlength="5" autocomplete="off" required>
                                                 </div>                                                    											
 											</div>
-                                        </div>	
-									</div>	
-								</div>
-
-								<div class="form-group">                                    
-                                    <div class="col-lg-2 col-md-2 col-sm-2">
-                                        <div class="row">			
-											<div class="xcol-xs-5">
+											
+											<div class="col-xs-3">
 												<label class="form-label">Control:</label>
-                                                <div class="form-line" style="width: 35%">
-                                                    <input type="number" onkeypress="return isNumeric(event)" oninput="maxLengthCheck(this)" class="form-control" name="ndv"id="ndv" min="0" max="99" maxlength="2" autocomplete="off" required>
-                                                </div>												
+													<div class="form-line">
+														<input type="number" onkeypress="return isNumeric(event)" oninput="maxLengthCheck(this)" class="form-control" name="ndv"id="ndv" min="0" max="99" maxlength="2" autocomplete="off" required>
+													</div>												
 											</div>											
 										</div>	
 									</div>	
 								</div>	
 
                                 <div class="form-group">
-									<div class="col-lg-6 col-md-6 col-sm-6">
+									<div class="col-xs-12 caja">
                                         <div class="row">
-											<div class="xcol-sm-9">
+											<div class="col-sm-6">
 												<label class="form-label">C&oacute;digo &Uacute;nico del Proceso:</label>
-												<div class="form-line" style="width: 80%">
+												<div class="form-line">
 													<input type="text" class="form-control" name="proceso"id="proceso" value="" maxlength="23" required readonly/>													
 												</div>
-                                                <div style="font-size:11px; text-align:right;width: 80%">
+                                                <div style="font-size:11px; text-align:right;">
                                                     Caracteres: <span id="muestrocantidadcaracteresid">0</span> de 23
                                                 </div>	
 											</div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-									<div class="col-lg-4 col-md-4 col-sm-4">
-                                        <div class="row">											
-											<div class="xcol-sm-6">
+											
+											<div class="col-sm-6">
 												<label class="form-label">Fecha Inicio</label>												
 												<div class='input-group date form-line' name="fechainicio" id="fechainicio" required>
 													<input type='text' id="txtFecha" class="form-control" value="" readonly/>
@@ -1022,9 +964,9 @@ if( $mproceso['estado'] < 2)
                                 </div> 
                                 
                                 <div class="form-group">
-                                    <div class="col-lg-12 col-md-12 col-sm-12">
+                                    <div class="col-xs-12 caja">
 										<div class="row">											
-											<div class="xcol-sm-8">
+											<div class="col-sm-8">
                                                 <label class="form-label">Asignado a:</label>
 												<select class="selectpicker show-tick" data-live-search="true" data-width="100%" name="usuario" id="usuario" required>
 												<option value="" >Seleccione Asignado...</option>
@@ -1048,12 +990,12 @@ if( $mproceso['estado'] < 2)
                                     </div>                                       
                                 </div>
 
-                                <div class="form-group">
-                                    <div class="col-lg-6 col-md-6 col-sm-6">
+                                <div class="form-group form-float" style="clear: both;">
+                                    <div class="col-xs-12 caja">
                                         <div class="row">
-                                            <div class="xcol-sm-6">
+                                            <div class="col-sm-6">
                                                 <label class="form-label">Ubicación:</label>                                                                                   
-                                                <select class="selectpicker show-tick" data-live-search="true" data-width="94%" name="ubicacion" id="ubicacion" required>
+                                                <select class="selectpicker show-tick" data-live-search="true" data-width="100%" name="ubicacion" id="ubicacion" required>
                                                 <option value="" >Seleccione Ubicación...</option>
                                                 <?php
                                                     $idTabla = 0;
@@ -1076,12 +1018,12 @@ if( $mproceso['estado'] < 2)
                                 </div>
 
 
-                                <div class="form-group">
-                                    <div class="col-lg-6 col-md-6 col-sm-6">
+                                <div class="form-group form-float" style="clear: both;">
+                                    <div class="col-xs-12 caja">
                                         <div class="row">
-                                            <div class="xcol-sm-8">
+                                            <div class="col-sm-8">
                                                 <label class="form-label">Clase Proceso:</label>                                                
-                                                    <select class="selectpicker show-tick" data-live-search="true" data-width="94%" name="claseproceso" id="claseproceso" required>
+                                                    <select class="selectpicker show-tick" data-live-search="true" data-width="100%" name="claseproceso" id="claseproceso" required>
                                                     <option value="" >Seleccione Clase Proceso...</option>
                                                     <?php
                                                         $idTabla = 0;
@@ -1104,25 +1046,22 @@ if( $mproceso['estado'] < 2)
                                 </div>
 								
 								<div class="form-group">
-                                    <div class="col-lg-6 col-md-6 col-sm-6">
+                                    <div class="col-xs-12 caja">
 										<div class="row">											
-											<div class="xcol-sm-8">
+											<div class="col-sm-8">
                                                 <label class="form-label">Demandante:</label>
-												<select class="selectpicker show-tick" data-live-search="true" data-width="94%" name="cliente" id="cliente" required>
+												<select class="selectpicker show-tick" data-live-search="true" data-width="100%" name="cliente" id="cliente" required>
 												<option value="" >Seleccione Cliente...</option>
 												<?php
 													for($i=0; $i<count($mcliente['cli_cliente']); $i++)
 													{
-                                                        if( $mcliente['cli_cliente'][$i]['CLI_IdTipoCliente'] == 2 )
-                                                        {
-                                                            $CLI_IdCliente = $mcliente['cli_cliente'][$i]['CLI_IdCliente'];
-                                                            $CLI_Nombre = $mcliente['cli_cliente'][$i]['NombreUsuario'];                                                            
+														$CLI_IdCliente = $mcliente['cli_cliente'][$i]['CLI_IdCliente'];                                                
+														$CLI_Nombre = $mcliente['cli_cliente'][$i]['NombreUsuario'];                                                
 												?>
-                                                            <option value="<?php echo $CLI_IdCliente; ?>" >
-                                                                <?php echo $CLI_Nombre ; ?>
-                                                            </option>
+														<option value="<?php echo $CLI_IdCliente; ?>" >
+															<?php echo $CLI_Nombre ; ?>                                                
+														</option>
 												<?php
-                                                        }
 													}
 												?>
 												</select>
@@ -1132,25 +1071,22 @@ if( $mproceso['estado'] < 2)
                                 </div>
 								
 								<div class="form-group">
-                                    <div class="col-lg-6 col-md-6 col-sm-6">
+                                    <div class="col-xs-12 caja">
 										<div class="row">											
-											<div class="xcol-sm-8">
+											<div class="col-sm-8">
                                                 <label class="form-label">Demandado:</label>
-												<select class="selectpicker show-tick" data-live-search="true" data-width="94%" name="demandado" id="demandado" required>
+												<select class="selectpicker show-tick" data-live-search="true" data-width="100%" name="demandado" id="demandado" required>
 												<option value="" >Seleccione Demandado...</option>
 												<?php
 													for($i=0; $i<count($mcliente['cli_cliente']); $i++)
 													{
-                                                        if( $mcliente['cli_cliente'][$i]['CLI_IdTipoCliente'] == 3 )
-                                                        {
-                                                            $CLI_IdCliente = $mcliente['cli_cliente'][$i]['CLI_IdCliente'];
-                                                            $CLI_Nombre = $mcliente['cli_cliente'][$i]['NombreUsuario'];                                                        
+														$CLI_IdCliente = $mcliente['cli_cliente'][$i]['CLI_IdCliente'];                                                
+														$CLI_Nombre = $mcliente['cli_cliente'][$i]['NombreUsuario'];                                                
 												?>
-                                                            <option value="<?php echo $CLI_IdCliente; ?>" >
-                                                                <?php echo $CLI_Nombre ; ?>
-                                                            </option>
+														<option value="<?php echo $CLI_IdCliente; ?>" >
+															<?php echo $CLI_Nombre ; ?>                                                
+														</option>
 												<?php
-                                                        }
 													}
 												?>
 												</select>
@@ -1158,40 +1094,24 @@ if( $mproceso['estado'] < 2)
 										</div>	
                                     </div>                                       
                                 </div>
+                                
+                                <div class="form-group form-float" style="clear: both;">
+                                    <label class="form-label">Estado</label>
+                                    <input type="radio" name="estado" id="activo" class="with-gap" value="1">
+                                    <label for="activo">Activo</label>
 
-                                <div class="form-group">
-                                    <div class="col-lg-9 col-md-9 col-sm-9">                                
-                                        <div class="row">
-                                            <div class="xcol-sm-8">
-                                                <div class="form-group form-float" style="clear: both;">
-                                                    <label class="form-label">Estado</label>
-                                                    <input type="radio" name="estado" id="activo" class="with-gap" value="1">
-                                                    <label for="activo">Abierto</label>
-
-                                                    <input type="radio" name="estado" id="inactivo" class="with-gap" value="2">
-                                                    <label for="inactivo" class="m-l-20">Cerrado</label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>    
+                                    <input type="radio" name="estado" id="inactivo" class="with-gap" value="2">
+                                    <label for="inactivo" class="m-l-20">Inactivo</label>
+                                </div>
                                 <hr>
-                                <div class="form-group">
-                                    <div class="col-xs-9">                                
-                                        <div class="row">
-                                            <div class="col-sm-8">
-                                                <button class="btn btn-primary waves-effect" type="submit" id="grabar">GRABAR</button>
-                                                <button class="btn btn-info waves-effect" type="button" id="actoprocesal">ACTUACION PROCESAL</button>
-                                                <button class="btn btn-danger waves-effect" type="submit" id="cerrar">SALIR</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div> 
+                                <button class="btn btn-primary waves-effect" type="submit" id="grabar">GRABAR</button>
+                                <button class="btn btn-info waves-effect" type="button" id="actoprocesal">ACTUACION PROCESAL</button>
+                                <button class="btn btn-danger waves-effect" type="submit" id="cerrar">CERRAR</button>
 
-                                <!-- <div id="g" class='alert'>GRabado</div> -->                            
-                        </form>                        
+                                <!-- <div id="g" class='alert'>GRabado</div> -->
+                            </form>                        
                         <!-- end form -->
-                        </div>
+                        
                         
                         
                         </div>

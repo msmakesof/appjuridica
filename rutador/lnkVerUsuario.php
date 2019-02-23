@@ -107,11 +107,25 @@
         $cookie_value = encryptor('encrypt', $usulocal);
         setcookie($cookie_name, $cookie_value, time() + (86400 * 30), "/"); // 86400 = 1 day 
         
+		$cookiename='_geo';
+		$value=$IdUsuario;
+		$expiry=time()+(86400 * 30);
+		$domain='http://127.0.0.1/appjuridica/';  //'appjuridica.ok-be.co';
+		$secure=true;
+		$httponly=true;
+		//setcookie($cookie_name,$value,$expiry,$path,$domain,$secure,$httponly);
+		setcookie($cookiename, $value, $expiry);
+		
+		
+		
         $vercook = trim($_COOKIE['_gus']);
         if( $vercook == "" || is_null($vercook) )
         {
             //Hosting No Permite crear cookie PHP
+            //$cookie_value = "Hosting No Permite crear cookie PHP";
+            $_SESSION["user_id"] = $cookie_value;			
         }
+		$_SESSION["opcMenu"]="";
     }
     //echo trim($existe.'- cookie...'.$_COOKIE['_gus']);
     require_once('./pages/tables/regAuditor.php');

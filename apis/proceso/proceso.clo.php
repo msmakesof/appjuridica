@@ -3,8 +3,8 @@ require_once('../../Connections/cnn_kn.php');
 require_once('../../Connections/config2.php');
 if(!isset($_SESSION)) 
 { 
-  session_start(); 
-} 
+  session_start();   
+}
 ?>
 <?php
 if (!function_exists("GetSQLValueString")) 
@@ -42,13 +42,13 @@ if (!function_exists("GetSQLValueString"))
 }
 
 require_once('../../Connections/DataConex.php');
-$parameters = "update=update&tipodocumento=$tipodocumento&numerodocumento=$numerodocumento&apellido1=$apellido1&apellido2=$apellido2&nombre=$nombre&email=$email&direccion=$direccion&celular=$celular&usuario=$email&clave=$clave&estado=$estado&verseguimiento=$verseguimiento&tipocliente=$tipocliente&idtabla=$idUsuario";
+$parameters = "cierre=cierre&estado=$estado&observacion=$observacion&usuario=$usuario&fechacierre=$fechaCierre&pidtabla=$pidtabla";
 $soportecURL = "S";
-$url         = urlServicios."consultadetalle/consultadetalle_Cliente.php?".$parameters;
+$url         = urlServicios."consultadetalle/consultadetalle_pro_proceso.php?".$parameters;
 $existe      = "";
 $usulocal    = "";
-$siguex      = "";
-//echo("<script>console.log('PHP updCliente: ".$url."');</script>");
+$sigue      = "";
+//echo("<script>console.log('PHP closed: ".$url."');</script>");
 if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
 {
     $ch = curl_init();
@@ -64,11 +64,11 @@ if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
     $curl_errno  = curl_errno($ch);
     curl_close($ch);
 
-    $mcliente = preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $resultado);    
-    $mcliente = json_decode($mcliente, true);    
-    //echo("<script>console.log('PHP: ".print_r($mcliente)."');</script>");
+    $mproceso = preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $resultado);    
+    $mproceso = json_decode($mproceso, true);    
+    //echo("<script>console.log('PHP: ".print_r($mproceso)."');</script>");
     //echo("<script>console.log('PHP resultado: ".$resultado."');</script>");
-    //echo("<script>console.log('PHP: ".count($m['cli_cliente'])."');</script>");
+    //echo("<script>console.log('PHP: ".count($m['pro_proceso'])."');</script>");
     
     $json_errors = array(
         JSON_ERROR_NONE => 'No se ha producido ningún error',
@@ -80,11 +80,11 @@ if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
     if($resultado === false || $curl_errno > 0)
     {
         //echo 'Curl error: ' . curl_error($ch);
-        $sigue = "N-Registro NO modificado - Curl Error: " . $curl_errno;
+        $sigue = "N-Registro NO Cerrado - Curl Error: " . $curl_errno;
     }
     else
     {
-      $sigue = "S-Registro modificado Correctamente.";
+      $sigue = "S-Registro Cerrado Correctamente.";
     }
     //echo "Error : ", $json_errors[json_last_error()], PHP_EOL, PHP_EOL."<br>";        
 }
@@ -100,7 +100,7 @@ if($soportecURL == "N")
     $response = Unirest\Request::get($url, array("X-Mashape-Key" => "MY SECRET KEY"));
     $resultado = $response->raw_body;
     $resultado = preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $resultado);
-    $mcliente = json_decode($resultado, true);	        
+    $mproceso = json_decode($resultado, true);	        
 }
 echo $sigue;
 ?>

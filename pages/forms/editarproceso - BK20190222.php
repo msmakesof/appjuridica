@@ -470,10 +470,10 @@ $IdJuzgado = trim($mproceso['pro_proceso']['PRO_IdJuzgado']);
                                                 <div class="form-group form-float" style="clear: both;">
                                                     <label class="form-label">Estado</label>
                                                     <input type="radio" name="estado" id="activo" class="with-gap" value="1" <?php if( $EstadoProceso == 1){?>checked="checked"<?php } ?>>
-                                                    <label for="activo">Abierto</label>
+                                                    <label for="activo">Activo</label>
 
                                                     <input type="radio" name="estado" id="inactivo" class="with-gap" value="2"<?php if( $EstadoProceso == 2){?>checked="checked"<?php } ?>>
-                                                    <label for="inactivo" class="m-l-20">Cerrado</label>
+                                                    <label for="inactivo" class="m-l-20">Inactivo</label>
                                                 </div>
                                             </div>
                                         </div>
@@ -875,56 +875,95 @@ $IdJuzgado = trim($mproceso['pro_proceso']['PRO_IdJuzgado']);
     			});
             }    
         });
-        
+
+
         $("#borrar").on('click', function() {
+            Swal.fire({
+            title: 'Desea Cerrar este Proceso?',
+            input: 'text',
+            inputAttributes: {
+                autocapitalize: 'off',
+                placeholder: 'Digite breve observaciòn...'
+            },
+            showCancelButton: true,
+            confirmButtonText: 'Cerrar  !',
+            cancelButtonText:  'Cancelar!', 
+            showLoaderOnConfirm: true,
+            preConfirm: (login) => {
+                return fetch(`//api.github.com/users/${login}`)
+                .then(response => {
+                    if (!response.ok) {
+                    throw new Error(response.statusText)
+                    }
+                    return response.json()
+                })
+                .catch(error => {
+                    Swal.showValidationMessage(
+                    `Request failed: ${error}`
+                    )
+                })
+            },
+            allowOutsideClick: () => !Swal.isLoading()
+            }).then((result) => {
+            if (result.value) {
+                Swal.fire({
+                title: `${result.value.login}'s avatar`,
+                imageUrl: result.value.avatar_url
+                })
+            }
+            })
+        })
+
+        $("#xyborrar").on('click', function() {
             var idtabla  = "<?php echo $idtabla; ?>";            
             var estado = 2;
-            swal({
-                title: "Desea Cerrar este Proceso?",
-                text: "Digite breve observaciòn sobre el cierre.",
-                type: "input",                
-                confirmButtonText: 'Cerrar..!',
-                cancelButtonText:  'Cancelar!',               
-                showCancelButton: true,
-                closeOnConfirm: false,
-                inputPlaceholder: "Digite breve observaciòn..."
-                }, function (inputValue) {
-                if (inputValue === false) return false;
-                if (inputValue === "") {
-                    swal.showInputError("observacion debe ser diligenciada.... :)");
-                    return false;
-                }
-                setTimeout(function () { 
-                    $.ajax( 
-                        {  
-                            data : {"pidtabla": idtabla, "estado": estado, "observacion": inputValue},
-                            type: "POST",
-                            url: "../forms/cerrar_<?php echo strtolower($Tabla) ; ?>.php",                                
-                            
-                            success: function(data)
-                            {
-                                //alert(data);
-                                var xrespstr = data.trim();
-                                var respstr = xrespstr.substr(0,1);
-                                var msj = xrespstr.substr(2);
-                                if( respstr == "S")
-                                {
-                                    swal({ title: "Proceso Cerrado!", text: msj, type: "success",}, 
-                                    function () { location.reload(true); });
-                                }
-                            }                                
-                            
-                        }
-                    );
-                        
-                }, 2000); 
-                }
+            //
+            const swalWithBootstrapButtons = Swal.mixin({
+            confirmButtonClass: 'btn btn-success',
+            cancelButtonClass: 'btn btn-danger',
+            buttonsStyling: true,
+            })
 
-            );
- 
-        });
+            swalWithBootstrapButtons.fire({
+            title: 'Desea Cerrar este Proceso?',
+            text: "Digite breve observaciòn sobre el cierre.",
+            type: 'question',
+            html: '<textarea id="observacion" name="observacion" placeholder="Digite breve observaciòn..." maxlength="150" rows="4" cols="40" autocomplete="off" required></textarea>',            
+            showCancelButton: true,
+            confirmButtonText: 'Cerrar..!',
+            cancelButtonText:  'Cancelar!',            
+            reverseButtons: true,
+            showLoaderOnConfirm: true,  
+                    //
+                    preConfirm: (observacion) => {
+                        return fetch('../forms/cerrar_<?php echo strtolower($Tabla) ; ?>.php/${observacion}')
+                        .then(response => {
+                            if (!response.ok) {
+                            throw new Error(response.statusText)
+                            }
+                            return response.json()
+                        })
+                        .catch(error => {
+                            Swal.showValidationMessage(
+                            `Request failed: ${error}`
+                            )
+                        })
+                    },
+                    allowOutsideClick: () => !Swal.isLoading()
+                    }).then((result) => {
+                    if (result.value) {
+                        Swal.fire({
+                        title: `${result.value.login}'s avatar`,
+                        imageUrl: result.value.avatar_url
+                        })
+                    }
+                    //
+                }    
 
-      
+            })
+            //
+
+        })
 
 	
         $("#xborrar").on('click', function() {

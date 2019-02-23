@@ -38,6 +38,7 @@ if (!function_exists("GetSQLValueString"))
     return $theValue;
     }
 }
+$idTabla = 0;
 $empresa = "AppJuridica";
 if( isset($_POST['ƒ¤']) && !empty($_POST['ƒ¤']) )
 {    
@@ -594,7 +595,7 @@ else
                                         <th>Ubicaci&oacute;n</th>
                                         <th>Clase Proceso</th>
                                         <th>Juzgado</th>
-                                        <th>Activo</th> 
+                                        <th>Estado</th> 
                                     </tr>
                                 </thead>
                                 <tfoot>
@@ -604,7 +605,7 @@ else
                                         <th>Ubicaci&oacute;n</th>
                                         <th>Clase Proceso</th>
                                         <th>Juzgado</th>
-                                        <th>Activo</th>                                        
+                                        <th>Estado</th>                                        
                                     </tr>
                                 </tfoot>
                                 <tbody>
@@ -657,8 +658,8 @@ if($soportecURL == "N")
     $mproceso = json_decode($resultado, true);	        
 } 
 
-//if( $mproceso['estado'] < 2)
-//{
+if( $mproceso['estado'] != 2)
+{
     $nombre_Tabla="";
     for($i=0; $i<count($mproceso['pro_proceso']); $i++)
     {
@@ -687,7 +688,7 @@ if($soportecURL == "N")
         </tr>
     <?php                          
     }
-//}
+}
 ?>
  </tbody>
 </table>
@@ -791,7 +792,7 @@ var variableValue;
     });
 
     $("#cambiar").on("click", function(id){
-        alert(id);
+        //alert(id);
         <?php  $_SESSION["f"] = $idTabla;?>
         //document.getElementById("formulario").submit();
         

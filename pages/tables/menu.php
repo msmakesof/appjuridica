@@ -2,6 +2,10 @@
 <?php 
 //include('../../Connections/cnn_kn.php'); 
 //require('../../Connections/config2.php'); 
+if(!isset($_SESSION)) 
+{ 
+  session_start(); 
+}
 ?>
 <?php
 if (!function_exists("GetSQLValueString")) 
@@ -46,6 +50,12 @@ else
 {
     $clave ="";
 }
+
+$opcMenu= $_SESSION["opcMenu"] ;
+// if( isset($_POST['idx']) && !empty($_POST['idx']) )
+// {    
+//     $opcMenu = trim($_POST['idx']);
+// }
 
 // $nombre = "";
 // $email  = "";
@@ -94,7 +104,7 @@ else
             </a>
         </li>                   
 
-        <li class="active">
+        <li>
             <a href="javascript:void(0);" class="menu-toggle">
                 <i class="material-icons">view_list</i>
                 <span>Módulo de Administración</span>
@@ -130,7 +140,7 @@ else
             </ul>
         </li>
 
-        <li>
+        <li <?php if($opcMenu =="P") { echo "class='active'"; }?> >
             <a href="javascript:void(0);" class="menu-toggle">
                 <i class="material-icons">work</i>
                 <span>Gesti&oacute;n Procesos</span>

@@ -91,10 +91,10 @@ if(isset($_POST['celular'])){
   $celular = trim($_POST['celular']);
 }
 
-// $tipocliente ="";
-// if(isset($_POST['tipocliente'])){
-//   $tipocliente = trim($_POST['tipocliente']);
-// }
+$tipocliente ="";
+if(isset($_POST['tipocliente'])){
+  $tipocliente = trim($_POST['tipocliente']);
+}
 
 $estado ="";
 if(isset($_POST['estado'])){
@@ -109,6 +109,15 @@ if(isset($_POST['OldClave'])){
 if($OldClave != $clave)
 {
   $clave = encryptor('encrypt',$clave);
+}
+
+$verseguimiento ="";
+if(isset($_POST['verseguimiento'])){
+  $verseguimiento = trim($_POST['verseguimiento']);
+  if($verseguimiento == "on")
+  {
+	  $verseguimiento = 1;
+  }
 }
 
 require_once('../../apis/cliente/infoCliente.upd.php');

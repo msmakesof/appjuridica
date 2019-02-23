@@ -149,7 +149,8 @@ else
 
 $nombre = "";
 $email  = "";
-echo "<br><br><br><br><br>";
+//echo "<br><br><br><br><br>";
+
 //echo "global....".$idStorageGlobal;
 //echo "usu....".$_POST['username']."<br>";
 // echo "usu: ".$_POST['ƒ×'];
@@ -637,7 +638,7 @@ $row_rs_topicxnivel = mysqli_fetch_assoc($rs_topicxnivel);
             </div>
             <!-- #END# Widgets -->
             <!-- CPU Usage -->
-            <div id="graficaalumno">
+            <!-- <div id="graficaalumno">
                 <div class="row clearfix">
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                         <div class="card">
@@ -668,7 +669,7 @@ $row_rs_topicxnivel = mysqli_fetch_assoc($rs_topicxnivel);
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> -->
             <!-- #END# CPU Usage -->
             <div class="row clearfix">
                 <!-- Visitors -->

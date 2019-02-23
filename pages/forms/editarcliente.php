@@ -42,7 +42,7 @@ if (!function_exists("GetSQLValueString"))
 
 $idTabla = 0;
 require_once('../../apis/general/tipodocumento.php');
-//require_once('../../apis/general/tipocliente.php');
+require_once('../../apis/general/tipocliente.php');
 
 if( isset($_GET['f'])  && !empty($_GET['f']) )
 {    
@@ -68,7 +68,8 @@ $Celular = trim($mcliente['cli_cliente']['CLI_Celular']);
 $Usuario = trim($mcliente['cli_cliente']['CLI_Usuario']);
 $Clave = $mcliente['cli_cliente']['CLI_Clave'];
 $EstadoEst = $mcliente['cli_cliente']['CLI_Estado'];
-//$TipoCliente = $mcliente['cli_cliente']['CLI_IdTipoCliente'];
+$Verseguimiento = $mcliente['cli_cliente']['CLI_SeguimientoProceso'];
+$TipoCliente = $mcliente['cli_cliente']['CLI_IdTipoCliente'];
 ?>
 <!DOCTYPE html>
 <html>
@@ -207,42 +208,57 @@ $EstadoEst = $mcliente['cli_cliente']['CLI_Estado'];
                                        <!-- -->
                                     </div>
                                 </div>
-                                <div class="form-group form-float">
+                                
+								<div class="form-group form-float">
                                     <label class="form-label">Email</label>
                                     <div class="form-line">
-                                        <input type="text" class="form-control" name="email" id="email" value="<?php echo $Email ;?>" maxlength="60" required>
-                                       <!-- -->
+                                        <input type="text" class="form-control" name="email" id="email" value="<?php echo $Email ;?>" maxlength="60" required>                                       
                                     </div>
                                 </div>
+								
                                 <div class="form-group form-float">
-                                     <label class="form-label">Celular</label>
-                                    <div class="form-line">
-                                        <input type="text" class="form-control" name="celular" id="celular" value="<?php echo $Celular ;?>" maxlength="13" required>
-                                       <!---->
-                                    </div>
-                                </div>                              
-                                
+									<div style="float: left;">
+										<label class="form-label">Celular</label>
+										<div class="form-line">
+											<input type="text" class="form-control" name="celular" id="celular" value="<?php echo $Celular ;?>" maxlength="13" required>                                      
+										</div>
+									</div>	
+									
+									<div style="float: left;">										
+										<div class="col-sm-6">
+											<label class="form-label">Tipo Usuario</label>
+											<select class="selectpicker show-tick" data-live-search="true" data-width="100%" name="tipocliente" id="tipocliente" required>                                           
+												<?php                                                 
+													for($i=0; $i<count($mtipocliente['cli_tipocliente']); $i++)
+													{           
+														$TCL_IdTipoCliente = $mtipocliente['cli_tipocliente'][$i]['TCL_IdTipoCliente'];                                                    
+														$TCL_Nombre = $mtipocliente['cli_tipocliente'][$i]['TCL_Nombre'];
+														$TCL_Estado = $mtipocliente['cli_tipocliente'][$i]['TCL_Estado'];
+												?>                                            
+												<option value="<?php echo $TCL_IdTipoCliente; ?>" <?php if ($TCL_IdTipoCliente == $TipoCliente){ echo "selected";} else{ echo "";} ?>>
+													<?php echo $TCL_Nombre ; ?>                                                
+												</option>
+												<?php                    
+													} 
+												?>
+											</select>
+										</div>
+									</div>										
+                                </div> 
+								
+								<div class="form-group">
+                                    <label class="form-label">Autoriza acceso a la herramienta para que el cliente pueda ver seguimiento de su proceso?
+                                    <input type="checkbox" name="verseguimiento" id="verseguimiento" data-toggle="toggle" data-size="mini" data-on="Si" data-off="No" data-onstyle="success" data-offstyle="danger" <?php if( $Verseguimiento == 1){?>checked="checked"<?php } ?>>
+									</label>									
+									<!--
+									<input type="radio" name="verseguimiento" id="inactivovs" class="with-gap" value="S">
+                                    <label for="inactivo">Si</label>
 
-                                <!-- <div class="form-group form-float">
-                                    <label class="form-label">Tipo Usuario</label>
-                                    <div class="col-sm-4">
-                                        <select class="selectpicker show-tick" data-live-search="true" data-width="90%" name="tipocliente" id="tipocliente" required>                                           
-                                            <?php                                                 
-                                                //for($i=0; $i<count($mtipocliente['cli_tipocliente']); $i++)
-                                                //{           
-                                                    //$TCL_IdTipoCliente = $mtipocliente['cli_tipocliente'][$i]['TCL_IdTipoCliente'];                                                    
-                                                    //$TCL_Nombre = $mtipocliente['cli_tipocliente'][$i]['TCL_Nombre'];
-                                                    //$TCL_Estado = $mtipocliente['cli_tipocliente'][$i]['TCL_Estado'];
-                                            ?>                                            
-                                            <option value="<?php //echo $TCL_IdTipoCliente; ?>" <?php //if ($TCL_IdTipoCliente == $TipoCliente){ echo "selected";} else{ echo "";} ?>>
-                                                <?php //echo $TCL_Nombre ; ?>                                                
-                                            </option>
-                                            <?php                    
-                                                //} 
-                                            ?>
-                                        </select>
-                                    </div>   
-                                </div> -->
+                                    <input type="radio" name="verseguimiento" id="activovs" class="with-gap" value="N">
+                                    <label for="activo" class="m-l-20">No</label>
+									-->
+									<hr style="margin-top:5px">
+                                </div>
                                 
                                 <div class="form-group">
                                     <input type="radio" name="estado" id="activo" class="with-gap" value="1" <?php if( $EstadoEst == 1){?>checked="checked"<?php } ?>>
@@ -261,11 +277,10 @@ $EstadoEst = $mcliente['cli_cliente']['CLI_Estado'];
 								</div>
 								
                             </form>                        
-                            <div id="msj" style="margin-top:7px;"></div>
+                            <div id="msj" style="margin-top:5px;"></div>
 
-
-                             <form id="mensaje">
-                             <label style="font-family: Verdana; font-size: 18; color:red;">Registro ha sido borrado correctamente.</lael>
+                            <form id="mensaje">
+								<label style="font-family: Verdana; font-size: 18; color:red;">Registro ha sido borrado correctamente.</label>
                             </form>
 
                     	</div> 
@@ -311,6 +326,10 @@ $EstadoEst = $mcliente['cli_cliente']['CLI_Estado'];
 
     <script src="../../js/alertify.min.js"></script>
     <script src="../../js/jquery.numeric.js"></script>
+	
+	<!-- toggle botton --> 
+	<link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
+	<script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
 
     <script type="text/javascript">    
     $(document).ready(function()
@@ -358,11 +377,13 @@ $EstadoEst = $mcliente['cli_cliente']['CLI_Estado'];
             var direccion = $("#direccion").val();
             var email = $("#email").val();
             var celular = $("#celular").val();            
-            //var tipocliente = $("#tipocliente").val();			
+            var tipocliente = $("#tipocliente").val();			
 			var estado = $('input:radio[name=estado]:checked').val();
+			var seguimiento = $('input:checkbox[name=verseguimiento]:checked').val();
+			
 			var idtabla =  "<?php echo $idtabla; ?>";
             var OldClave = "<?php echo $Clave; ?>";
-            if( tipodocumento == "" || numerodocumento =="" || nombre == "" || apellido1 == "" || apellido2 == "" || clave =="" || direccion == "" || email == "" || celular == "" || estado == undefined )
+            if( tipodocumento == "" || numerodocumento =="" || nombre == "" || apellido1 == "" || apellido2 == "" || clave =="" || direccion == "" || email == "" || celular == "" || estado == undefined || seguimiento == "" || tipocliente == undefined || tipocliente == "")
             {               
                 swal({
                   title: "Error:  Ingrese información en todos los campos...",
@@ -376,7 +397,7 @@ $EstadoEst = $mcliente['cli_cliente']['CLI_Estado'];
             else
             {
     			$.ajax({
-    				data : {"tipodocumento": tipodocumento, "numerodocumento": numerodocumento, "nombre": nombre, "apellido1": apellido1, "apellido2": apellido2, "clave": clave, "direccion": direccion, "email": email, "celular": celular, "estado": estado, "idtabla": idtabla, "OldClave": OldClave },
+    				data : {"tipodocumento": tipodocumento, "numerodocumento": numerodocumento, "nombre": nombre, "apellido1": apellido1, "apellido2": apellido2, "clave": clave, "direccion": direccion, "email": email, "celular": celular, "estado": estado, "idtabla": idtabla, "OldClave": OldClave, "verseguimiento": seguimiento, "tipocliente": tipocliente },
     				type: "POST",				
     				url : "editar_<?php echo strtolower($Tabla); ?>.php",
                 })  

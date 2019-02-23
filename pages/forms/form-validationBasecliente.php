@@ -42,8 +42,7 @@ if (!function_exists("GetSQLValueString"))
 $NombreTabla ="CLIENTE";
 $idTabla = 0;
 require_once('../../apis/general/tipodocumento.php');
-//require_once('../../apis/general/tipocliente.php');
-
+require_once('../../apis/general/tipocliente.php');
 ?>
 <!DOCTYPE html>
 <html>
@@ -124,7 +123,11 @@ require_once('../../apis/general/tipodocumento.php');
     <script src="../../js/demo.js"></script>
 
     <!-- <script src="../../js/alertify.min.js"></script> -->
-     <script src="../../js/jquery.numeric.js"></script>
+    <script src="../../js/jquery.numeric.js"></script>
+	 
+	<!-- toggle botton --> 
+	<link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
+	<script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
 
     <script type="text/javascript">
     var nombre ="";
@@ -184,13 +187,14 @@ require_once('../../apis/general/tipodocumento.php');
             var direccion = $("#direccion").val();
             var email = $("#email").val();
             var celular = $("#celular").val();
-            //var tipocliente = $("#tipocliente").val();
+            var tipocliente = $("#tipocliente").val();
             //var telefonofijo = $("#telefonofijo").val();
             //var sucursal = $("#sucursal").val();            
             var estado = $('input:radio[name=estado]:checked').val();
+			var seguimiento = $('input:radio[name=verseguimiento]:checked').val();
             e.preventDefault();
 
-            if( tipodocumento == "" || numerodocumento =="" || nombre == "" || apellido1 == "" || apellido2 == "" || clave =="" || direccion == "" || email == "" || celular == "" || estado == undefined )
+            if( tipodocumento == "" || numerodocumento =="" || nombre == "" || apellido1 == "" || apellido2 == "" || clave =="" || direccion == "" || email == "" || celular == "" || estado == undefined || seguimiento == "" || tipocliente == undefined || tipocliente == "")
             {
                //swal("Atencion:", "Estudiante " + nombre + " !Ya se encuentra registrado(a)...");
                 swal({
@@ -206,7 +210,7 @@ require_once('../../apis/general/tipodocumento.php');
             else
             {
                 $.ajax({
-                    data : {"tipodocumento": tipodocumento, "numerodocumento": numerodocumento, "nombre": nombre, "apellido1": apellido1, "apellido2": apellido2, "clave": clave, "direccion": direccion, "email": email, "celular": celular, "estado": estado}, 
+                    data : {"tipodocumento": tipodocumento, "numerodocumento": numerodocumento, "nombre": nombre, "apellido1": apellido1, "apellido2": apellido2, "clave": clave, "direccion": direccion, "email": email, "celular": celular, "estado": estado, "verseguimiento": seguimiento, "tipocliente": tipocliente}, 
                     type: "POST",
                     dataType: "html",
                     url : "crea_<?php echo strtolower($NombreTabla); ?>.php",
@@ -350,48 +354,49 @@ require_once('../../apis/general/tipodocumento.php');
                                 <div class="form-group form-float">
                                     <label class="form-label">Direcci&oacute;n</label>
                                     <div class="form-line">
-                                        <input type="text" class="form-control" name="direccion" id="direccion" value="" maxlength="50" required>
-                                       <!-- -->
+                                        <input type="text" class="form-control" name="direccion" id="direccion" value="" maxlength="50" required>                                
                                     </div>
                                 </div>
-                                <div class="form-group form-float">
+                                
+								<div class="form-group form-float">
                                     <label class="form-label">Email</label>
                                     <div class="form-line">
-                                        <input type="text" class="form-control" name="email" id="email" value="" maxlength="60" required>
-                                       <!-- -->
+                                       <input type="text" class="form-control" name="email" id="email" value="" maxlength="60" required>                                       
                                     </div>
                                 </div>
+								
                                 <div class="form-group form-float">
-                                     <label class="form-label">Celular</label>
-                                    <div class="form-line">
-                                        <input type="text" class="form-control" name="celular" id="celular" value="" maxlength="13" required>
-                                       <!---->
-                                    </div>
+									<div style="float: left;">
+										<label class="form-label">Celular</label>
+										<div class="form-line">
+											<input type="text" class="form-control" name="celular" id="celular" value="" maxlength="13" required>                                       
+										</div>
+									</div>                                
+									
+									<div style="float: left;">										                                    
+										<div class="col-sm-6">
+											<label class="form-label">
+												Tipo Cliente
+											</label>
+											<select class="selectpicker show-tick" data-live-search="true" data-width="100%" name="tipocliente" id="tipocliente" required>
+												<option value="" >Seleccione Opción...</option>
+												<?php
+													for($i=0; $i<count($mtipocliente['cli_tipocliente']); $i++)
+													{
+														$TCL_IdTipoCliente = $mtipocliente['cli_tipocliente'][$i]['TCL_IdTipoCliente'];                                                    
+														$TCL_Nombre = $mtipocliente['cli_tipocliente'][$i]['TCL_Nombre'];
+														$TCL_Estado = $mtipocliente['cli_tipocliente'][$i]['TCL_Estado'];
+												?>
+														<option value="<?php echo $TCL_IdTipoCliente; ?>" >
+															<?php echo $TCL_Nombre ; ?>                                                
+														</option>
+												<?php
+													}
+												?>
+											</select>
+										</div>
+									</div>
                                 </div> 
-
-                                <!-- <div style="form-group form-float">                                     
-                                    <label class="form-label">
-                                        Tipo Cliente
-                                    </label>                                    
-                                    <div class="col-sm-4">                                       
-                                        <select class="selectpicker show-tick" data-live-search="true" data-width="80%" name="tipocliente" id="tipocliente" required>
-                                            <option value="" >Seleccione Opción...</option>
-                                            <?php
-                                                //for($i=0; $i<count($mtipocliente['cli_tipocliente']); $i++)
-                                                //{
-                                                //    $TCL_IdTipoCliente = $mtipocliente['cli_tipocliente'][$i]['TCL_IdTipoCliente'];                                                    
-                                                //    $TCL_Nombre = $mtipocliente['cli_tipocliente'][$i]['TCL_Nombre'];
-                                                //    $TCL_Estado = $mtipocliente['cli_tipocliente'][$i]['TCL_Estado'];
-                                            ?>
-                                                    <option value="<?php //echo $TCL_IdTipoCliente; ?>" >
-                                                        <?php //echo $TCL_Nombre ; ?>                                                
-                                                    </option>
-                                            <?php
-                                                //}
-                                            ?>
-                                        </select>
-                                    </div>
-                                </div> -->
 
                                 <!-- 
                                 <div class="form-group form-float">
@@ -424,7 +429,13 @@ require_once('../../apis/general/tipodocumento.php');
                                         </select>
                                     </div>   
                                 </div>                               -->
-                                
+                                <div class="form-group form-float">
+                                    <label class="form-label">Autoriza acceso a la herramienta para que el cliente pueda ver seguimiento de su proceso?
+                                    <input type="checkbox" name="verseguimiento" id="verseguimiento" data-toggle="toggle" data-size="mini"  data-on="Si" data-off="No" data-onstyle="success" data-offstyle="danger">
+									</label>									
+									<hr style="margin-top:5px">
+                                </div>
+								
                                 <div class="form-group form-float">
                                     <label class="form-label">Estado</label>
                                     <input type="radio" name="estado" id="activo" class="with-gap" value="1">

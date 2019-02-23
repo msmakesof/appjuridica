@@ -85,10 +85,19 @@ if(isset($_POST['celular'])){
   $celular = trim($_POST['celular']);
 }
 
-// $tipocliente ="";
-// if(isset($_POST['tipocliente'])){
-//   $tipocliente = trim($_POST['tipocliente']);
-// }
+$tipocliente ="";
+if(isset($_POST['tipocliente'])){
+  $tipocliente = trim($_POST['tipocliente']);
+}
+
+$verseguimiento ="";
+if(isset($_POST['verseguimiento'])){
+  $verseguimiento = trim($_POST['verseguimiento']);
+  if($verseguimiento == "on")
+  {
+	  $verseguimiento = 1;
+  }
+}
 
 $estado ="";
 if(isset($_POST['estado'])){
@@ -140,13 +149,14 @@ if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
       $local = rand(10000000,1234567890000);
       $clave = encryptor('encrypt',$clave);
 
-      $parameters = "insert=insert&TipoDocumento=$tipodocumento&Identificacion=$numerodocumento&PrimerApellido=$apellido1&SegundoApellido=$apellido2&Nombre=$nombre&Email=$email&Direccion=$direccion&Celular=$celular&Usuario=$email&Clave=$clave&Estado=$estado&IdInterno=$interno&Local=$local";
+      $parameters = "insert=insert&TipoDocumento=$tipodocumento&Identificacion=$numerodocumento&PrimerApellido=$apellido1&SegundoApellido=$apellido2&Nombre=$nombre&Email=$email&Direccion=$direccion&Celular=$celular&Usuario=$email&Clave=$clave&Estado=$estado&IdInterno=$interno&Local=$local&Verseguimiento=$verseguimiento&TipoCliente=$tipocliente";
            
       $soportecURL = "S";
       $url         = urlServicios."consultadetalle/consultadetalle_Cliente.php?".$parameters;
       $existe      = "";
       $usulocal    = "";
       $sigue       = "";
+	  //echo("<script>console.log('PHP Creacliente: ".$url."');</script>");
       //$verbose = fopen("php://appjuridica/tempoErr", 'w');
       if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
       {    

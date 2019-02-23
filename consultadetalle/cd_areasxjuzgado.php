@@ -22,6 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 
             // Tratar retorno            
             $retorno = AREASXJUZGADO::getById($TipoJuzgado, $Area);
+			//$retorno = AREASXJUZGADO::getById($TipoJuzgado);
 
             if ($retorno) 
             {

@@ -129,13 +129,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         $par7  = $_GET['Direccion'];
         $par8  = $_GET['Celular'];
         $par9  = $_GET['Usuario'];
-        $par10 = $_GET['Clave'];
-        //$par11 = $_GET['TipoCliente'];
-        $par12 = $_GET['Estado'];        
-        $par13 = $_GET['IdInterno'];
-        $par14 = $_GET['Local'];
+        $par10 = $_GET['Clave'];        
+        $par11 = $_GET['Estado'];        
+        $par12 = $_GET['IdInterno'];
+        $par13 = $_GET['Local'];
+		$par14 = $_GET['Verseguimiento'];
+		$par15 = $_GET['TipoCliente'];		
         
-        $retorno = CLI_CLIENTE::insert($par1,$par2,$par3,$par4,$par5,$par6,$par7,$par8,$par9,$par10,$par12,$par13,$par14);        
+        $retorno = CLI_CLIENTE::insert($par1,$par2,$par3,$par4,$par5,$par6,$par7,$par8,$par9,$par10,$par11,$par12,$par13,$par14,$par15);
         $msj =$retorno;
         if ($retorno) 
         {
@@ -169,12 +170,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         $par7  = $_GET['direccion'];        
         $par8  = $_GET['celular'];  
         $par9  = $_GET['email']; // usu
-        $par10 = $_GET['clave'];
-        //$par11 = $_GET['tipocliente'];
-        $par12 = $_GET['estado'];
-        $par0  = $_GET['idtabla'];    
-
-        $retorno = CLI_CLIENTE::update($par1,$par2,$par3,$par4,$par5,$par6,$par7,$par8,$par9,$par10,$par12,$par0);
+        $par10 = $_GET['clave'];        
+        $par11 = $_GET['estado'];        
+		$par12 = $_GET['verseguimiento'];
+		$par13 = $_GET['tipocliente'];
+		$par0  = $_GET['idtabla'];
+		
+        $retorno = CLI_CLIENTE::update($par1,$par2,$par3,$par4,$par5,$par6,$par7,$par8,$par9,$par10,$par11,$par12,$par13,$par0);
         $msj =$retorno;
         if ($retorno) 
         {

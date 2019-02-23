@@ -1,4 +1,4 @@
-<?php require_once('cnn_kn.php'); ?>
+<?php require_once('../Connections/cnn_kn.php'); ?>
 
 <?php
 if (!function_exists("GetSQLValueString")) {

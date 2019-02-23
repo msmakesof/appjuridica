@@ -66,7 +66,9 @@ class PRO_PROCESO
 							PRO_IdUbicacion,
 							PRO_IdClaseProceso,
 							PRO_IdJuzgadoOrigen,
-							PRO_EstadoProceso
+							PRO_EstadoProceso,
+							PRO_IdArea,
+							PRO_IdJuzgado
                             FROM ".$GLOBALS['TABLA'].
                             " WHERE ".$GLOBALS['Llave']." = ? ; ";
 
@@ -309,6 +311,38 @@ class PRO_PROCESO
             return -1;
         }
     }
-}
 
+    /**
+     * Cierre de un Proceso: actualiza un registro de la bases de datos basado
+     * en los nuevos valores relacionados con un identificador      
+     *
+     * @param $Estado             Estado
+     * @param $Observacion        Observacion del cierre    
+     * @param $Usuario            usuario que realiza cierre
+     * @param $FechaCierre        fecha de Cierre
+     * @param $Pidtabla      
+     * 
+     */
+    public static function cierre(
+        $Estado,
+        $Observacion,
+        $Usuario,
+        $FechaCierre,
+        $Pidtabla
+    )
+    {
+        // Creando consulta UPDATE
+        $consulta = "UPDATE ". $GLOBALS['TABLA']. 
+            " SET PRO_EstadoProceso=?, PRO_ObservacionCierre=?, PRO_IdUsuarioCierre=?, PRO_FechaCierre=? ".
+            " WHERE ". $GLOBALS['Llave'] ." =? ;";
+
+        // Preparar la sentencia
+        $cmd = Database::getInstance()->getDb()->prepare($consulta);
+
+        // Relacionar y ejecutar la sentencia
+        $cmd->execute(array($Estado, $Observacion, $Usuario, $FechaCierre, $Pidtabla ));
+
+        return $cmd;
+    }
+}
 ?>

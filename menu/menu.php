@@ -95,7 +95,7 @@ else
             </a>
         </li>                   
 
-        <li class="active">
+        <li> <!-- class="active" -->
             <a href="javascript:void(0);" class="menu-toggle">
                 <i class="material-icons">view_list</i>
                 <span>M&oacute;dulo de Administraci&oacute;n</span>
@@ -233,6 +233,20 @@ else
                     <a href="../kal/sample.php" class="menu-toggle">
                         <span>Agenda</span>
                     </a>  
+                </li>
+            </ul>
+        </li>
+		
+		<li>
+            <a href="javascript:void(0);" class="menu-toggle">
+                <i class="material-icons">assignment_ind</i>
+                <span>Dependiente Judicial</span>
+            </a>
+            <ul class="ml-menu">
+                <li>
+					<a href="../eventos/" class="menu-toggle">
+                        <span>Herramientas</span>
+                    </a> 
                 </li>
             </ul>
         </li>

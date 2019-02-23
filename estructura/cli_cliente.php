@@ -38,6 +38,7 @@ class CLI_CLIENTE
         CLI_UsuarioEstado,
         CLI_IdInterno,
         CLI_Local ,
+		CLI_IdTipoCliente, 
         CASE CLI_Estado WHEN 1 THEN 'Activo' ELSE 'Inactivo' END EstadoUsuario,
         concat_WS(' ',CLI_Nombre, CLI_PrimerApellido, CLI_SegundoApellido) AS NombreUsuario 
         FROM ".$GLOBALS['TABLA']." ORDER BY CLI_Nombre; ";
@@ -82,7 +83,9 @@ class CLI_CLIENTE
                         CLI_UsuarioModifica,                        
                         CLI_UsuarioEstado,
                         CLI_IdInterno,
-                        CLI_Local ".
+                        CLI_Local ,
+						CLI_SeguimientoProceso,
+						CLI_IdTipoCliente ".
                         " FROM ".$GLOBALS['TABLA'].
                         " WHERE ".$GLOBALS['Llave']." = ? ORDER BY CLI_Nombre; ";
 
@@ -189,7 +192,9 @@ class CLI_CLIENTE
      * @param $FechaEstado          nueva Fecha Estado
      * @param $UsuarioEstado        nueva Usuario Estado
      * @param $IdInterno            nueva Id Interno
-     * @param $Local                nueva Id Interno Cliente   
+     * @param $Local                nueva Id Interno Cliente
+	 * @param $Verseguimiento       marca si autoriza al cliente acceso a la herramenta para que pueda ver el seguimiento del proceso
+	 * @param $TipoCliente          nueva Tipo de Cliente
      * 
      */
     public static function update(        
@@ -204,20 +209,22 @@ class CLI_CLIENTE
         $Usuario,
         $Clave,        
         $Estado,
-        $IdUsuario
+		$Verseguimiento,
+		$TipoCliente,
+        $IdUsuario		
     )
     {
         // Creando consulta UPDATE
         $consulta = "UPDATE ". $GLOBALS['TABLA']. 
             " SET CLI_TipoDocumento=?, CLI_Identificacion=?, CLI_PrimerApellido=?, CLI_SegundoApellido=?, CLI_Nombre=?, CLI_Email=?, ".
-            " CLI_Direccion=?, CLI_Celular=?, CLI_Usuario=?, CLI_Clave=?, CLI_Estado=? " .
+            " CLI_Direccion=?, CLI_Celular=?, CLI_Usuario=?, CLI_Clave=?, CLI_Estado=?, CLI_SeguimientoProceso=?, CLI_IdTipoCliente=? " .
             " WHERE ". $GLOBALS['Llave'] ."=? ;";
 
         // Preparar la sentencia
         $cmd = Database::getInstance()->getDb()->prepare($consulta);
 
         // Relacionar y ejecutar la sentencia
-        $cmd->execute(array($TipoDocumento, $Identificacion, $PrimerApellido, $SegundoApellido, $Nombre, $Email, $Direccion, $Celular, $Usuario, $Clave, $Estado, $IdUsuario ));
+        $cmd->execute(array($TipoDocumento, $Identificacion, $PrimerApellido, $SegundoApellido, $Nombre, $Email, $Direccion, $Celular, $Usuario, $Clave, $Estado, $Verseguimiento, $TipoCliente, $IdUsuario ));
 
         return $cmd;
     }
@@ -234,8 +241,7 @@ class CLI_CLIENTE
      * @param $Direccion            nueva Direccion
      * @param $Celular              nueva Celular
      * @param $Usuario              nueva Usuario o Login
-     * @param $Clave                nueva Clave
-     * @param $TipoCliente          nueva Tipo de usuario
+     * @param $Clave                nueva Clave     
      * @param $Estado               nueva Estado
      * @param $FechaCreado          nueva Fecha creado
      * @param $UsuarioCrea          nueva Usuario que crea
@@ -245,11 +251,13 @@ class CLI_CLIENTE
      * @param $UsuarioEstado        nueva Usuario Estado
      * @param $IdInterno            nueva Id Interno
      * @param $Local                nueva Id Interno Cliente 
+	 * @param $Verseguimiento       marca si autoriza al cliente acceso a la herramenta para que pueda ver el seguimiento del proceso
+	 * @param $TipoCliente          nueva Tipo de usuario
      * @return PDOStatement
      */
 
     public static function insert( $TipoDocumento, $Identificacion, $PrimerApellido, $SegundoApellido, $Nombre, $Email, $Direccion, $Celular, $Usuario,
-        $Clave, $Estado, $IdInterno, $Local )
+        $Clave, $Estado, $IdInterno, $Local, $Verseguimiento, $TipoCliente )
     {
         // Sentencia INSERT
         $comando = "INSERT INTO ". $GLOBALS['TABLA'] ." ( " .            
@@ -262,16 +270,15 @@ class CLI_CLIENTE
             " CLI_Direccion," .
             " CLI_Celular," .
             " CLI_Usuario," .
-            " CLI_Clave," .
-            //" CLI_IdTipoCliente," .
+            " CLI_Clave," .            
             " CLI_Estado, " .
-            " CLI_IdInterno, CLI_Local ) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?);";
+            " CLI_IdInterno, CLI_Local, CLI_SeguimientoProceso, CLI_IdTipoCliente ) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);";
         try {
             // Preparar la sentencia
             $sentencia = Database::getInstance()->getDb()->prepare($comando);
             return $sentencia->execute(
-                array($TipoDocumento, $Identificacion,$PrimerApellido, $SegundoApellido, $Nombre,$Email,
-                $Direccion, $Celular, $Usuario, $Clave, $Estado, $IdInterno, $Local )    
+                array($TipoDocumento, $Identificacion, $PrimerApellido, $SegundoApellido, $Nombre, $Email,
+                $Direccion, $Celular, $Usuario, $Clave, $Estado, $IdInterno, $Local, $Verseguimiento, $TipoCliente )    
             );
            
         } catch (PDOException $e) {

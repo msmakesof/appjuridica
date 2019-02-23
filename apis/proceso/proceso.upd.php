@@ -48,7 +48,7 @@ $url         = urlServicios."consultadetalle/consultadetalle_pro_proceso.php?".$
 $existe      = "";
 $usulocal    = "";
 $sigue      = "";
-//echo("<script>console.log('PHP upd: ".$url."');</script>");
+//echo("<script>console.log('PHP upd proceso...: ".$url."');</script>");
 if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
 {
     $ch = curl_init();
