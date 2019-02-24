@@ -3,8 +3,8 @@ require_once('../../Connections/cnn_kn.php');
 require_once('../../Connections/config2.php');
 if(!isset($_SESSION)) 
 { 
-  session_start();   
-}
+  session_start(); 
+} 
 ?>
 <?php
 if (!function_exists("GetSQLValueString")) 
@@ -42,13 +42,12 @@ if (!function_exists("GetSQLValueString"))
 }
 
 require_once('../../Connections/DataConex.php');
-$parameters = "cierre=cierre&estado=$estado&observacion=$observacion&usuario=$usuario&fechacierre=$fechaCierre&pidtabla=$pidtabla";
+$parameters = "cierre=cierre&estado=$estado&observacion=$observacion&usuario=$usuario&fechacierre=$fechacierre&idtabla=$idtabla";
 $soportecURL = "S";
 $url         = urlServicios."consultadetalle/consultadetalle_pro_proceso.php?".$parameters;
 $existe      = "";
 $usulocal    = "";
 $sigue      = "";
-//echo("<script>console.log('PHP closed: ".$url."');</script>");
 if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
 {
     $ch = curl_init();
@@ -80,11 +79,11 @@ if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
     if($resultado === false || $curl_errno > 0)
     {
         //echo 'Curl error: ' . curl_error($ch);
-        $sigue = "N-Registro NO Cerrado - Curl Error: " . $curl_errno;
+        $sigue = "N-Registro NO modificado - Curl Error: " . $curl_errno;
     }
     else
     {
-      $sigue = "S-Registro Cerrado Correctamente.";
+      $sigue = "S-Registro modificado Correctamente.";
     }
     //echo "Error : ", $json_errors[json_last_error()], PHP_EOL, PHP_EOL."<br>";        
 }

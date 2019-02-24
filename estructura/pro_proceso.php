@@ -26,12 +26,13 @@ class PRO_PROCESO
             PRO_IdClaseProceso, CPR_Nombre AS ClaseProceso,
             PRO_IdJuzgadoOrigen, JUZ_Ubicacion AS Juzgado, 
             PRO_EstadoProceso, 
-            CASE PRO_EstadoProceso WHEN 1 THEN 'Activo' ELSE 'Inactivo' END EstadoTabla 
+            EPR_Nombre AS EstadoTabla 
             FROM ".$GLOBALS['TABLA'].
             " LEFT JOIN usu_usuario ON usu_usuario.USU_IdUsuario = PRO_IdUsuario ".
             " JOIN pro_ubicacion ON pro_ubicacion.UBI_IdUbicacion = PRO_IdUbicacion ".
             " JOIN pro_claseproceso ON pro_claseproceso.CPR_IdClaseProceso = PRO_IdClaseProceso ".
             " LEFT JOIN juz_juzgado ON juz_juzgado.JUZ_IdJuzgado = PRO_IdJuzgadoOrigen ".
+            " JOIN pro_estadoproceso ON pro_estadoproceso.EPR_IdEstado = PRO_EstadoProceso AND pro_estadoproceso.EPR_Estado = 1 ".
             " WHERE PRO_NumeroProceso > '' ".
             " ORDER BY PRO_NumeroProceso; ";
         try {
@@ -68,7 +69,10 @@ class PRO_PROCESO
 							PRO_IdJuzgadoOrigen,
 							PRO_EstadoProceso,
 							PRO_IdArea,
-							PRO_IdJuzgado
+                            PRO_IdJuzgado,
+                            PRO_FechaCierre,
+                            PRO_ObservacionCierre,
+                            PRO_IdUsuarioCierre
                             FROM ".$GLOBALS['TABLA'].
                             " WHERE ".$GLOBALS['Llave']." = ? ; ";
 
@@ -321,26 +325,26 @@ class PRO_PROCESO
      * @param $Usuario            usuario que realiza cierre
      * @param $FechaCierre        fecha de Cierre
      * @param $Pidtabla      
-     * 
      */
+       
     public static function cierre(
         $Estado,
         $Observacion,
         $Usuario,
-        $FechaCierre,
-        $Pidtabla
+        $FechaCierre,       
+        $Idtabla
     )
     {
         // Creando consulta UPDATE
         $consulta = "UPDATE ". $GLOBALS['TABLA']. 
-            " SET PRO_EstadoProceso=?, PRO_ObservacionCierre=?, PRO_IdUsuarioCierre=?, PRO_FechaCierre=? ".
+            " SET PRO_EstadoProceso=? , PRO_ObservacionCierre=?, PRO_IdUsuarioCierre=?, PRO_FechaCierre=? ".    
             " WHERE ". $GLOBALS['Llave'] ." =? ;";
 
         // Preparar la sentencia
         $cmd = Database::getInstance()->getDb()->prepare($consulta);
 
         // Relacionar y ejecutar la sentencia
-        $cmd->execute(array($Estado, $Observacion, $Usuario, $FechaCierre, $Pidtabla ));
+        $cmd->execute(array($Estado, $Observacion,  $Usuario, $FechaCierre, $Idtabla ));
 
         return $cmd;
     }

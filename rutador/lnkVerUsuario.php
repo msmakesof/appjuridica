@@ -126,6 +126,11 @@
             $_SESSION["user_id"] = $cookie_value;			
         }
 		$_SESSION["opcMenu"]="";
+		
+		if (!isset($_SESSION['IdUsuario'])) {
+			$_SESSION['IdUsuario'] = $IdUsuario;
+		} 
+		
     }
     //echo trim($existe.'- cookie...'.$_COOKIE['_gus']);
     require_once('./pages/tables/regAuditor.php');

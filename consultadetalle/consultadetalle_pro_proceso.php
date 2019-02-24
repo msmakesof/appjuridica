@@ -208,6 +208,37 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             );
         }
     }
+	//cierre proceso
+    elseif(isset($_GET['cierre']) )
+    {
+        //Obtener Parametros
+        $par1 = $_GET['estado'];
+        $par2 = $_GET['observacion'];
+        $par3 = $_GET['usuario'];       
+        $par4 = $_GET['fechacierre'];
+        $par5 = $_GET['idtabla'];
+
+        $retorno = PRO_PROCESO::cierre($par1, $par2, $par3, $par4, $par5);
+        $msj = $retorno;
+        if($retorno)
+        {
+            $pro_proceso["estado"] = "1";
+            $pro_proceso["pro_proceso"] = $retorno;
+             // Enviar objeto json de la PRO_PROCESO
+            header('Content-Type: application/json');
+            echo json_encode($pro_proceso);
+        }
+        else
+        {
+            // Enviar respuesta de error general
+            print json_encode(
+                array(
+                    'estado' => '2',
+                    'mensaje' => 'No se obtuvo el registro al Actualizar Proceso'
+                )
+            );
+        }
+    }
     elseif(isset($_GET['delete']) )
     {
         $par1 = $_GET['estado'];
@@ -233,39 +264,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             );
         }
     }
-    
-    //cierre proceso
-    elseif(isset($_GET['cierre']) )
-    {
-        //Obtener Parametros
-        $par1 = $_GET['estado'];
-        $par2 = $_GET['observacion'];
-        $par3 = $_GET['usuario'];
-        $par4 = $_GET['fechacierre'];
-        $par5 = $_GET['pidtabla'];
-
-        $retorno = PRO_PROCESO::cierre($par1, $par2, $par3, $par4, $par5);
-        $msj = $retorno;
-        if($retorno)
-        {
-            $pro_proceso["estado"] = "1";
-            $pro_proceso["pro_proceso"] = $retorno;
-             // Enviar objeto json de la PRO_PROCESO
-            header('Content-Type: application/json');
-            echo json_encode($pro_proceso);
-        }
-        else
-        {
-            // Enviar respuesta de error general
-            print json_encode(
-                array(
-                    'estado' => '2',
-                    'mensaje' => 'No se obtuvo el registro al Actualizar Proceso'
-                )
-            );
-        }
-    }
-
     else {
         // Enviar respuesta de error
         print json_encode(
