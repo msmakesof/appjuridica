@@ -1,5 +1,10 @@
 <?php
-session_start();
+ if(!isset($_SESSION)) 
+    { 
+        session_start(); 
+    }
+//session_start();  // se deja en comentario 20190225 por mks
+
 //require_once('./Connections/cnn_kn.php');	
 $var2 = $_COOKIE['_gus'] ;
 //echo "<br><br><br><br><br> antes.....".$var2;

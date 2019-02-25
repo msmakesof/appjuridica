@@ -86,6 +86,12 @@ else
 {
     $usuario ="";
 }
+
+    //header('Location: ../../');
+if($usuario == "")
+{
+    $usuario = $_SESSION['IdUsuario'];
+}
 ?>   
    
 <div class="menu">

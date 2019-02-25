@@ -1,16 +1,16 @@
 ﻿<?php
-include('../Connections/cnn_kn.php'); 
-include('../Connections/config2.php'); 
-//include('../webtrack/signer.php');
-//include('../rutador/config2.php');  falla
-
 if(!isset($_SESSION)) 
 { 
     session_start(); 
-} 
+}
+include('../Connections/cnn_kn.php'); 
+include('../Connections/config2.php'); 
+
+echo "<br><br><br><br><br><div style='margin-left:280px;'>En header sesionUsuario.....".$_SESSION['IdUsuario']."</div>";
+//include('../webtrack/signer.php');
+//include('../rutador/config2.php');  falla
 ?>
 <?php
-
 if (!function_exists("GetSQLValueString")) {
 function GetSQLValueString($theValue, $theType, $theDefinedValue = "", $theNotDefinedValue = "") 
 {
@@ -138,6 +138,7 @@ mysqli_free_result($rs_mesx);
 
 */
 
+/*  se deja en comentario por mks 20190225
 if( isset($_POST['ƒ¤']) && !empty($_POST['ƒ¤']) )
 {    
     $clave = trim($_POST['ƒ¤']);
@@ -146,6 +147,8 @@ else
 {
     $clave ="";
 }
+
+*/
 
 $nombre = "";
 $email  = "";
@@ -566,7 +569,7 @@ $row_rs_topicxnivel = mysqli_fetch_assoc($rs_topicxnivel);
             </div>
             <!-- #User Info -->
             <!-- Menu -->
-            <?php include('../menu/menu.php'); ?>           
+            <?php require_once('../menu/menu.php'); ?>           
             
             <!-- #Menu -->
             <!-- Footer -->

@@ -38,7 +38,6 @@ if (!function_exists("GetSQLValueString"))
     return $theValue;
     }
 }
-$idTabla = 0;
 $empresa = "AppJuridica";
 if( isset($_POST['ƒ¤']) && !empty($_POST['ƒ¤']) )
 {    
@@ -48,7 +47,7 @@ else
 {
     $clave ="";
  }
- $nombre_lnk = "proceso";
+ $nombre_lnk = "notificacion";
  $nombre = "";
  $email  = "";
  $usuario ="";
@@ -60,9 +59,9 @@ else
 {
     $usuario ="";
 }
-if($usuario == "")
+if ($usuario == "")
 {
-    $usuario = $_SESSION['IdUsuario'];
+    $usuario = $_SESSION["IdUsuario"];
 }
 ?>
 <!DOCTYPE html>
@@ -149,20 +148,20 @@ if($usuario == "")
 
             </div>
 
-            <!-- Notificaciones -->
+            <!-- Notificaciones
             <div class="collapse navbar-collapse" id="navbar-collapse">
                 <ul class="nav navbar-nav navbar-right">
-                    <!-- <  Call Search > -->
+                    <  Call Search >
                     <li><a href="javascript:void(0);" class="js-search" data-close="true"><i class="material-icons">search</i></a></li>
-                    <!-- < #END# Call Search >
-                    < Notifications > -->
+                    < #END# Call Search >
+                    < Notifications >
                     <li class="dropdown">
                         <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button">
                             <i class="material-icons">notifications</i>
                             <span class="label-count">7</span>
                         </a>
                         <ul class="dropdown-menu">
-                            <li class="header">NOTIFICACIONES</li>
+                            <li class="header">NOTIFICATIONES</li>
                             <li class="body">
                                 <ul class="menu">
                                     <li>
@@ -171,7 +170,7 @@ if($usuario == "")
                                                 <i class="material-icons">person_add</i>
                                             </div>
                                             <div class="menu-info">
-                                                <h4>3 Revisión Demanda Arte SAS</h4>
+                                                <h4>3 Nacionalizaciones de Carga</h4>
                                                 <p>
                                                     <i class="material-icons">access_time</i> Hace 4 mins
                                                 </p>
@@ -184,7 +183,7 @@ if($usuario == "")
                                                 <i class="material-icons">add_shopping_cart</i>
                                             </div>
                                             <div class="menu-info">
-                                                <h4>1 Reunión Proceso Mario Soto</h4>
+                                                <h4>1 Gestión de Transporte</h4>
                                                 <p>
                                                     <i class="material-icons">access_time</i> Hace 22 mins
                                                 </p>
@@ -210,7 +209,7 @@ if($usuario == "")
                                                 <i class="material-icons">mode_edit</i>
                                             </div>
                                             <div class="menu-info">
-                                                <h4>3 <b>Visitas</b> del día</h4>
+                                                <h4>3 <b>Disponibilidad</b> Flota Transporte</h4>
                                                 <p>
                                                     <i class="material-icons">access_time</i> Hace 45 minutos
                                                 </p>
@@ -223,7 +222,7 @@ if($usuario == "")
                                                 <i class="material-icons">comment</i>
                                             </div>
                                             <div class="menu-info">
-                                                <h4>Revisar Agenda</h4>
+                                                <h4>Revisar 3 DTA´s</h4>
                                                 <p>
                                                     <i class="material-icons">access_time</i> Hace 1 Hora
                                                 </p>
@@ -263,8 +262,8 @@ if($usuario == "")
                             </li>
                         </ul>
                     </li>
-                    <!-- < #END# Notifications >
-                    < Tasks > -->
+                    < #END# Notifications >
+                    < Tasks >
                     <li class="dropdown">
                         <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button">
                             <i class="material-icons">flag</i>
@@ -277,7 +276,7 @@ if($usuario == "")
                                     <li>
                                         <a href="javascript:void(0);">
                                             <h4>
-                                                Reporte Agenda
+                                                Reporte Min Transporte
                                                 <small>32%</small>
                                             </h4>
                                             <div class="progress">
@@ -289,7 +288,7 @@ if($usuario == "")
                                     <li>
                                         <a href="javascript:void(0);">
                                             <h4>
-                                                Revisar cumplimiento por Procesos
+                                                Revisar cumplimiento por Transportador
                                                 <small>45%</small>
                                             </h4>
                                             <div class="progress">
@@ -301,7 +300,7 @@ if($usuario == "")
                                     <li>
                                         <a href="javascript:void(0);">
                                             <h4>
-                                                Revisar Actividades Dependiente Judicial
+                                                Revisar OTM´s generados en el mes
                                                 <small>54%</small>
                                             </h4>
                                             <div class="progress">
@@ -313,7 +312,7 @@ if($usuario == "")
                                     <li>
                                         <a href="javascript:void(0);">
                                             <h4>
-                                                 Revisar Actividades Abogados en el mes
+                                                 Revisar DTA´s generados en el mes
                                                 <small>65%</small>
                                             </h4>
                                             <div class="progress">
@@ -325,7 +324,7 @@ if($usuario == "")
                                     <li>
                                         <a href="javascript:void(0);">
                                             <h4>
-                                                Entrega documentación Clientes
+                                                Entrega documentación Expo Carga
                                                 <small>92%</small>
                                             </h4>
                                             <div class="progress">
@@ -341,11 +340,11 @@ if($usuario == "")
                             </li>
                         </ul>
                     </li>
-                    <!-- < #END# Tasks > -->
-                    <!-- <li class="pull-right"><a href="javascript:void(0);" class="js-right-sidebar" data-close="true"><i class="material-icons">more_vert</i></a></li> -->
+                    < #END# Tasks >
+                    <li class="pull-right"><a href="javascript:void(0);" class="js-right-sidebar" data-close="true"><i class="material-icons">more_vert</i></a></li>
                 </ul>
             </div>
-           <!-- Fin notificaciones -->
+            Fin notificaciones -->
 
         </div>
     </nav>
@@ -370,7 +369,7 @@ if($usuario == "")
 
 
                     <!-- <div class="name" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><?php echo trim($nombre); ?></div>
-                    <div class="email"><?php //echo trim($email); ?></div> -->
+                    <div class="email"><?php echo trim($email); ?></div> -->
                     <div class="btn-group user-helper-dropdown">
                         <i class="material-icons" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">keyboard_arrow_down</i>
                         <ul class="dropdown-menu pull-right">
@@ -572,11 +571,7 @@ if($usuario == "")
                                     
                                     <ul class="dropdown-menu pull-right">
                                        <li>
-                                       <!-- <a id="nuevo" class="btn btn-warning btn-xs waves-effect" data-toggle="modal" data-target="#defaultModal">Nuevo</a> -->
-
-                                       <a id="nuevo" class="btn btn-warning btn-xs waves-effect">Nuevo</a>
-
-
+                                       <a id="nuevo" class="btn btn-warning btn-xs waves-effect" data-toggle="modal" data-target="#defaultModal">Nuevo</a>
                                       <!--  <button type="button" class="btn btn-default waves-effect m-r-20" data-toggle="modal" data-target="#defaultModal">Nuevo</button>-->
                                         </li>
                                         <!-- 
@@ -590,25 +585,18 @@ if($usuario == "")
                             </ul>
                         </div>
                         <div class="body table-responsive" id="zonaquery">
-                        <form class='contact_form' ACTION='../forms/editarproceso.php' METHOD='POST' id='formulario'>
                          <table class="table table-bordered table-striped table-hover dataTable js-exportable" id="grid">
                                 <thead>
                                     <tr>
-                                        <th>No. Proceso</th>
-                                        <th>Asignado A</th>
-                                        <th>Ubicaci&oacute;n</th>
-                                        <th>Clase Proceso</th>
-                                        <th>Juzgado</th>
+                                        <th>Nombre</th>
+                                        <th>D&iacute;as H&aacute;biles</th>
                                         <th>Estado</th> 
                                     </tr>
                                 </thead>
                                 <tfoot>
                                     <tr>
-                                        <th>No. Proceso</th>
-                                        <th>Asignado A</th>
-                                        <th>Ubicaci&oacute;n</th>
-                                        <th>Clase Proceso</th>
-                                        <th>Juzgado</th>
+                                        <th>Nombre</th>
+                                        <th>D&iacute;as H&aacute;biles</th>
                                         <th>Estado</th>                                        
                                     </tr>
                                 </tfoot>
@@ -616,11 +604,11 @@ if($usuario == "")
 <?php
 require_once('../../Connections/DataConex.php');
 $soportecURL = "S";
-$url         = urlServicios."consultadetalle/consultadetalle_pro_proceso.php?IdMostrar=0";
+$url         = urlServicios."consultadetalle/consultadetalle_pro_notificacion.php?IdMostrar=0";
 $existe      = "";
 $usulocal    = "";
 $siguex      = "";
-//echo("<script>console.log('PHP proproceso: $url');</script>");
+
 if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
 {
     $ch = curl_init();
@@ -634,10 +622,10 @@ if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
     $resultado = curl_exec ($ch);
     curl_close($ch);
 
-    $mproceso =  preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $resultado);    
-    $mproceso = json_decode($mproceso, true);
-    //echo("<script>console.log('PHP: ".print_r($mproceso)."');</script>");
-    //echo("<script>console.log('PHP: ".count($m['pro_proceso'])."');</script>");
+    $mnotificacion =  preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $resultado);    
+    $mnotificacion = json_decode($mnotificacion, true);
+    //echo("<script>console.log('PHP: ".print_r($mnotificacion)."');</script>");
+    //echo("<script>console.log('PHP: ".count($m['pro_notificacion'])."');</script>");
     
     $json_errors = array(
         JSON_ERROR_NONE => 'No se ha producido ningún error',
@@ -659,36 +647,26 @@ if($soportecURL == "N")
     $response = Unirest\Request::get($url, array("X-Mashape-Key" => "MY SECRET KEY"));
     $resultado = $response->raw_body;
     $resultado = preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $resultado);
-    $mproceso = json_decode($resultado, true);	        
+    $mnotificacion = json_decode($resultado, true);	        
 } 
 
-if( $mproceso['estado'] != 2)
+if( $mnotificacion['estado'] < 2)
 {
     $nombre_Tabla="";
-    for($i=0; $i<count($mproceso['pro_proceso']); $i++)
+    for($i=0; $i<count($mnotificacion['pro_notificacion']); $i++)
     {
-        $NombreTabla = trim($mproceso['pro_proceso'][$i]['PRO_NumeroProceso']);        
+        $NombreTabla = trim($mnotificacion['pro_notificacion'][$i]['NOT_Nombre']);        
         $archivo = $NombreTabla.".php";
-        $idTabla = $mproceso['pro_proceso'][$i]['PRO_IdProceso'];
-        $AsignadoA =$mproceso['pro_proceso'][$i]['AsignadoA'];
-        $Ubicacion =$mproceso['pro_proceso'][$i]['Ubicacion'];
-        $ClaseProceso =$mproceso['pro_proceso'][$i]['ClaseProceso'];
-        $Juzgado =$mproceso['pro_proceso'][$i]['Juzgado'];
-        $estadoTabla = trim($mproceso['pro_proceso'][$i]['EstadoTabla']);
-       
+        $idTabla = $mnotificacion['pro_notificacion'][$i]['NOT_IdNotificacion'];
+        $diasHabiles = $mnotificacion['pro_notificacion'][$i]['NOT_DiasHabiles'];
+        $estadoTabla = trim($mnotificacion['pro_notificacion'][$i]['EstadoTabla']);
     ?>
         <tr>
             <td>
-                <input type='hidden' id="hf" name="hf" value="<?php echo $idTabla; ?>">
-                <a href='javascript:void(0)' onclick="cambiar(<?php echo $idTabla; ?>)">   
-                    <?php echo $NombreTabla; ?>
-                </a>
-            </td>            
-            <td><?php echo $AsignadoA; ?></td>
-            <td><?php echo $Ubicacion; ?></td>
-            <td><?php echo $ClaseProceso; ?></td>            
-            <td><?php echo $Juzgado; ?></td>
-            <td><?php echo $estadoTabla; ?></td>
+                <a href="javascript:void(0);" onclick="cambiar('../forms/editar<?php echo $nombre_lnk ;?>.php?f=<?php echo $idTabla; ?>')" class="nav nav-tabs nav-stacked" data-toggle="modal" data-target="#defaultModalEditar" style="text-decoration:none;"><?php echo $NombreTabla; ?></a>        	
+            </td>
+            <td><?php echo $diasHabiles; ?></td>
+            <td><?php echo $estadoTabla; ?></td>               
         </tr>
     <?php                          
     }
@@ -696,7 +674,6 @@ if( $mproceso['estado'] != 2)
 ?>
  </tbody>
 </table>
-</form>
                                
                         </div>
                     </div>
@@ -715,9 +692,7 @@ if( $mproceso['estado'] != 2)
 				</div>
 				
 				<div class="modal-body">
-					<object type="text/html" 
-					style="padding :0px; position: relative; height: 76vh; max-height:76vh; bottom:0; overflow: hidden; margin: 0;"
-					data="../forms/editar<?php echo $nombre_lnk ;?>.php" id="carga"></object>                           
+					<object type="text/html" data="../forms/editar<?php echo $nombre_lnk ;?>.php" id="carga"></object>                           
 				</div>
 
 				<div class="modal-footer">
@@ -732,15 +707,12 @@ if( $mproceso['estado'] != 2)
 		<div class="modal-dialog" role="document">
 			<div class="modal-content" >
 				<div class="modal-header">
-					<!-- <h4 class="modal-title" id="defaultModalLabel">Crear</h4> -->
 				</div>
 				
 				<div class="modal-body">                         
-					<object style="padding :0px; position: relative; height: 85vh; max-height:85vh; bottom:0; overflow: hidden; margin: 0;" 
-					type="text/html" data="../forms/form-validationBase<?php echo $nombre_lnk ;?>.php" id="crear"></object>
+					<object type="text/html" data="../forms/form-validationBase<?php echo $nombre_lnk ;?>.php" id="crear"></object>
 				</div>
 				<div class="modal-footer">
-					<!-- <button type="button" class="btn btn-link waves-effect">SAVE CHANGES</button> -->
 					<button type="button" class="btn btn-info waves-effect" data-dismiss="modal" id="cerrarModalC">CERRAR Crear.</button>
 				</div>
 			</div>
@@ -780,7 +752,6 @@ if( $mproceso['estado'] != 2)
     <script src="../../js/demo.js"></script>
 
 <script type="text/javascript">
-var variableValue;
  $(document).ready(function () {	 
 	$("#cerrarModal").click(function(){
 	 	 window.location="pro_<?php echo $nombre_lnk; ?>.php";
@@ -792,31 +763,11 @@ var variableValue;
 
     $("#nuevo").on("click", function(){
         //window.location='../forms/form-validationBasepais.php';
-        window.location = 'pro_procesoforma.php';
-    });
-
-    $("#cambiar").on("click", function(id){
-        //alert(id);
-        <?php  $_SESSION["f"] = $idTabla;?>
-        //document.getElementById("formulario").submit();
-        
-        window.location = '../forms/editarproceso.php';
     });
 
  }); 
 
-function cambiar(id) 
-{
-    //alert(id);    	
-    $.post('../forms/editarproceso.php', { 'id': id }, function (result) {
-        WinId = window.open('','_self');
-        WinId.document.open();
-        WinId.document.write(result);
-        WinId.document.close();
-    });
-}
-
-function xcambiar(nuevaurl) 
+function cambiar(nuevaurl) 
 { 
     var obj       = $('#carga');
     var container = $(obj).parent();
@@ -835,6 +786,6 @@ function crear(nuevaurl)
     $(obj).remove();
     $(container).append(newobj);
 }
-</script>
+</script>	
 </body>
 </html>

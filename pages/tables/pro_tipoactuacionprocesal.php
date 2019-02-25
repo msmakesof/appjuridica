@@ -59,6 +59,10 @@ else
 {
     $usuario ="";
 }
+if ($usuario == "")
+{
+    $usuario = $_SESSION["IdUsuario"];
+}
 ?>
 <!DOCTYPE html>
 <html>

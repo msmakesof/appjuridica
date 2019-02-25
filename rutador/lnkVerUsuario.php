@@ -95,8 +95,7 @@
         {
             $soportecURL = "N";
             echo "No hay soporte para cURL";
-        } 
-
+        }
     }
     
     
@@ -114,8 +113,7 @@
 		$secure=true;
 		$httponly=true;
 		//setcookie($cookie_name,$value,$expiry,$path,$domain,$secure,$httponly);
-		setcookie($cookiename, $value, $expiry);
-		
+		setcookie($cookiename, $value, $expiry);		
 		
 		
         $vercook = trim($_COOKIE['_gus']);
@@ -129,7 +127,17 @@
 		
 		if (!isset($_SESSION['IdUsuario'])) {
 			$_SESSION['IdUsuario'] = $IdUsuario;
-		} 
+		}
+		else
+		{
+			$_SESSION['IdUsuario'] = $IdUsuario;
+		}
+		
+		/* Si Hosting No Permite crear cookie PHP, esto es para la variable de session HTML5 */
+		if($_SESSION["user_id"] == "")
+		{
+			$_SESSION["user_id"] = $cookie_value;
+		}
 		
     }
     //echo trim($existe.'- cookie...'.$_COOKIE['_gus']);
