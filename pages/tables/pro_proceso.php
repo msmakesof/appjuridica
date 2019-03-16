@@ -107,6 +107,23 @@ if($usuario == "")
        width:100%;
        height:390px ;  
 	}
+    .procesodiv{
+        margin-top: 3px;
+        display: flex;  
+        align-items: center;
+        align-content: center;
+        min-height: 2vh;
+    }
+
+    .procesodiv2{        
+        display: inline-flex !important;  
+        vertical-align:middle !important;
+            
+    }
+    .txt{ 
+        margin: auto; /* Important */ 
+        text-align: center; 
+      }
    </style>     
 </head>
 
@@ -679,10 +696,28 @@ if( $mproceso['estado'] != 2)
     ?>
         <tr>
             <td>
-                <input type='hidden' id="hf" name="hf" value="<?php echo $idTabla; ?>">
-                <a href='javascript:void(0)' onclick="cambiar(<?php echo $idTabla; ?>)">   
-                    <?php echo $NombreTabla; ?>
-                </a>
+                <div class="procesodiv">
+                    <input type='hidden' id="hf" name="hf" value="<?php echo $idTabla; ?>">
+                    <a href='javascript:void(0)' onclick="cambiar(<?php echo $idTabla; ?>)">   
+                        <?php echo $NombreTabla; ?>
+                    </a>
+                </div>
+                <div class="procesodiv">
+                    <a href="javascript:void(0);" onclick="actprocesal(<?php echo $idTabla; ?>)">
+                    <div class="procesodiv2">
+                        <i class="material-icons material-icons md-36" style="color:#b30000">art_track</i>
+                        <span class="txt">Actuaci&oacute;n Procesal</span>
+                    </div>
+                    </a>
+                </div>
+                <div class="procesodiv">
+                    <a href="javascript:void(0);" onclick="docsxproceso(<?php echo $idTabla; ?>)">
+                    <div class="procesodiv2">
+                        <i class="material-icons material-icons md-24" style="color:#01A30A">library_books</i>
+                        <span class="txt">Documentaci&oacute;n</span>
+                    </div>
+                    </a>
+                </div>
             </td>            
             <td><?php echo $AsignadoA; ?></td>
             <td><?php echo $Ubicacion; ?></td>
@@ -809,6 +844,17 @@ function cambiar(id)
 {
     //alert(id);    	
     $.post('../forms/editarproceso.php', { 'id': id }, function (result) {
+        WinId = window.open('','_self');
+        WinId.document.open();
+        WinId.document.write(result);
+        WinId.document.close();
+    });
+}
+
+function actprocesal(id) 
+{
+    //alert(id);    	
+    $.post('../forms/editaractprocesal.php', { 'id': id }, function (result) {
         WinId = window.open('','_self');
         WinId.document.open();
         WinId.document.write(result);

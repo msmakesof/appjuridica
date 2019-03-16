@@ -16,8 +16,11 @@ const $video = document.querySelector("#video"),
 	$canvas = document.querySelector("#canvas"),
 	$boton = document.querySelector("#boton"),
 	$estado = document.querySelector("#estado"),
-	$listaDeDispositivos = document.querySelector("#listaDeDispositivos");
+	$listaDeDispositivos = document.querySelector("#listaDeDispositivos"),
+	$nroproceso = document.querySelector("#nroproceso");
 
+	
+	
 // La función que es llamada después de que ya se dieron los permisos
 // Lo que hace es llenar el select con los dispositivos obtenidos
 const llenarSelectConDispositivosDisponibles = () => {
@@ -121,6 +124,11 @@ const llenarSelectConDispositivosDisponibles = () => {
 
 				//Escuchar el click del botón para tomar la foto
 				$boton.addEventListener("click", function () {
+					if(document.querySelector("#nroproceso").value =="")
+					{
+						$estado.innerHTML = "<span style='color:red'>Debe seleccionar un Numero de Proceso.</span>"; 
+						return;
+					}
 
 					//Pausar reproducción
 					$video.pause();
@@ -132,12 +140,15 @@ const llenarSelectConDispositivosDisponibles = () => {
 					contexto.drawImage($video, 0, 0, $canvas.width, $canvas.height);
 
 					let foto = $canvas.toDataURL(); //Esta es la foto, en base 64
+					console.log($nroproceso);
+					//alert('proceso.....'+$nroproceso);
 					$estado.innerHTML = "Enviando foto. Por favor, espera...";
 					fetch("./guardar_foto.php", {
 						method: "POST",
 						body: encodeURIComponent(foto),
+						//body: JSON.stringify({"foto": foto, "proceso": document.querySelector("#nroproceso").value}),
 						headers: {
-							"Content-type": "application/x-www-form-urlencoded",
+							"Content-type": "application/x-www-form-urlencoded",							
 						}
 					})
 						.then(resultado => {
@@ -147,7 +158,7 @@ const llenarSelectConDispositivosDisponibles = () => {
 						.then(nombreDeLaFoto => {
 							// nombreDeLaFoto trae el nombre de la imagen que le dio PHP
 							console.log("La foto fue enviada correctamente");
-							$estado.innerHTML = `Foto guardada Correctamente. Puedes verla <a target='_blank' href='./${nombreDeLaFoto}'> aquí</a>`;
+							$estado.innerHTML = "Foto guardada Correctamente. Puedes verla <a target='_blank' href='./${nombreDeLaFoto}'> aqui</a>";
 						})
 
 					//Reanudar reproducción
@@ -159,4 +170,3 @@ const llenarSelectConDispositivosDisponibles = () => {
 			});
 	}
 })();
-

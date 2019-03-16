@@ -6,7 +6,7 @@ if(!isset($_SESSION))
 include('../Connections/cnn_kn.php'); 
 include('../Connections/config2.php'); 
 
-echo "<br><br><br><br><br><div style='margin-left:280px;'>En header sesionUsuario.....".$_SESSION['IdUsuario']."</div>";
+//echo "<br><br><br><br><br><div style='margin-left:280px;'>En header sesionUsuario.....".$_SESSION['IdUsuario']."</div>";
 //include('../webtrack/signer.php');
 //include('../rutador/config2.php');  falla
 ?>

@@ -228,6 +228,7 @@ body {
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" type="text/css">
 <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha384-tsQFqpEReu7ZLhBV2VZlAu7zcOV+rXbYlF2cqB8txI/8aZajjp4Bqd+V6D5IgvKT" crossorigin="anonymous"></script>
 <script>
+
 $(function() {
 	function slideMenu() {
 		var activeState = $("#menu-container .menu-list").hasClass("active");
@@ -263,6 +264,29 @@ function camara(){
 }
 </script>
 </head>
+
+<!--  Parte nueva para incluir bootstrap
+Bootstrap Core Css -->
+<link href="../plugins/bootstrap/css/bootstrap.css" rel="stylesheet">
+ <!-- Waves Effect Css -->
+ <link href="../plugins/node-waves/waves.css" rel="stylesheet" />
+
+ <!-- Animation Css -->
+ <link href="../plugins/animate-css/animate.css" rel="stylesheet" />
+
+ <!-- Preloader Css -->
+ <link href="../plugins/material-design-preloader/md-preloader.css" rel="stylesheet" />
+
+ <!-- Bootstrap Select Css -->
+ <link href="../plugins/bootstrap-select/css/bootstrap-select.css" rel="stylesheet" />
+
+  <!-- Jquery Validation Plugin Css -->
+	<script src="../../plugins/jquery-validation/jquery.validate.js"></script>
+
+	<script src="../../js/jquery.numeric.js"></script>
+
+<!-- fin parte nueva -->
+
 <body style="font-family:Verdana;color:#aaaaaa;">
 
 	<div style="background-color:#56B7E9;padding:5px;text-align:center;">
@@ -349,11 +373,40 @@ function camara(){
 		</div>
 		
 		<div id="camara" class="main">
-			<h3>Selecciona un dispositivo</h3>
 			<div>
-				<select name="listaDeDispositivos" id="listaDeDispositivos"></select>
-				<button id="boton">Tomar foto</button>
-				<p id="estado"></p>
+				<h3>Informacion del Proceso</h3>			
+					<div class="form-group">
+							<div class="col-lg-12 col-md-12 col-sm-12">
+									<div class="row">
+											<div class="xcol-xs-10">                                                
+													<label class="form-label">&nbsp;</label>
+													<div class="form-line">                                                    
+															<select class="selectpicker show-tick" data-live-search="true" data-width="95%" name="zip" id="zip" required>
+																<option value="" >Proceso ...</option>
+															
+															</select>
+															<label class="form-label">Digite N&uacute;mero del Proceso:</label>
+													</div>
+											</div>
+									</div>
+							</div>
+					</div>
+			</div>
+
+			
+			<div>				
+				<div class="form-group">
+					<div class="col-lg-12 col-md-12 col-sm-12">
+							<div class="row">
+									<div class="xcol-xs-10">
+										<label class="form-label">Selecciona un dispositivo:</label> 
+										<select name="listaDeDispositivos" id="listaDeDispositivos"></select>
+										<button id="boton">Tomar foto</button>
+										<p id="estado"></p>
+									</div>
+							</div>
+					</div>	
+				</div>
 			</div>
 			<br>
 			<video muted="muted" id="video"></video>
@@ -366,7 +419,7 @@ function camara(){
 		</div>
 	</div>
 
-	<div style="background-color:#e5e5e5;text-align:center;padding:10px;margin-top:7px;">© Copyright 2019 -  App Jurídica     Diseño ::: msmakesof LabS</div>
+	<div style="background-color:#e5e5e5;text-align:center;padding:10px;margin-top:7px;">ï¿½ Copyright 2019 -  App Jurï¿½dica     Diseï¿½o ::: msmakesof LabS</div>
 </body>
 <script src="js/camjs/script.js"></script>
 </html>

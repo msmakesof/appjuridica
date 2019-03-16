@@ -66,7 +66,7 @@ $url         = urlServicios."consultadetalle/consultadetalle_pro_proceso.php?".$
 $existe      = "";
 $usulocal    = "";
 $siguex      = "";
-echo("<script>console.log('PHP proceso: ".$url."');</script>");
+//echo("<script>console.log('PHP proceso: ".$url."');</script>");
 if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
 {
     $ch = curl_init();

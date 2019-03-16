@@ -1,0 +1,436 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"par",
+				"par4"
+			],
+			[
+				"RE",
+				"retorno"
+			],
+			[
+				"padding",
+				"padding-right"
+			],
+			[
+				"back",
+				"background-color"
+			],
+			[
+				"var",
+				"var2"
+			],
+			[
+				"margi",
+				"margin-left"
+			],
+			[
+				"c",
+				"content\tAttr"
+			],
+			[
+				"b",
+				"body\tTag"
+			],
+			[
+				"va",
+				"val"
+			],
+			[
+				"eho",
+				"echo\techo \"…\""
+			],
+			[
+				"str",
+				"strtolower"
+			],
+			[
+				"font",
+				"font-size"
+			],
+			[
+				"inc",
+				"include"
+			],
+			[
+				"req",
+				"require_once"
+			],
+			[
+				"cl",
+				"clear"
+			],
+			[
+				"mar",
+				"margin-top"
+			],
+			[
+				"pa",
+				"padding"
+			],
+			[
+				"margin",
+				"margin-top"
+			],
+			[
+				"ma",
+				"margin"
+			],
+			[
+				"in",
+				"inline-block"
+			],
+			[
+				"text-a",
+				"text-align"
+			],
+			[
+				"con",
+				"contArr"
+			],
+			[
+				"res",
+				"restaurar"
+			],
+			[
+				"gra",
+				"graf"
+			],
+			[
+				"strto",
+				"strtoupper"
+			],
+			[
+				"a",
+				"auto"
+			],
+			[
+				"he",
+				"height"
+			],
+			[
+				"paddin",
+				"padding-bottom"
+			],
+			[
+				"w",
+				"width"
+			],
+			[
+				"tue",
+				"true"
+			],
+			[
+				"E",
+				"EndTime"
+			],
+			[
+				"Id",
+				"IdEvento"
+			]
+		]
+	},
+	"buffers":
+	[
+	],
+	"build_system": "",
+	"build_system_choices":
+	[
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+			[
+				"control",
+				"Package Control: Install Package"
+			],
+			[
+				"xdebug client",
+				"Xdebug: Clear All Breakpoints"
+			],
+			[
+				"xd",
+				"Xdebug: Stop Debugging"
+			],
+			[
+				"install ",
+				"Package Control: Install Package"
+			]
+		],
+		"width": 0.0
+	},
+	"console":
+	{
+		"height": 0.0,
+		"history":
+		[
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"file_history":
+	[
+		"/D/xampp/htdocs/movilweb/pages/forms/departamento-editar.php",
+		"/D/xampp/htdocs/appjuridica/pages/forms/editartabla.php",
+		"/D/xampp/htdocs/appjuridica/apis/general/tabla.php",
+		"/D/xampp/htdocs/appjuridica/pages/forms/borrar_tabla.php",
+		"/D/xampp/htdocs/appjuridica/estructura/gen_tabla.php",
+		"/D/xampp/htdocs/appjuridica/consultadetalle/consultadetalle_gen_tabla.php",
+		"/D/xampp/htdocs/appjuridica/apis/general/tabla.del.php",
+		"/D/xampp/htdocs/appjuridica/pages/forms/editarcliente.php",
+		"/D/xampp/htdocs/appjuridica/pages/forms/form-validationBasetablas.php",
+		"/D/xampp/htdocs/appjuridica/pages/forms/crea_tabla.php",
+		"/D/xampp/htdocs/appjuridica/pages/forms/borrar_usuario.php",
+		"/D/xampp/htdocs/appjuridica/pages/forms/crea_ciudad.php",
+		"/D/xampp/htdocs/appjuridica/pages/tables/gen_tabla.php",
+		"/D/xampp/htdocs/appjuridica/pages/forms/editar_tabla.php",
+		"/D/xampp/htdocs/appjuridica/apis/general/tabla.upd.php",
+		"/D/xampp/htdocs/appjuridica/apis/general/tipoUsuario.php",
+		"/D/xampp/htdocs/appjuridica/pages/forms/crea_usuario.php",
+		"/D/xampp/htdocs/appjuridica/consultadetalle/consultadetalle_Usuario.php",
+		"/D/xampp/htdocs/appjuridica/estructura/usu_usuario.php",
+		"/C/Users/msmakesof/AppData/Roaming/Sublime Text 3/Packages/Xdebug Client/Xdebug.sublime-settings",
+		"/D/xampp/htdocs/ok/politicas_seguridad.html",
+		"/D/xampp/htdocs/ok/xok2/HTML/messages.html",
+		"/D/xampp/htdocs/ok/index.html",
+		"/D/xampp/htdocs/ok/info/css/styles.css",
+		"/D/xampp/htdocs/ok/templateDocs.html",
+		"/D/xampp/htdocs/ok/login2.html",
+		"/D/xampp/htdocs/appjuridica/consultadetalle/consultadetalle_gen_configuracion.php",
+		"/D/xampp/htdocs/appjuridico/Connections/cnnkn.php",
+		"/D/xampp/htdocs/appjuridico/Connections/cnn_kn.php",
+		"/D/xampp/htdocs/ok/xok/css/templatemo_style.css",
+		"/D/xampp/htdocs/ok/xok2/HTML/edit.php",
+		"/D/xampp/htdocs/ok/privacidad.html",
+		"/D/xampp/htdocs/ok/admContacto.php",
+		"/D/xampp/htdocs/ok/enviaemail.php",
+		"/D/xampp/htdocs/ok/respuesta.php",
+		"/D/xampp/htdocs/ok/revisar.php",
+		"/D/xampp/htdocs/ok/conMensajes.php",
+		"/D/xampp/htdocs/ok/delContacto.php",
+		"/D/xampp/htdocs/ok/listaUsuarios.php",
+		"/D/xampp/htdocs/ok/xok2/HTML/forms.html",
+		"/D/xampp/htdocs/ok/xok2/index.html",
+		"/D/xampp/htdocs/ok/xok2/HTML/index.html",
+		"/D/xampp/htdocs/ok/Connections/cnn_ok.php",
+		"//LAURA-PC/xampp/htdocs/ok/Connections/cnn_ok.php",
+		"/D/xampp/htdocs/ok/cookies.html",
+		"/D/xampp/htdocs/movilweb/combo/index.php",
+		"/D/xampp/htdocs/movilweb/combo/get_states.php",
+		"/D/xampp/htdocs/movilweb/pages/forms/listaconductores.php",
+		"/D/xampp/htdocs/movilweb/pages/tables/tablas.php",
+		"/D/xampp/htdocs/movilweb/pages/tables/vehiculos.php",
+		"/D/xampp/htdocs/movilweb/pages/forms/form-validationBasevehiculos.php",
+		"/D/xampp/htdocs/movilweb/pages/forms/crea_vehiculos.php",
+		"/D/xampp/htdocs/movilweb/pages/forms/editarvehiculos.php",
+		"/D/xampp/htdocs/movilweb/pages/forms/editar_vehiculos.php",
+		"/D/xampp/htdocs/movilweb/pages/forms/editarusuario.php",
+		"/D/xampp/htdocs/movilweb/pages/forms/editarvehiculo.php",
+		"/D/xampp/htdocs/movilweb/pages/forms/form-validationBasetransportadores.php",
+		"/D/xampp/htdocs/movilweb/pages/forms/form-validationBaseusuarios.php",
+		"/D/xampp/htdocs/movilweb/pages/forms/editarconductores.php",
+		"/D/xampp/htdocs/movilweb/Calendario/vertemaxnivel.php",
+		"/D/xampp/htdocs/movilweb/Calendario/dias.php",
+		"/D/xampp/htdocs/movilweb/fecha.php",
+		"/D/Users/msmakesof/Desktop/proyecto logistica/combo/db.php",
+		"/D/Users/msmakesof/Desktop/proyecto logistica/combo/get_states.php",
+		"/D/Users/msmakesof/Desktop/proyecto logistica/combo/index.php",
+		"/D/xampp/htdocs/movilweb/pages/forms/form-validationBasefuncionarios.php",
+		"/D/xampp/htdocs/movilweb/pages/forms/editartransportadores.php",
+		"/D/xampp/htdocs/movilweb/pages/forms/editarfuncionario.php",
+		"/D/xampp/htdocs/movilweb/pages/forms/form-validationBaseconductores.php",
+		"/D/xampp/htdocs/movilweb/pages/forms/editar_conductores.php",
+		"/D/xampp/htdocs/movilweb/pages/forms/editar_nivel.php",
+		"/D/xampp/htdocs/movilweb/pages/forms/editartabla.php",
+		"/D/xampp/htdocs/movilweb/pages/tables/cupos.php",
+		"/D/xampp/htdocs/movilweb/pages/forms/borrar_conductores.php",
+		"/D/xampp/htdocs/movilweb/pages/tables/conductores.php",
+		"/D/xampp/htdocs/movilweb/pages/forms/crea_conductores.php",
+		"/D/xampp/htdocs/movilweb/pages/forms/borrar_transportadores.php",
+		"/D/xampp/htdocs/movilweb/pages/forms/editar_transportadores.php",
+		"/D/xampp/htdocs/movilweb/pages/forms/crea_transportadores.php",
+		"/D/xampp/htdocs/movilweb/pages/tables/transportadores.php",
+		"/D/xampp/htdocs/movilweb/pages/tables/centrosacopio.php",
+		"/D/xampp/htdocs/movilweb/pages/forms/form-validationBasecentrosacopio.php",
+		"/D/xampp/htdocs/movilweb/pages/forms/borrar_centrosacopio.php",
+		"/D/xampp/htdocs/movilweb/pages/forms/crea_centrosacopio.php",
+		"/D/xampp/htdocs/movilweb/pages/forms/editarcentrosacopio.php",
+		"/D/xampp/htdocs/movilweb/pages/forms/editar_centrosacopio.php",
+		"/D/xampp/htdocs/movilweb/pages/tables/trasportadores.php",
+		"/D/xampp/htdocs/movilweb/pages/forms/form-validationBaseacciones.php",
+		"/D/xampp/htdocs/movilweb/pages/tables/funcionarios.php",
+		"/D/xampp/htdocs/movilweb/pages/forms/crea_funcionario.php",
+		"/D/xampp/htdocs/movilweb/pages/forms/borrar_funcionario.php",
+		"/D/xampp/htdocs/movilweb/pages/forms/editar_funcionario.php",
+		"/D/xampp/htdocs/movilweb/check.php",
+		"/D/xampp/htdocs/movilweb/header/index.php",
+		"/D/xampp/htdocs/movilweb/pages/forms/borrar_acciones.php",
+		"/D/xampp/htdocs/movilweb/pages/forms/editar_acciones.php",
+		"/D/xampp/htdocs/movilweb/pages/forms/editaracciones.php",
+		"/D/xampp/htdocs/movilweb/pages/forms/crea_acciones.php",
+		"/D/xampp/htdocs/movilweb/pages/tables/acciones.php",
+		"/D/xampp/htdocs/movilweb/menu/menu.php",
+		"/D/xampp/htdocs/movilweb/pages/tables/estados.php",
+		"/D/xampp/htdocs/movilweb/pages/forms/borrar_rol.php",
+		"/D/xampp/htdocs/movilweb/pages/forms/editar_rol.php",
+		"/D/xampp/htdocs/movilweb/pages/forms/editarrol.php",
+		"/D/xampp/htdocs/movilweb/pages/forms/crea_roles.php",
+		"/D/xampp/htdocs/movilweb/pages/forms/form-validationBaseroles.php",
+		"/D/xampp/htdocs/movilweb/pages/tables/roles.php",
+		"/D/xampp/htdocs/movilweb/pages/forms/crea_nivel.php",
+		"/D/xampp/htdocs/movilweb/css/style.css",
+		"/D/xampp/htdocs/movilweb/Connections/cnn_kn.php",
+		"/D/xampp/htdocs/movilweb/pages/tables/menu.php",
+		"/D/xampp/htdocs/movilweb/Connections/config2.php",
+		"/D/xampp/htdocs/movilweb/plugins/bootstrap/css/bootstrap.css",
+		"/D/xampp/htdocs/movilweb/pages/tables/usuarios.php",
+		"/D/xampp/htdocs/movilweb/Connections/menu.php",
+		"/D/xampp/htdocs/movilweb/index.html",
+		"/D/xampp/htdocs/movilweb/Connections/cnnkn.php",
+		"/D/xampp/htdocs/movilweb/Connections/config.php",
+		"/D/xampp/htdocs/x/index.html",
+		"/D/xampp/htdocs/movilweb/index_BK20171125.html",
+		"/D/xampp/htdocs/ok/contadores.php",
+		"/D/xampp/htdocs/ok/xok2/HTML/buscar.php",
+		"/D/xampp/htdocs/ok/xok2/HTML/js/plugins/fullcalendar/fullcalendar.min.js",
+		"/D/xampp/htdocs/ok/assets/js/fullcalendar.min.js",
+		"/D/xampp/htdocs/ok/assets/js/date-time/bootstrap-datepicker.min.js",
+		"/D/xampp/htdocs/ok/assets/js/date-time/moment.min.js",
+		"/D/xampp/htdocs/ok/assets/js/x-editable/bootstrap-editable.min.js",
+		"/D/xampp/htdocs/ok/xok2/HTML/js/plugins/elfinder/i18n/elfinder.LANG.js"
+	],
+	"find":
+	{
+		"height": 27.0
+	},
+	"find_in_files":
+	{
+		"height": 104.0,
+		"where_history":
+		[
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+		],
+		"highlight": false,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"sheets":
+			[
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 27.0
+	},
+	"input":
+	{
+		"height": 39.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"pinned_build_system": "",
+	"project": "index.sublime-project",
+	"replace":
+	{
+		"height": 50.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 283.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}

@@ -83,18 +83,21 @@ else
     <ul class="list">
         <li class="header">MENÚ de NAVEGACIÓN</li>
         <li>
-            <a href="../header/index.php">
+            <a href="../header/">
                 <i class="material-icons">home</i>
                 <span>Inicio</span>
             </a>
         </li>
-        <li>
-            <a href="javascript:void(0);">
-                <i class="material-icons">text_fields</i>
-                <span>M&oacute;dulo Usuarios</span>
-            </a>
-        </li>                   
+        <?php if($_SESSION["TipoUsuario"] == 1) {?>
+            <li>
+                <a href="javascript:void(0);">
+                    <i class="material-icons">text_fields</i>
+                    <span>M&oacute;dulo Usuarios</span>
+                </a>
+            </li>                   
+        <?php } ?>
 
+        <?php if($_SESSION["TipoUsuario"] == 1) { ?>
         <li> <!-- class="active" -->
             <a href="javascript:void(0);" class="menu-toggle">
                 <i class="material-icons">view_list</i>
@@ -180,10 +183,11 @@ else
             ?>
             </ul>
         </li>
+        <?php } ?>
 
         <li>
             <a href="javascript:void(0);" class="menu-toggle">
-                <i class="material-icons">work</i>
+                <i class="material-icons">gavel</i>
                 <span>Gesti&oacute;n Procesos</span>
             </a>
             <ul class="ml-menu">
@@ -226,11 +230,11 @@ else
         <li>
             <a href="javascript:void(0);" class="menu-toggle">
                 <i class="material-icons">today</i>
-                <span>AGENDA</span>
+                <span>Agenda</span>
             </a>
             <ul class="ml-menu">
                 <li>
-                    <a href="../kal/sample.php" class="menu-toggle">
+                    <a href="../agenda/index.php" class="menu-toggle">
                         <span>Agenda</span>
                     </a>  
                 </li>
@@ -244,8 +248,8 @@ else
             </a>
             <ul class="ml-menu">
                 <li>
-					<a href="../eventos/" class="menu-toggle">
-                        <span>Herramientas</span>
+					<a href="../dependiente/" class="menu-toggle">
+                        <span>Actividades</span>
                     </a> 
                 </li>
             </ul>
@@ -264,7 +268,7 @@ else
                 </li>
             </ul>
         </li>
-        
+        <?php if($_SESSION["TipoUsuario"] == 1) { ?>
         <li>
             <a href="javascript:void(0);" class="menu-toggle">
                 <i class="material-icons">pie_chart</i>
@@ -288,6 +292,7 @@ else
                 </li>                            
             </ul>
         </li>
+        <?php } ?>
        
     </ul>
 </div>

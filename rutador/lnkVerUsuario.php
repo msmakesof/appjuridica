@@ -86,6 +86,7 @@
             $usulocal = $m['usu_usuario']['USU_Local'] ;
             $nombres =  $m['usu_usuario']['USU_Nombre'].' '.$m['usu_usuario']['USU_PrimerApellido'].' '.$m['usu_usuario']['USU_SegundoApellido'];
             $email =  $m['usu_usuario']['USU_Email'];
+            $tipousuario = $m['usu_usuario']['USU_TipoUsuario'];
             
             $_SESSION['Usuario'] = preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $usulocal);
             $_SESSION['NombreUsuario'] = $nombres ;
@@ -109,7 +110,7 @@
 		$cookiename='_geo';
 		$value=$IdUsuario;
 		$expiry=time()+(86400 * 30);
-		$domain='http://127.0.0.1/appjuridica/';  //'appjuridica.ok-be.co';
+		$domain='http://localhost/appjuridica/';  //'appjuridica.ok-be.co';
 		$secure=true;
 		$httponly=true;
 		//setcookie($cookie_name,$value,$expiry,$path,$domain,$secure,$httponly);
@@ -123,7 +124,8 @@
             //$cookie_value = "Hosting No Permite crear cookie PHP";
             $_SESSION["user_id"] = $cookie_value;			
         }
-		$_SESSION["opcMenu"]="";
+        $_SESSION["opcMenu"] ="";
+        $_SESSION["TipoUsuario"] = $tipousuario;
 		
 		if (!isset($_SESSION['IdUsuario'])) {
 			$_SESSION['IdUsuario'] = $IdUsuario;
@@ -145,4 +147,3 @@
     //regAuditor();
     echo trim("$existe$cookie_value");
 ?>
-
