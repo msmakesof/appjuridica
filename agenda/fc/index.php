@@ -1,5 +1,4 @@
 <?php
-
 /**
 **
 **  BY iCODEART
@@ -81,7 +80,7 @@ if (isset($_POST['from']))
 
         // redireccionamos a nuestro calendario
         //header("Location:$base_url");
-        header("Location: agenda/fc/index.php"); 
+        header("Location: agenda/fc/"); 
 
     }
 }
@@ -209,53 +208,52 @@ if (isset($_POST['from']))
 
                         onAfterEventsLoad: function(events)
                         {
-                                if(!events)
-                                {
-                                        return;
-                                }
-                                var list = $('#eventlist');
-                                list.html('');
+                            if(!events)
+                            {
+                                return;
+                            }
+                            var list = $('#eventlist');
+                            list.html('');
 
-                                $.each(events, function(key, val)
-                                {
-                                        $(document.createElement('li'))
-                                                .html('<a href="' + val.url + '">' + val.title + '</a>')
-                                                .appendTo(list);
-                                });
+                            $.each(events, function(key, val)
+                            {
+                                $(document.createElement('li'))
+                                    .html('<a href="' + val.url + '">' + val.title + '</a>')
+                                    .appendTo(list);
+                            });
                         },
                         onAfterViewLoad: function(view)
                         {
-                                $('.page-header h2').text(this.getTitle());
-                                $('.btn-group button').removeClass('active');
-                                $('button[data-calendar-view="' + view + '"]').addClass('active');
+                            $('.page-header h2').text(this.getTitle());
+                            $('.btn-group button').removeClass('active');
+                            $('button[data-calendar-view="' + view + '"]').addClass('active');
                         },
                         classes: {
-                                months: {
-                                        general: 'label'
-                                }
+                            months: {
+                                general: 'label'
+                            }
                         }
                 };
-
 
                 // id del div donde se mostrara el calendario
                 var calendar = $('#calendar').calendar(options); 
 
                 $('.btn-group button[data-calendar-nav]').each(function()
                 {
-                        var $this = $(this);
-                        $this.click(function()
-                        {
-                                calendar.navigate($this.data('calendar-nav'));
-                        });
+                    var $this = $(this);
+                    $this.click(function()
+                    {
+                        calendar.navigate($this.data('calendar-nav'));
+                    });
                 });
 
                 $('.btn-group button[data-calendar-view]').each(function()
                 {
-                        var $this = $(this);
-                        $this.click(function()
-                        {
-                                calendar.view($this.data('calendar-view'));
-                        });
+                    var $this = $(this);
+                    $this.click(function()
+                    {
+                        calendar.view($this.data('calendar-view'));
+                    });
                 });
 
                 $('#first_day').change(function()
@@ -265,8 +263,8 @@ if (isset($_POST['from']))
                         calendar.setOptions({first_day: value});
                         calendar.view();
                 });
-        });
-        //(jQuery)
+        }(jQuery));
+        //
     </script>
 
 <div class="modal fade" id="add_evento" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">

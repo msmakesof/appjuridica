@@ -41,6 +41,7 @@ class USU_USUARIO
         USU_UsuarioEstado,
         USU_IdInterno,
         USU_Local ,
+		USU_EsAbogado ,
         CASE USU_Estado WHEN 1 THEN 'Activo' ELSE 'Inactivo' END EstadoUsuario,
         concat_WS(' ',USU_Nombre, USU_PrimerApellido, USU_SegundoApellido) AS NombreUsuario 
         FROM ".$GLOBALS['TABLA']." ORDER BY NombreUsuario; ";
@@ -87,7 +88,8 @@ class USU_USUARIO
                         USU_FechaEstado,
                         USU_UsuarioEstado,
                         USU_IdInterno,
-                        USU_Local ".
+                        USU_Local,
+						USU_EsAbogado ".
                         " FROM ".$GLOBALS['TABLA'].
                         " WHERE ".$GLOBALS['Llave']." = ? ORDER BY USU_Nombre; ";
 
@@ -211,20 +213,21 @@ class USU_USUARIO
         $Clave,
         $TipoUsuario,
         $Estado,
+		$EsAbogado,
         $IdUsuario
     )
     {
         // Creando consulta UPDATE
         $consulta = "UPDATE ". $GLOBALS['TABLA']. 
             " SET USU_TipoDocumento=?, USU_Identificacion=?, USU_PrimerApellido=?, USU_SegundoApellido=?, USU_Nombre=?, USU_Email=?, ".
-            " USU_Direccion=?, USU_Celular=?, USU_Usuario=?, USU_Clave=?, USU_TipoUsuario=?, USU_Estado=? " .
+            " USU_Direccion=?, USU_Celular=?, USU_Usuario=?, USU_Clave=?, USU_TipoUsuario=?, USU_Estado=?, USU_EsAbogado =? " .
             " WHERE ". $GLOBALS['Llave'] ."=? ;";
 
         // Preparar la sentencia
         $cmd = Database::getInstance()->getDb()->prepare($consulta);
 
         // Relacionar y ejecutar la sentencia
-        $cmd->execute(array($TipoDocumento, $Identificacion, $PrimerApellido, $SegundoApellido, $Nombre, $Email, $Direccion, $Celular, $Usuario, $Clave, $TipoUsuario, $Estado, $IdUsuario ));
+        $cmd->execute(array($TipoDocumento, $Identificacion, $PrimerApellido, $SegundoApellido, $Nombre, $Email, $Direccion, $Celular, $Usuario, $Clave, $TipoUsuario, $Estado, $EsAbogado, $IdUsuario ));
 
         return $cmd;
     }
@@ -256,7 +259,7 @@ class USU_USUARIO
      */
 
     public static function insert( $TipoDocumento, $Identificacion, $PrimerApellido, $SegundoApellido, $Nombre, $Email, $Direccion, $Celular, $Usuario,
-        $Clave, $TipoUsuario,$Estado, $IdInterno, $Local )
+        $Clave, $TipoUsuario,$Estado, $IdInterno, $Local, $Abogado )
     {
         // Sentencia INSERT
         $comando = "INSERT INTO ". $GLOBALS['TABLA'] ." ( " .            
@@ -272,13 +275,13 @@ class USU_USUARIO
             " USU_Clave," .
             " USU_TipoUsuario," .
             " USU_Estado, " .
-            " USU_IdInterno, USU_Local ) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?);";
+            " USU_IdInterno, USU_Local, USU_EsAbogado ) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);";
         try {
             // Preparar la sentencia
             $sentencia = Database::getInstance()->getDb()->prepare($comando);
             return $sentencia->execute(
                 array($TipoDocumento, $Identificacion,$PrimerApellido, $SegundoApellido, $Nombre,$Email,
-                $Direccion, $Celular, $Usuario,$Clave,$TipoUsuario,$Estado, $IdInterno, $Local )    
+                $Direccion, $Celular, $Usuario,$Clave,$TipoUsuario,$Estado, $IdInterno, $Local, $Abogado )    
             );
            
         } catch (PDOException $e) {
@@ -288,7 +291,7 @@ class USU_USUARIO
         }    
     }
 
-    /**
+    /*
      * Eliminar el registro con el identificador especificado
      *
      * @param $IdUsuario identificador de la usu_usuario
@@ -332,6 +335,32 @@ class USU_USUARIO
             return -1;
         }
     }
-}
+    
+    /**
+     * Seleccionar usuarios tipo Abogado y Dependiente Judicial
+     *
+     * @param $IdUsuario identificador de la usu_usuario
+     * @return bool Respuesta de la consulta
+	 * Traemos todos los abogados que tienen uno o mas procesos activos asignados
+     */
+    public static function usuarioresponsable()
+    {
+        $consulta = "SELECT DISTINCT ".$GLOBALS['Llave'].", concat_WS(' ',USU_Nombre, USU_PrimerApellido, USU_SegundoApellido) AS NombreUsuario, USU_Email ".
+                   " FROM ".$GLOBALS['TABLA'].
+				   " JOIN pro_proceso ON pro_proceso.PRO_IdUsuario = USU_IdUsuario AND pro_proceso.PRO_EstadoProceso = 1 ".
+                   " WHERE USU_EsAbogado IN (1) AND USU_Estado = 1; ";
+        try {
+            // Preparar sentencia
+            $comando = Database::getInstance()->getDb()->prepare($consulta);
+            // Ejecutar sentencia preparada
+            $comando->execute();
 
+            return $comando->fetchAll(PDO::FETCH_ASSOC);
+
+        } catch (PDOException $e) {
+            return false;
+        }
+    }   
+    
+}
 ?>

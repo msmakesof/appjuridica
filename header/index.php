@@ -1,263 +1,63 @@
 ﻿<?php
+ob_start();
 if(!isset($_SESSION)) 
 { 
     session_start(); 
 }
+if( !isset($_SESSION['IdUsuario']) && !isset($_SESSION['NombreUsuario']) )
+{
+	header("Location: ../index.html");
+    exit;
+}
 include('../Connections/cnn_kn.php'); 
 include('../Connections/config2.php'); 
-
-//echo "<br><br><br><br><br><div style='margin-left:280px;'>En header sesionUsuario.....".$_SESSION['IdUsuario']."</div>";
-//include('../webtrack/signer.php');
-//include('../rutador/config2.php');  falla
+include('js.php');
+//echo "<br><br><br><br><br><div style='margin-left:280px;'>En MWXxxxXMMMMMXMMXMMxxxXWWWwwm.....".$_SESSION['IdUsuario'].' - '.$_SESSION['NombreUsuario']."</div>";
 ?>
 <?php
-if (!function_exists("GetSQLValueString")) {
-function GetSQLValueString($theValue, $theType, $theDefinedValue = "", $theNotDefinedValue = "") 
+if (!function_exists("GetSQLValueString")) 
 {
-  if (PHP_VERSION < 6) {
-    $theValue = get_magic_quotes_gpc() ? stripslashes($theValue) : $theValue;
-  }
+	function GetSQLValueString($theValue, $theType, $theDefinedValue = "", $theNotDefinedValue = "") 
+	{
+		if (PHP_VERSION < 6) 
+		{
+			$theValue = get_magic_quotes_gpc() ? stripslashes($theValue) : $theValue;
+		}
 
-  $theValue = function_exists("mysqli_real_escape_string") ? mysqli_real_escape_string($theValue) : mysqli_escape_string($theValue);
+		$theValue = function_exists("mysqli_real_escape_string") ? mysqli_real_escape_string($theValue) : mysqli_escape_string($theValue);
 
-  switch ($theType) {
-    case "text":
-      $theValue = ($theValue != "") ? "'" . $theValue . "'" : "NULL";
-      break;    
-    case "long":
-    case "int":
-      $theValue = ($theValue != "") ? intval($theValue) : "NULL";
-      break;
-    case "double":
-      $theValue = ($theValue != "") ? doubleval($theValue) : "NULL";
-      break;
-    case "date":
-      $theValue = ($theValue != "") ? "'" . $theValue . "'" : "NULL";
-      break;
-    case "defined":
-      $theValue = ($theValue != "") ? $theDefinedValue : $theNotDefinedValue;
-      break;
-  }
-  return $theValue;
-}
+		  switch ($theType) 
+		  {
+			case "text":
+			  $theValue = ($theValue != "") ? "'" . $theValue . "'" : "NULL";
+			  break;    
+			case "long":
+			case "int":
+			  $theValue = ($theValue != "") ? intval($theValue) : "NULL";
+			  break;
+			case "double":
+			  $theValue = ($theValue != "") ? doubleval($theValue) : "NULL";
+			  break;
+			case "date":
+			  $theValue = ($theValue != "") ? "'" . $theValue . "'" : "NULL";
+			  break;
+			case "defined":
+			  $theValue = ($theValue != "") ? $theDefinedValue : $theNotDefinedValue;
+			  break;
+		  }
+		  return $theValue;
+	}
 }
 
 $empresa = "AppJuridica";
-$arrayMeses = array('Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio','Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre');
+//$arrayMeses = array('Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio','Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre');
 
 date_default_timezone_set('America/Bogota');
 setlocale(LC_ALL,"es_ES");
-
 $script_tz = date_default_timezone_get();
-//echo "zona horario.....$script_tz<br>";
-//echo strftime("El año es %Y y el mes es %B");
-
-/*
-mysqli_select_db($cnn_kn, $database_cnn_kn);
-$query_rs_mes = "SELECT * FROM controlmesactual WHERE MONTH(fechaMes) = MONTH(NOW()) ;" ;
-$rs_mes = mysqli_query($cnn_kn, $query_rs_mes) or die(mysqli_error()."Err.....$query_rs_mes");
-$row_rs_mes = mysqli_fetch_assoc($rs_mes);
-$totalRows_rs_mes = mysqli_num_rows($rs_mes);
-if ( $totalRows_rs_mes == 0)
-{
-    $insertSQL = "INSERT INTO controlmesactual (IdMes, NombreMes, numeroMes, fechaMes, estadoMes) VALUES (0, '', MONTH(Now()), Now(), 'I');";
-    mysqli_select_db($cnn_kn, $database_cnn_kn);
-    $Result1 = mysqli_query($cnn_kn, $insertSQL) or die(mysqli_error()."Err....$insertSQL<br>");
-}
-
-$updSQL = "UPDATE controlmesactual SET estadoMes = 'A', fechaMes = Now() WHERE MONTH(fechaMes) = MONTH(NOW());";
-mysqli_select_db($cnn_kn, $database_cnn_kn);    
-$Result1 = mysqli_query($cnn_kn, $updSQL) or die(mysqli_error()."Err....$updSQL<br>");
-mysqli_free_result($rs_mes);
-
-$nombremes = "";
-$yy = "";
-mysqli_select_db($cnn_kn, $database_cnn_kn);
-$query_rs_mesx = "SELECT * FROM controlmesactual WHERE MONTH(fechaMes) = MONTH(NOW()) AND estadoMes = 'A';" ;
-$rs_mesx = mysqli_query($cnn_kn, $query_rs_mesx) or die(mysqli_error()."Err.....$query_rs_mesx");
-$row_rs_mesx = mysqli_fetch_assoc($rs_mesx);
-$totalRows_rs_mesx = mysqli_num_rows($rs_mesx);
-//echo $query_rs_mesx;
-if ( $totalRows_rs_mesx > 0)
-{
-    $yy = substr($row_rs_mesx['fechaMes'],0,4);
-    $nromes = $row_rs_mesx['numeroMes'];
-    switch ($nromes)
-    {
-        case '1':
-            $nombremes = "Enero";
-            break;
-        
-        case '2':
-            $nombremes = "Febrero";
-            break;
-
-        case '3':
-            $nombremes = "Marzo";
-            break;
-
-        case '4':
-            $nombremes = "Abril";
-            break;
-            
-        case '5':
-            $nombremes = "Mayo";
-            break;
-            
-         case '6':
-            $nombremes = "Junio";
-            break;
-            
-        case '7':
-            $nombremes = "Julio";
-            break;
-            
-        case '8':
-            $nombremes = "Agosto";
-            break;
-            
-        case '9':
-            $nombremes = "Septiembre";
-            break;
-
-        case '10':
-            $nombremes = "Octubre";
-            break;
-
-        case '11':
-            $nombremes = "Noviembre";
-            break;
-
-        case '12':
-            $nombremes = "Diciembre";
-            break;
-    }    
-}
-echo $nombremes;
-mysqli_free_result($rs_mesx);
-
-*/
-
-/*  se deja en comentario por mks 20190225
-if( isset($_POST['ƒ¤']) && !empty($_POST['ƒ¤']) )
-{    
-    $clave = trim($_POST['ƒ¤']);
-}
-else
-{
-    $clave ="";
-}
-
-*/
-
-$nombre = "";
-$email  = "";
-//echo "<br><br><br><br><br>";
-
-//echo "global....".$idStorageGlobal;
-//echo "usu....".$_POST['username']."<br>";
-// echo "usu: ".$_POST['ƒ×'];
-// if( isset($_POST['ƒ×'])  && !empty($_POST['ƒ×']) )
-// {    
-//     $usuario = trim($_POST['ƒ×']);
-    
-//     mysqli_select_db($cnn_kn, $database_cnn_kn);
-//     $query_rs_usuario = "SELECT CONCAT_WS(' ',USU_Nombre,USU_PrimerApellido,USU_SegundoApellido) Nombre, USU_Email 
-//     FROM usu_usuario WHERE USU_Estado = 1 AND USU_Email = '$usuario' ;" ;
-//     $rs_usuario = mysqli_query($cnn_kn, $query_rs_usuario) or die(mysqli_error()."Err.....$query_rs_usuario");
-//     $row_rs_usuario = mysqli_fetch_assoc($rs_usuario);
-//     $totalRows_rs_usuario = mysqli_num_rows($rs_usuario);
-//     $y = "";
-    
-//     if ($resultado = mysqli_query($cnn_kn, $query_rs_usuario)) 
-//     {
-//         while($strowreg = mysqli_fetch_assoc($resultado))
-//         {
-//             $nombre = $strowreg['Nombre'];
-//             $email = $strowreg['USU_Email'];    
-//         }
-//     }
-//     mysqli_free_result($rs_usuario);
-// }
-// else
-// {
-//     $usuario ="";
-// }
-
-
-//echo $_SESSION['Usuario'];
-// $ususesion =  preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $_SESSION['Usuario']); 
-// echo "sesion....".$ususesion."<br>";
-// $cookie_name= "Pharametrykham";
-
-// if(!isset($_COOKIE["$cookie_name"])) {
-//     echo "Cookie named '" . $cookie_name . "' is not set!<br>";
-// } else {
-//     echo "Cookie '" . $cookie_name . "' is set!<br>";
-//     echo "Value is: " . $_COOKIE[$cookie_name];
-// }
-// $valorcookie = encryptor('decrypt', $_COOKIE["$cookie_name"]);
-// echo "cook....$valorcookie <br>";
-
-/*
-// clases
-$cantclases = 0;
-mysqli_select_db($cnn_kn, $database_cnn_kn);
-$query_rs_tipo_ctabla = "SELECT count(IdClase) as cantclases FROM clases WHERE Estado = 1 AND MONTH(hasta) = MONTH(NOW());";
-$rs_tipo_ctabla = mysqli_query($cnn_kn,$query_rs_tipo_ctabla) or die(mysqli_error()."$query_rs_tipo_ctabla");
-mysqli_set_charset($cnn_kn,"utf8");
-$row_rs_tipo_ctabla = mysqli_fetch_assoc($rs_tipo_ctabla);
-$cantclases = $row_rs_tipo_ctabla['cantclases'];
-mysqli_free_result($rs_tipo_ctabla);
-
-
-// Alumnos
-$cantest = 0;
-mysqli_select_db($cnn_kn, $database_cnn_kn);
-$query_rs_tipo_etabla = "SELECT count(IdEstudiante) as cantest FROM estudiante WHERE Estado_EST = 1 ;";
-$rs_tipo_etabla = mysqli_query($cnn_kn,$query_rs_tipo_etabla) or die(mysqli_error()."$query_rs_tipo_etabla");
-mysqli_set_charset($cnn_kn,"utf8");
-$row_rs_tipo_etabla = mysqli_fetch_assoc($rs_tipo_etabla);
-$cantest = $row_rs_tipo_etabla['cantest'];
-mysqli_free_result($rs_tipo_etabla);
-
-// Profesores
-$cantpro = 0;
-mysqli_select_db($cnn_kn, $database_cnn_kn);
-$query_rs_tipo_ptabla = "SELECT count(IdProfesor) as cantpro FROM profesores WHERE Estado_PRO = 1 ;";
-$rs_tipo_ptabla = mysqli_query($cnn_kn,$query_rs_tipo_ptabla) or die(mysqli_error()."$query_rs_tipo_ptabla");
-mysqli_set_charset($cnn_kn,"utf8");
-$row_rs_tipo_ptabla = mysqli_fetch_assoc($rs_tipo_ptabla);
-$cantpro = $row_rs_tipo_ptabla['cantpro'];
-mysqli_free_result($rs_tipo_ptabla);
-
-
-//horarios
-$canthor = 0;
-mysqli_select_db($cnn_kn, $database_cnn_kn);
-$query_rs_tipo_htabla = "SELECT count(IdHorario) as canthor FROM horario WHERE Estado = 1 ;";
-$rs_tipo_htabla = mysqli_query($cnn_kn,$query_rs_tipo_htabla) or die(mysqli_error()."$query_rs_tipo_htabla");
-mysqli_set_charset($cnn_kn,"utf8");
-$row_rs_tipo_htabla = mysqli_fetch_assoc($rs_tipo_htabla);
-$canthor = $row_rs_tipo_htabla['canthor'];
-mysqli_free_result($rs_tipo_htabla);
-
-mysqli_select_db($cnn_kn, $database_cnn_kn);
-$query_rs_niveles = "SELECT NombreNivel FROM nivel WHERE Estado = 1 ORDER BY NombreNivel;";
-$rs_niveles = mysqli_query($cnn_kn,$query_rs_niveles) or die(mysqli_error()."$query_rs_niveles");
-mysqli_set_charset($cnn_kn,"utf8");
-$row_rs_niveles = mysqli_fetch_assoc($rs_niveles);
-
-mysqli_select_db($cnn_kn, $database_cnn_kn);
-$query_rs_topicxnivel = "SELECT NombreNivel, count(IdTemaTxN) as total FROM temasxnivel JOIN nivel ON nivel.IdNivel = temasxnivel.IdNivelTxN AND IdEstadoTxN = 1 GROUP BY NombreNivel ORDER BY NombreNivel;";
-$rs_topicxnivel = mysqli_query($cnn_kn,$query_rs_topicxnivel) or die(mysqli_error()."$query_rs_topicxnivel");
-mysqli_set_charset($cnn_kn,"utf8");
-$row_rs_topicxnivel = mysqli_fetch_assoc($rs_topicxnivel);
-*/
 ?>
 <!DOCTYPE html>
 <html>
-
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=Edge">
@@ -600,7 +400,7 @@ $row_rs_topicxnivel = mysqli_fetch_assoc($rs_topicxnivel);
                             <i class="material-icons">playlist_add_check</i>
                         </div>
                         <div class="content">
-                            <div class="text">Mis Procesos: <?php echo $nombremes. ' '.$yy ;?> </div>
+                            <div class="text">Mis Procesos: <?php //echo $nombremes. ' '.$yy ;?> </div>
                             <div class="number count-to" data-from="0" data-to="<?php echo $cantclases; ?>" data-speed="15" data-fresh-interval="20"></div>
                         </div>
                     </div>
@@ -926,10 +726,7 @@ $row_rs_topicxnivel = mysqli_fetch_assoc($rs_topicxnivel);
 
     <!-- Demo Js -->
     <script src="../js/demo.js"></script>
+	
 </body>
-
 </html>
-<?php 
-//mysqli_free_result($rs_niveles); 
-//mysqli_free_result($rs_topicxnivel);
-?>
+<?php ob_end_flush();?>

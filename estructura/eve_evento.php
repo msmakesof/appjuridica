@@ -4,9 +4,9 @@
  * almacenadas en la base de datos
  */
 require '../Connections/database.php';
-$TABLA ="pro_proceso";
-$Llave ="PRO_IdProceso";
-class PRO_PROCESO
+$TABLA ="eve_evento";
+$Llave ="Id";
+class EVE_EVENTO
 {
     function __construct()
     {
@@ -59,22 +59,22 @@ class PRO_PROCESO
     {
         // Consulta de la tabla Proceso
         $consulta = "SELECT ".$GLOBALS['Llave'].",
-							PRO_IdDemandante,
-							PRO_IdDemandado,
-                            PRO_NumeroProceso, 
-							PRO_FechaInicio, 
-							PRO_IdUsuario,
-							PRO_IdUbicacion,
-							PRO_IdClaseProceso,
-							PRO_IdJuzgadoOrigen,
-							PRO_EstadoProceso,
-							PRO_IdArea,
-                            PRO_IdJuzgado,
-                            PRO_FechaCierre,
-                            PRO_ObservacionCierre,
-                            PRO_IdUsuarioCierre
-                            FROM ".$GLOBALS['TABLA'].
-                            " WHERE ".$GLOBALS['Llave']." = ? ; ";
+                    PRO_IdDemandante,
+                    PRO_IdDemandado,
+                    PRO_NumeroProceso, 
+                    PRO_FechaInicio, 
+                    PRO_IdUsuario,
+                    PRO_IdUbicacion,
+                    PRO_IdClaseProceso,
+                    PRO_IdJuzgadoOrigen,
+                    PRO_EstadoProceso,
+                    PRO_IdArea,
+                    PRO_IdJuzgado,
+                    PRO_FechaCierre,
+                    PRO_ObservacionCierre,
+                    PRO_IdUsuarioCierre
+                    FROM ".$GLOBALS['TABLA'].
+                    " WHERE ".$GLOBALS['Llave']." = ? ; ";
 
         try {
             // Preparar sentencia
@@ -200,69 +200,108 @@ class PRO_PROCESO
     /**
      * Insertar un nueva Tabla
      *         
-     * @param $IdTabla               identificador
-     * @param $Proceso               Proceso     
-     * @param $Fechainicio           Fechainicio
-     * @param $Asignadoa             Asignadoa     
-     * @param $Ubicacion             Ubicacion   
-     * @param $Claseproceso          Claseproceso      
-     * @param $Demandante            Demandante 
-     * @param $Demandado             Demandado
-     * @param $Estado                Estado
-     * @param $Especialidad          Especialidad o Area
-     * @param $Despacho              Despacho
+     * @param $Title               identificador
+     * @param $Body               Proceso     
+     * @param $Tipo           Fechainicio
+     * @param $From             Asignadoa     
+     * @param $To             Ubicacion   
+     * @param $Inicio          Claseproceso      
+     * @param $Final            Demandante 
+     * @param $Proceso             Demandado
+     * @param $Responsable                Estado     
      * @return PDOStatement
      */
     public static function insert(        
-        $Demandante,
-        $Demandado,
+        $Title,
+        $Body,        
+        $Tipo,
+        $Inicio,                
+        $Final,
+        $From,    
+        $To,                    
         $Proceso,
-        $Fechainicio,
-        $Asignadoa,
-        $Ubicacion,
-        $Claseproceso,                
-        $JuzgadoOrigen,                
-        $Estado,
-        $Especialidad,
-        $Despacho
+        $Responsable        
     )
     {
         // Sentencia INSERT
         $comando = "INSERT INTO ". $GLOBALS['TABLA'] ." ( " . 
-            " PRO_IdDemandante, " .            
-            " PRO_IdDemandado, " . 
-            " PRO_NumeroProceso, " .            
-            " PRO_FechaInicio, " . 
-            " PRO_IdUsuario, " .            
-            " PRO_IdUbicacion, " . 
-            " PRO_IdClaseProceso, " .            
-            " PRO_IdJuzgadoOrigen, " . 
-            " PRO_EstadoProceso, " . 
-            " PRO_IdArea, ".
-            " PRO_IdJuzgado".
+            " title, " .            
+            " body, " . 
+            " class, " .            
+            " start, " . 
+            " end, " .            
+            " inicio_normal, " . 
+            " final_normal, " .            
+            " IdProceso, " . 
+            " IdUsuario " .            
             " )".     
-            " VALUES(?,?,?,?,?,?,?,?,?,?,?) ;";
+            " VALUES(?,?,?,?,?,?,?,?,?) ;";
 
         // Preparar la sentencia
         $sentencia = Database::getInstance()->getDb()->prepare($comando);
 
         return $sentencia->execute(
             array(
-                $Demandante,
-                $Demandado,
+                $Title,
+                $Body,        
+                $Tipo,
+                $Inicio,                
+                $Final,
+                $From,    
+                $To,                            
                 $Proceso,
-                $Fechainicio,
-                $Asignadoa,
-                $Ubicacion,
-                $Claseproceso,                
-                $JuzgadoOrigen,                
-                $Estado,
-                $Especialidad,
-                $Despacho
+                $Responsable
             )
         );
     }
+    
+    /**
+     * Busca el maximo Id de la tabla eve_eventos
+     * No envia parametros de entrada
+     */
+    public static function MaxId($parametro)
+    {
+        $consulta = "SELECT MAX(".$GLOBALS['Llave'].") AS MaxId 
+            FROM ".$GLOBALS['TABLA'];
+        try {
+            // Preparar sentencia
+            $comando = Database::getInstance()->getDb()->prepare($consulta);
+            // Ejecutar sentencia preparada
+            $comando->execute(array($parametro));
+            // Capturar primera fila del resultado
+            $row = $comando->fetch(PDO::FETCH_ASSOC);
+            return $row;
 
+        } catch (PDOException $e) {
+            // Aquí puedes clasificar el error dependiendo de la excepción
+            // para presentarlo en la respuesta Json
+            return -1;
+        }
+    }
+    /**
+     * actualiza url  para la agenda
+     */
+    public static function UpdateUrl(
+        $MaxId,
+        $MaxId1    
+    )
+    {
+      // Creando consulta UPDATE
+        $parUrl = "fc/descripcion_evento.php?id=";
+        $consulta = "UPDATE ". $GLOBALS['TABLA']. 
+            " SET url = '$parUrl' ? ".
+            " WHERE ". $GLOBALS['Llave'] ." =? ;";
+
+        // Preparar la sentencia
+        $cmd = Database::getInstance()->getDb()->prepare($consulta);
+
+        // Relacionar y ejecutar la sentencia
+        $cmd->execute(array($MaxId, $MaxId1 ));
+
+        return $cmd;  
+    }
+    
+    
     /**
      * Cambia estado al registro con el identificador especificado
      *
@@ -290,21 +329,21 @@ class PRO_PROCESO
     }
 
     /**
-     * Verifica si existe el PRO_Proceso
+     * Verifica si existe el Evento
      *
-     * @param $IdUsuario identificador de la PRO_Proceso
+     * @param $IdUsuario identificador de Evento
      * @return bool Respuesta de la consulta
      */
-    public static function existetabla($Proceso, $Demandante, $Demandado)
+    public static function existetabla($From, $To, $Tipo, $Proceso, $Responsable)
     {
-        $consulta = "SELECT count(". $GLOBALS['Llave']. ") existe, PRO_NumeroProceso FROM ".$GLOBALS['TABLA'].
-        " WHERE PRO_NumeroProceso = ? AND PRO_IdDemandante = ? AND PRO_IdDemandado = ? ; ";
+        $consulta = "SELECT count(". $GLOBALS['Llave']. ") existe, Id FROM ".$GLOBALS['TABLA'].
+        " WHERE inicio_normal = ? AND final_normal = ? AND IdProceso = ? AND IdUsuario = ? ;";
 
         try {
             // Preparar sentencia
             $comando = Database::getInstance()->getDb()->prepare($consulta);
             // Ejecutar sentencia preparada
-            $comando->execute(array($Proceso, $Demandante, $Demandado));
+            $comando->execute(array($From, $To, $Tipo, $Proceso, $Responsable));
             // Capturar primera fila del resultado
             $row = $comando->fetch(PDO::FETCH_ASSOC);
             return $row;

@@ -186,11 +186,12 @@ require_once('../../apis/general/tipousuario.php');
             var celular = $("#celular").val();
             var tipousuario = $("#tipousuario").val();
             //var telefonofijo = $("#telefonofijo").val();
-            //var sucursal = $("#sucursal").val();            
+            //var sucursal = $("#sucursal").val();
+			var abogado = $('input:radio[name=abogado]:checked').val();            
             var estado = $('input:radio[name=estado]:checked').val();
             e.preventDefault();
 
-            if( tipodocumento == "" || numerodocumento =="" || nombre == "" || apellido1 == "" || apellido2 == "" || clave =="" || direccion == "" || email == "" || celular == "" || estado == undefined || tipousuario == "" )
+            if( tipodocumento == "" || numerodocumento =="" || nombre == "" || apellido1 == "" || apellido2 == "" || clave =="" || direccion == "" || email == "" || celular == "" || estado == undefined || tipousuario == "" || abogado == "" )
             {
                //swal("Atencion:", "Estudiante " + nombre + " !Ya se encuentra registrado(a)...");
                 swal({
@@ -202,11 +203,10 @@ require_once('../../apis/general/tipousuario.php');
                 });
                 return false;
             }
-
             else
             {
                 $.ajax({
-                    data : {"tipodocumento": tipodocumento, "numerodocumento": numerodocumento, "nombre": nombre, "apellido1": apellido1, "apellido2": apellido2, "clave": clave, "direccion": direccion, "email": email, "celular": celular, "estado": estado, "tipousuario": tipousuario}, 
+                    data : {"tipodocumento": tipodocumento, "numerodocumento": numerodocumento, "nombre": nombre, "apellido1": apellido1, "apellido2": apellido2, "clave": clave, "direccion": direccion, "email": email, "celular": celular, "estado": estado, "tipousuario": tipousuario, "abogado": abogado}, 
                     type: "POST",
                     dataType: "html",
                     url : "crea_usuario.php",
@@ -426,6 +426,15 @@ require_once('../../apis/general/tipousuario.php');
                                 </div>                               -->
                                 
                                 <div class="form-group form-float">
+                                    <label class="form-label">Abogado</label>
+                                    <input type="radio" name="abogado" id="si" class="with-gap" value="1">
+                                    <label for="si">Si</label>
+
+                                    <input type="radio" name="abogado" id="no" class="with-gap" value="0">
+                                    <label for="no" class="m-l-20">No</label>
+                                </div>
+								
+								<div class="form-group form-float">
                                     <label class="form-label">Estado</label>
                                     <input type="radio" name="estado" id="activo" class="with-gap" value="1">
                                     <label for="activo">Activo</label>

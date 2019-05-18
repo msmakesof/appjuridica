@@ -1,5 +1,4 @@
 <?php
-
 /**
 **
 **  BY iCODEART
@@ -18,12 +17,18 @@
 **********************************************************************
 **********************************************************************
 **/
-
+if(!isset($_SESSION)) 
+{ 
+    session_start(); 
+}
 // Incluimos nuestro archivo config
-include 'config.php'; 
+//include 'config.php'; 
+include('../../Connections/cnn_kn.php'); 
+include('../../Connections/config2.php');
 
 // Sentencia sql para traer los eventos desde la base de datos
-$sql="SELECT * FROM eventos"; 
+$sql="SELECT * FROM eve_evento ORDER BY inicio_normal; "; 
+$conexion = $cnn_kn;
 
 // Verificamos si existe un dato
 if ($conexion->query($sql)->num_rows)
@@ -59,6 +64,4 @@ if ($conexion->query($sql)->num_rows)
         // Si no existen eventos mostramos este mensaje.
         echo "No hay datos"; 
     }
-
-
 ?>

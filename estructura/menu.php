@@ -17,12 +17,13 @@ class MENU
      *
      * @param $IdTabla Identificador del registro
      * @return array Datos del registro
+	 * TAB_Grupo, 
      */
     public static function getAll()
     {
         $consulta = "SELECT ".$GLOBALS['Llave'].", TAB_Nombre_Tabla, TAB_NombreMostrar, TAB_Grupo, 
             CASE TAB_IdEstadoTabla WHEN 1 THEN 'Activo' ELSE 'Inactivo' END EstadoTabla
-            FROM ".$GLOBALS['TABLA']." WHERE TAB_IdEstadoTabla = 1 ORDER BY TAB_Grupo, TAB_NombreMostrar; ";
+            FROM ".$GLOBALS['TABLA']." WHERE TAB_IdEstadoTabla = 1 ORDER BY TAB_NombreMostrar; ";
         try {
             // Preparar sentencia
             $comando = Database::getInstance()->getDb()->prepare($consulta);

@@ -1,3 +1,4 @@
+
 ﻿<!DOCTYPE html>
 <html>
 
@@ -196,12 +197,10 @@
 					url : "valida_usuarioK2.php",
                 })  
 				.done(function( dataX, textStatus, jqXHR ){	                   				
-					var respstr = dataX.trim();
-                    var l = respstr.substr(1);
-                    if( respstr.substr(0,1) == "1" )
-                    {                        
-                        sessionStorage.setItem("_utmworker", l);
-                        relocate("webtrack/index.php");                       
+					var respstr = dataX.trim();                    
+					if(respstr == "1")
+                    {                       
+                        relocate("webtrack/");                       
                     }
                     else
                     {                     

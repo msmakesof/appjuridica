@@ -1,10 +1,17 @@
-﻿<?php 
+﻿<?php
+ob_start();
 require_once('../../Connections/cnn_kn.php'); 
 require_once('../../Connections/config2.php');
 if(!isset($_SESSION)) 
 { 
     session_start(); 
+}
+if( !isset($_SESSION['IdUsuario']) && !isset($_SESSION['NombreUsuario']) )
+{
+	header("Location: ../../index.html");
+    exit;
 } 
+ob_start();
 ?>
 <?php
 if (!function_exists("GetSQLValueString")) 
@@ -377,12 +384,42 @@ if($usuario == "")
                 </div>
                 <div class="info-container">
 					<div class="name" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">                       
-                        <span id="xNom"><?php echo $_SESSION['NombreUsuario']; ?></span>                   
+                        <span id="xNom">
+							<?php 								
+								if ( isset( $_SESSION['NombreUsuario'] ) && !empty( $_SESSION['NombreUsuario'] ) ) 
+								{
+									// Variable definida y no vacia
+									echo $_SESSION['NombreUsuario'];
+									//header("Content-Type: text/html; charset=UTF-8");
+								} 
+								else 
+								{
+									// Variable no definida o vacia
+									//header("Content-Type: text/html; charset=UTF-8");
+									header('Location: ../../');
+								}								 
+							?>
+						</span>                   
                     </div>
 
 
                     <div class="email">                        
-                        <span id="xMail"><?php echo $_SESSION['EmailUsuario']; ?></span>
+                        <span id="xMail">
+							<?php								
+								if ( isset( $_SESSION['EmailUsuario'] ) && !empty( $_SESSION['EmailUsuario'] ) ) 
+								{
+									// Variable definida y no vacia
+									echo $_SESSION['EmailUsuario'];
+									//header("Content-Type: text/html; charset=UTF-8");
+								} 
+								else 
+								{
+									// Variable no definida o vacia
+									header('Location: ../../');
+								}							
+								//echo $_SESSION['EmailUsuario']; 
+							?>
+						</span>
                     </div>
 
 
@@ -583,7 +620,7 @@ if($usuario == "")
                             <ul class="header-dropdown m-r--1">
                                 <li class="dropdown">
                                     <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                                        <i class="material-icons" style="font-size:24px;color:red">add</i>  										      
+                                        <i class="material-icons" style="font-size:24px;color:red">add_circle_outline</i>  										      
                                     </a>
                                      
                                     
@@ -612,7 +649,7 @@ if($usuario == "")
                                 <thead>
                                     <tr>
                                         <th>No. Proceso</th>
-                                        <th>Asignado A</th>
+                                        <th>Apoderado(a)</th>
                                         <th>Ubicaci&oacute;n</th>
                                         <th>Clase Proceso</th>
                                         <th>Juzgado</th>
@@ -622,7 +659,7 @@ if($usuario == "")
                                 <tfoot>
                                     <tr>
                                         <th>No. Proceso</th>
-                                        <th>Asignado A</th>
+                                        <th>Apoderado(a)</th>
                                         <th>Ubicaci&oacute;n</th>
                                         <th>Clase Proceso</th>
                                         <th>Juzgado</th>
@@ -633,7 +670,7 @@ if($usuario == "")
 <?php
 require_once('../../Connections/DataConex.php');
 $soportecURL = "S";
-$url         = urlServicios."consultadetalle/consultadetalle_pro_proceso.php?IdMostrar=0";
+$url         = urlServicios."consultadetalle/consultadetalle_pro_proceso.php?IdMostrar=0&e=1";
 $existe      = "";
 $usulocal    = "";
 $siguex      = "";
@@ -678,32 +715,43 @@ if($soportecURL == "N")
     $resultado = preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $resultado);
     $mproceso = json_decode($resultado, true);	        
 } 
-
+//echo "estado...".$mproceso['pro_proceso']['PRO_EstadoProceso']."<br>";
 if( $mproceso['estado'] != 2)
 {
-    $nombre_Tabla="";
+    $nombre_Tabla="";	
     for($i=0; $i<count($mproceso['pro_proceso']); $i++)
     {
-        $NombreTabla = trim($mproceso['pro_proceso'][$i]['PRO_NumeroProceso']);        
-        $archivo = $NombreTabla.".php";
-        $idTabla = $mproceso['pro_proceso'][$i]['PRO_IdProceso'];
-        $AsignadoA =$mproceso['pro_proceso'][$i]['AsignadoA'];
-        $Ubicacion =$mproceso['pro_proceso'][$i]['Ubicacion'];
-        $ClaseProceso =$mproceso['pro_proceso'][$i]['ClaseProceso'];
-        $Juzgado =$mproceso['pro_proceso'][$i]['Juzgado'];
-        $estadoTabla = trim($mproceso['pro_proceso'][$i]['EstadoTabla']);
-       
+			$icon="";
+			$NombreTabla = trim($mproceso['pro_proceso'][$i]['PRO_NumeroProceso']);
+			$nroproceso = substr($NombreTabla,16,5);        
+			$archivo = $NombreTabla.".php";
+			$idTabla = $mproceso['pro_proceso'][$i]['PRO_IdProceso'];		
+			if(strlen($nroproceso) < 5 )
+			{
+				$NombreTabla = $idTabla;
+				$icon = "t";
+			}
+			$AsignadoA =$mproceso['pro_proceso'][$i]['AsignadoA'];
+			$Ubicacion =$mproceso['pro_proceso'][$i]['Ubicacion'];
+			$ClaseProceso =$mproceso['pro_proceso'][$i]['ClaseProceso'];
+			$Juzgado =$mproceso['pro_proceso'][$i]['Juzgado'];
+			$estadoTabla = trim($mproceso['pro_proceso'][$i]['EstadoTabla']);       
     ?>
         <tr>
             <td>
                 <div class="procesodiv">
                     <input type='hidden' id="hf" name="hf" value="<?php echo $idTabla; ?>">
                     <a href='javascript:void(0)' onclick="cambiar(<?php echo $idTabla; ?>)">   
-                        <?php echo $NombreTabla; ?>
+                        <?php if($icon == "t" ) { ?>
+							<div class="procesodiv2">
+							<i class="material-icons">label_important</i>
+							</div>
+						<?php } ?>
+						<?php  echo $NombreTabla; ?>
                     </a>
                 </div>
                 <div class="procesodiv">
-                    <a href="javascript:void(0);" onclick="actprocesal(<?php echo $idTabla; ?>)">
+                    <a href="javascript:void(0);" onclick='actprocesal("<?php echo $idTabla; ?>","<?php echo trim($NombreTabla); ?>")'>
                     <div class="procesodiv2">
                         <i class="material-icons material-icons md-36" style="color:#b30000">art_track</i>
                         <span class="txt">Actuaci&oacute;n Procesal</span>
@@ -786,8 +834,9 @@ if( $mproceso['estado'] != 2)
     <!-- Bootstrap Core Js -->
     <script src="../../plugins/bootstrap/js/bootstrap.js"></script>
 
-    <!-- Select Plugin Js -->
+    <!-- Select Plugin Js 
     <script src="../../plugins/bootstrap-select/js/bootstrap-select.js"></script>
+	-->
 
     <!-- Slimscroll Plugin Js -->
     <script src="../../plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
@@ -830,13 +879,15 @@ var variableValue;
         window.location = 'pro_procesoforma.php';
     });
 
-    $("#cambiar").on("click", function(id){
+    /*
+	$("#cambiar").on("click", function(id){
         //alert(id);
         <?php  $_SESSION["f"] = $idTabla;?>
         //document.getElementById("formulario").submit();
         
         window.location = '../forms/editarproceso.php';
     });
+	*/
 
  }); 
 
@@ -851,10 +902,9 @@ function cambiar(id)
     });
 }
 
-function actprocesal(id) 
-{
-    //alert(id);    	
-    $.post('../forms/editaractprocesal.php', { 'id': id }, function (result) {
+function actprocesal(id, proceso) 
+{   
+    $.post('editaractprocesal.php', { 'id': id, 'proceso': proceso }, function (result) {
         WinId = window.open('','_self');
         WinId.document.open();
         WinId.document.write(result);
@@ -884,3 +934,4 @@ function crear(nuevaurl)
 </script>
 </body>
 </html>
+<?php ob_end_flush(); ?>

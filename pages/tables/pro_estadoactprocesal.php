@@ -565,7 +565,7 @@ if ($usuario == "")
                             <ul class="header-dropdown m-r--1">
                                 <li class="dropdown">
                                     <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                                        <i class="material-icons" style="font-size:24px;color:red">add</i>  										      
+                                        <i class="material-icons" style="font-size:24px;color:red">add_circle_outline</i>  										      
                                     </a>
                                      
                                     

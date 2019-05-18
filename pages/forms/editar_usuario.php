@@ -99,6 +99,11 @@ if(isset($_POST['estado'])){
 	$estado = trim($_POST['estado']);
 }
 
+$abogado ="";
+if(isset($_POST['abogado'])){
+  $abogado = trim($_POST['abogado']);
+}
+
 $OldClave ="";
 if(isset($_POST['OldClave'])){
   $OldClave = trim($_POST['OldClave']);

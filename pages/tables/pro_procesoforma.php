@@ -1,4 +1,5 @@
-﻿<?php 
+﻿<?php
+ob_start(); 
 require_once('../../Connections/cnn_kn.php'); 
 require_once('../../Connections/config2.php');
 if(!isset($_SESSION)) 
@@ -84,8 +85,9 @@ else
     <!-- Bootstrap Core Css -->
     <link href="../../plugins/bootstrap/css/bootstrap.css" rel="stylesheet">
 
-        <!-- DateTime Picker -->
+        <!-- DateTime Picker 
         <link href="../../calendar/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
+		-->
 
     <!-- Waves Effect Css -->
     <link href="../../plugins/node-waves/waves.css" rel="stylesheet" />
@@ -154,9 +156,13 @@ else
 
     <!-- DateTime picker -->
     <script src="../../calendar/js/moment.min.js"></script>
+	<!--
     <script src="../../calendar/js/bootstrap-datetimepicker.min.js"></script>
     <script src="../../calendar/js/bootstrap-datetimepicker.es.js"></script>    
-
+	-->
+	<script src="../../fc/js/bootstrap-datetimepicker.js"></script>
+    <link rel="stylesheet" href="../../fc/css/bootstrap-datetimepicker.min.css" />
+	<script src="../../fc/js/bootstrap-datetimepicker.es.js"></script> 
    <style>
     object{
        width:100%;
@@ -277,8 +283,17 @@ else
         $('#consecutivo').numeric();
         $('#nproceso').numeric(); 
         $('.selectpicker').selectpicker();
-        $('#fechainicio').datetimepicker({
-           format: 'YYYY-MM-DD'       
+		var exclude_dates = ['2019-04-18', '2019-04-19'];
+		var disabledWeekDays = [0,6];
+        $('#fechainicio').datetimepicker({			
+			language: 'es',											
+			daysOfWeekDisabled: [0, 6],
+			datesDisabled: exclude_dates,
+			autoclose: true,
+			defaultDate: new Date(),											
+			format:'YYYY/MM/DD',
+			minDate: new Date(),
+			viewMode: 'days'		
         });
         $("#ndv").attr("value", "00");
         _nDv = $("#ndv").val();
@@ -407,10 +422,11 @@ else
             despacho = $("#despacho").val();
             cliente = $("#cliente").val();
             demandado = $("#demandado").val();
+			var origen ="p";
 
             var estado = $('input:radio[name=estado]:checked').val();
             e.preventDefault();
-            if( estado == undefined || nombre == "" || fechainicio == "" || ubicacion == "" || claseproceso == "" || juzgado == "" || cliente == "" || demandado == "" || especialidad == "" | despacho == "")
+            if( estado == undefined || nombre == "" || fechainicio == "" || ubicacion == "" || claseproceso == "" || juzgado == "" || cliente == "" || demandado == "" || especialidad == "" || despacho == "" || usuario == "") 
             {                 
                 swal("Atencion:", "Debe digitar un Nombre y/o seleccionar un Estado y/o Fecha de Inicio  y/o Usuario  y/o Ubicacion  y/o  clase Proceso  y/o  Juzgado y/o especialidad y/o despacho.");
                 e.stopPropagation();
@@ -427,7 +443,8 @@ else
                 .done(function( data, textStatus, jqXHR){                 
                     var xrespstr = data.trim();
                     var respstr = xrespstr.substr(0,1);
-                    var msj = xrespstr.substr(2);
+                    var msj = xrespstr.substr(2,32);
+					var maxid = xrespstr.substr(34);
                     if(respstr == "E")
                     {                         
                        swal("Atención:", msj);
@@ -436,8 +453,38 @@ else
                     {    
                         if( respstr == "S" )
                         {                        
-                            swal("Atención: ", msj, "success");
-                            return false;
+                            //swal("Atención: ", msj, "success");
+                            //return false;							
+							var nombreciu = $('select[name="zip"] option:selected').text();
+							var corporacion = $('select[name="tipojuzgado"] option:selected').text();
+							var area = $('select[name="area"] option:selected').text();
+							var despacho = $('select[name="despacho"] option:selected').text();
+							var asignadoa = $('select[name="usuario"] option:selected').text();
+							var ubicacion = $('select[name="ubicacion"] option:selected').text();
+							var claseproceso = $('select[name="claseproceso"] option:selected').text();
+							var cliente = $('select[name="cliente"] option:selected').text();
+							var demandado = $('select[name="demandado"] option:selected').text();							
+							//var area = $('select[name="area"] option:selected').text();
+							
+							$.ajax({
+								data : {"pnombre": nombre, "pfechainicio": fechainicio, "pusuario": usuario, "pubicacion": ubicacion, "pclaseproceso": claseproceso ,"pjuzgado": juzgado,"pestado": estado, "pproceso": pproceso,"pcliente": cliente, "pdemandado":demandado, "pespecialidad":especialidad, "pdespacho":despacho, "origen": origen, "nombreciu": nombreciu, "corporacion": corporacion, "area": area, "despacho": despacho, "asignadoa": asignadoa, "ubicacion": ubicacion, "claseproceso": claseproceso, "cliente": cliente, "demandado": demandado, "maxid": maxid},
+								type: "POST",
+								dataType: "html",
+								url : "../../email/",
+							})
+							.done(function( data, textStatus, jqXHR){
+								xrespstr = data.trim();
+								//alert("Email enviado..."+xrespstr);
+								swal("Atención: ", msj, "success");
+								return false;
+							})
+							.fail(function( jqXHR, textStatus, errorThrown ) {
+								if ( console && console.log ) 
+								{
+									console.log( "La solicitud a fallado: " +  textStatus);
+									$("#msj").html("");
+								}
+							});
                             $("#actoprocesal").show();                          
                         }
                         else
@@ -704,12 +751,43 @@ else
                 </div>
                 <div class="info-container">
 					<div class="name" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">                       
-                        <span id="xNom"><?php echo $_SESSION['NombreUsuario']; ?></span>                   
+                        <span id="xNom">
+							<?php
+								if ( isset( $_SESSION['NombreUsuario'] ) && !empty( $_SESSION['NombreUsuario'] ) ) 
+								{
+									// Variable definida y no vacia
+									echo $_SESSION['NombreUsuario'];
+									//header("Content-Type: text/html; charset=UTF-8");
+								} 
+								else 
+								{
+									// Variable no definida o vacia
+									//header("Content-Type: text/html; charset=UTF-8");
+									header('Location: ../../');
+								}							
+								//echo $_SESSION['NombreUsuario']; 
+							?>
+						</span>                   
                     </div>
 
 
                     <div class="email">                        
-                        <span id="xMail"><?php echo $_SESSION['EmailUsuario']; ?></span>
+                        <span id="xMail">
+							<?php 
+								if ( isset( $_SESSION['EmailUsuario'] ) && !empty( $_SESSION['EmailUsuario'] ) ) 
+								{
+									// Variable definida y no vacia
+									echo $_SESSION['EmailUsuario'];
+									//header("Content-Type: text/html; charset=UTF-8");
+								} 
+								else 
+								{
+									// Variable no definida o vacia
+									header('Location: ../../');
+								}	
+								//echo $_SESSION['EmailUsuario']; 
+							?>
+						</span>
                     </div>
 
 
@@ -1025,9 +1103,9 @@ if( $mproceso['estado'] < 2)
                                     <div class="col-lg-12 col-md-12 col-sm-12">
 										<div class="row">											
 											<div class="xcol-sm-8">
-                                                <label class="form-label">Asignado a:</label>
+                                                <label class="form-label">Apoderado(a):</label>
 												<select class="selectpicker show-tick" data-live-search="true" data-width="100%" name="usuario" id="usuario" required>
-												<option value="" >Seleccione Asignado...</option>
+												<option value="" >Seleccione Apoderado(a)...</option>
 												<?php
                                                     $idTabla = 0;
                                                     require_once('../../apis/usuario/infoUsuario.php');
@@ -1164,7 +1242,7 @@ if( $mproceso['estado'] < 2)
                                         <div class="row">
                                             <div class="xcol-sm-8">
                                                 <div class="form-group form-float" style="clear: both;">
-                                                    <label class="form-label">Estado</label>
+                                                    <label class="form-label">Estado: </label>
                                                     <input type="radio" name="estado" id="activo" class="with-gap" value="1">
                                                     <label for="activo">Abierto</label>
 
@@ -1250,7 +1328,8 @@ function isNumeric (evt) {
     var key = theEvent.keyCode || theEvent.which;
     key = String.fromCharCode (key);
     var regex = /[0-9]|\./;
-    if ( !regex.test(key) ) {
+	var keyCode = evt.keyCode == 0 ? evt.charCode : evt.keyCode;
+    if ( !regex.test(key) || keyCode == 46 ) {
     theEvent.returnValue = false;
     if(theEvent.preventDefault) theEvent.preventDefault();
     }
@@ -1258,3 +1337,4 @@ function isNumeric (evt) {
 </script>	
 </body>
 </html>
+<?php ob_end_flush(); ?>

@@ -59,20 +59,28 @@ $Nombreciudad = "";
 $yy = date("Y");
 
 require_once('../../apis/proceso/proceso.php');
-
+$txtEstado = "";
 $idtabla = $mproceso['pro_proceso']['PRO_IdProceso'];
 $IdDemandante = $mproceso['pro_proceso']['PRO_IdDemandante'];
 $IdDemandado = trim($mproceso['pro_proceso']['PRO_IdDemandado']);
+$EstadoProceso = trim($mproceso['pro_proceso']['PRO_EstadoProceso']);
 $NumeroProceso = trim($mproceso['pro_proceso']['PRO_NumeroProceso']);
 $nroproceso = substr($NumeroProceso,16,5);
+if(strlen($nroproceso) < 5)
+{
+	$nroproceso = $idtabla;
+	if($EstadoProceso <> 2)
+	{
+		$txtEstado = "Estado en Reparto.";
+	}
+}	
 $FechaInicio = trim($mproceso['pro_proceso']['PRO_FechaInicio']);
 $FechaInicio = date('Y-m-d', strtotime($FechaInicio));
 $IdUsuario = trim($mproceso['pro_proceso']['PRO_IdUsuario']);
 $IdUbicacion = trim($mproceso['pro_proceso']['PRO_IdUbicacion']);
 $IdClaseProceso = trim($mproceso['pro_proceso']['PRO_IdClaseProceso']);
 $IdJuzgadoOrigen = trim($mproceso['pro_proceso']['PRO_IdJuzgadoOrigen']);
-$EstadoProceso = trim($mproceso['pro_proceso']['PRO_EstadoProceso']);
-$IdArea = $mproceso['pro_proceso']['PRO_IdArea']; // Areaa o Especialidad
+$IdArea = $mproceso['pro_proceso']['PRO_IdArea']; // Area o Especialidad
 $IdJuzgado = trim($mproceso['pro_proceso']['PRO_IdJuzgado']);
 
 $FechaCierre = trim($mproceso['pro_proceso']['PRO_FechaCierre']);
@@ -97,8 +105,9 @@ $IdUsuarioCierre = trim($mproceso['pro_proceso']['PRO_IdUsuarioCierre']);
     <!-- Bootstrap Core Css -->
     <link href="../../plugins/bootstrap/css/bootstrap.css" rel="stylesheet">
 
-    <!-- DateTime Picker -->
+    <!-- DateTime Picker 
     <link href="../../calendar/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
+	-->
 
     <!-- Waves Effect Css -->
     <link href="../../plugins/node-waves/waves.css" rel="stylesheet" />
@@ -583,7 +592,7 @@ $IdUsuarioCierre = trim($mproceso['pro_proceso']['PRO_IdUsuarioCierre']);
         <div class="container-fluid">
             <div class="block-header">
                 <h2>
-                    FORMULARIO: Edición <?php echo $Tabla; ?>.
+                    FORMULARIO: Edición <?php echo $Tabla;?>. <span class="badge badge-pill badge-info"><?php echo $txtEstado; ?></span>
                     <!--<small>Editar.</small>-->
                 </h2>
             </div>
@@ -669,10 +678,25 @@ $IdUsuarioCierre = trim($mproceso['pro_proceso']['PRO_IdUsuarioCierre']);
                                     <div class="col-lg-6 col-md-6 col-sm-6">
                                         <div class="row">
                                             <div class="xcol-xs-6">                                                
-                                                <label class="form-label">Especialidad o &Aacute;rea:</label>                                                
-                                                <!-- <input type="text" class="form-control" name="area" id="area" value="<?php //echo $JUZ_Area ;?>" maxlength="5" autocomplete="ÑÖcompletes" required> -->
-                                                <select id="area" name="area" class="selectpicker show-tick" data-live-search="true" data-width="95%" required  disabled="true">
-                                                    <!-- <option value="">-- Seleccione Especializacion.... --</option>                                                         -->
+                                                <label class="form-label">Especialidad o &Aacute;rea:</label>
+												<select id="area" name="area" class="selectpicker show-tick" data-live-search="true" data-width="95%" required  disabled="true">
+												<option value="">-- Seleccione Especializacion.... --</option>
+												<?php 
+													$idTabla = 0;
+													require_once('../../apis/general/area.php');
+													for($i=0; $i<count($marea['juz_area']); $i++)
+													{
+														$ARE_IdArea = $marea['juz_area'][$i]['ARE_IdArea'];                                                    
+														$ARE_Nombre = trim($marea['juz_area'][$i]['ARE_Nombre']);
+														$ARE_Codigo = trim($marea['juz_area'][$i]['ARE_Codigo']);
+														$ARE_Estado = $marea['juz_area'][$i]['ARE_Estado'];
+												?>                                               
+														<option value="<?php echo $ARE_Codigo; ?>" <?php if (trim($ARE_Codigo) == trim($IdArea)){ echo "selected";} else{ echo "";} ?>>
+                                                            <?php echo $ARE_Nombre ; ?>                                                
+                                                        </option>
+                                                <?php
+													}
+												?>                                                             
                                                 </select>                                                                                                
                                             </div>
                                         </div>	
@@ -689,6 +713,22 @@ $IdUsuarioCierre = trim($mproceso['pro_proceso']['PRO_IdUsuarioCierre']);
                                                 <label class="form-label"></label> -->
                                                 <select id="despacho" name="despacho" class="selectpicker show-tick" data-live-search="true" data-width="95%" required  disabled="true">
                                                     <option value="">-- Seleccione Despacho.... --</option>
+													<?php 
+													$idTabla = 0;
+													require_once('../../apis/juzgado/juzgado.php');
+													for($i=0; $i<count($mjuzgado['juz_juzgado']); $i++)
+													{
+														$JUZ_IdJuzgado = $mjuzgado['juz_juzgado'][$i]['JUZ_IdJuzgado'];                                                    
+														$JUZ_Ubicacion = trim($mjuzgado['juz_juzgado'][$i]['JUZ_Ubicacion']);
+														$JUZ_IdArea = trim($mjuzgado['juz_juzgado'][$i]['JUZ_IdArea']);
+														$JUZ_Estado = $mjuzgado['juz_juzgado'][$i]['JUZ_Estado'];
+												?>
+													<option value="<?php echo $JUZ_IdJuzgado; ?>" <?php if (trim($JUZ_IdJuzgado) == trim($IdJuzgado)){ echo "selected";} else{ echo "";} ?>>
+                                                        <?php echo $JUZ_Ubicacion ; ?>                                                
+                                                    </option>
+                                                <?php
+													}
+												?>
                                                 </select> 
                                             </div>
                                         </div>
@@ -701,7 +741,7 @@ $IdUsuarioCierre = trim($mproceso['pro_proceso']['PRO_IdUsuarioCierre']);
                                         <div class="row">            
                                             <div class="ccol-xs-3">
                                                 <label class="form-label">Año</label>                                        
-                                                <div class="form-line" style="width: 20%">
+                                                <div class="form-line" style="width: 22%">
                                                     <input type="text" class="form-control" name="anio" id="anio" value="<?php echo $yy; ?>" maxlength="4" autocomplete="ÑÖcompletes" required  disabled="true">
                                                     <label class="form-label"></label>
                                                 </div>
@@ -710,17 +750,17 @@ $IdUsuarioCierre = trim($mproceso['pro_proceso']['PRO_IdUsuarioCierre']);
                                     </div>                                    
                                 </div>
 
-                                <div class="form-group">                                    
+                                <div class="form-group">							
                                     <div class="col-lg-6 col-md-6 col-sm-5">
                                         <div class="row">
-											<div class="xcol-xs-9">
+                                            <div class="xcol-xs-9">
 												<label class="form-label">Nro. Consecutivo Radicaci&oacute;n:</label>
                                                 <div class="form-line" style="width: 70%">
-                                                    <input type="number" onkeypress="return isNumeric(event)" oninput="maxLengthCheck(this)" class="form-control" name="nproceso" id="nproceso" value="<?php echo $nroproceso; ?>" min="1" max="99999" maxlength="5" autocomplete="off" required  disabled="true">
+                                                    <input type="number" onkeypress="return isNumeric(event)" oninput="maxLengthCheck(this)" class="form-control" name="nproceso" id="nproceso" value="<?php echo $nroproceso; ?>" min="1" max="99999" maxlength="5" autocomplete="off" required>
                                                 </div>                                                    											
-											</div>
+                                            </div>
                                         </div>	
-									</div>	
+                                    </div>	
 								</div>
 
                                 <div class="form-group">                                    
@@ -729,7 +769,7 @@ $IdUsuarioCierre = trim($mproceso['pro_proceso']['PRO_IdUsuarioCierre']);
 											<div class="xcol-xs-5">
 												<label class="form-label">Control:</label>
                                                 <div class="form-line" style="width: 35%">
-                                                    <input type="number" onkeypress="return isNumeric(event)" oninput="maxLengthCheck(this)" class="form-control" name="ndv"id="ndv" min="0" max="99" maxlength="2" autocomplete="off" required  disabled="true">
+                                                    <input type="number" onkeypress="return isNumeric(event)" oninput="maxLengthCheck(this)" class="form-control" name="ndv"id="ndv" value="<?php echo substr($NumeroProceso,-2); ?>" min="0" max="99" maxlength="2" autocomplete="off" required  disabled="true">
                                                 </div>												
 											</div>											
 										</div>	
@@ -745,7 +785,7 @@ $IdUsuarioCierre = trim($mproceso['pro_proceso']['PRO_IdUsuarioCierre']);
 													<input type="number" onkeypress="return isNumeric(event)" oninput="maxLengthCheck(this)" class="form-control" name="proceso" id="proceso" value="<?php echo $NumeroProceso; ?>" maxlength="23" required />                                                    
 												</div>
                                                 <div style="font-size:11px; text-align:right;width: 80%">
-                                                        Caracteres: <span id="muestrocantidadcaracteresid">0</span> de 23
+                                                        Caracteres: <span id="muestrocantidadcaracteresid"></span> de 23
                                                 </div>
 											</div>
                                         </div>
@@ -753,18 +793,18 @@ $IdUsuarioCierre = trim($mproceso['pro_proceso']['PRO_IdUsuarioCierre']);
                                 </div>                                
 
                                 <div class="form-group">
-									<div class="col-lg-4 col-md-4 col-sm-4">
+                                    <div class="col-lg-4 col-md-4 col-sm-4">
                                         <div class="row">											
-											<div class="xcol-sm-6">
-												<label class="form-label">Fecha Inicio</label>												
-												<div class='input-group date form-line' name="fechainicio" id="fechainicio" required>
-													<input type='text' id="txtFecha" class="form-control" value="<?php echo $FechaInicio ;?>" readonly/>
-													<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span>
-													</span>
-												</div>
-											</div>																						
-										</div>
-									</div>	
+                                            <div class="xcol-sm-6">
+                                                <label class="form-label">Fecha Inicio</label>												
+                                                <div class='input-group date form-line' name="fechainicio" id="fechainicio" required>
+                                                    <input type='text' id="txtFecha" class="form-control" value="<?php echo $FechaInicio ;?>" readonly/>
+                                                    <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span>
+                                                    </span>
+                                                </div>
+                                            </div>																						
+                                        </div>
+                                    </div>	
                                 </div>
 
 
@@ -772,9 +812,9 @@ $IdUsuarioCierre = trim($mproceso['pro_proceso']['PRO_IdUsuarioCierre']);
                                     <div class="col-lg-12 col-md-12 col-sm-12">
 										<div class="row">											
 											<div class="xcol-sm-8">
-                                                <label class="form-label">Asignado a:</label>
+                                                <label class="form-label">Apoderado(a):</label>
 												<select class="selectpicker show-tick" data-live-search="true" data-width="94%" name="usuario" id="usuario" required>
-												<option value="" >Seleccione Asignado...</option>
+												<option value="" >Seleccione Apoderado(a)...</option>
 												<?php
                                                     $idTabla = 0;
                                                     require_once('../../apis/usuario/infoUsuario.php');
@@ -787,9 +827,9 @@ $IdUsuarioCierre = trim($mproceso['pro_proceso']['PRO_IdUsuarioCierre']);
 															<?php echo $USU_Nombre ; ?>                                                
 														</option>
 												<?php
-													}
+													}													
 												?>
-												</select>
+												</select>												
 											</div>
 										</div>	
                                     </div>                                       
@@ -909,12 +949,16 @@ $IdUsuarioCierre = trim($mproceso['pro_proceso']['PRO_IdUsuarioCierre']);
                                         <div class="row">
                                             <div class="xcol-sm-8">
                                                 <div class="form-group form-float" style="clear: both;">
-                                                    <label class="form-label">Estado</label>
+                                                    <label class="form-label">Estado: </label>
                                                     <input type="radio" name="estado" id="activo" class="with-gap" value="1" <?php if( $EstadoProceso == 1){?>checked="checked"<?php } ?>>
-                                                    <label for="activo">Abierto</label>
+                                                    <label for="activo">Reparto</label>
 
                                                     <input type="radio" name="estado" id="inactivo" class="with-gap" value="2"<?php if( $EstadoProceso == 2){?>checked="checked"<?php } ?>>
                                                     <label for="inactivo" class="m-l-20">Cerrado</label>
+													
+													<label class="form-label">Autoriza enviar email al cliente?
+														<input type="checkbox" name="enviaemail" id="enviaemail" data-toggle="toggle" data-size="mini" data-on="Si" data-off="No" data-onstyle="success" data-offstyle="danger">
+													</label>
                                                 </div>
                                             </div>
                                         </div>
@@ -983,8 +1027,8 @@ $IdUsuarioCierre = trim($mproceso['pro_proceso']['PRO_IdUsuarioCierre']);
         </div>
     </section>
 
-        <!-- Jquery Core Js -->
-    <script src="../../plugins/jquery/jquery.min.js"></script>
+    <!-- Jquery Core Js -->
+    <script src="../../plugins/jquery/jquery.min.js"></script> 	
 
     <!-- Bootstrap Core Js -->
     <script src="../../plugins/bootstrap/js/bootstrap.js"></script>
@@ -1023,10 +1067,19 @@ $IdUsuarioCierre = trim($mproceso['pro_proceso']['PRO_IdUsuarioCierre']);
     <script src="../../js/alertify.min.js"></script>
     <script src="../../js/jquery.numeric.js"></script>
 
-    <!-- DateTime picker -->
-    <script src="../../calendar/js/moment.min.js"></script>
+    <!-- DateTime picker 
+    
     <script src="../../calendar/js/bootstrap-datetimepicker.min.js"></script>
     <script src="../../calendar/js/bootstrap-datetimepicker.es.js"></script>  
+	-->
+	<script src="../../calendar/js/moment.min.js"></script>
+	<script src="../../fc/js/bootstrap-datetimepicker.js"></script>
+    <link rel="stylesheet" href="../../fc/css/bootstrap-datetimepicker.min.css" />
+   <script src="../../fc/js/bootstrap-datetimepicker.es.js"></script>
+   
+   	<!-- toggle botton --> 
+	<link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
+	<script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
 
     <script type="text/javascript">
 
@@ -1043,12 +1096,11 @@ $IdUsuarioCierre = trim($mproceso['pro_proceso']['PRO_IdUsuarioCierre']);
     var _Proceso = "";
     var EspecialidadHTML ="";
 
-    function populateFruitVariety() {
-        //alert('popular...'+$('#tipojuzgado').val());
-        //console.log('tipoJuzgado popular...'+$('#tipojuzgado').val());
+    function populateFruitVariety() 
+	{        
         $.getJSON('../tables/urlink.php', {funcion: "ja", origen: $('#tipojuzgado').val()}, function (data) {
             var zdata= data.juz_areasxtipojuzgado;
-            //console.log('fn ja...'+zdata);
+            console.log('fn ja...'+zdata);
             var selectedOption = '0';
             var newOptions = zdata;
             var select = $('#area');
@@ -1072,13 +1124,33 @@ $IdUsuarioCierre = trim($mproceso['pro_proceso']['PRO_IdUsuarioCierre']);
             nroProceso();            
         });
     }
+	
+	function isNumeric(evt) 
+	{
+        var theEvent = evt || window.event;
+		var key = theEvent.keyCode || theEvent.which;
+		key = String.fromCharCode (key);
+		var regex = /[0-9]|\./;
+		var keyCode = evt.keyCode == 0 ? evt.charCode : evt.keyCode;		
+		if ( !regex.test(key) || keyCode == 46) {
+			theEvent.returnValue = false;
+			if(theEvent.preventDefault) theEvent.preventDefault();
+		}
+	}
 
-    function goDespachos() {
-        var __area = $('#area').val();
-        //alert("__area:..."+__area);
+	function maxLengthCheck(object)
+	{
+		if (object.value.length > object.maxLength)
+		{
+			object.value = object.value.slice(0, object.maxLength);
+		}
+	}
+
+    function goDespachos() 
+	{
+        var __area = $('#area').val();        
         if( __area == "" || __area == null)
-        {
-            //__area = _area;
+        {           
             if(_area != "" && _area != null)
             {
                 __area = _area;
@@ -1088,9 +1160,7 @@ $IdUsuarioCierre = trim($mproceso['pro_proceso']['PRO_IdUsuarioCierre']);
                 __area = <?php echo $IdArea;?>;
             }            
         }
-        //alert("_area goDespachos: ..."+__area);
-        //alert('tipo Juzgado goDespachos: ....'+$('#tipojuzgado').val());
-        
+                
         if( __area != "" && __area != null)
         {
             //console.log('tipoJuzgado goDespacho..'+$('#tipojuzgado').val());
@@ -1122,17 +1192,23 @@ $IdUsuarioCierre = trim($mproceso['pro_proceso']['PRO_IdUsuarioCierre']);
         }    
     }
     
-    
     function nroProceso(){
-        _area = "";
+		_area =  $("#area").val();
+		_nProceso = $("#nproceso").val();
+		_Proceso = _zipDeptoCiudad + _tipojuzgado + _area + _despacho + $("#anio").val() + _nProceso + _nDv;		
+		init_contador("#proceso","#muestrocantidadcaracteresid");
+	}	
+    
+	function cnroProceso(){
+        _area = "";		
         if(_tipojuzgado != "")
         {
             _area =  $("#area").val();
         }
-        //alert("_area en nroProceso :..."+_area);
+        
         if(_area != "")
         {
-            _Proceso = _zipDeptoCiudad + _tipojuzgado + _area + _despacho + $("#anio").val() + _nProceso + _nDv;
+            _Proceso = _zipDeptoCiudad + _tipojuzgado + _area + _despacho + $("#anio").val() + _nProceso + _nDv;			
             $("#proceso").attr("value",_Proceso);
             init_contador("#proceso","#muestrocantidadcaracteresid");
         }
@@ -1158,21 +1234,73 @@ $IdUsuarioCierre = trim($mproceso['pro_proceso']['PRO_IdUsuarioCierre']);
             update_contador(idtextarea, idcontador);
         });            
     }
+	
+	function fx(prespstr)
+	{
+		if(prespstr == "S")
+		{
+			var fechainicio = $("#txtFecha").val();
+			var usuario = $("#usuario").val();
+			var ubicacion = $('select[name="ubicacion"] option:selected').text();
+			var claseproceso = $('select[name="claseproceso"] option:selected').text();
+			var juzgado = $("#juzgado").val();
+			var estado = $('input:radio[name=estado]:checked').val();
+			var proceso = $("#proceso").val();
+			var cliente = $('select[name="cliente"] option:selected').text();
+			var demandado = $('select[name="demandado"] option:selected').text();
+			var especialidad = $("#area").val();
+			var despacho = $("#despacho").val();		
+			var nombreciu = $('select[name="zip"] option:selected').text();		
+			var corporacion = $('select[name="tipojuzgado"] option:selected').text();		
+			var area = $('select[name="area"] option:selected').text();
+			var ddespacho = $('select[name="despacho"] option:selected').text();		
+			var asignadoa = $('select[name="usuario"] option:selected').text();		
+			var idtabla = "<?php echo $idtabla; ?>";		 
+			var nproceso = $("#nproceso").val();		
+			var origen ="p";
+			//if( nproceso.length == 5)
+			//{
+			$.ajax({
+				data : {"pnombre": nombre, "pfechainicio": fechainicio, "pusuario": usuario, "pubicacion": ubicacion, "pclaseproceso": claseproceso ,"pjuzgado": juzgado,"pestado": estado, "pproceso": proceso, "pnproceso": nproceso,"pcliente": cliente, "pdemandado":demandado, "pespecialidad":especialidad, "pdespacho":despacho, "origen": origen, "nombreciu": nombreciu, "corporacion": corporacion, "area": area, "despacho": ddespacho, "asignadoa": asignadoa, "ubicacion": ubicacion, "claseproceso": claseproceso, "cliente": cliente, "demandado": demandado, "maxid": idtabla, "accion": "u"},
+				type: "POST",
+				dataType: "html",
+				url: "../../email/",
+			})
+			.done(function( data, textStatus, jqXHR){
+				console.log("email..."+data);
+				swal("Atención: ", "Proceso Actualizado correctamente.", "success");				
+			})
+			.fail(function( jqXHR, textStatus, errorThrown ) {
+				if ( console && console.log ) 
+				{
+					console.log( "La solicitud a fallado: " +  textStatus);
+					$("#msj").html("");
+				}
+			});
+		}
+	}
 
-    $(document).ready(function()
-	{			
-		$("#mensaje").hide();
+
+    $(document).ready(function(){			
+        $("#mensaje").hide();
         $("#form_validation").show();
         $('#proceso').numeric();
         $('#anio').numeric();
         $('.selectpicker').selectpicker();
+		var exclude_dates = ['2019-04-18', '2019-04-19'];
+		var disabledWeekDays = [0,6];
         $('#fechainicio').datetimepicker({
-          format: 'YYYY-MM-DD'       
+          format: 'YYYY-MM-DD',
+			datesDisabled: exclude_dates,
+			daysOfWeekDisabled: disabledWeekDays		  
         });
 
         populateFruitVariety();        
 
-        init_contador("#proceso","#muestrocantidadcaracteresid");        
+        //init_contador("#proceso","#muestrocantidadcaracteresid");
+		
+		var x = $("#proceso").val().length;
+		$("#muestrocantidadcaracteresid").html("<span>"+x+"</span>");
 
         $("#cerrar").on('click', function(e) {
             e.preventDefault();
@@ -1193,25 +1321,20 @@ $IdUsuarioCierre = trim($mproceso['pro_proceso']['PRO_IdUsuarioCierre']);
         });
 
          $('#area').focusin(function() {           
-            _area = $('#area').val();
-            //alert('area focusin....'+_area);
-            //console.log('_area IN'+_area);            
+            _area = $('#area').val();                       
             nroProceso();        
         });
 
         $('#area').focusout(function() {           
-            _area = $('#area').val();
-            //alert('area focusout....'+_area);
+            _area = $('#area').val();           
             nroProceso();        
         });
 
         $("#ndv").val('00');
-        //$("#actoprocesal").hide();
-
-
+        
         if( $('#tipojuzgado').val() != "" )
         {
-            $.ajax({                
+			$.ajax({                
                 type: "GET",				
                 url : "../../consultadetalle/consultadetalle_juzgado.php?IdMostrar=0",
             })
@@ -1285,16 +1408,19 @@ $IdUsuarioCierre = trim($mproceso['pro_proceso']['PRO_IdUsuarioCierre']);
             goDespachos();
             nroProceso(); 
         }
-        
+		        
 		
-		$("#grabar").on('click', function(e) {
+	$("#grabar").on('click', function(e) {
+			e.stopPropagation();
+			e.preventDefault();
             $("#mensaje").hide();
-            var proceso = $("#proceso").val();            
+            var proceso = $("#proceso").val();
+			var nproceso = $("#nproceso").val();            
             var fechainicio = $("#txtFecha").val();
             var asignadoa = $("#usuario").val();
             var ubicacion = $("#ubicacion").val();
-            var claseproceso = $("#claseproceso").val();
-            //juzgado = $("#juzgado").val();
+            var claseproceso = $("#claseproceso").val();            
+			var especialidad = $("#area").val();
             var demandante = $("#demandante").val();
             var demandado = $("#demandado").val();
             var estado = $('input:radio[name=estado]:checked').val();
@@ -1313,20 +1439,21 @@ $IdUsuarioCierre = trim($mproceso['pro_proceso']['PRO_IdUsuarioCierre']);
             }
             else
             {
-    			$.ajax({
-    				data : {"proceso": proceso, "fechainicio": fechainicio, "asignadoa": asignadoa, "ubicacion": ubicacion, "claseproceso": claseproceso, "demandante": demandante, "demandado": demandado, "estado": estado, "idtabla": idtabla },
+    			var enviaemailcli = $('#enviaemail').prop('checked');
+				//alert("envia email cli..."+enviaemailcli);
+				$.ajax({
+    				data : {"proceso": proceso, "nproceso": nproceso, "fechainicio": fechainicio, "asignadoa": asignadoa, "ubicacion": ubicacion, "claseproceso": claseproceso, "demandante": demandante, "demandado": demandado, "estado": estado, "idtabla": idtabla, "enviaemailcli": enviaemailcli},
     				type: "POST",				
     				url : "../forms/editar_<?php echo strtolower($Tabla); ?>.php",
                 })  
     			.done(function( dataX, textStatus, jqXHR ){	    			    
-    				var xrespstr = dataX.trim();
+    				var xrespstr = dataX.trim();					
                     var respstr = xrespstr.substr(0,1);
-                    var msj = xrespstr.substr(2);    				
+                    var msj = xrespstr.substr(2);
+					//alert(respstr);
     				if( respstr == "S" )
                     {
-                        swal("Atención: ", msj, "success");
-                        return false;
-                        $("#actoprocesal").show();
+                        fx(respstr);						
                     }
     				else
     				{
@@ -1338,8 +1465,7 @@ $IdUsuarioCierre = trim($mproceso['pro_proceso']['PRO_IdUsuarioCierre']);
                         return false;  
     				}
     			})
-    			.fail(function( jqXHR, textStatus, errorThrown ) {
-    			 	//e.stopPropagation();
+    			.fail(function( jqXHR, textStatus, errorThrown ) {    			 	
     				if ( console && console.log ) 
     				{						
     					console.log( "La solicitud a fallado: " +  textStatus);

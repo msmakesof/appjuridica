@@ -1,12 +1,13 @@
-<?php 
-include('../Connections/cnn_kn.php'); 
+<?php  
 //include('../Connections/config2.php'); 
 if(!isset($_SESSION)) 
 { 
     session_start(); 
 } 
+include('../Connections/cnn_kn.php');
 ?>
 <?php
+//echo $_SERVER['PHP_SELF'];
 if (!function_exists("GetSQLValueString")) {
 function GetSQLValueString($theValue, $theType, $theDefinedValue = "", $theNotDefinedValue = "") 
 {
@@ -38,6 +39,7 @@ function GetSQLValueString($theValue, $theType, $theDefinedValue = "", $theNotDe
 }
 }
 $empresa = "AppJuridica";
+$opcMenu= $_SESSION["opcMenu"] ;
 if( isset($_POST['ƒ¤']) && !empty($_POST['ƒ¤']) )
 {    
     $clave = trim($_POST['ƒ¤']);
@@ -45,38 +47,7 @@ if( isset($_POST['ƒ¤']) && !empty($_POST['ƒ¤']) )
 else
 {
     $clave ="";
- }
-
-// $nombre = "";
-// $email  = "";
-// if( isset($_POST['ƒ×'])  && !empty($_POST['ƒ×']) )
-// {    
-//     $usuario = trim($_POST['ƒ×']);
-   
-// mysqli_select_db($cnn_kn, $database_cnn_kn);
-// $query_rs_usuario = "SELECT USU_Email AS Email_usuario, CONCAT_WS(' ',USU_Nombre,USU_PrimerApellido,USU_SegundoApellido) Nombre 
-// FROM usu_usuario WHERE USU_Email = '$usuario' AND USU_Estado = 1 ;" ;
-// $rs_usuario = mysqli_query($cnn_kn, $query_rs_usuario) or die(mysqli_error()."Err.....$query_rs_usuario");
-// $row_rs_usuario = mysqli_fetch_assoc($rs_usuario);
-// $totalRows_rs_usuario = mysqli_num_rows($rs_usuario);
-//     $y = "";
-    
-//     if ($resultado = mysqli_query($cnn_kn, $query_rs_usuario)) 
-//     {
-//         while($all = mysqli_fetch_assoc($resultado))
-//         {
-//             $nombre = $strowreg['Nombre'];
-//             $email = $strowreg['Email_usuario'];           
-//         }
-//     }
-//     mysqli_free_result($rs_usuario);
-// }
-// else
-// {
-//     $usuario ="";
-// }
-
-
+}
 ?>   
    
 <div class="menu">
@@ -88,6 +59,23 @@ else
                 <span>Inicio</span>
             </a>
         </li>
+		
+		<li>
+            <a href="../pages/tables/cli_cliente.php" class="menu-toggle">
+                <i class="material-icons">assignment_ind</i>
+                <span>Clientes</span>
+            </a>
+			<!--
+            <ul class="ml-menu">
+                <li>
+                    <a href="../pages/tables/cli_cliente.php" class="menu-toggle">
+                        <span>Clientes</span>
+                    </a>  
+                </li>
+            </ul>
+			-->            
+        </li>
+		
         <?php if($_SESSION["TipoUsuario"] == 1) {?>
             <li>
                 <a href="javascript:void(0);">
@@ -185,7 +173,7 @@ else
         </li>
         <?php } ?>
 
-        <li>
+        <li <?php if($opcMenu =="P") { echo "class='active'"; }?> >
             <a href="javascript:void(0);" class="menu-toggle">
                 <i class="material-icons">gavel</i>
                 <span>Gesti&oacute;n Procesos</span>
@@ -195,28 +183,19 @@ else
                     <a href="../pages/tables/pro_proceso.php" class="menu-toggle">
                         <span>Nuevo Proceso</span>
                     </a>
+					<a href="../pages/tables/pro_procesoc.php" class="menu-toggle">
+                        <span>Procesos Cerrados</span>
+                    </a>
                 </li>
-            </ul>
+            </ul>			
         </li>
 
-        <li>
-            <!-- <a href="javascript:void(0);" class="menu-toggle">
-                <i class="material-icons">widgets</i>
-                <span>Ubicaci&oacute;n</span>
-            </a> -->
-            <ul class="ml-menu">
-                <li>
-                   <!--  <a href="../kal/sample.php" class="menu-toggle">
-                        <span>Comparaci&oacute;n de Cajas</span>
-                    </a>  --> 
-                </li>
-            </ul>
-        </li>
+        
 
         <li>
             <a href="javascript:void(0);" class="menu-toggle">
                 <i class="material-icons">account_balance</i>
-                <span>Consultar Juzgados</span>
+                <span>Consultar Juzgados..</span>
             </a>
             <ul class="ml-menu">
                 <li>
@@ -234,13 +213,13 @@ else
             </a>
             <ul class="ml-menu">
                 <li>
-                    <a href="../agenda/index.php" class="menu-toggle">
+                    <a href="../agenda/inde.php" class="menu-toggle">
                         <span>Agenda</span>
                     </a>  
                 </li>
-            </ul>
-        </li>
-		
+            </ul>            
+        </li>               
+        
 		<li>
             <a href="javascript:void(0);" class="menu-toggle">
                 <i class="material-icons">assignment_ind</i>

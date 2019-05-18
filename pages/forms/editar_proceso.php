@@ -48,6 +48,15 @@ if(isset($_POST['proceso'])){
   $proceso = trim($_POST['proceso']);
 }
 
+$nproceso ="";
+if(isset($_POST['nproceso'])){
+  $nproceso = trim($_POST['nproceso']);
+}
+
+$cad1 = substr($proceso,0,16);
+$cad2 = substr($proceso,-2);
+$proceso = $cad1.$nproceso.$cad2;
+
 $fechainicio ="";
 if(isset($_POST['fechainicio'])){
   $fechainicio = $_POST['fechainicio'];

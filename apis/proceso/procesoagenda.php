@@ -1,6 +1,6 @@
 <?php
-require_once('../../Connections/cnn_kn.php'); 
-require_once('../../Connections/config2.php');
+require_once('../Connections/cnn_kn.php'); 
+require_once('../Connections/config2.php');
 if(!isset($_SESSION)) 
 { 
   session_start(); 
@@ -40,7 +40,7 @@ if (!function_exists("GetSQLValueString"))
     return $theValue;
   }
 }
-require_once('../../Connections/DataConex.php');
+require_once('../Connections/DataConex.php');
 $params ="";
 //$idTabla = 0;
 //if(isset($_GET["idTabla"]))
@@ -55,7 +55,7 @@ else
 //echo("<script>console.log('PHP idTabla: ".$idTabla."');</script>");
 if($idTabla == 0)
 {
-  $params = "IdMostrar=0";
+  $params = "IdMostrar=0&e=1";
 }
 else
 {

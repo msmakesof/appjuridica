@@ -18,7 +18,7 @@ class PRO_PROCESO
      * @param $IdTabla Identificador del registro
      * @return array Datos del registro
      */
-    public static function getAll()
+    public static function getAll($par1, $Estado)
     {
         $consulta = "SELECT ".$GLOBALS['Llave'].", PRO_NumeroProceso, PRO_FechaInicio, 
             PRO_IdUsuario, concat_WS(' ', USU_Nombre, USU_PrimerApellido,USU_SegundoApellido) AS AsignadoA,
@@ -33,13 +33,13 @@ class PRO_PROCESO
             " JOIN pro_claseproceso ON pro_claseproceso.CPR_IdClaseProceso = PRO_IdClaseProceso ".
             " LEFT JOIN juz_juzgado ON juz_juzgado.JUZ_IdJuzgado = PRO_IdJuzgadoOrigen ".
             " JOIN pro_estadoproceso ON pro_estadoproceso.EPR_IdEstado = PRO_EstadoProceso AND pro_estadoproceso.EPR_Estado = 1 ".
-            " WHERE PRO_NumeroProceso > '' ".
+            " WHERE PRO_NumeroProceso > '' AND PRO_EstadoProceso = ? ".
             " ORDER BY PRO_NumeroProceso; ";
         try {
             // Preparar sentencia
             $comando = Database::getInstance()->getDb()->prepare($consulta);
             // Ejecutar sentencia preparada
-            $comando->execute();
+            $comando->execute(array($Estado));
 
             return $comando->fetchAll(PDO::FETCH_ASSOC);
 
@@ -59,22 +59,22 @@ class PRO_PROCESO
     {
         // Consulta de la tabla Proceso
         $consulta = "SELECT ".$GLOBALS['Llave'].",
-							PRO_IdDemandante,
-							PRO_IdDemandado,
-                            PRO_NumeroProceso, 
-							PRO_FechaInicio, 
-							PRO_IdUsuario,
-							PRO_IdUbicacion,
-							PRO_IdClaseProceso,
-							PRO_IdJuzgadoOrigen,
-							PRO_EstadoProceso,
-							PRO_IdArea,
-                            PRO_IdJuzgado,
-                            PRO_FechaCierre,
-                            PRO_ObservacionCierre,
-                            PRO_IdUsuarioCierre
-                            FROM ".$GLOBALS['TABLA'].
-                            " WHERE ".$GLOBALS['Llave']." = ? ; ";
+					PRO_IdDemandante,
+					PRO_IdDemandado,
+					PRO_NumeroProceso, 
+					PRO_FechaInicio, 
+					PRO_IdUsuario,
+					PRO_IdUbicacion,
+					PRO_IdClaseProceso,
+					PRO_IdJuzgadoOrigen,
+					PRO_EstadoProceso,
+					PRO_IdArea,
+					PRO_IdJuzgado,
+					PRO_FechaCierre,
+					PRO_ObservacionCierre,
+					PRO_IdUsuarioCierre
+					FROM ".$GLOBALS['TABLA'].
+					" WHERE ".$GLOBALS['Llave']." = ? ; ";
 
         try {
             // Preparar sentencia
@@ -89,6 +89,46 @@ class PRO_PROCESO
             // Aquí puedes clasificar el error dependiendo de la excepción
             // para presentarlo en la respuesta Json
             return -1;
+        }
+    }
+	
+	/**
+     * Obtiene los campos de todos los procesos activos que tiene
+     * asignado un abogado
+     *
+     * @param $IdTabla Identificador del Usuario (Abogado)
+     * @return mixed
+     */
+    public static function getByIdResponsable($IdTabla)
+    {
+        // Consulta de la tabla Proceso
+        $consulta = "SELECT ".$GLOBALS['Llave'].",
+					PRO_IdDemandante,
+					PRO_IdDemandado,
+					PRO_NumeroProceso, 
+					PRO_FechaInicio, 
+					PRO_IdUsuario,
+					PRO_IdUbicacion,
+					PRO_IdClaseProceso,
+					PRO_IdJuzgadoOrigen,
+					PRO_EstadoProceso,
+					PRO_IdArea,
+					PRO_IdJuzgado,
+					PRO_FechaCierre,
+					PRO_ObservacionCierre,
+					PRO_IdUsuarioCierre
+					FROM ".$GLOBALS['TABLA'].
+					" WHERE PRO_IdUsuario = ? AND PRO_EstadoProceso = 1 ORDER BY PRO_NumeroProceso; ";
+        try {
+            // Preparar sentencia
+            $comando = Database::getInstance()->getDb()->prepare($consulta);
+            // Ejecutar sentencia preparada
+            $comando->execute(array($IdTabla));
+
+            return $comando->fetchAll(PDO::FETCH_ASSOC);
+
+        } catch (PDOException $e) {
+            return false;
         }
     }
 
@@ -295,16 +335,17 @@ class PRO_PROCESO
      * @param $IdUsuario identificador de la PRO_Proceso
      * @return bool Respuesta de la consulta
      */
-    public static function existetabla($Proceso, $Demandante, $Demandado)
+    public static function existetabla($Proceso, $Demandante, $Demandado, $Fecha, $Asignadoa)
     {
         $consulta = "SELECT count(". $GLOBALS['Llave']. ") existe, PRO_NumeroProceso FROM ".$GLOBALS['TABLA'].
-        " WHERE PRO_NumeroProceso = ? AND PRO_IdDemandante = ? AND PRO_IdDemandado = ? ; ";
+        " WHERE PRO_NumeroProceso = ? AND PRO_IdDemandante = ? AND PRO_IdDemandado = ? AND PRO_Fechainicio = ? 
+		AND PRO_IdUsuario = ? AND PRO_EstadoProceso = 1; ";
 
         try {
             // Preparar sentencia
             $comando = Database::getInstance()->getDb()->prepare($consulta);
             // Ejecutar sentencia preparada
-            $comando->execute(array($Proceso, $Demandante, $Demandado));
+            $comando->execute(array($Proceso, $Demandante, $Demandado, $Fecha, $Asignadoa));
             // Capturar primera fila del resultado
             $row = $comando->fetch(PDO::FETCH_ASSOC);
             return $row;
@@ -347,6 +388,68 @@ class PRO_PROCESO
         $cmd->execute(array($Estado, $Observacion,  $Usuario, $FechaCierre, $Idtabla ));
 
         return $cmd;
+    }
+	
+	/**
+     * Obtiene informacion del email del abogado asignado al Proceso.
+     * determinado
+     * @param $IdTabla Identificador de la $IdTabla
+     * @return mixed
+     */
+    public static function EmailProceso($IdProceso)
+    {
+        // Consulta de la tabla Proceso
+        $consulta = "SELECT ".$GLOBALS['Llave'].", PRO_NumeroProceso, D.CLI_Email AS EmailCliente, 
+					USU_Email, D.CLI_Identificacion AS IdenDemandante, TDD.TDO_Abreviatura AS AbreDemandante,
+					DO.CLI_Identificacion AS IdenDemandado, TDDO.TDO_Abreviatura AS AbreDemandado
+					FROM ". $GLOBALS['TABLA']. "
+					JOIN usu_usuario ON usu_usuario.USU_IdUsuario = pro_proceso.PRO_IdUsuario 
+						AND usu_usuario.USU_UsuarioEstado =1
+					JOIN cli_cliente D ON D.CLI_IdCliente = pro_proceso.PRO_IdDemandante
+					JOIN gen_tipodocumento TDD ON TDD.TDO_IdTipoDocumento = D.CLI_TipoDocumento
+					JOIN cli_cliente DO ON DO.CLI_IdCliente = pro_proceso.PRO_IdDemandado
+					JOIN gen_tipodocumento TDDO ON TDDO.TDO_IdTipoDocumento = DO.CLI_TipoDocumento					
+					WHERE ".$GLOBALS['Llave']." = ? ; ";
+
+        try {
+            // Preparar sentencia
+            $comando = Database::getInstance()->getDb()->prepare($consulta);
+            // Ejecutar sentencia preparada
+            $comando->execute(array($IdProceso));
+            // Capturar primera fila del resultado
+            $row = $comando->fetch(PDO::FETCH_ASSOC);
+            return $row;
+
+        } catch (PDOException $e) {
+            // Aquí puedes clasificar el error dependiendo de la excepción
+            // para presentarlo en la respuesta Json
+            return -1;
+        }
+    }
+	/**
+     * Obtiene informacion del email del abogado asignado al Proceso.
+     * determinado
+     * @param $IdTabla Identificador de la $IdTabla
+     * @return mixed
+     */
+    public static function MaxId($IdProceso)
+    {
+        // Consulta de la tabla Proceso
+        $consulta = "SELECT MAX(".$GLOBALS['Llave'].") AS MaxIdProceso FROM ". $GLOBALS['TABLA'] ;				
+        try {
+            // Preparar sentencia
+            $comando = Database::getInstance()->getDb()->prepare($consulta);
+            // Ejecutar sentencia preparada
+            $comando->execute(array($IdProceso));
+            // Capturar primera fila del resultado
+            $row = $comando->fetch(PDO::FETCH_ASSOC);
+            return $row;
+
+        } catch (PDOException $e) {
+            // Aquí puedes clasificar el error dependiendo de la excepción
+            // para presentarlo en la respuesta Json
+            return -1;
+        }
     }
 }
 ?>

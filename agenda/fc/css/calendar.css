@@ -6,6 +6,7 @@
 .cal-row-fluid {
   width: 100%;
   *zoom: 1;
+  clear: both;
 }
 .cal-row-fluid:before,
 .cal-row-fluid:after {
@@ -450,20 +451,46 @@ span[data-cal-date]:hover {
   cursor: default;
 }
 .cal-day-today {
-  background-color: #e8fde7;
+  background-color: #33adff;
 }
 .cal-day-today span[data-cal-date] {
   color: darkgreen;
 }
 .cal-month-box .cal-day-today span[data-cal-date] {
-  font-size: 1.9em;
+  font-size: 1.7em;
+  color: red;
+  /*
+  width: 4rem;
+	height: 4rem;
+	border-radius: 50%;
+	background: deepskyblue;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	text-align: center;
+ */
 }
 .cal-day-holiday span[data-cal-date] {
   color: #800080;
 }
 .cal-day-weekend span[data-cal-date] {
   color: darkred;
+  /*
+      
+    */
 }
+
+.circulo {
+	width: 10rem;
+	height: 10rem;
+	border-radius: 50%;
+	background: red;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	text-align: center;
+}
+
 #cal-week-box {
   border: 1px solid #e1e1e1;
   border-right: 0px;

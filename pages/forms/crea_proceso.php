@@ -55,9 +55,9 @@ if( isset($_POST['pfechainicio']) )
 }
 
 $pasignadoa ="";
-if( isset($_POST['pasignadoa']) )
+if( isset($_POST['pusuario']) )
 {
-    $pasignadoa = trim($_POST['pasignadoa']);
+    $pasignadoa = trim($_POST['pusuario']);
 }
 
 $pubicacion ="";
@@ -121,7 +121,7 @@ require_once('../../Connections/DataConex.php');
 // Nombres iguales 
 if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
 {
-  $parameters = "ExisteTabla=1&Proceso=$pproceso&Demandante=$pcliente&Demandado=$pdemandado";
+  $parameters = "ExisteTabla=1&Proceso=$pproceso&Demandante=$pcliente&Demandado=$pdemandado&Fecha=$pfechainicio&Asignadoa=$pasignadoa";
   $url = urlServicios."consultadetalle/consultadetalle_pro_proceso.php?".$parameters;
   $ch = curl_init();
   curl_setopt($ch, CURLOPT_VERBOSE, true);
@@ -193,13 +193,69 @@ if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
             $m = preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $resultado);    
             $m = json_decode($m, true);
             $grabadoOK = $m['pro_proceso'];
+			
             if(!$grabadoOK)
             {
               $sigue = "N-Registro NO ha sido grabado.";
             }
             else
             {
-              $sigue = "S-Registro grabado Correctamente.";
+				$sigue = "S-Registro grabado Correctamente.";
+			  
+				//Tomo el Max(id)
+				$parameters = "maxid=maxid";
+				$soportecURL = "S";
+				$url         = urlServicios."consultadetalle/consultadetalle_pro_proceso.php?".$parameters;
+				if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL				
+				{
+					$ch = curl_init();
+					curl_setopt($ch, CURLOPT_VERBOSE, true);
+					curl_setopt($ch, CURLOPT_URL, $url);
+					curl_setopt($ch, CURLOPT_TIMEOUT, 30);
+					curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+					curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+					curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
+					curl_setopt($ch, CURLOPT_POST, 0);          
+					//curl_setopt($handle, CURLOPT_STDERR, $verbose);
+					//curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($parameters));    
+
+					$resultado = curl_exec ($ch);         
+					$http_status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+					$curl_errno = curl_errno($ch);
+					$curl_msj = curl_error($ch) ;
+					curl_close($ch);
+					
+					if($resultado === false || $curl_errno > 0)
+					{
+						//echo 'Curl error: ' . curl_error($ch);
+						$sigue = "N-Se presentó problema... ". $curl_errno.' '.$curl_msj;
+					}
+					else
+					{          
+						//echo "Curl Err_no returned.... $curl_errno <br/>";
+						$m = preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $resultado);    
+						$m = json_decode($m, true);
+						$MaxId = $m['pro_proceso']['MaxIdProceso'];
+						$sigue = $sigue."*".$MaxId;
+					}
+				}
+				else
+				{
+					$soportecURL = "N";
+					//echo "No hay soporte para cURL";
+					$sigue ="N-No hay soporte para cURL";
+				}
+				
+				if($soportecURL == "N")
+				{
+					require_once('./unirest/vendor/autoload.php');
+					$response = Unirest\Request::get($url, array("X-Mashape-Key" => "MY SECRET KEY"));
+					$resultado = $response->raw_body;
+					$resultado = preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $resultado);
+					$m = json_decode($resultado, true);	        
+				}
+				//
+			  
             }  
           }
 

@@ -42,78 +42,57 @@ else
   }
 }
 
-$pproceso ="";
-if( isset($_POST['pproceso']) )
+// incluimos el archivo de funciones
+include '../../agenda/fc/funciones.php';
+
+$inicio ="";
+$final  ="";
+$from ="";
+if( isset($_POST['from']) )
 {
-    $pproceso = trim($_POST['pproceso']);
+    $from = trim($_POST['from']);
+    $inicio = _formatear($_POST['from']);
+    $from = str_replace(' ','%20', $from);
 }
 
-$pfechainicio ="";
-if( isset($_POST['pfechainicio']) )
+$to ="";
+if( isset($_POST['to']) )
 {
-    $pfechainicio = trim($_POST['pfechainicio']);
+    $to = trim($_POST['to']);
+    $final  = _formatear($_POST['to']);
+    $to = str_replace(' ','%20', $to);
 }
 
-$pasignadoa ="";
-if( isset($_POST['pasignadoa']) )
+$proceso ="";
+if( isset($_POST['proceso']) )
 {
-    $pasignadoa = trim($_POST['pasignadoa']);
+    $proceso = trim($_POST['proceso']);
 }
 
-$pubicacion ="";
-if( isset($_POST['pubicacion']) )
+$responsable ="";
+if( isset($_POST['responsable']) )
 {
-    $pubicacion = trim($_POST['pubicacion']);
+    $responsable = trim($_POST['responsable']);
 }
 
-$pclaseproceso ="";
-if( isset($_POST['pclaseproceso']) )
+$tipo ="";
+if( isset($_POST['tipo']) )
 {
-    $pclaseproceso = trim($_POST['pclaseproceso']);
+    $tipo = trim($_POST['tipo']);
 }
 
-// $pdemandante ="";
-// if( isset($_POST['pdemandante']) )
-// {
-//     $pdemandante = trim($_POST['pdemandante']);
-// }
-
-// $pdemandado ="";
-// if( isset($_POST['pdemandado']) )
-// {
-//     $pdemandado = trim($_POST['pdemandado']);
-// }
-
-$pidjuzgado = substr($pproceso,9,3);
-
-$pestado ="";
-if( isset($_POST['pestado']) )
+$title ="";
+if( isset($_POST['title']) )
 {
-    $pestado = trim($_POST['pestado']);
+    $title = trim($_POST['title']);
+    $title = str_replace(' ','%20', $title);    
 }
 
-$pcliente ="";
-if( isset($_POST['pcliente']) )
+$body ="";
+if( isset($_POST['body']) )
 {
-    $pcliente = trim($_POST['pcliente']);
-}
-
-$pdemandado ="";
-if( isset($_POST['pdemandado']) )
-{
-    $pdemandado = trim($_POST['pdemandado']);
-}
-
-$pespecialidad ="";
-if( isset($_POST['pespecialidad']) )
-{
-    $pespecialidad = trim($_POST['pespecialidad']);
-}
-
-$pdespacho ="";
-if( isset($_POST['pdespacho']) )
-{
-    $pdespacho = trim($_POST['pdespacho']);
+    $body = trim($_POST['body']);
+    $body = str_replace(' ','%20', $body);
 }
 
 require_once('../../Connections/DataConex.php');
@@ -121,8 +100,10 @@ require_once('../../Connections/DataConex.php');
 // Nombres iguales 
 if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
 {
-  $parameters = "ExisteTabla=1&Proceso=$pproceso&Demandante=$pcliente&Demandado=$pdemandado";
-  $url = urlServicios."consultadetalle/consultadetalle_pro_proceso.php?".$parameters;
+  $parameters = "ExisteTabla=1&From=$from&To=$to&Tipo=$tipo&Proceso=$proceso&Responsable=$responsable";
+  $url = urlServicios."consultadetalle/eve_evento.php?".$parameters;
+  
+  //echo "<script>console.log(Exsite.......$url)</script>" ;
   $ch = curl_init();
   curl_setopt($ch, CURLOPT_VERBOSE, true);
   curl_setopt($ch, CURLOPT_URL, $url);
@@ -148,20 +129,22 @@ if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
     $m = preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $resultado);    
     $m = json_decode($m, true);
     //print_r ($m);
-    $existe = $m['pro_proceso']['existe'];
+    $existe = $m['eve_evento']['existe'];
     if($existe > 0)
     {
-      $sigue = "E-Existe un Proceso registrado con el mismo Código.";
+      $sigue = "E-Existe un Evento registrado con la misma Información.";
     }
     else
     {
       
-      $parameters = "insert=insert&Proceso=$pproceso&Fechainicio=$pfechainicio&Asignadoa=$pasignadoa&Ubicacion=$pubicacion&Claseproceso=$pclaseproceso&Demandante=$pcliente&Demandado=$pdemandado&JuzgadoOrigen=$pidjuzgado&Estado=$pestado&Especialidad=$pespecialidad&Despacho=$pdespacho";
+      $parameters = "insert=insert&Title=$title&Body=$body&Tipo=$tipo&Inicio=$inicio&Final=$final&From=$from&To=$to&Proceso=$proceso&Responsable=$responsable";
       $soportecURL = "S";
-      $url         = urlServicios."consultadetalle/consultadetalle_pro_proceso.php?".$parameters;
+      $url         = urlServicios."consultadetalle/eve_evento.php?".$parameters;
       $existe      = "";
       $usulocal    = "";
-      $sigue       = ""; 
+      $sigue       = "";
+      $sigueins    = "";
+      $sigueupd    = "";
       //echo "<script>console.log($url)</script>" ;
       if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
       {    
@@ -191,15 +174,98 @@ if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
           {          
             //echo "Curl Err_no returned.... $curl_errno <br/>";
             $m = preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $resultado);    
+
             $m = json_decode($m, true);
-            $grabadoOK = $m['pro_proceso'];
-            if(!$grabadoOK)
+            //print_r
+            //var_dump($m);
+            //echo "<script>console.log(m estado....".$m['estado'].")</script>";
+            //echo "<script>console.log(m evento....".$m['eve_evento'].")</script>";
+            $grabadoOK = $m['eve_evento'];
+            if(!$grabadoOK )
             {
               $sigue = "N-Registro NO ha sido grabado.";
             }
             else
             {
-              $sigue = "S-Registro grabado Correctamente.";
+                $sigueins    = "S";
+                //buscamos el maximo id de eve_evento
+                $parameters = "buscamax=buscamax";
+                $soportecURL = "S";
+                $url         = urlServicios."consultadetalle/eve_evento.php?".$parameters;
+                $existe      = "";
+                //echo "<script>console.log(url1....$url)</script>";
+                $MaxId = 0;
+                if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
+                {    
+                    $ch = curl_init();
+                    curl_setopt($ch, CURLOPT_VERBOSE, true);
+                    curl_setopt($ch, CURLOPT_URL, $url);
+                    curl_setopt($ch, CURLOPT_TIMEOUT, 30);
+                    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                    curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+                    curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
+                    curl_setopt($ch, CURLOPT_POST, 0);          
+                    //curl_setopt($handle, CURLOPT_STDERR, $verbose);
+                    //curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($parameters));    
+
+                    $resultado = curl_exec ($ch);         
+                    $http_status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+                    $curl_errno = curl_errno($ch);
+                    $curl_msj = curl_error($ch) ;
+                    curl_close($ch);
+                    
+                    if($resultado === false || $curl_errno > 0)
+                    {
+                        //echo 'Curl error: ' . curl_error($ch);
+                        $sigue = "N-Se presentó problema... ". $curl_errno.' '.$curl_msj;
+                    }
+                    else
+                    { 
+                        $m = preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $resultado);
+                        $m = json_decode($m, true);                         
+                        $MaxId = $m['eve_evento']['MaxId'];
+                        //echo "<script>console.log(maxId....".$MaxId.")</script>";
+                        
+                        $parameters = "updateurl=updateurl&maxid=$MaxId&maxid1=$MaxId";
+                        $soportecURL = "S";
+                        $url         = urlServicios."consultadetalle/eve_evento.php?".$parameters;
+                        $existe      = "";
+                        //echo "<script>console.log(updmaxId....".$url.")</script>";
+                        if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
+                        {
+                            $ch = curl_init();
+                            curl_setopt($ch, CURLOPT_VERBOSE, true);
+                            curl_setopt($ch, CURLOPT_URL, $url);
+                            curl_setopt($ch, CURLOPT_TIMEOUT, 30);
+                            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                            curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+                            curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
+                            curl_setopt($ch, CURLOPT_POST, 0);
+                            
+                            $resultado = curl_exec ($ch);
+                            $http_status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+                            $curl_errno  = curl_errno($ch);
+                            curl_close($ch);
+                            
+                            if($resultado === false || $curl_errno > 0)
+                            {
+                                //echo 'Curl error: ' . curl_error($ch);
+                                $sigue = "N-Se presentó problema... ". $curl_errno.' '.$curl_msj;
+                                $sigueupd    = "";
+                            }
+                            else
+                            {                                
+                                $sigueupd    = "S";
+                            }
+                        }                      
+                        
+                    }
+                }
+                
+                if($sigueins == "S" && $sigueupd == "S")
+                {
+                    $sigue = "S-Registro grabado Correctamente.";
+                }    
             }  
           }
 

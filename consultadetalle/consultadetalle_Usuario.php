@@ -87,8 +87,37 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         }
     
     }
+    elseif (isset($_GET['IdAbogados'])) {
+        // Obtener parámetro IdMostrar de usu_usuario
+        $parametro = $_GET['IdAbogados'];
+        if($parametro == 0)
+        {
+            $parametro == "";
+        }
 
-    elseif(isset($_GET['ExisteUsuario']) )
+        // Tratar retorno
+        $retorno = USU_USUARIO::usuarioresponsable($parametro);
+
+        if ($retorno) 
+        {
+            $usu_usuario["estado"] = "1";
+            $usu_usuario["usu_usuario"] = $retorno;
+            // Enviar objeto json de la usu_usuario
+            header('Content-Type: application/json');
+            echo json_encode($usu_usuario);
+        } 
+        else 
+        {
+            // Enviar respuesta de error general
+            print json_encode(
+                array(
+                    'estado' => '2',
+                    'mensaje' => 'No se obtuvo el registro'
+                )
+            );
+        }    
+    }
+    elseif (isset($_GET['ExisteUsuario']) )
     {
         $par2  = $_GET['Identificacion'];        
         $par3  = $_GET['PrimerApellido'];
@@ -134,8 +163,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         $par12 = $_GET['Estado'];        
         $par13 = $_GET['IdInterno'];
         $par14 = $_GET['Local'];
+		$par15 = $_GET['Abogado'];
         
-        $retorno = USU_USUARIO::insert($par1,$par2,$par3,$par4,$par5,$par6,$par7,$par8,$par9,$par10,$par11,$par12,$par13,$par14);        
+        $retorno = USU_USUARIO::insert($par1,$par2,$par3,$par4,$par5,$par6,$par7,$par8,$par9,$par10,$par11,$par12,$par13,$par14,$par15);        
         $msj =$retorno;
         if ($retorno) 
         {
@@ -172,9 +202,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         $par10 = $_GET['clave'];
         $par11 = $_GET['tipousuario'];
         $par12 = $_GET['estado'];
+		$par13 = $_GET['abogado'];
         $par0  = $_GET['idtabla'];    
 
-        $retorno = USU_USUARIO::update($par1,$par2,$par3,$par4,$par5,$par6,$par7,$par8,$par9,$par10,$par11,$par12,$par0);
+        $retorno = USU_USUARIO::update($par1,$par2,$par3,$par4,$par5,$par6,$par7,$par8,$par9,$par10,$par11,$par12,$par13,$par0);
         $msj =$retorno;
         if ($retorno) 
         {
@@ -224,8 +255,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     elseif (isset($_GET['idU']) && isset($_GET['idC'])) 
     {
         // Obtener parámetro idUsuario y idClave de usu_usuario
-        $parametro = $_GET['idU'];
-        $parametroC = $_GET['idC'];
+        $parametro = trim($_GET['idU']);
+        $parametroC = trim($_GET['idC']);
 
         // Tratar retorno
         $retorno = USU_USUARIO::getByIdExiste($parametro,$parametroC);

@@ -69,7 +69,7 @@ else
 
 $soportecURL = "S";
 $url         = urlServicios."consultadetalle/consultadetalle_gen_ciudad.php?".$params;
-echo("<script>console.log('PHP: ".$url."');</script>");
+//echo("<script>console.log('PHP: ".$url."');</script>");
 if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
 {
     $ch = curl_init();

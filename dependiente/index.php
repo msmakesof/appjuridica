@@ -1,10 +1,10 @@
 ﻿<?php
+include('../Connections/cnn_kn.php'); 
+include('../Connections/config2.php'); 
 if(!isset($_SESSION)) 
 { 
     session_start(); 
 }
-include('../Connections/cnn_kn.php'); 
-include('../Connections/config2.php'); 
 ?>
 <?php
 if (!function_exists("GetSQLValueString")) {
@@ -64,8 +64,14 @@ $email  = "";
     <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&subset=latin,cyrillic-ext" rel="stylesheet" type="text/css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" type="text/css">
 
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha384-tsQFqpEReu7ZLhBV2VZlAu7zcOV+rXbYlF2cqB8txI/8aZajjp4Bqd+V6D5IgvKT" crossorigin="anonymous"></script>
+
+
     <!-- Bootstrap Core Css -->
     <link href="../plugins/bootstrap/css/bootstrap.css" rel="stylesheet">
+
+    <!-- Bootstrap Select Css -->
+    <!-- <link href="../plugins/bootstrap-select/css/bootstrap-select.css" rel="stylesheet" /> -->
 
     <!-- Waves Effect Css -->
     <link href="../plugins/node-waves/waves.css" rel="stylesheet" />
@@ -86,8 +92,15 @@ $email  = "";
     <link href="../css/themes/all-themes.css" rel="stylesheet" />
     
     <!-- Jquery Core Js -->
-    <script src="../plugins/jquery/jquery.min.js"></script>   
-   
+    <!-- <script src="../plugins/jquery/jquery.min.js"></script>    -->
+    
+    <script>
+    $(document).ready(function()
+    {
+        //$('.selectpicker').selectpicker();
+        document.getElementById("m2").style.display = "none";        
+	});
+    </script>
 </head>
 
 <body class="theme-red">
@@ -380,7 +393,7 @@ $email  = "";
         <!-- #END# Left Sidebar -->       
     </section>
 
-    <section class="content">
+    <section class="content" id="m1">
         <div class="container-fluid">
             <div class="block-header">
                 <h2>TABLERO DE CONTROL</h2>
@@ -391,7 +404,7 @@ $email  = "";
                 <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                     <div class="info-box bg-pink hover-expand-effect">
                         <div class="icon">
-                            <i class="material-icons">playlist_add_check</i>
+                            <i class="material-icons">gavel</i>
                         </div>
                         <div class="content">
                             <div class="text">Mis Procesos: <?php echo $nombremes. ' '.$yy ;?> </div>
@@ -399,14 +412,14 @@ $email  = "";
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12" onclick="myFunction()">
                     <div class="info-box bg-cyan hover-expand-effect">
                         <div class="icon">
-                            <i class="material-icons">group</i>
+                            <i class="material-icons">add_a_photo</i>
                         </div>
                         <div class="content">
-                            <div class="text">Mis Clientes:</div>
-                            <div class="number count-to" data-from="0" data-to="<?php echo $cantest; ?>" data-speed="1000" data-fresh-interval="20"></div>
+                            <div class="text">Mis Recursos:</div>
+                            <div class="xnumber xcount-to" data-from="0" data-to="Fotos" data-speed="1000" data-fresh-interval="20">Foto Documentos</div>
                         </div>
                     </div>
                 </div>
@@ -424,7 +437,7 @@ $email  = "";
                 <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                     <div class="info-box bg-orange hover-expand-effect">
                         <div class="icon">
-                            <i class="material-icons">web</i>
+                            <i class="material-icons">event</i>
                         </div>
                         <div class="content">
                             <div class="text">Mi Agenda: </div>
@@ -680,13 +693,78 @@ $email  = "";
         </div>
     </section>
 
-   
+    <section class="content" id="m2">
+        <div class="container-fluid">
+            <!-- Widgets -->
+            <div class="row clearfix">                
+               
+                <div class="card" style="min-height: 80% !important; border-style: solid; position:absolute; border-width: 1px; padding:10px; border-color: #E6E6E6;">
+					
+                <div class="form-group">
+                    <div class="col-lg-12 col-md-12 col-sm-12">
+                        <div class="row"  style="padding:10px !important;">
+                            <div class="col-xs-10">                                                
+                                <label class="form-label">Seleccione N&uacute;mero del Proceso: </label>
+                                <div class="xform-line">                                                    
+                                    
+                                    <!-- <select  name="nroproceso" id="nroproceso"> -->
+                                    <select class="selectpicker show-tick" data-live-search="true" data-width="95%" name="nroproceso" id="nroproceso" required>   
+                                        <option value="" >Seleccione Proceso ...</option>
+                                        <?php
+                                            $idTabla = 0;
+                                            include('../apis/proceso/procesorecursos.php');
+                                            for($i=0; $i<count($mproceso['pro_proceso']); $i++)
+                                            {
+                                                $PRO_IdProceso = $mproceso['pro_proceso'][$i]['PRO_IdProceso'];
+                                                $PRO_NroProceso = $mproceso['pro_proceso'][$i]['PRO_NumeroProceso'];                                                
+                                        ?>
+                                                <option value="<?php echo $PRO_NroProceso; ?>" >
+                                                    <?php echo $PRO_NroProceso ; ?>                                                
+                                                </option>
+                                        <?php
+                                            }
+                                        ?>
+                                    </select>
+                                    <!-- <label class="form-label">Digite N&uacute;mero del Proceso:</label> -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>                
+			
+                <div class="col-lg-12 col-md-12 col-sm-12">	
+                    <label >Selecciona un dispositivo:</label> 
+                    <select name="listaDeDispositivos" id="listaDeDispositivos"></select>
+                    <!-- <select class="selectpicker show-tick" data-live-search="true" data-width="95%" name="listaDeDispositivos" id="listaDeDispositivos" required> -->                    
+                </div>
+                <div class="col-lg-12 col-md-12 col-sm-12">    
+                    <button id="boton" type="button" class="btn btn-info">Tomar foto</button>
+                    <p id="estado"></p>				
+				</div>
+			
+                <div class="col-lg-12 col-md-12 col-sm-12">
+                    <div class="row">	
+                        <video muted="muted" id="video"></video>
+                        <canvas id="canvas" style="display: none;"></canvas>                    
+                    </div>
+                </div>
+            
+                <div class="col-lg-12 col-md-12 col-sm-12">
+                    <div class="row">
+                        <button  type="button" class="btn btn-info" onclick="myFunction()">Cerrar</button>
+                    </div>
+                </div>
+
+            </div>            
+        </div>
+        </div>
+    </section>   
 
     <!-- Bootstrap Core Js -->
-    <script src="../plugins/bootstrap/js/bootstrap.js"></script>
+    <script src="../plugins/bootstrap/js/bootstrap.js"></script>  
 
     <!-- Select Plugin Js -->
-    <script src="../plugins/bootstrap-select/js/bootstrap-select.js"></script>
+    <!-- <script src="../plugins/bootstrap-select/js/bootstrap-select.js"></script> -->
 
     <!-- Slimscroll Plugin Js -->
     <script src="../plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
@@ -719,7 +797,26 @@ $email  = "";
     <script src="../js/pages/index.js"></script>
 
     <!-- Demo Js -->
-    <script src="../js/demo.js"></script>
+    <script src="../js/demo.js"></script>   
+
+    <script>    
+    function myFunction() {
+        var x = document.getElementById("m1");
+        var y = document.getElementById("m2");
+        if (x.style.display === "none") 
+        {
+            x.style.display = "block";
+            y.style.display = "none";
+        } 
+        else 
+        {
+            x.style.display = "none";
+            y.style.display = "block";
+        }
+    }
+    </script>
+      <!-- Camara Js -->                                            
+      <script src="js/camjs/script.js"></script>
 </body>
 
 </html>

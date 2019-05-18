@@ -213,12 +213,7 @@ else
 					var respstr = dataX.trim();                   
                     if( respstr.substr(0,1) == "1" )
                     {
-                        //var varStorage = respstr.substr(2);
-                        // localStorage.setItem("pusherAttention", varStorage);
-                        // sessionStorage.setItem("_us_utmworker", varStorage);
-                        // document.cookie = "_ga_xp_mainserver="+varStorage+"; expires=Mon, 11 Jul 2016 12:23:00 GMT; path=/";
-                        //relocate("header/index.php");
-                        relocate("webtrack/index.php");
+                        relocate("webtrack/");
                     }
                     else
                     {                     

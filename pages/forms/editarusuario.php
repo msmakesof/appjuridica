@@ -68,6 +68,7 @@ $Celular = trim($muser['usu_usuario']['USU_Celular']);
 $Usuario = trim($muser['usu_usuario']['USU_Usuario']);
 $Clave = $muser['usu_usuario']['USU_Clave'];
 $EstadoEst = $muser['usu_usuario']['USU_Estado'];
+$EsAbogado = $muser['usu_usuario']['USU_EsAbogado'];
 $TipoUsuario = $muser['usu_usuario']['USU_TipoUsuario'];
 ?>
 <!DOCTYPE html>
@@ -245,6 +246,15 @@ $TipoUsuario = $muser['usu_usuario']['USU_TipoUsuario'];
                                         </select>
                                     </div>   
                                 </div>
+								
+								<div class="form-group form-float">
+                                    <label class="form-label">Abogado</label>
+                                    <input type="radio" name="abogado" id="si" class="with-gap" value="1" <?php if( $EsAbogado == 1){?>checked="checked"<?php } ?>>
+                                    <label for="si">Si</label>
+
+                                    <input type="radio" name="abogado" id="no" class="with-gap" value="0" <?php if( $EsAbogado == 0){?>checked="checked"<?php } ?>>
+                                    <label for="no" class="m-l-20">No</label>
+                                </div>
                                 
                                 <div class="form-group">
                                     <input type="radio" name="estado" id="activo" class="with-gap" value="1" <?php if( $EstadoEst == 1){?>checked="checked"<?php } ?>>
@@ -359,9 +369,10 @@ $TipoUsuario = $muser['usu_usuario']['USU_TipoUsuario'];
             var celular = $("#celular").val();            
             var tipousuario = $("#tipousuario").val();			
 			var estado = $('input:radio[name=estado]:checked').val();
+			var abogado = $('input:radio[name=abogado]:checked').val();
 			var idtabla =  "<?php echo $idtabla; ?>";
             var OldClave = "<?php echo $Clave; ?>";
-            if( tipodocumento == "" || numerodocumento =="" || nombre == "" || apellido1 == "" || apellido2 == "" || clave =="" || direccion == "" || email == "" || celular == "" || estado == undefined  || tipousuario == "" )
+            if( tipodocumento == "" || numerodocumento =="" || nombre == "" || apellido1 == "" || apellido2 == "" || clave =="" || direccion == "" || email == "" || celular == "" || estado == undefined  || tipousuario == "" || abogado == "" )
             {               
                 swal({
                   title: "Error:  Ingrese información en todos los campos...",
@@ -375,7 +386,7 @@ $TipoUsuario = $muser['usu_usuario']['USU_TipoUsuario'];
             else
             {
     			$.ajax({
-    				data : {"tipodocumento": tipodocumento, "numerodocumento": numerodocumento, "nombre": nombre, "apellido1": apellido1, "apellido2": apellido2, "clave": clave, "direccion": direccion, "email": email, "celular": celular, "estado": estado, "tipousuario": tipousuario, "idtabla": idtabla, "OldClave": OldClave },
+    				data : {"tipodocumento": tipodocumento, "numerodocumento": numerodocumento, "nombre": nombre, "apellido1": apellido1, "apellido2": apellido2, "clave": clave, "direccion": direccion, "email": email, "celular": celular, "estado": estado, "tipousuario": tipousuario, "idtabla": idtabla, "OldClave": OldClave, "abogado": abogado },
     				type: "POST",				
     				url : "editar_usuario.php",
                 })  

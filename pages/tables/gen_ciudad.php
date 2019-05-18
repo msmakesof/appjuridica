@@ -565,14 +565,14 @@ else
                             <ul class="header-dropdown m-r--1">
                                 <li class="dropdown">
                                     <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                                        <i class="material-icons" style="font-size:24px;color:red">add</i>  										      
+                                        <i class="material-icons" style="font-size:24px;color:red">add_circle_outline </i>  										      
                                     </a>
                                      
                                     
                                     <ul class="dropdown-menu pull-right">
                                        <li>
                                        <a  id="nuevo" class="btn btn-warning btn-xs waves-effect waves-effect m-r-20" data-toggle="modal" data-target="#defaultModal">Nuevo</a>                                        
-                                      <!--  <button type="button" class="btn btn-default waves-effect m-r-20" data-toggle="modal" data-target="#defaultModal">Nuevo</button>-->
+										<!--  <button type="button" class="btn btn-default waves-effect m-r-20" data-toggle="modal" data-target="#defaultModal">Nuevo</button>-->
                                         </li>
                                         <!-- 
                                         <li><a href="javascript:void(0);">Another action</a></li>

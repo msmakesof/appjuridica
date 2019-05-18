@@ -1,4 +1,3 @@
-
 <?php 
 //include('../../Connections/cnn_kn.php'); 
 //require('../../Connections/config2.php'); 
@@ -52,42 +51,15 @@ else
 }
 
 $opcMenu= $_SESSION["opcMenu"] ;
-// if( isset($_POST['idx']) && !empty($_POST['idx']) )
-// {    
-//     $opcMenu = trim($_POST['idx']);
-// }
-
-// $nombre = "";
-// $email  = "";
-
 if( isset($_POST['ƒ×'])  && !empty($_POST['ƒ×']) )
 {    
     $usuario = trim($_POST['ƒ×']);
-    
-    // mysqli_select_db($cnn_kn, $database_cnn_kn);
-    // $query_rs_usuario = "SELECT CONCAT_WS(' ',USU_Nombre,USU_PrimerApellido,USU_SegundoApellido) Nombre, USU_Email 
-    // FROM usu_usuario WHERE USU_Estado = 1 AND USU_Email = '$usuario' ;" ;
-    // $rs_usuario = mysqli_query($cnn_kn, $query_rs_usuario) or die(mysqli_error()."Err.....$query_rs_usuario");
-    // $row_rs_usuario = mysqli_fetch_assoc($rs_usuario);
-    // $totalRows_rs_usuario = mysqli_num_rows($rs_usuario);
-    // $y = "";
-    
-    // if ($resultado = mysqli_query($cnn_kn, $query_rs_usuario)) 
-    // {
-    //     while($all = mysqli_fetch_assoc($resultado))
-    //     {
-    //         $nombre = $strowreg['Nombre'];
-    //         $email = $strowreg['USU_Email'];           
-    //     }
-    // }
-    // mysqli_free_result($rs_usuario);
 }
 else
 {
     $usuario ="";
 }
-
-    //header('Location: ../../');
+//header('Location: ../../');
 if($usuario == "")
 {
     $usuario = $_SESSION['IdUsuario'];
@@ -103,48 +75,67 @@ if($usuario == "")
                 <span>Inicio</span>
             </a>
         </li>
-        <li>
-            <a href="javascript:void(0);">
-                <i class="material-icons">text_fields</i>
-                <span>Módulo Usuarios</span>
+		
+		<li>
+            <a href="cli_cliente.php" class="menu-toggle">
+                <i class="material-icons">assignment_ind</i>
+                <span>Clientes</span>
             </a>
-        </li>                   
-
-        <li>
-            <a href="javascript:void(0);" class="menu-toggle">
-                <i class="material-icons">view_list</i>
-                <span>Módulo de Administración</span>
-            </a>
-            <ul class="ml-menu">
-            <?php
-            include('menuInclude.php');
-			$NombreArchivo = basename($_SERVER['PHP_SELF'],".php");
-
-            for($i=0; $i<count($mmenu['menu']); $i++)    
-            {
-                $NombreTablaMenu = trim($mmenu['menu'][$i]['TAB_Nombre_Tabla']);                
-                $NombreMostrar = trim($mmenu['menu'][$i]['TAB_NombreMostrar']);							
-                $archivo = $NombreTablaMenu.".php";	
-                
-                if( strtoupper($NombreArchivo) == strtoupper($NombreTablaMenu) )
-				{ 
-					$clase = "class='active'"; 
-				}
-				else
-				{
-					$clase = "";	
-				}
-                ?>
-
-                <li <?php echo $clase ;?> >
-                    <a href="<?php echo $archivo; ?>"><?php echo $NombreMostrar; ?></a>
+            <!--
+			<ul class="ml-menu">
+                <li>
+                    <a href="cli_cliente.php" class="menu-toggle">
+                        <span>Clientes</span>
+                    </a>  
                 </li>
-                <?php                          
-            }             
-            ?>   
-               
             </ul>
+			-->            
         </li>
+		<?php if($_SESSION["TipoUsuario"] == 1) {?>
+			<li>
+				<a href="javascript:void(0);">
+					<i class="material-icons">text_fields</i>
+					<span>Módulo Usuarios</span>
+				</a>
+			</li>
+		<?php } ?>
+
+		<?php if($_SESSION["TipoUsuario"] == 1) { ?>
+			<li>
+				<a href="javascript:void(0);" class="menu-toggle">
+					<i class="material-icons">view_list</i>
+					<span>Módulo de Administración</span>
+				</a>
+				<ul class="ml-menu">
+					<?php
+					include('menuInclude.php');
+					$NombreArchivo = basename($_SERVER['PHP_SELF'],".php");
+
+					for($i=0; $i<count($mmenu['menu']); $i++)    
+					{
+						$NombreTablaMenu = trim($mmenu['menu'][$i]['TAB_Nombre_Tabla']);                
+						$NombreMostrar = trim($mmenu['menu'][$i]['TAB_NombreMostrar']);							
+						$archivo = $NombreTablaMenu.".php";	
+						
+						if( strtoupper($NombreArchivo) == strtoupper($NombreTablaMenu) )
+						{ 
+							$clase = "class='active'"; 
+						}
+						else
+						{
+							$clase = "";	
+						}
+						?>
+
+						<li <?php echo $clase ;?> >
+							<a href="<?php echo $archivo; ?>"><?php echo $NombreMostrar; ?></a>
+						</li>
+						<?php                          
+					}             
+					?>				   
+				</ul>
+			</li>
+		<?php } ?>
 
         <li <?php if($opcMenu =="P") { echo "class='active'"; }?> >
             <a href="javascript:void(0);" class="menu-toggle">
@@ -153,17 +144,18 @@ if($usuario == "")
             </a>
             <ul class="ml-menu">
                 <li>
-                    <a href="pro_proceso.php" class="menu-toggle active">
+                    <a href="pro_proceso.php" id ="np" name="np" class="menu-toggle active">
                         <span>Nuevo Proceso</span>
+                    </a>
+					<a href="pro_procesoc.php" id ="cp" name="cp" class="menu-toggle active">
+                        <span>Procesos Cerrados</span>
                     </a>
                     <a href="pro_actuacionprocesal.php" class="menu-toggle active">
                         <span>Actuaci&oacute;n Procesal</span>
                     </a>
                 </li>
             </ul>
-        </li>
-
-        
+        </li>        
 
         <li>
             <a href="javascript:void(0);" class="menu-toggle">
@@ -172,7 +164,7 @@ if($usuario == "")
             </a>
             <ul class="ml-menu">
                 <li>
-                    <a href="../../kal/sample.php" class="menu-toggle">
+                    <a href="../../agenda/inde.php" class="menu-toggle">
                         <span>Agenda</span>
                     </a>  
                 </li>

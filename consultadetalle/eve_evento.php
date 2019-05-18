@@ -4,7 +4,7 @@
  * su identificador "$ITabla"
  */
 header('Access-Control-Allow-Origin: *');
-require '../estructura/pro_proceso.php';
+require '../estructura/eve_evento.php';
 
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 
@@ -14,7 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         $parametro = $_GET['IdTabla'];
 
         // Tratar retorno
-        $retorno = PRO_PROCESO::getById($parametro);
+        $retorno = EVE_EVENTO::getById($parametro);
 
         if ($retorno) {
             $pro_proceso["estado"] = "1";
@@ -37,7 +37,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         $parametro = $_GET['IdEstado'];
 
         // Tratar retorno
-        $retorno = PRO_PROCESO::getByIdEstado($parametro);
+        $retorno = EVE_EVENTO::getByIdEstado($parametro);
 
         if ($retorno) {
             $pro_proceso["estado"] = "1";
@@ -61,7 +61,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         $parametroC = $_GET['idC'];
 
         // Tratar retorno
-        $retorno = PRO_PROCESO::getByIdExiste($parametro,$parametroC);
+        $retorno = EVE_EVENTO::getByIdExiste($parametro,$parametroC);
 
         if ($retorno) {
             $pro_proceso["estado"] = "1";
@@ -82,18 +82,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 
     elseif (isset($_GET['ExisteTabla']) )
     {
-        $par1 = $_GET['Proceso'];
-        $par2 = $_GET['Demandante'];
-        $par3 = $_GET['Demandado'];                
+        $par1 = $_GET['From'];
+        $par2 = $_GET['To'];
+        $par3 = $_GET['Tipo'];
+        $par4 = $_GET['Proceso'];
+        $par5 = $_GET['Responsable'];
 
-        $retorno = PRO_PROCESO::existetabla($par1, $par2, $par3);
+        $retorno = EVE_EVENTO::existetabla($par1, $par2, $par3, $par4, $par5);
         if ($retorno) 
         {
-            $pro_proceso["estado"] = "1";
-            $pro_proceso["pro_proceso"] = $retorno;
-            // Enviar objeto json de PRO_PROCESO
+            $eve_evento["estado"] = "1";
+            $eve_evento["eve_evento"] = $retorno;
+            // Enviar objeto json de EVE_EVENTO
             header('Content-Type: application/json');
-            echo json_encode($pro_proceso);
+            echo json_encode($eve_evento);
         } 
         else 
         {
@@ -116,7 +118,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         }
 
         // Tratar retorno
-        $retorno = PRO_PROCESO::getAll($parametro);
+        $retorno = EVE_EVENTO::getAll($parametro);
 
         if ($retorno) 
         {
@@ -141,27 +143,25 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     elseif(isset($_GET['insert']) )
     {
         //Obtener Parametros
-        $par1 = $_GET['Demandante'];
-        $par2 = $_GET['Demandado'];        
-        $par3 = $_GET['Proceso'];        
-        $par4 = $_GET['Fechainicio'];
-        $par5 = $_GET['Asignadoa'];        
-        $par6 = $_GET['Ubicacion'];
-        $par7 = $_GET['Claseproceso'];
-        $par8 = $_GET['JuzgadoOrigen'];
-        $par9 = $_GET['Estado'];
-        $par10 = $_GET['Especialidad'];
-        $par11 = $_GET['Despacho'];
+        $par1 = $_GET['Title'];
+        $par2 = $_GET['Body'];
+        $par3 = $_GET['Tipo'];
+        $par4 = $_GET['Inicio'];
+        $par5 = $_GET['Final'];
+        $par6 = $_GET['From'];
+        $par7 = $_GET['To'];        
+        $par8 = $_GET['Proceso'];
+        $par9 = $_GET['Responsable'];
 
-        $retorno = PRO_PROCESO::insert($par1, $par2, $par3, $par4, $par5, $par6, $par7, $par8, $par9, $par10, $par11);
+        $retorno = EVE_EVENTO::insert($par1, $par2, $par3, $par4, $par5, $par6, $par7, $par8, $par9);
         $msj = $retorno;
         if($retorno)
         {
-            $pro_proceso["estado"] = "1";
-            $pro_proceso["pro_proceso"] = $retorno;
-             // Enviar objeto json de la PRO_PROCESO
+            $eve_evento["estado"] = "1";
+            $eve_evento["eve_evento"] = $retorno;
+             // Enviar objeto json de EVE_EVENTO
             header('Content-Type: application/json');
-            echo json_encode($pro_proceso);
+            echo json_encode($eve_evento);
         }
         else
         {
@@ -169,25 +169,78 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             print json_encode(
                 array(
                     'estado' => '2',
-                    'mensaje' => 'No se obtuvo el registro al Crear'
+                    'mensaje' => 'No se obtuvo el registro al Crear Evento'
                 )
             );
         }
     }
+    elseif(isset($_GET['buscamax']))
+    {
+        $parametro = "";
+        // Tratar retorno
+        $retorno = EVE_EVENTO::MaxId($parametro);
+
+        if ($retorno) 
+        {
+            $eve_evento["estado"] = "1";
+            $eve_evento["eve_evento"] = $retorno;
+            // Enviar objeto json de la EVE_EVENTO
+            header('Content-Type: application/json');
+            echo json_encode($eve_evento);
+        } 
+        else 
+        {
+            // Enviar respuesta de error general
+            print json_encode(
+                array(
+                    'estado' => '2',
+                    'mensaje' => 'No se obtuvo el registro para Mostrar el Registro'
+                )
+            );
+        }
+        
+    }
+    elseif(isset($_GET['updateurl']))
+    {
+        $par1 = $_GET['maxid'];
+        $par2 = $_GET['maxid1'];
+        // Tratar retorno
+        $retorno = EVE_EVENTO::UpdateUrl($par1, $par2);
+        $msj = $retorno;
+        if ($retorno) 
+        {
+            $eve_evento["estado"] = "1";
+            $eve_evento["eve_evento"] = $retorno;
+            // Enviar objeto json de la EVE_EVENTO
+            header('Content-Type: application/json');
+            echo json_encode($eve_evento);
+        } 
+        else 
+        {
+            // Enviar respuesta de error general
+            print json_encode(
+                array(
+                    'estado' => '2',
+                    'mensaje' => 'No se obtuvo el registro para Mostrar el Registro'
+                )
+            );
+        }
+        
+    }    
     elseif(isset($_GET['update']) )
     {
         //Obtener Parametros
         $par1 = $_GET['proceso'];        
         $par2 = $_GET['fechainicio'];
         $par3 = $_GET['asignadoa'];
-		$par4 = $_GET['ubicacion'];        
+	$par4 = $_GET['ubicacion'];        
         $par5 = $_GET['claseproceso'];
         $par6 = $_GET['demandante'];
-		$par7 = $_GET['demandado'];        
+	$par7 = $_GET['demandado'];        
         $par8 = $_GET['estado'];
         $par9 = $_GET['idtabla'];
 
-        $retorno = PRO_PROCESO::update($par1, $par2, $par3, $par4, $par5, $par6, $par7, $par8, $par9);
+        $retorno = EVE_EVENTO::update($par1, $par2, $par3, $par4, $par5, $par6, $par7, $par8, $par9);
         $msj = $retorno;
         if($retorno)
         {
@@ -208,7 +261,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             );
         }
     }
-	//cierre proceso
+    //cierre proceso
     elseif(isset($_GET['cierre']) )
     {
         //Obtener Parametros
@@ -218,7 +271,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         $par4 = $_GET['fechacierre'];
         $par5 = $_GET['idtabla'];
 
-        $retorno = PRO_PROCESO::cierre($par1, $par2, $par3, $par4, $par5);
+        $retorno = EVE_EVENTO::cierre($par1, $par2, $par3, $par4, $par5);
         $msj = $retorno;
         if($retorno)
         {
@@ -244,7 +297,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         $par1 = $_GET['estado'];
         $par0 = $_GET['pidtabla'];
 
-        $retorno = PRO_PROCESO::delete($par1, $par0);
+        $retorno = EVE_EVENTO::delete($par1, $par0);
         if ($retorno) 
         {
             $pro_proceso["estado"] = "1";
