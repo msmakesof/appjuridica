@@ -1,20 +1,7 @@
-<?php 
-	if(!isset($_SESSION)) 
-    { 
-        session_start(); 
-    }
+<?php	
+	session_start(); 
 	require_once('Connections/cnn_kn.php');	
 	require_once('rutador/enlaceControl.php');
-
-	$_SESSION['Usuario'] = "";
-	$_SESSION['NombreUsuario'] = "" ;
-	$_SESSION['EmailUsuario'] = "" ;
-	$_SESSION['user_id'] = "";
-	$_SESSION['opcMenu'] = "";
-	$_SESSION['IdUsuario'] = "";
-	$_SESSION['TipoUsuario'] = "";
-	$_SESSION['user_id'] = "";
-	$_SESSION['IdUsuario'] = "" ;
 ?>
 <?php
 if (!function_exists("GetSQLValueString")) 
@@ -77,5 +64,6 @@ if ($usuario != "" && $clave != "")
 else
 {
 	header('Location: index.html');
+	exit;
 }
 ?>

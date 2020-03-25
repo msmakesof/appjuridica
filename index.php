@@ -1,15 +1,35 @@
-﻿<?php 
-if ( (!isset($_POST['username'])) && (!isset($_POST['password'])) )
-{}
-else    
-{
-    echo $_POST['username'];
+<?php
+/**
+ * Obtener y guardar la IP de un visitante en PHP
+ *
+ * @author parzibyte
+ */
+# Para obtener la fecha correcta hay que poner la zona horaria
+date_default_timezone_set("America/Bogota");
+$fechaHoraIngreso = date("Y-m-d H:i:s");
+# Si no hay REMOTE_ADDR entonces ponemos "Desconocida"
+$ipInterna = empty($_SERVER["REMOTE_ADDR"]) ? "Desconocida" : $_SERVER["REMOTE_ADDR"];
+# Formatear mensaje
+$mensaje = sprintf("La IP %s accedió en %s%s", $ipInterna, $fechaHoraIngreso, PHP_EOL);
 
-    if( !empty ($_POST['username']))
-    {
-        header('Location: webtrack/index.php');
-    }
-}    
+echo $mensaje."<br>";
+
+$nombreHost = gethostbyaddr($_SERVER['REMOTE_ADDR']);
+
+//echo $nombre_host;
+echo "<br>";
+echo "El nombre del servidor es: {$_SERVER['SERVER_NAME']}<hr>"; 
+//echo "Vienes procedente de la página: {$_SERVER['HTTP_REFERER']}<hr>"; 
+echo "Te has conectado usando el puerto: {$_SERVER['REMOTE_PORT']}<hr>"; 
+echo "El agente de usuario de tu navegador es: {$_SERVER['HTTP_USER_AGENT']}";
+
+# Y adjuntarlo o escribirlo en ips.txt
+//file_put_contents("ips.txt", $mensaje, FILE_APPEND);
+# Ya registramos la ip, ahora seguimos con el flujo normal ;)
+echo "<br>";
+$servidor = $_SERVER['SERVER_NAME'];
+$puerto = $_SERVER['REMOTE_PORT'];
+$agente = $_SERVER['HTTP_USER_AGENT'];
 
 ?>
 <!DOCTYPE html>
@@ -48,6 +68,17 @@ else
         .modal-footer, .close {
             background-color: #f9f9f9;
         }
+		
+#div-cookies {
+    position: fixed;
+    bottom: 0px;
+    left: 0px;
+    width: 100%;
+    background-color: white;
+    box-shadow: 0px -5px 15px gray;
+    padding: 7px;
+    text-align: center;
+}
         </style>
 </head>
 
@@ -90,15 +121,20 @@ else
                             <button class="btn btn-block bg-pink waves-effect" type="submit" id="ingresar" name="ingresar">INGRESAR</button>
                         </div>
                     </div>
+					<!--
 					<div class="row m-t-15 m-b--20">
 						<div class="col-xs-12">                            
 							<div id="msj"></div>
                         </div>
 					</div>
+					-->
 					<hr>
                     <div class="row m-t-15 m-b--20">                    	                  
-                        <div class="col-xs-6 align-right">
+                        <div class="col-xs-5 align-right">
                             <a href="#">Olvid&eacute; mi Clave?</a>
+                        </div>
+						<div class="col-xs-7 align-right">
+                            <a href="#">Trato de Datos Personales</a>
                         </div>
                     </div>
 
@@ -127,6 +163,22 @@ else
                 </form>
             </div>
         </div>
+
+        <div id="ip"></div>
+<div id="address"></div>
+Respuesta completa: 
+<pre id="details"></pre>
+		
+		<div id="div-cookies" style="display: none;">
+			Necesitamos usar cookies para que funcione todo, si permanece aquí acepta su uso, más información en
+			<a hreflang="es" href="/info/aviso-legal">Aviso Legal</a>
+			y la
+			<a hreflang="es" href="/info/politica-de-privacidad">Política de Privacidad</a>.
+			<button type="button" class="btn btn-sm btn-primary" id="acceptCookies">
+				Acepto el uso de cookies
+			</button>
+		</div>
+	
     </div>
 
     <!-- Jquery Core Js -->
@@ -212,8 +264,8 @@ else
 				.done(function( dataX, textStatus, jqXHR ){	                   				
 					var respstr = dataX.trim();                   
                     if( respstr.substr(0,1) == "1" )
-                    {
-                        relocate("webtrack/");
+                    {   						
+						relocate("pages/tables/");
                     }
                     else
                     {                     
@@ -228,9 +280,43 @@ else
 				});
 			}	 
 	    });
-	}); 
+		
+		function checkAcceptCookies() {
+			if (localStorage.acceptCookies == 'true') 
+            {
+                alert(7);
+			} 
+            else 
+            {
+				$('#div-cookies').show();
+			}
+		}
+		function acceptCookies() {
+			localStorage.acceptCookies = 'true';
+			$('#div-cookies').hide();
+            
+		}
+		//$(document).ready(function() {
+		checkAcceptCookies();
+		//});
+
+	});
+    var ip="";
+    $.get("https://ipinfo.io", function (response) {    
+        $("#ip").html("IP: " + response.ip);
+        ip = response.ip;        
+        $("#address").html("Ubicaci&#243;n: " + response.city + ", " + response.region);
+        $("#details").html(JSON.stringify(response, null, 4));    
+    }, "jsonp");
     </script>
     <div id="resultado"></div>
+    <?php
+        $ipPublica = "";
+        $ipPublica = "<script> document.writeln(ip); </script>";        
+        $dataArray = json_decode(file_get_contents("http://www.geoplugin.net/json.gp?ip=".$ipPublica));        
+        var_dump($dataArray);
+        //ipinterna=$ipInterna&fechaHoraIngreso=$fechaHoraIngreso&nombreHost=$nombreHost&servidor=$servidor&puerto=$puerto&agente=$agente&ippublica=$ipPublica
+    ?>
 </body>
 
 </html>

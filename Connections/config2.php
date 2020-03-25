@@ -1,7 +1,6 @@
 <?php require_once('cnn_kn.php'); ?>
 
 <?php
-
 //echo "*****<br>";
 //echo "host...$hostname_cnn_kn<br>";
 //echo "*****<br>";
