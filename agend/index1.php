@@ -12,33 +12,6 @@ if( !isset($_SESSION['IdUsuario']) && !isset($_SESSION['NombreUsuario']) )
 date_default_timezone_set('America/Bogota');
 setlocale(LC_ALL,"es_ES");
 
-$user_agent = $_SERVER['HTTP_USER_AGENT'];
-function getPlatform($user_agent) {
-$plataformas = array(
-'Windows 10' => 'Windows NT 10.0+',
-'Windows 8.1' => 'Windows NT 6.3+',
-'Windows 8' => 'Windows NT 6.2+',
-'Windows 7' => 'Windows NT 6.1+',
-'Windows Vista' => 'Windows NT 6.0+',
-'Windows XP' => 'Windows NT 5.1+',
-'Windows 2003' => 'Windows NT 5.2+',
-'Windows' => 'Windows otros',
-'iPhone' => 'iPhone',
-'iPad' => 'iPad',
-'Mac OS X' => '(Mac OS X+)|(CFNetwork+)',
-'Mac otros' => 'Macintosh',
-'Android' => 'Android',
-'BlackBerry' => 'BlackBerry',
-'Linux' => 'Linux',
-);
-foreach($plataformas as $plataforma=>$pattern){
-	if (eregi($pattern, $user_agent))
-		return $plataforma;
-	}
-	return 'No detectado';
-}
-$SO = getPlatform($user_agent);
-
 $hoy = getdate();
 //print_r($hoy);
 $nombredia = "";
@@ -99,10 +72,7 @@ $events = $req->fetchAll();
     <meta name="description" content="">
     <meta name="author" content="">
 
-	<title>Inicio</title>
-   
-
-	
+	<title>Inicio</title>	
     <!-- Custom CSS -->
     <style>
     body {
@@ -467,10 +437,9 @@ $events = $req->fetchAll();
         <!-- #END# Left Sidebar -->       
     </section>	
 
-    <!-- Page Content -->
 	
-    <div class="container">
-		<?php if ($SO == "Android") { ?>
+    <!-- Page Content <br><br><br><br><br>-->	
+    <div class="container" >
 		<div class="text-right">
 			<div id="container-floating">
 				<div id="floating-button" data-toggle="tooltip" data-placement="left" data-original-title="Create" onclick="adiEvento()">
@@ -478,20 +447,19 @@ $events = $req->fetchAll();
 				</div>
 			</div>
 		</div>
-		<?php } ?>
-
-		<div class="row" style="float: right !important;">		
-            <div class="col-lg-12">                
-                <div id="calendar" <?php echo substr($SO,0,7); if (substr($SO,0,7) == "Windows") { ?> style="margin-top: 180px" <?php } ?>></div>
-            </div>		
-        </div>
-        <!-- /.row -->
 		
+
+		<div class="row">
+            <div class="col-lg-12 text-center">                
+                <div id="calendar" class="col-centered"></div>
+            </div>			
+        </div>
+        <!-- /.row -->		
 		<!-- Modal -->
 		<div class="modal fade" id="ModalAdd" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
 		  <div class="modal-dialog" role="document">
 			<div class="modal-content">
-			<form class="form-horizontal" method="POST" action="addEvent.php">
+			<form id="elForm" class="form-horizontal" method="POST" action="addEvent.php">
 			
 			  <div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -500,14 +468,14 @@ $events = $req->fetchAll();
 			  <div class="modal-body">
 				
 				  <div class="form-group">
-					<label for="title" class="col-sm-2 control-label">Titulo</label>
-					<div class="col-sm-10">
+					<label for="title" class="col-sm-4 control-label">Titulo</label>
+					<div class="col-sm-8">
 					  <input type="text" name="title" class="form-control" id="title" placeholder="Titulo">
 					</div>
 				  </div>
 				  <div class="form-group">
-					<label for="color" class="col-sm-2 control-label">Color</label>
-					<div class="col-sm-10">
+					<label for="color" class="col-sm-4 control-label">Color</label>
+					<div class="col-sm-8">
 						<select name="color" class="form-control" id="color">
 							<option value="">Seleccionar</option>
 							<option style="color:#0071c5;" value="#0071c5">&#9724; Azul oscuro</option>
@@ -522,20 +490,24 @@ $events = $req->fetchAll();
 					</div>
 				  </div>
 				  <div class="form-group">
-					<label for="start" class="col-sm-2 control-label">Fecha Inicial</label>
-					<div class="col-sm-10">
+					<label for="start" class="col-sm-4 control-label">Fecha Inicial</label>
+					<div class="col-sm-8">
+						<!-- <label for="date">Date Input:</label>  -->
+						<input type="date" name="date" id="date" value="" onChange="sinDomingos();" onblur="obtenerfechafinf1();" />
 						<!-- <input type="text" name="start" class="form-control" id="start" readonly> -->
+						<!-- 
 						<div class='input-group date form-line' id="from" readonly required>
 							<input type='text' id="startx" name="startx" class="form-control" readonly/>
 							<span class="input-group-addon">
 								<span class="glyphicon glyphicon-calendar"></span>
 							</span>
 						</div>
+						-->
 					</div>
 				  </div>
 				  <div class="form-group">
-					<label for="end" class="col-sm-2 control-label">Fecha Final</label>
-					<div class="col-sm-10">
+					<label for="end" class="col-sm-4 control-label">Fecha Final</label>
+					<div class="col-sm-8">
 					  <input type="text" name="end" class="form-control" id="end" readonly>
 					</div>
 				  </div>
@@ -544,6 +516,7 @@ $events = $req->fetchAll();
 			  <div class="modal-footer">
 				<button type="button" class="btn btn-info" data-dismiss="modal">Cerrar</button>
 				<button type="submit" class="btn btn-primary">Guardar</button>
+				<input id="elSubmit" type="submit" style="display:none;" />
 			  </div>
 			</form>
 			</div>
@@ -634,12 +607,14 @@ $events = $req->fetchAll();
 			  </div>
 			  <div class="modal-footer">				
 			  </div>
+			  
 			</form>
 			</div>
 		  </div>
 		</div>
 
     </div>
+	
 			
     <!-- /.container -->
 	<!-- Google Fonts -->
@@ -696,7 +671,7 @@ $events = $req->fetchAll();
 	<script src='js/fullcalendar/fullcalendar.js'></script>
 	<script src='js/fullcalendar/locale/es.js'></script>
 	
-         
+    <!--      
 	<link rel="stylesheet" href="fc/css/calendar.css">
 	<link rel="stylesheet" href="fc/css/bootstrap-datetimepicker.min.css" />
 	<script src="fc/js/underscore-min.js"></script>
@@ -705,8 +680,12 @@ $events = $req->fetchAll();
 	<script src="fc/js/bootstrap-datetimepicker.js"></script>
 	<script src="fc/js/bootstrap-datetimepicker.es.js"></script>
 	<script src='fc/js/moment.js'></script>
-	
-		
+	-->
+	 
+	<link rel="stylesheet" href="css/jquery.ui.datepicker.mobile.css" /> 
+	<script src="js/jQuery.ui.datepicker.js"></script>
+	<script src="js/jquery.ui.datepicker.mobile.js"></script>
+	 	
 		
 	<script>	
 	$(document).ready(function() {
@@ -836,14 +815,14 @@ $events = $req->fetchAll();
 		
 		
 		var myCalendar = $('#calendar'); 
-myCalendar.fullCalendar();
-var myEvent = {
-  title:"my new event",
-  allDay: true,
-  start: new Date(),
-  end: new Date()
-};
-myCalendar.fullCalendar( 'renderEvent', myEvent );
+		myCalendar.fullCalendar();
+		var myEvent = {
+		  title:"my new event",
+		  allDay: true,
+		  start: new Date(),
+		  end: new Date()
+		};
+		myCalendar.fullCalendar( 'renderEvent', myEvent );
 */
 	};
 	
@@ -851,7 +830,8 @@ myCalendar.fullCalendar( 'renderEvent', myEvent );
 <script type="text/javascript">
 var $=jQuery.noConflict();
 	$(document).ready(function() {
-	
+		
+		/*
 		var ddx = "<?php echo $fecha_actual; ?>";
 		var exclude_dates = ['2019-04-18', '2019-04-19'];
 		$('#startx').datetimepicker({
@@ -864,7 +844,56 @@ var $=jQuery.noConflict();
 			minDate: ddx,
 			viewMode: 'days'
 		});
+		*/
+		
+		$( document ).bind( "mobileinit", function(){
+			$.mobile.page.prototype.options.degradeInputs.date = true;
+		});
+		
+		$("#date").datepicker({
+			//"dateFormat" : "dd-mm-yy" //any valid format that you want to have
+			/* 
+			var ddx = "<?php echo $fecha_actual; ?>";
+			var exclude_dates = ['2019-04-18', '2019-04-19'];
+			//$('#startx').datetimepicker({
+			language: 'es',											
+			daysOfWeekDisabled: [0, 6],
+			datesDisabled: exclude_dates,
+			autoclose: true,
+			defaultDate: "<?php echo $fecha_actualdef; ?>", //dd,											
+			format:'DD/MM/YYYY HH:mm:ss',
+			minDate: ddx,
+			viewMode: 'days'
+			*/			
+		});
 	})
+	
+	var elDate = document.getElementById('date');
+	var elForm = document.getElementById('elForm');
+	var elSubmit = document.getElementById('elSubmit');
+
+	function sinDomingos(){
+		var day = new Date(elDate.value ).getUTCDay();
+		console.log(Date(elDate.value ));
+		// Días 0-6, 0 es Domingo 6 es Sábado
+		elDate.setCustomValidity(''); // limpiarlo para evitar pisar el fecha inválida
+		if( day == 0 || day == 6 )
+		{
+		   elDate.setCustomValidity('Sábados y Domingos no disponibles, por favor seleccione otro día');
+		} 
+		else 
+		{
+		   elDate.setCustomValidity('');
+		}
+		if(!elForm.checkValidity()) 
+		{
+			elSubmit.click()
+		};
+	}
+
+	function obtenerfechafinf1(){
+		sinDomingos();
+	}
 </script>
 </body>
 

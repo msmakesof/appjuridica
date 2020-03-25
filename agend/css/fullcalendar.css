@@ -9,6 +9,11 @@
 	direction: ltr;
 	text-align: left;
 }
+/*COLOREAR FECHAS PASADAS*/
+.fc-past {
+	background-color: #F8F8F8;
+}
+/*FIN COLOREAR FECHAS PASADAS*/
 
 .fc-rtl {
 	text-align: right;
