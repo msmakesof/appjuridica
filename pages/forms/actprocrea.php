@@ -1,10 +1,14 @@
-﻿<?php
-require_once('../../Connections/cnn_kn.php'); 
-require_once('../../Connections/config2.php');
+<?php
 if(!isset($_SESSION)) 
 { 
     session_start(); 
+}
+if( !isset($_SESSION['IdUsuario']) && !isset($_SESSION['NombreUsuario']) )
+{
+	header("Location: ../../index.html");
 } 
+require_once('../../Connections/cnn_kn.php'); 
+require_once('../../Connections/config2.php');
 ?>
 <?php
 if (!function_exists("GetSQLValueString")) 

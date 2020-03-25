@@ -42,7 +42,7 @@ if (!function_exists("GetSQLValueString"))
 }
 
 require_once('../../Connections/DataConex.php');
-$parameters = "update=update&proceso=$proceso&fechainicio=$fechainicio&asignadoa=$asignadoa&ubicacion=$ubicacion&claseproceso=$claseproceso&demandante=$demandante&demandado=$demandado&estado=$estado&idtabla=$idtabla";
+$parameters = "update=update&proceso=$proceso&fechainicio=$fechainicio&asignadoa=$asignadoa&ubicacion=$ubicacion&claseproceso=$claseproceso&demandante=$demandante&demandado=$demandado&estado=$estado&enviaemailcli=$enviaemailcli&representa=$representa&usuariomodifica=$usuariomodifica&idtabla=$idtabla";
 $soportecURL = "S";
 $url         = urlServicios."consultadetalle/consultadetalle_pro_proceso.php?".$parameters;
 $existe      = "";

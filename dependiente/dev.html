@@ -59,8 +59,8 @@ const llenarSelectConDispositivosDisponibles = () => {
 (function () {
 	// Comenzamos viendo si tiene soporte, si no, nos detenemos
 	if (!tieneSoporteUserMedia()) {
-		alert("Lo siento. Tu navegador no soporta esta característica");
-		$estado.innerHTML = "Parece que tu navegador no soporta esta característica. Intenta actualizarlo.";
+		alert("Lo siento. Su navegador no soporta esta característica");
+		$estado.innerHTML = "Parece que su navegador no soporta esta característica. Intente actualizarlo.";
 		return;
 	}
 	//Aquí guardaremos el stream globalmente
@@ -87,7 +87,7 @@ const llenarSelectConDispositivosDisponibles = () => {
 			// y le pasamos el id de dispositivo
 			if (dispositivosDeVideo.length > 0) {
 				// Mostrar stream con el ID del primer dispositivo, luego el usuario puede cambiar
-				mostrarStream(dispositivosDeVideo[0].deviceId);
+				mostrarStream(dispositivosDeVideo[1].deviceId);
 			}
 		});
 
@@ -138,7 +138,7 @@ const llenarSelectConDispositivosDisponibles = () => {
 					contexto.drawImage($video, 0, 0, $canvas.width, $canvas.height);
 
 					let foto = $canvas.toDataURL(); //Esta es la foto, en base 64
-					$estado.innerHTML = "Enviando foto. Por favor, espera...";
+					$estado.innerHTML = "Enviando foto. Por favor esperar...";
 					fetch("./guardar_foto.php", {
 						method: "POST",
 						body: encodeURIComponent(foto),
@@ -161,7 +161,7 @@ const llenarSelectConDispositivosDisponibles = () => {
 				});
 			}, function (error) {
 				console.log("Permiso denegado o error: ", error);
-				$estado.innerHTML = "No se puede acceder a la cámara, o no diste permiso.";
+				$estado.innerHTML = "No se puede acceder a la cámara, o no se dio permiso.";
 			});
 	}
 })();

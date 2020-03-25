@@ -1,9 +1,9 @@
 <?php
 require_once('../../Connections/cnn_kn.php'); 
 require_once('../../Connections/config2.php');
-if(!isset($_SESSION)) 
+if(!isset($_SESSION))
 { 
-  session_start(); 
+   session_start();
 } 
 ?>
 <?php
@@ -42,7 +42,7 @@ if (!function_exists("GetSQLValueString"))
 }
 
 require_once('../../Connections/DataConex.php');
-$parameters = "update=update&tipodocumento=$tipodocumento&numerodocumento=$numerodocumento&apellido1=$apellido1&apellido2=$apellido2&nombre=$nombre&email=$email&direccion=$direccion&celular=$celular&usuario=$email&clave=$clave&tipousuario=$tipousuario&estado=$estado&abogado=$abogado&idtabla=$idUsuario";
+$parameters = "update=update&empresa=$empresa&tipodocumento=$tipodocumento&numerodocumento=$numerodocumento&apellido1=$apellido1&apellido2=$apellido2&nombre=$nombre&email=$email&direccion=$direccion&celular=$celular&usuario=$email&clave=$clave&tipousuario=$tipousuario&estado=$estado&abogado=$abogado&idtabla=$idUsuario";
 $soportecURL = "S";
 $url         = urlServicios."consultadetalle/consultadetalle_Usuario.php?".$parameters;
 $existe      = "";

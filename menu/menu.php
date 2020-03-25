@@ -40,6 +40,18 @@ function GetSQLValueString($theValue, $theType, $theDefinedValue = "", $theNotDe
 }
 $empresa = "AppJuridica";
 $opcMenu= $_SESSION["opcMenu"] ;
+/*
+if( isset($opcMenu) && !empty($opcMenu) )
+{
+	$opcMenu= $_SESSION["opcMenu"] ;
+}
+else
+{
+	$opcMenu="P";
+}
+echo "opcMenu.....$opcMenu";
+*/
+
 if( isset($_POST['ƒ¤']) && !empty($_POST['ƒ¤']) )
 {    
     $clave = trim($_POST['ƒ¤']);
@@ -48,6 +60,7 @@ else
 {
     $clave ="";
 }
+include('../header.php');
 ?>   
    
 <div class="menu">
@@ -56,36 +69,11 @@ else
         <li>
             <a href="../header/">
                 <i class="material-icons">home</i>
-                <span>Inicio</span>
+                <span>Inicio...</span>
             </a>
         </li>
 		
-		<li>
-            <a href="../pages/tables/cli_cliente.php" class="menu-toggle">
-                <i class="material-icons">assignment_ind</i>
-                <span>Clientes</span>
-            </a>
-			<!--
-            <ul class="ml-menu">
-                <li>
-                    <a href="../pages/tables/cli_cliente.php" class="menu-toggle">
-                        <span>Clientes</span>
-                    </a>  
-                </li>
-            </ul>
-			-->            
-        </li>
-		
-        <?php if($_SESSION["TipoUsuario"] == 1) {?>
-            <li>
-                <a href="javascript:void(0);">
-                    <i class="material-icons">text_fields</i>
-                    <span>M&oacute;dulo Usuarios</span>
-                </a>
-            </li>                   
-        <?php } ?>
-
-        <?php if($_SESSION["TipoUsuario"] == 1) { ?>
+				<?php if($_SESSION["TipoUsuario"] == 1) { ?>
         <li> <!-- class="active" -->
             <a href="javascript:void(0);" class="menu-toggle">
                 <i class="material-icons">view_list</i>
@@ -171,7 +159,43 @@ else
             ?>
             </ul>
         </li>
-        <?php } ?>
+        <?php } ?> 
+		
+		<li>
+            <a href="#" class="menu-toggle">
+                <i class="material-icons">assignment_ind</i>
+                <span>Módulo Empresas</span>
+            </a>
+			
+            <ul class="ml-menu">
+                <li>
+                    <a href="../pages/tables/emp_empresa.php" class="menu-toggle">
+						<i class="material-icons">text_fields</i>
+                        <span>Empresas</span>
+                    </a>  
+                </li>
+				
+				<?php if($_SESSION["TipoUsuario"] == 1) {?>
+					<li>
+						<a href="../pages/tables/usu_usuario.php" class="menu-toggle">
+							<i class="material-icons">text_fields</i>
+							<span>Usuarios</span>
+						</a>
+					</li>                   
+				<?php } ?>
+            </ul>
+			         
+        </li>
+		
+		<li>
+            <a href="../pages/tables/cli_cliente.php" class="menu-toggle">
+                <i class="material-icons">assignment_ind</i>
+                <span>Clientes</span>
+            </a>			           
+        </li>
+		
+        
+
 
         <li <?php if($opcMenu =="P") { echo "class='active'"; }?> >
             <a href="javascript:void(0);" class="menu-toggle">
@@ -190,23 +214,7 @@ else
             </ul>			
         </li>
 
-        
-
-        <li>
-            <a href="javascript:void(0);" class="menu-toggle">
-                <i class="material-icons">account_balance</i>
-                <span>Consultar Juzgados..</span>
-            </a>
-            <ul class="ml-menu">
-                <li>
-                   <!--  <a href="../kal/sample.php" class="menu-toggle">
-                        <span>Comparaci&oacute;n de Cajas</span>
-                    </a>  --> 
-                </li>
-            </ul>
-        </li>
-
-        <li>
+         <li>
             <a href="javascript:void(0);" class="menu-toggle">
                 <i class="material-icons">today</i>
                 <span>Agenda</span>
@@ -218,8 +226,17 @@ else
                     </a>  
                 </li>
             </ul>            
-        </li>               
-        
+        </li>
+		
+		<!--
+        <li>
+            <a href="javascript:void(0);" class="menu-toggle">
+                <i class="material-icons">account_balance</i>
+                <span>Consultar Juzgados.</span>
+            </a>            
+        </li>                      
+        -->
+		
 		<li>
             <a href="javascript:void(0);" class="menu-toggle">
                 <i class="material-icons">assignment_ind</i>
@@ -234,19 +251,18 @@ else
             </ul>
         </li>
 
+		<!--
         <li>
             <a href="javascript:void(0);" class="menu-toggle">
                 <i class="material-icons">widgets</i>
                 <span>Siglo XXI</span>
             </a>
             <ul class="ml-menu">
-                <li>
-                   <!--  <a href="../kal/sample.php" class="menu-toggle">
-                        <span>Comparaci&oacute;n de Cajas</span>
-                    </a>  --> 
-                </li>
+                
             </ul>
         </li>
+		-->
+		
         <?php if($_SESSION["TipoUsuario"] == 1) { ?>
         <li>
             <a href="javascript:void(0);" class="menu-toggle">
@@ -254,6 +270,11 @@ else
                 <span>Módulo de Recursos.</span>
             </a>
             <ul class="ml-menu">
+				<li>
+                    <a href="https://procesojudicial.ramajudicial.gov.co/Justicia21/Administracion/InicioAplicaciones/InicioJusticia21Web.aspx" class="menu-toggle" target="_blank">
+                        <span>Rama Judicial TYBA</span>
+                    </a>                
+				</li>
                 <li>
                     <a href="javascript:void(0);">Indicadores</a>
                 </li>
@@ -272,6 +293,7 @@ else
             </ul>
         </li>
         <?php } ?>
-       
+		
+      
     </ul>
 </div>

@@ -19,23 +19,23 @@ $imagenCodificadaLimpia = str_replace("data:image/png;base64,", "", urldecode($i
 $imagenDecodificada = base64_decode($imagenCodificadaLimpia);
 
 /* nuevo*/
-/*
+
 // Mejor esto:
+/*
 $datos = json_decode(file_get_contents("php://input"));
 $imagenDeCodificada = $datos->foto;
 if($imagenDeCodificada == "")exit("No se recibió ninguna imagen");
 # Lo siguiente es el nroproceso que enviaron desde el select
 $nroproceso = $datos->proceso;
 //echo "img...$imagenDeCodificada  - proceso: $nroproceso";
-*/
 /* fin nuevo */ 
 
-
+$nroproceso = $datos->proceso;
 //Calcular un nombre único
-$nombreImagenGuardada = "foto_" . uniqid()  . ".jpg";   //. "-$nroproceso"
+$nombreImagenGuardada = "foto_$nroproceso_" . uniqid()  . ".jpg";   //. "-$nroproceso"
 
 $tmp_name = $_FILES['imagen']["tmp_name"];
-$nuevo_path="imgsfotos/";//.$nombreImagenGuardada;
+$nuevo_path = "imgsfotos/";//.$nombreImagenGuardada;
 move_uploaded_file($tmp_name,$nuevo_path);
 
 //Escribir el archivo

@@ -90,5 +90,19 @@ if(isset($_POST['estado'])){
 	$estado = trim($_POST['estado']);
 }
 
+$enviaemailcli ="";
+if(isset($_POST['enviaemailcli'])){
+	$enviaemailcli = $_POST['enviaemailcli'];
+}
+
+$representa ="";
+if(isset($_POST['representa'])){
+	$representa = $_POST['representa'];
+}
+
+$usuariomodifica ="";
+if(isset($_POST['um'])){
+	$usuariomodifica = trim($_POST['um']);
+}
 require_once('../../apis/proceso/proceso.upd.php');
 ?>

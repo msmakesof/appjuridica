@@ -192,7 +192,7 @@
                       BorderRadius: o.borderRadius,
                       MozBorderRadius: o.borderRadius,
                       WebkitBorderRadius: o.borderRadius,
-                      zIndex: 99
+                      zIndex: 99 
                   });
 
                 // set position

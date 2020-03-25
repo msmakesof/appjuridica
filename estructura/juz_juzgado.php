@@ -26,12 +26,16 @@ class JUZ_JUZGADO
         JUZ_Direccion,
         JUZ_Piso,
         JUZ_IdTipoJuzgado,
-        JUZ_IdArea,                
+        JUZ_IdArea,
+		JUZ_Email,
+		JUZ_Edificio,
+		PIS_Numero,
         CASE JUZ_Estado WHEN 1 THEN 'Activo' ELSE 'Inactivo' END EstadoTabla, 
         CIU_Nombre , TJU_Nombre, ARE_Nombre
         FROM ".$GLOBALS['TABLA'] .
         " JOIN gen_ciudad ON JUZ_IdCiudad = gen_ciudad.CIU_IdCiudades ".
         " JOIN juz_tipojuzgado ON JUZ_IdTipoJuzgado = juz_tipojuzgado.TJU_IdTipoJuzgado ".
+		" JOIN juz_piso ON PIS_IdPiso = JUZ_Piso AND PIS_Estado = 1 ".
         " JOIN juz_area ON JUZ_IdArea = juz_area.ARE_IdArea ";
 
         try {
@@ -65,6 +69,8 @@ class JUZ_JUZGADO
                     JUZ_IdTipoJuzgado,
                     JUZ_IdArea,
                     JUZ_Estado,
+					JUZ_Email,
+					JUZ_Edificio,
                     CASE JUZ_Estado WHEN 1 THEN 'Activo' ELSE 'Inactivo' END EstadoTabla, 
                     CIU_Nombre , TJU_Nombre, ARE_Nombre
                     FROM ". $GLOBALS['TABLA'].
@@ -177,20 +183,22 @@ class JUZ_JUZGADO
         $TipoJuzgado,        
         $Area,
         $Estado,
+		$Email, 
+		$Edificio,		
         $IdUsuario
     )
     {
         // Creando consulta UPDATE
         $consulta = "UPDATE ". $GLOBALS['TABLA'].
             " SET JUZ_Ubicacion=?, JUZ_IdCiudad=?, JUZ_Direccion=?, JUZ_Piso=?, JUZ_IdTipoJuzgado=?, JUZ_IdArea=?, ".
-            " JUZ_Estado=? " .
+            " JUZ_Estado=?, JUZ_Email=?, JUZ_Edificio=? " .
             " WHERE ". $GLOBALS['Llave'] ." =? ;";
 
         // Preparar la sentencia
         $cmd = Database::getInstance()->getDb()->prepare($consulta);
 
         // Relacionar y ejecutar la sentencia
-        $cmd->execute(array($Ubicacion, $Ciudad, $Direccion, $Piso, $TipoJuzgado, $Area, $Estado, $IdUsuario ));
+        $cmd->execute(array($Ubicacion, $Ciudad, $Direccion, $Piso, $TipoJuzgado, $Area, $Estado, $Email, $Edificio, $IdUsuario ));
 
         return $cmd;
     }
@@ -209,7 +217,7 @@ class JUZ_JUZGADO
      * @return PDOStatement
      */
 
-    public static function insert( $Ubicacion, $Ciudad, $Direccion, $Piso, $TipoJuzgado, $Area, $Estado)
+    public static function insert( $Ubicacion, $Ciudad, $Direccion, $Piso, $TipoJuzgado, $Area, $Estado, $Email, $Edificio)
     {
         // Sentencia INSERT
         $comando = "INSERT INTO ". $GLOBALS['TABLA'] ."( " .            
@@ -219,13 +227,15 @@ class JUZ_JUZGADO
             " JUZ_Piso," .
             " JUZ_IdTipoJuzgado," .
             " JUZ_IdArea," .
-            " JUZ_Estado " .
-            " ) VALUES(?,?,?,?,?,?,?);";
+            " JUZ_Estado, " .
+			" JUZ_Email, " .
+			" JUZ_Edificio " .
+            " ) VALUES(?,?,?,?,?,?,?,?,?);";
         try {
             // Preparar la sentencia
             $sentencia = Database::getInstance()->getDb()->prepare($comando);
             return $sentencia->execute(
-                array( $Ubicacion, $Ciudad, $Direccion, $Piso, $TipoJuzgado, $Area, $Estado )    
+                array( $Ubicacion, $Ciudad, $Direccion, $Piso, $TipoJuzgado, $Area, $Estado, $Email, $Edificio )    
             );
            
         } catch (PDOException $e) {

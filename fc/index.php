@@ -31,11 +31,11 @@ include 'config.php';
 // Verificamos si se ha enviado el campo con name from
 if (isset($_POST['from'])) 
 {
-
+	echo "baseurl0....$base_url";
     // Si se ha enviado verificamos que no vengan vacios
-    if ($_POST['from']!="" AND $_POST['to']!="") 
+    if ($_POST['from'] !="" AND $_POST['to'] !="") 
     {
-
+		echo "baseurl....$base_url";
         // Recibimos el fecha de inicio y la fecha final desde el form
 
         $inicio = _formatear($_POST['from']);
@@ -60,13 +60,13 @@ if (isset($_POST['from']))
         $clase  = evaluar($_POST['class']);
 
         // insertamos el evento
-        $query="INSERT INTO eventos VALUES(null,'$titulo','$body','','$clase','$inicio','$final','$inicio_normal','$final_normal')";
+        $query="INSERT INTO eve_evento VALUES(null,'$titulo','$body','','$clase','$inicio','$final','$inicio_normal','$final_normal')";
 
         // Ejecutamos nuestra sentencia sql
         $conexion->query($query); 
 
         // Obtenemos el ultimo id insetado
-        $im=$conexion->query("SELECT MAX(id) AS id FROM eventos");
+        $im=$conexion->query("SELECT MAX(id) AS id FROM eve_evento");
         $row = $im->fetch_row();  
         $id = trim($row[0]);
 
@@ -74,13 +74,14 @@ if (isset($_POST['from']))
         $link = "$base_url"."descripcion_evento.php?id=$id";
 
         // y actualizamos su link
-        $query="UPDATE eventos SET url = '$link' WHERE id = $id";
+        $query="UPDATE eve_evento SET url = '$link' WHERE id = $id";
 
         // Ejecutamos nuestra sentencia sql
         $conexion->query($query); 
 
         // redireccionamos a nuestro calendario
-        header("Location:$base_url"); 
+        //header("Location:$base_url/"); 
+		header("Location:index.php"); 
     }
 }
 
@@ -285,7 +286,7 @@ if (isset($_POST['from']))
                     <br>
 
                     <label for="tipo">Tipo de evento</label>
-                    <select class="form-control" name="class" id="tipo">
+                    <select class="form-control" name="tipo" id="tipo">
                         <option value="event-info">Informacion</option>
                         <option value="event-success">Exito</option>
                         <option value="event-important">Importantante</option>
@@ -303,7 +304,7 @@ if (isset($_POST['from']))
 
 
                     <label for="body">Evento</label>
-                    <textarea id="body" name="event" required class="form-control" rows="3"></textarea>
+                    <textarea id="body" name="body" required class="form-control" rows="3"></textarea>
 
     <script type="text/javascript">
         $(function () {

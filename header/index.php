@@ -1,18 +1,22 @@
-﻿<?php
+<?php
 ob_start();
 if(!isset($_SESSION)) 
 { 
     session_start(); 
 }
+
 if( !isset($_SESSION['IdUsuario']) && !isset($_SESSION['NombreUsuario']) )
 {
 	header("Location: ../index.html");
     exit;
 }
+
 include('../Connections/cnn_kn.php'); 
 include('../Connections/config2.php'); 
 include('js.php');
-//echo "<br><br><br><br><br><div style='margin-left:280px;'>En MWXxxxXMMMMMXMMXMMxxxXWWWwwm.....".$_SESSION['IdUsuario'].' - '.$_SESSION['NombreUsuario']."</div>";
+//echo "<br><br><br><br><br><div style='margin-left:280px;'>En MWXxxxXMMMMMXMMXMMxxxXWWWwwm.....".$_SESSION['IdUsuario'].' - '.$_SESSION['NombreUsuario']." - ".$clavelocal." - ms: ". $ms." - abog: ".$usuesAbogado." - sa: ".$essuperadmin."</div>";
+//include('info.php');
+require_once('info.php');
 ?>
 <?php
 if (!function_exists("GetSQLValueString")) 
@@ -133,13 +137,13 @@ $script_tz = date_default_timezone_get();
                     <img src="../images/logoaj.png" style="margin-top: -10px;">
                 </a>
             </div>
-            <!--  Notificaciones
+            <!--  Notificaciones  -->
             <div class="collapse navbar-collapse" id="navbar-collapse">
                 <ul class="nav navbar-nav navbar-right">
-                    < Call Search >
+                    <!--< Call Search >-->
                     <li><a href="javascript:void(0);" class="js-search" data-close="true"><i class="material-icons">search</i></a></li>
-                    < #END# Call Search >
-                    < Notifications >
+                    <!-- < #END# Call Search > 					
+                    < Notifications >  -->
                     <li class="dropdown">
                         <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button">
                             <i class="material-icons">notifications</i>
@@ -246,8 +250,9 @@ $script_tz = date_default_timezone_get();
                                 <a href="javascript:void(0);">Ver Todas las Notificaciones</a>
                             </li>
                         </ul>                    </li>
-                    < #END# Notifications >
-                    < Tasks >
+                    <!-- < #END# Notifications > 
+                    < Tasks >  -->
+					
                     <li class="dropdown">
                         <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button">
                             <i class="material-icons">flag</i>
@@ -324,11 +329,11 @@ $script_tz = date_default_timezone_get();
                             </li>
                         </ul>
                     </li>
-                    < #END# Tasks >
+                    <!-- < #END# Tasks >-->
                     <li class="pull-right"><a href="javascript:void(0);" class="js-right-sidebar" data-close="true"><i class="material-icons">more_vert</i></a></li>
                 </ul>
             </div>
-            Fin Notificaciones -->
+           <!--  Fin Notificaciones -->
 
         </div>
     </nav>
@@ -342,17 +347,43 @@ $script_tz = date_default_timezone_get();
                     <img src="../images/user.png" width="48" height="48" alt="User" />
                 </div>
                 <div class="info-container">
-
                     <div class="name" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">                        
-                        <span id="xNom"><?php echo $_SESSION['NombreUsuario']; ?></span>                   
+                        <span id="xNom">
+							<?php 
+								if ( isset( $_SESSION['NombreUsuario'] ) && !empty( $_SESSION['NombreUsuario'] ) ) 
+								{
+									// Variable definida y no vacia
+									echo $_SESSION['NombreUsuario'];									
+								} 
+								else 
+								{
+									// Variable no definida o vacia									
+									header('Location: ../');
+									exit;
+								}	
+							?>
+						</span>
                     </div>
 
                     <div class="email">                       
-                        <span id="xMail"><?php echo $_SESSION['EmailUsuario']; ?></span>
-                    </div>
-                    
+                        <span id="xMail">
+							<?php 
+								if ( isset( $_SESSION['EmailUsuario'] ) && !empty( $_SESSION['EmailUsuario'] ) ) 
+								{
+									// Variable definida y no vacia
+									echo $_SESSION['EmailUsuario'];								
+								} 
+								else 
+								{
+									// Variable no definida o vacia
+									header('Location: ../');
+									exit;
+								}							
+							?>
+						</span>
+                    </div>                    
                     <!-- <div class="name" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><?php echo trim($nombre); ?></div> 
-                    <div class="email"><?php echo trim($email); ?></div>-->
+                    <div class="email"><?php //echo trim($email); ?></div>-->
                     <div class="btn-group user-helper-dropdown">
                         <i class="material-icons" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">keyboard_arrow_down</i>
                         <ul class="dropdown-menu pull-right">
@@ -367,10 +398,28 @@ $script_tz = date_default_timezone_get();
                     </div>
                 </div>
             </div>
-            <!-- #User Info -->
+            <!-- #User Info
+			<style>
+			.slimScrollDiv {
+				height: auto !important;
+				min-height: 737px !important;
+				max-height: 850px !important;
+			}
+
+			.slimScrollDiv .scroller {
+				height: auto !important;
+				min-height: 737px !important;
+				max-height: 850px !important;
+			}
+			</style>
+			 -->
+			
             <!-- Menu -->
-            <?php require_once('../menu/menu.php'); ?>           
-            
+            <?php 
+			//include('../header.php');
+			include_once('../menu/menu.php');
+//include('../pages/tables/menu.php');
+			?>            
             <!-- #Menu -->
             <!-- Footer -->
             <div class="legal">
@@ -400,8 +449,8 @@ $script_tz = date_default_timezone_get();
                             <i class="material-icons">playlist_add_check</i>
                         </div>
                         <div class="content">
-                            <div class="text">Mis Procesos: <?php //echo $nombremes. ' '.$yy ;?> </div>
-                            <div class="number count-to" data-from="0" data-to="<?php echo $cantclases; ?>" data-speed="15" data-fresh-interval="20"></div>
+                            <div class="text">Procesos Abiertos: </div>
+                            <div class="number count-to" data-from="0" data-to="<?php echo $misProcesos; ?>" data-speed="1000" data-fresh-interval="20"></div>
                         </div>
                     </div>
                 </div>
@@ -411,8 +460,8 @@ $script_tz = date_default_timezone_get();
                             <i class="material-icons">group</i>
                         </div>
                         <div class="content">
-                            <div class="text">Mis Clientes:</div>
-                            <div class="number count-to" data-from="0" data-to="<?php echo $cantest; ?>" data-speed="1000" data-fresh-interval="20"></div>
+                            <div class="text">Clientes Activos:</div>
+                            <div class="number count-to" data-from="0" data-to="<?php echo $misClientes; ?>" data-speed="1000" data-fresh-interval="20"></div>
                         </div>
                     </div>
                 </div>
@@ -423,7 +472,7 @@ $script_tz = date_default_timezone_get();
                         </div>
                         <div class="content">
                             <div class="text">Seguimiento Judicial:</div>
-                            <div class="number count-to" data-from="0" data-to="<?php echo $cantpro; ?>" data-speed="1000" data-fresh-interval="20"></div>
+                            <div class="number count-to" data-from="0" data-to="<?php echo $miProcesoJudicial; ?>" data-speed="1000" data-fresh-interval="20"></div>
                         </div>
                     </div>
                 </div>
@@ -433,8 +482,8 @@ $script_tz = date_default_timezone_get();
                             <i class="material-icons">web</i>
                         </div>
                         <div class="content">
-                            <div class="text">Mi Agenda: </div>
-                            <div class="number count-to" data-from="0" data-to="<?php echo $canthor; ?>" data-speed="1000" data-fresh-interval="20"></div>
+                            <div class="text">Eventos Agenda:</div>
+                            <div class="number count-to" data-from="0" data-to="<?php echo $miAgenda ; ?>" data-speed="1000" data-fresh-interval="20"></div>							
                         </div>
                     </div>
                 </div>

@@ -1,10 +1,10 @@
-﻿<?php
-require_once('../../Connections/cnn_kn.php'); 
-require_once('../../Connections/config2.php');
+<?php
 if(!isset($_SESSION)) 
 { 
     session_start(); 
 } 
+require_once('../../Connections/cnn_kn.php'); 
+require_once('../../Connections/config2.php');
 ?>
 <?php
 if (!function_exists("GetSQLValueString")) 
@@ -82,11 +82,12 @@ $IdClaseProceso = trim($mproceso['pro_proceso']['PRO_IdClaseProceso']);
 $IdJuzgadoOrigen = trim($mproceso['pro_proceso']['PRO_IdJuzgadoOrigen']);
 $IdArea = $mproceso['pro_proceso']['PRO_IdArea']; // Area o Especialidad
 $IdJuzgado = trim($mproceso['pro_proceso']['PRO_IdJuzgado']);
-
 $FechaCierre = trim($mproceso['pro_proceso']['PRO_FechaCierre']);
 $ObservacionCierre = trim($mproceso['pro_proceso']['PRO_ObservacionCierre']);
 $IdUsuarioCierre = trim($mproceso['pro_proceso']['PRO_IdUsuarioCierre']);
-
+$EnviaEmail = $mproceso['pro_proceso']['PRO_EnviaEmail'];
+$Representante = $mproceso['pro_proceso']['PRO_RepresentanteDe'];
+$FechaCreado = $mproceso['pro_proceso']['PRO_FechaCreado'];
 
 //echo "IdJuzgado....$IdJuzgado";
 //GLOBAL $deptoproceso ;GLOBAL $ciudadproceso ;
@@ -592,7 +593,14 @@ $IdUsuarioCierre = trim($mproceso['pro_proceso']['PRO_IdUsuarioCierre']);
         <div class="container-fluid">
             <div class="block-header">
                 <h2>
-                    FORMULARIO: Edición <?php echo $Tabla;?>. <span class="badge badge-pill badge-info"><?php echo $txtEstado; ?></span>
+					<?php 
+						$textoCreado ="";
+						if($_SESSION['TipoUsuario'] == 4 )  // SA
+						{	
+							$textoCreado = "           Fecha Creación:  ".$FechaCreado;
+						}
+					?>
+                    FORMULARIO: Edición <?php echo $Tabla;?>. <span class="badge badge-pill badge-info"><?php echo $txtEstado; ?></span><?php echo $textoCreado; ?>
                     <!--<small>Editar.</small>-->
                 </h2>
             </div>
@@ -809,15 +817,15 @@ $IdUsuarioCierre = trim($mproceso['pro_proceso']['PRO_IdUsuarioCierre']);
 
 
                                 <div class="form-group">
-                                    <div class="col-lg-12 col-md-12 col-sm-12">
+                                    <div class="col-lg-7 col-md-7 col-sm-7">
 										<div class="row">											
 											<div class="xcol-sm-8">
                                                 <label class="form-label">Apoderado(a):</label>
 												<select class="selectpicker show-tick" data-live-search="true" data-width="94%" name="usuario" id="usuario" required>
 												<option value="" >Seleccione Apoderado(a)...</option>
 												<?php
-                                                    $idTabla = 0;
-                                                    require_once('../../apis/usuario/infoUsuario.php');
+                                                    $idTabla = 1;
+                                                    require_once('../../apis/usuario/infoUsuarioAbogado.php');
 													for($i=0; $i<count($muser['usu_usuario']); $i++)
 													{
 														$USU_IdUsuario = $muser['usu_usuario'][$i]['USU_IdUsuario'];                                                
@@ -832,7 +840,21 @@ $IdUsuarioCierre = trim($mproceso['pro_proceso']['PRO_IdUsuarioCierre']);
 												</select>												
 											</div>
 										</div>	
-                                    </div>                                       
+                                    </div> 
+									<div class="col-lg-5 col-md-5 col-sm-5">                                
+                                        <div class="row">
+                                            <div class="xcol-sm-8" style="margin-left:15px;">
+												<label class="form-label">Representante de: </label>
+                                                <div class="form-group">                                                    
+													<input type="radio" name="representa" id="acusador" class="with-gap" value="0" <?php if( $Representante == 0){?>checked="checked"<?php } ?>>
+													<label for="acusador">Demandante</label>
+
+													<input type="radio" name="representa" id="acusado" class="with-gap" value="1"  <?php if( $Representante == 1){?>checked="checked"<?php } ?>>
+													<label for="acusado" class="m-l-20">Demandado</label>
+												</div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
 
                                 <div class="form-group">
@@ -957,7 +979,7 @@ $IdUsuarioCierre = trim($mproceso['pro_proceso']['PRO_IdUsuarioCierre']);
                                                     <label for="inactivo" class="m-l-20">Cerrado</label>
 													
 													<label class="form-label">Autoriza enviar email al cliente?
-														<input type="checkbox" name="enviaemail" id="enviaemail" data-toggle="toggle" data-size="mini" data-on="Si" data-off="No" data-onstyle="success" data-offstyle="danger">
+														<input type="checkbox" name="enviaemail" id="enviaemail" data-toggle="toggle" data-size="mini" data-on="Si" data-off="No" data-onstyle="success" data-offstyle="danger" <?php if($EnviaEmail == 1){ ?> checked="checked" <?php } ?>>
 													</label>
                                                 </div>
                                             </div>
@@ -1295,9 +1317,7 @@ $IdUsuarioCierre = trim($mproceso['pro_proceso']['PRO_IdUsuarioCierre']);
 			daysOfWeekDisabled: disabledWeekDays		  
         });
 
-        populateFruitVariety();        
-
-        //init_contador("#proceso","#muestrocantidadcaracteresid");
+        populateFruitVariety();
 		
 		var x = $("#proceso").val().length;
 		$("#muestrocantidadcaracteresid").html("<span>"+x+"</span>");
@@ -1408,6 +1428,18 @@ $IdUsuarioCierre = trim($mproceso['pro_proceso']['PRO_IdUsuarioCierre']);
             goDespachos();
             nroProceso(); 
         }
+		
+	$("#actoprocesal").on("click", function(){
+		var id = "<?php echo $idtabla ?>";
+		var proceso ="<?php echo $nroproceso; ?>";
+		$.post('editaractprocesal.php', { 'id': id, 'proceso': proceso }, function (result) {
+			WinId = window.open('','_self');
+			WinId.document.open();
+			WinId.document.write(result);
+			WinId.document.close();
+		});
+		
+    });
 		        
 		
 	$("#grabar").on('click', function(e) {
@@ -1424,9 +1456,11 @@ $IdUsuarioCierre = trim($mproceso['pro_proceso']['PRO_IdUsuarioCierre']);
             var demandante = $("#demandante").val();
             var demandado = $("#demandado").val();
             var estado = $('input:radio[name=estado]:checked').val();
+			var representa = $('input:radio[name=representa]:checked').val();
             var idtabla = "<?php echo $idtabla; ?>";
+			var um = <?php echo $_SESSION['IdUsuario']; ?>;
             //asignadoa == "" ||
-            if( estado == undefined || proceso == "" || fechainicio == "" ||  ubicacion == "" || claseproceso == "" || demandante == "" || demandado == "")
+            if( estado == undefined || representa == undefined || proceso == "" || fechainicio == "" ||  ubicacion == "" || claseproceso == "" || demandante == "" || demandado == "")
             {               
                 swal({
                   title: "Error:  Ingrese información en todos los campos...",
@@ -1442,7 +1476,7 @@ $IdUsuarioCierre = trim($mproceso['pro_proceso']['PRO_IdUsuarioCierre']);
     			var enviaemailcli = $('#enviaemail').prop('checked');
 				//alert("envia email cli..."+enviaemailcli);
 				$.ajax({
-    				data : {"proceso": proceso, "nproceso": nproceso, "fechainicio": fechainicio, "asignadoa": asignadoa, "ubicacion": ubicacion, "claseproceso": claseproceso, "demandante": demandante, "demandado": demandado, "estado": estado, "idtabla": idtabla, "enviaemailcli": enviaemailcli},
+    				data : {"proceso": proceso, "nproceso": nproceso, "fechainicio": fechainicio, "asignadoa": asignadoa, "ubicacion": ubicacion, "claseproceso": claseproceso, "demandante": demandante, "demandado": demandado, "estado": estado, "idtabla": idtabla, "enviaemailcli": enviaemailcli, "representa": representa, "um": um},
     				type: "POST",				
     				url : "../forms/editar_<?php echo strtolower($Tabla); ?>.php",
                 })  

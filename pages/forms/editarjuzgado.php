@@ -1,4 +1,4 @@
-﻿<?php 
+<?php 
 require_once('../../Connections/cnn_kn.php'); 
 require_once('../../Connections/config2.php');
 if(!isset($_SESSION)) 
@@ -43,6 +43,7 @@ require_once('../../apis/general/ciudad.php');
 require_once('../../apis/general/piso.php');
 require_once('../../apis/general/tipojuzgado.php');
 require_once('../../apis/general/area.php');
+require_once('../../apis/general/edificio.php');
 if( isset($_GET['f'])  && !empty($_GET['f']) )
 {    
     $idTabla = trim($_GET['f']);
@@ -57,6 +58,8 @@ $idTabla = $mjuzgado['juz_juzgado']['JUZ_IdJuzgado'];
 $Ciudad = $mjuzgado['juz_juzgado']['JUZ_IdCiudad'];
 $NombreCiudad = $mjuzgado['juz_juzgado']['CIU_Nombre'];
 $Direccion = $mjuzgado['juz_juzgado']['JUZ_Direccion'];
+$Edificio = $mjuzgado['juz_juzgado']['JUZ_Edificio'];
+$Email = $mjuzgado['juz_juzgado']['JUZ_Email'];
 $Piso = $mjuzgado['juz_juzgado']['JUZ_Piso'];
 $TipoJuzgado = $mjuzgado['juz_juzgado']['JUZ_IdTipoJuzgado'];
 $NombreTipoJuzgado = $mjuzgado['juz_juzgado']['TJU_Nombre'];
@@ -218,11 +221,36 @@ $EstadoUsuario = $mjuzgado['juz_juzgado']['EstadoTabla'];
                                     </div>
                                 </div>
 
-                                <div class="form-group">
+                                <div style="form-group form-float">                                     
+                                    <label class="form-label">
+                                        Edificio
+                                    </label>                                    
+                                    <div class="col-sm-4">                                       
+                                        <select class="selectpicker show-tick" data-live-search="true" data-width="80%" name="edificio" id="edificio" required>
+                                            <option value="" >Seleccione Opción...</option>
+                                            <?php
+                                                for($i=0; $i<count($medificio['gen_edificio']); $i++)
+                                                {
+                                                    $EDI_IdEdificio = $medificio['gen_edificio'][$i]['EDI_IdEdificio'];                                                    
+                                                    $EDI_Nombre = $medificio['gen_edificio'][$i]['EDI_Nombre'];
+													$EDI_Direccion = $medificio['gen_edificio'][$i]['EDI_Direccion'];
+                                                    $EDI_Estado = $medificio['gen_edificio'][$i]['EDI_Estado'];
+                                            ?>
+                                                    <option value="<?php echo $EDI_IdEdificio; ?>" <?php if ($EDI_IdEdificio == $Edificio){ echo "selected";} else{ echo "";} ?>>
+                                                        <?php echo $EDI_Nombre ; ?>                                                
+                                                    </option>
+                                            <?php
+                                                }
+                                            ?>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="form-group form-float" style="clear: both;">
                                     <label class="form-label">Direcci&oacute;n</label>
                                     <div class="form-line">
-                                        <input type="text" class="form-control" name="direccion" id="direccion" value="<?php echo $Direccion; ?>" required>                                      
-                                    </div>                                
+                                        <input type="text" class="form-control" name="direccion" id="direccion" value="" required>                                       
+                                    </div>
                                 </div>
 
                                 <div style="form-group form-float">                                     
@@ -236,11 +264,11 @@ $EstadoUsuario = $mjuzgado['juz_juzgado']['EstadoTabla'];
                                                 for($i=0; $i<count($mpiso['juz_piso']); $i++)
                                                 {
                                                     $PIS_IdPiso = $mpiso['juz_piso'][$i]['PIS_IdPiso'];                                                    
-                                                    $PIS_Nombre = $mpiso['juz_piso'][$i]['PIS_Nombre'];
+                                                    $PIS_Numero = $mpiso['juz_piso'][$i]['PIS_Numero'];
                                                     $PIS_Estado = $mpiso['juz_piso'][$i]['PIS_Estado'];
                                             ?>
                                                     <option value="<?php echo $PIS_IdPiso; ?>" <?php if ($PIS_IdPiso == $Piso){ echo "selected";} else{ echo "";} ?>>
-                                                        <?php echo $PIS_Nombre ; ?>                                                
+                                                        <?php echo $PIS_Numero ; ?>                                                
                                                     </option>
                                             <?php
                                                 }
@@ -249,7 +277,13 @@ $EstadoUsuario = $mjuzgado['juz_juzgado']['EstadoTabla'];
                                     </div>
                                 </div>
                                   
-                                
+                                <div class="form-group form-float" style="clear: both;">
+                                    <label class="form-label">Email</label>
+                                    <div class="form-line">
+                                        <input type="text" class="form-control" name="email" id="email" value="<?php echo $Email ;?>" required>                                       
+                                    </div>
+                                </div>
+								
                                 <div class="form-group" style="clear: both;">Estado: 
                                     <input type="radio" name="estado" id="activo" class="with-gap" value="1" <?php if( $Estado == 1){?>checked="checked"<?php } ?>>
                                     <label for="activo">Activo</label>
@@ -357,20 +391,54 @@ $EstadoUsuario = $mjuzgado['juz_juzgado']['EstadoTabla'];
             populateFruitVariety();
         });
 		
+		var id = $('#edificio').val();				
+		$.ajax({
+			type: 'GET',					
+			url: '../../consultadetalle/consultadetalle_gen_edificio.php?IdTabla='+id,
+			contentType: "application/json; charset=utf-8",
+			dataType: "json",
+			success: function(respuesta) {						
+				var dir = respuesta.gen_edificio.EDI_Direccion;
+				$("#direccion").val(dir);
+			},
+			error: function() {
+				console.log("No se ha podido obtener la información");
+			}
+		});
+		
+		
+		$('#edificio').on('change', function(e){
+			var id = $('#edificio').val();				
+			$.ajax({
+				type: 'GET',					
+				url: '../../consultadetalle/consultadetalle_gen_edificio.php?IdTabla='+id,
+				contentType: "application/json; charset=utf-8",
+				dataType: "json",
+				success: function(respuesta) {						
+					var dir = respuesta.gen_edificio.EDI_Direccion;
+					$("#direccion").val(dir);
+				},
+				error: function() {
+					console.log("No se ha podido obtener la información");
+				}
+			});
+		});
+		
 		$("#grabar").on('click', function(e) {
             $("#mensaje").hide();
-			var ubicacion = $("#ubicacion").val();
-            //ubicacion = ubicacion.toUpperCase();
+			var ubicacion = $("#ubicacion").val();            
             var ciudad = $("#ciudad").val();
             var direccion = $("#direccion").val();
             var piso = $("#piso").val();            
             var tipojuzgado = $("#tipojuzgado").val();
             var area = $("#area").val();
+			var edificio = $("#edificio").val();
+			var email = $("#email").val();
 			var estado = $('input:radio[name=estado]:checked').val();
 			var idtabla = "<?php echo $idTabla; ?>";
 			
 			$.ajax({
-				data : {"ubicacion": ubicacion, "ciudad": ciudad, "direccion": direccion, "piso": piso, "tipojuzgado": tipojuzgado, "area": area, "estado": estado, "idtabla": idtabla},
+				data : {"ubicacion": ubicacion, "ciudad": ciudad, "direccion": direccion, "piso": piso, "tipojuzgado": tipojuzgado, "area": area, "estado": estado, "edificio": edificio, "email": email, "idtabla": idtabla},
 				type: "POST",
 				dataType: "html",
 				url : "editar_<?php echo strtolower($Tabla); ?>.php",

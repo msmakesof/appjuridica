@@ -169,23 +169,23 @@ class PRO_ACTUACIONPROCESAL
      * 
      */
     public static function update(
-        $observacion,
-        $actpro,         
-        $fechainicio,
-        $fechaestado,        
-        $idtabla
+        $Fechainicio,		
+        $Actpro,
+        $Fechaestado,
+		$Observaciones,
+        $Idtabla
     )
     {
         // Creando consulta UPDATE
         $consulta = "UPDATE ". $GLOBALS['TABLA'] .
-            " SET APR_Observaciones=?, APR_IdTipoActuacionProcesal=?, APR_FechaCreacion=?, APR_FechaHabil=? " .
+            " SET APR_FechaCreacion=?, APR_IdTipoActuacionProcesal=?, APR_FechaHabil=?, APR_Observaciones=? " .
             " WHERE ". $GLOBALS['Llave']. " =? ;";
 
         // Preparar la sentencia
         $cmd = Database::getInstance()->getDb()->prepare($consulta);
 
         // Relacionar y ejecutar la sentencia
-        $cmd->execute(array($observacion, $actpro, $fechainicio, $fechaestado, $idtabla ));
+        $cmd->execute(array($Fechainicio, $Actpro, $Fechaestado, $Observaciones, $Idtabla ));
 
         return $cmd;
     }

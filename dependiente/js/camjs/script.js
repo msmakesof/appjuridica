@@ -56,8 +56,8 @@ const llenarSelectConDispositivosDisponibles = () => {
 (function () {
 	// Comenzamos viendo si tiene soporte, si no, nos detenemos
 	if (!tieneSoporteUserMedia()) {
-		alert("Lo siento. Tu navegador no soporta esta característica");
-		$estado.innerHTML = "Parece que tu navegador no soporta esta característica. Intenta actualizarlo.";
+		alert("Lo siento. Su navegador no soporta esta característica");
+		$estado.innerHTML = "Parece que su navegador no soporta esta característica. Intente actualizarlo.";
 		return;
 	}
 	//Aquí guardaremos el stream globalmente
@@ -84,10 +84,15 @@ const llenarSelectConDispositivosDisponibles = () => {
 			// y le pasamos el id de dispositivo
 			if (dispositivosDeVideo.length > 0) {
 				// Mostrar stream con el ID del primer dispositivo, luego el usuario puede cambiar
-				mostrarStream(dispositivosDeVideo[0].deviceId);
+				if (dispositivosDeVideo.length == 1) {
+					mostrarStream(dispositivosDeVideo[0].deviceId);
+				}
+				if (dispositivosDeVideo.length > 1) {
+					mostrarStream(dispositivosDeVideo[1].deviceId);
+				}
+				
 			}
 		});
-
 
 
 	const mostrarStream = idDeDispositivo => {
@@ -124,6 +129,7 @@ const llenarSelectConDispositivosDisponibles = () => {
 
 				//Escuchar el click del botón para tomar la foto
 				$boton.addEventListener("click", function () {
+					
 					if(document.querySelector("#nroproceso").value =="")
 					{
 						$estado.innerHTML = "<span style='color:red'>Debe seleccionar un Numero de Proceso.</span>"; 
@@ -140,9 +146,10 @@ const llenarSelectConDispositivosDisponibles = () => {
 					contexto.drawImage($video, 0, 0, $canvas.width, $canvas.height);
 
 					let foto = $canvas.toDataURL(); //Esta es la foto, en base 64
+					foto = foto+'_'+ document.querySelector("#nroproceso").value;
 					console.log($nroproceso);
 					//alert('proceso.....'+$nroproceso);
-					$estado.innerHTML = "Enviando foto. Por favor, espera...";
+					$estado.innerHTML = "Enviando foto. Por favor esperar...";
 					fetch("./guardar_foto.php", {
 						method: "POST",
 						body: encodeURIComponent(foto),

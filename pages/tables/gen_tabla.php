@@ -1,9 +1,10 @@
-﻿<?php 
+<?php
+session_start(); 
 require_once('../../Connections/cnn_kn.php'); 
 require_once('../../Connections/config2.php');
 if(!isset($_SESSION)) 
 { 
-    session_start(); 
+     
 } 
 ?>
 <?php
@@ -691,7 +692,8 @@ if( $mtabla['estado'] < 2)
 				</div>
 
 				<div class="modal-footer">
-					<button type="button" class="btn btn-info waves-effect" data-dismiss="modal" id="cerrarModal">CERRAR</button>
+					<button 
+					type="button" class="btn btn-info waves-effect" data-dismiss="modal" id="cerrarModal">CERRAR</button>
 				</div>
 			</div>
 		</div>
@@ -706,7 +708,7 @@ if( $mtabla['estado'] < 2)
 				</div>
 				
 				<div class="modal-body">                         
-					<object style="padding :0px; position: relative; height: 49vh; max-height:85vh; bottom:0; overflow: hidden; margin: 0;" type="text/html" data="../forms/form-validationBase<?php echo $nombre_lnk ;?>.php" id="crear"></object>
+					<object style="padding :0px; position: relative; height: 75vh; max-height:85vh; bottom:0; overflow: hidden; margin: 0;" type="text/html" data="../forms/form-validationBase<?php echo $nombre_lnk ;?>.php" id="crear"></object>
 				</div>
 				<div class="modal-footer">
 					<!-- <button type="button" class="btn btn-link waves-effect">SAVE CHANGES</button> -->

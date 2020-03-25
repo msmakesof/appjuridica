@@ -1,10 +1,17 @@
 ﻿<?php
+ob_start();
 require_once('../../Connections/cnn_kn.php'); 
 require_once('../../Connections/config2.php');
 if(!isset($_SESSION)) 
 { 
     session_start(); 
+}
+if( !isset($_SESSION['IdUsuario']) && !isset($_SESSION['NombreUsuario']) )
+{
+	header("Location: ../../index.html");
+    exit;
 } 
+
 ?>
 <?php
 if (!function_exists("GetSQLValueString")) 
@@ -752,7 +759,7 @@ $EstadoActProcesal = $mactuacionprocesal['pro_actuacionprocesal']['APR_EstadoAct
 	
 	function salir(idproceso, nroproceso) 
 	{    
-		alert(idproceso + ' - ' + nroproceso);
+		//alert(idproceso + ' - ' + nroproceso);
 		$.post('editaractprocesal.php', { 'id': idproceso, 'proceso': nroproceso }, function (result) {
 			WinId = window.open('','_self');
 			WinId.document.open();
@@ -803,12 +810,10 @@ $EstadoActProcesal = $mactuacionprocesal['pro_actuacionprocesal']['APR_EstadoAct
 			e.preventDefault();
             $("#mensaje").hide();
             var fechainicio = $("#txtFechaInicio").val();            
-            var actpro = $("#actpro").val();
-			alert(actpro);
-            var fechaestado = $("#txtFechaEstado").val();            
+            var actpro = $("#actpro").val();			
+			var fechaestado = $("#txtFechaEstado").val();            
             var observacion = $("#observacion").val();
-			var idproceso = "<?php echo $idtabla; ?>";		
-			
+			var idproceso = "<?php echo $idtabla; ?>";			
             if( fechainicio == "" || actpro == "" || fechaestado == "" ||  observacion == "" )
             {               
                 swal({
@@ -827,7 +832,7 @@ $EstadoActProcesal = $mactuacionprocesal['pro_actuacionprocesal']['APR_EstadoAct
     				type: "POST",				
     				url : "../forms/editar_<?php echo strtolower($Tabla); ?>.php",
                 })  
-    			.done(function( dataX, textStatus, jqXHR ){	    			    
+    			.done(function( dataX, textStatus, jqXHR ){						
     				var xrespstr = dataX.trim();
                     var respstr = xrespstr.substr(0,1);
                     var msj = xrespstr.substr(2);   				
@@ -861,7 +866,7 @@ $EstadoActProcesal = $mactuacionprocesal['pro_actuacionprocesal']['APR_EstadoAct
             var idtabla  = "<?php echo $idtabla; ?>";			
             alertify.confirm( 'Desea borrar este registro?', function (e) {
                 if (e) {
-                    //after clicking OK
+                    
                     $.ajax({
                         data : {"pidtabla": idtabla},
                         type: "POST",
@@ -902,3 +907,4 @@ $EstadoActProcesal = $mactuacionprocesal['pro_actuacionprocesal']['APR_EstadoAct
     </script>    
 </body>
 </html>
+<?php ob_end_flush(); ?>

@@ -48,7 +48,12 @@ if( isset($_POST['pnombre']) )
     $pnombre = trim($_POST['pnombre']);
     $pnombre = str_replace(' ','%20', $pnombre);
 }
-
+$pnumero = "";
+if( isset($_POST['pnumero']) )
+{
+    $pnumero = trim($_POST['pnumero']);
+    $pnumero = str_replace(' ','%20', $pnumero);
+}
 $pestado ="";
 if( isset($_POST['pestado']) )
 {
@@ -60,7 +65,7 @@ require_once('../../Connections/DataConex.php');
 // Nombres iguales 
 if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
 {
-  $parameters = "ExisteTabla=1&Nombre=$pnombre";
+  $parameters = "ExisteTabla=1&Nombre=$pnombre&Numero=$pnumero";
   $url = urlServicios."consultadetalle/consultadetalle_juz_piso.php?".$parameters;
   $ch = curl_init();
   curl_setopt($ch, CURLOPT_VERBOSE, true);
@@ -95,7 +100,7 @@ if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
     else
     {
       
-      $parameters = "insert=insert&Nombre=$pnombre&Estado=$pestado";
+      $parameters = "insert=insert&Nombre=$pnombre&Numero=$pnumero&Estado=$pestado";
       $soportecURL = "S";
       $url         = urlServicios."consultadetalle/consultadetalle_juz_piso.php?".$parameters;
       $existe      = "";

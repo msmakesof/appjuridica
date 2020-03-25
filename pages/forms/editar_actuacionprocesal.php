@@ -4,7 +4,12 @@ require_once('../../Connections/config2.php');
 if(!isset($_SESSION)) 
 { 
   session_start(); 
-} 
+}
+if( !isset($_SESSION['IdUsuario']) && !isset($_SESSION['NombreUsuario']) )
+{
+	header("Location: ../../index.html");
+    exit;
+}  
 ?>
 <?php
 if (!function_exists("GetSQLValueString")) {
@@ -45,6 +50,7 @@ if(isset($_POST['idproceso'])){
 $fechainicio ="";
 if(isset($_POST['fechainicio'])){
 	$fechainicio = trim($_POST['fechainicio']);
+	$fechainicio = str_replace(' ', '%20', $fechainicio);
 }
 
 $actpro ="";
@@ -55,6 +61,7 @@ if(isset($_POST['actpro'])){
 $fechaestado ="";
 if(isset($_POST['fechaestado'])){
 	$fechaestado = trim($_POST['fechaestado']);
+	$fechaestado = str_replace(' ', '%20', $fechaestado );
 }
 
 $observacion ="";
@@ -62,6 +69,5 @@ if(isset($_POST['observacion'])){
     $observacion = trim($_POST['observacion']);
     $observacion = str_replace(' ', '%20', $observacion);
 }
-
-require_once('../../apis/proceso/pro_actuacionprocesal.upd.php');
+require_once('../../apis/proceso/actuacionprocesal.upd.php');
 ?>

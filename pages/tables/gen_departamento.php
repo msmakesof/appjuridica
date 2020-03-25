@@ -1,10 +1,10 @@
-﻿<?php 
+<?php
+session_start();
 require_once('../../Connections/cnn_kn.php'); 
 require_once('../../Connections/config2.php');
-if(!isset($_SESSION)) 
-{ 
-    session_start(); 
-} 
+//if(!isset($_SESSION)) 
+//{ 
+//} 
 ?>
 <?php
 if (!function_exists("GetSQLValueString")) 
@@ -689,7 +689,7 @@ if( $mdepto['estado'] < 2)
 				
 				<div class="modal-body">
 					<object type="text/html" 
-					style="padding :0px; position: relative; height: 50vh; max-height:50vh; bottom:0; overflow: hidden; margin: 0;" 
+					style="padding :0px; position: relative; height: 70vh; max-height:80vh; bottom:0; overflow: hidden; margin: 0;" 
 					data="../forms/editar<?php echo $nombre_lnk ;?>.php" id="carga"></object>                           
 				</div>
 

@@ -61,6 +61,15 @@ else
 {
   $params ="IdUsuario=$idTabla";
 }
+
+/*
+// 1 Administrador y 2 Abogado
+if($_SESSION["TipoUsuario"] <= 2 ) {
+	$IdUsuario = $_SESSION['IdUsuario'];
+	$params .= "&"; 
+}
+*/
+
 $soportecURL = "S";
 $url         = urlServicios."consultadetalle/consultadetalle_Usuario.php?".$params;
 $existe      = "";

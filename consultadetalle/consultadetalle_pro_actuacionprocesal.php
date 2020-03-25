@@ -153,10 +153,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 	elseif(isset($_GET['update']) )
     {
         //Obtener Parametros
-        $par1 = $_GET['observacion'];                
-        $par2 = $_GET['actpro'];
-        $par3 = $_GET['fechainicio'];
-        $par4 = $_GET['fechaestado'];		
+        $par1 = $_GET['fechainicio'];
+		$par2 = $_GET['actpro'];		
+        $par3 = $_GET['fechaestado'];
+		$par4 = $_GET['observacion'];		
         $par5 = $_GET['idtabla'];
 
         $retorno = PRO_ACTUACIONPROCESAL::update($par1, $par2, $par3, $par4, $par5);

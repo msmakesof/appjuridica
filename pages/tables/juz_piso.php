@@ -1,9 +1,10 @@
-﻿<?php 
+<?php
+session_start();
 require_once('../../Connections/cnn_kn.php'); 
 require_once('../../Connections/config2.php');
 if(!isset($_SESSION)) 
 { 
-    session_start(); 
+     
 } 
 ?>
 <?php
@@ -584,13 +585,15 @@ else
                          <table class="table table-bordered table-striped table-hover dataTable js-exportable" id="grid">
                                 <thead>
                                     <tr>
-                                        <th>Nombre</th>
+                                        <th>N&uacute;mero</th>
+										<th>Nombre</th>
                                         <th>Activo</th> 
                                     </tr>
                                 </thead>
                                 <tfoot>
                                     <tr>
-                                        <th>Nombre</th>
+                                        <th>N&uacute;mero</th>
+										<th>Nombre</th>
                                         <th>Activo</th>                                        
                                     </tr>
                                 </tfoot>
@@ -649,14 +652,18 @@ if( $mpiso['estado'] < 2)
     $nombre_Tabla="";
     for($i=0; $i<count($mpiso['juz_piso']); $i++)
     {
-        $NombreTabla = trim($mpiso['juz_piso'][$i]['PIS_Nombre']);		
+        $NombreTabla = trim($mpiso['juz_piso'][$i]['PIS_Nombre']);
+		$Numero = trim($mpiso['juz_piso'][$i]['PIS_Numero']);		
         $archivo = $NombreTabla.".php";
         $idTabla = $mpiso['juz_piso'][$i]['PIS_IdPiso'];
         $estadoTabla = trim($mpiso['juz_piso'][$i]['EstadoTabla']);
     ?>
         <tr>
             <td>
-                <a href="javascript:void(0);" onclick="cambiar('../forms/editar<?php echo $nombre_lnk ;?>.php?f=<?php echo $idTabla; ?>')" class="nav nav-tabs nav-stacked" data-toggle="modal" data-target="#defaultModalEditar" style="text-decoration:none;"><?php echo $NombreTabla; ?></a>        	
+                <a href="javascript:void(0);" onclick="cambiar('../forms/editar<?php echo $nombre_lnk ;?>.php?f=<?php echo $idTabla; ?>')" class="nav nav-tabs nav-stacked" data-toggle="modal" data-target="#defaultModalEditar" style="text-decoration:none;"><?php echo $Numero; ?></a>        	
+            </td>
+			<td>
+                <?php echo $NombreTabla; ?>       	
             </td>
             <td><?php echo $estadoTabla; ?></td>               
         </tr>

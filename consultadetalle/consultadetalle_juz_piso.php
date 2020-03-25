@@ -85,9 +85,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 
     elseif (isset($_GET['ExisteTabla']) )
     {
-        $par1 = $_GET['Nombre'];       
+        $par1 = $_GET['Nombre'];
+		$par2 = $_GET['Numero'];
 
-        $retorno = JUZ_PISO::existetabla($par1);
+        $retorno = JUZ_PISO::existetabla($par1, $par2);
         if ($retorno) 
         {
             $juz_piso["estado"] = "1";
@@ -142,10 +143,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     elseif(isset($_GET['insert']) )
     {
         //Obtener Parametros
-        $par1 = $_GET['Nombre'];        
-        $par2 = $_GET['Estado'];
+        $par1 = $_GET['Nombre'];
+		$par2 = $_GET['Numero'];        
+        $par3 = $_GET['Estado'];
 
-        $retorno = JUZ_PISO::insert($par1, $par2);
+        $retorno = JUZ_PISO::insert($par1, $par2, $par3);
         $msj = $retorno;
         if($retorno)
         {
@@ -161,7 +163,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             print json_encode(
                 array(
                     'estado' => '2',
-                    'mensaje' => 'No se obtuvo el registro'
+                    'mensaje' => 'No se obtuvo el registro de insercion'
                 )
             );
         }
@@ -169,11 +171,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     elseif(isset($_GET['update']) )
     {
         //Obtener Parametros
-        $par1 = $_GET['nombre'];        
-        $par2 = $_GET['estado'];
-        $par3 = $_GET['idtabla'];
+        $par1 = $_GET['nombre'];
+		$par2 = $_GET['numero'];
+        $par3 = $_GET['estado'];
+        $par4 = $_GET['idtabla'];
 
-        $retorno = JUZ_PISO::update($par1, $par2, $par3);
+        $retorno = JUZ_PISO::update($par1, $par2, $par3, $par4);
         $msj = $retorno;
         if($retorno)
         {
@@ -189,7 +192,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             print json_encode(
                 array(
                     'estado' => '2',
-                    'mensaje' => 'No se obtuvo el registro'
+                    'mensaje' => 'No se obtuvo el registro de actualizacion'
                 )
             );
         }

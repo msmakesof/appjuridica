@@ -1,9 +1,10 @@
-﻿<?php 
+<?php
+session_start(); 
 require_once('../../Connections/cnn_kn.php'); 
 require_once('../../Connections/config2.php');
 if(!isset($_SESSION)) 
 { 
-    session_start(); 
+    
 } 
 ?>
 <?php
@@ -309,6 +310,7 @@ if( $mjuzgado['estado'] < 2)
         $NombreCiudad = $mjuzgado['juz_juzgado'][$i]['CIU_Nombre'];
         $Direccion = $mjuzgado['juz_juzgado'][$i]['JUZ_Direccion'];
         $Piso = $mjuzgado['juz_juzgado'][$i]['JUZ_Piso'];
+		$PisoNumero = $mjuzgado['juz_juzgado'][$i]['PIS_Numero'];
         $NombreTipoJuzgado = $mjuzgado['juz_juzgado'][$i]['TJU_Nombre'];
         $NombreArea = $mjuzgado['juz_juzgado'][$i]['ARE_Nombre'];
         $EstadoUsuario = $mjuzgado['juz_juzgado'][$i]['EstadoTabla'];
@@ -320,7 +322,7 @@ if( $mjuzgado['estado'] < 2)
         <td><?php echo $NombreTipoJuzgado; ?></td>
         <td><?php echo $NombreArea; ?></td> 
         <td><?php echo $Direccion; ?></td>
-        <td><?php echo $Piso; ?></td>
+        <td><?php echo $PisoNumero; ?></td>
         <td><?php echo $NombreCiudad; ?></td>        
 		<td><?php echo $EstadoUsuario; ?></td>
     </tr>

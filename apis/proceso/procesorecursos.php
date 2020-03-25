@@ -1,9 +1,10 @@
 <?php
+session_start();
 require_once('../Connections/cnn_kn.php'); 
 require_once('../Connections/config2.php');
 if(!isset($_SESSION)) 
 { 
-  session_start(); 
+  
 } 
 ?>
 <?php
@@ -62,7 +63,7 @@ else
   $params ="IdTabla=$idTabla";
 }
 $soportecURL = "S";
-$url         = urlServicios."consultadetalle/consultadetalle_pro_proceso.php?".$params;
+$url         = urlServicios."consultadetalle/consultadetalle_pro_proceso.php?".$params."&e=1";
 $existe      = "";
 $usulocal    = "";
 $siguex      = "";

@@ -128,8 +128,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         $par5 = $_GET['TipoJuzgado'];
         $par6 = $_GET['Area'];
         $par7 = $_GET['Estado'];
+		$par8 = $_GET['Email'];
+		$par9 = $_GET['Edificio'];
         
-        $retorno = JUZ_JUZGADO::insert($par1,$par2,$par3,$par4,$par5,$par6,$par7);        
+        $retorno = JUZ_JUZGADO::insert($par1,$par2,$par3,$par4,$par5,$par6,$par7,$par8,$par9);        
         $msj =$retorno;
         if ($retorno) 
         {
@@ -161,9 +163,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         $par5 = $_GET['TipoJuzgado'];
         $par6 = $_GET['Area'];
         $par7 = $_GET['Estado'];
+		$par8 = $_GET['Email'];
+		$par9 = $_GET['Edificio'];
         $par0 = $_GET['idtabla'];    
 
-        $retorno = JUZ_JUZGADO::update($par1,$par2,$par3,$par4,$par5,$par6,$par7,$par0);
+        $retorno = JUZ_JUZGADO::update($par1,$par2,$par3,$par4,$par5,$par6,$par7,$par8,$par9,$par0);
         $msj =$retorno;
         if ($retorno) 
         {

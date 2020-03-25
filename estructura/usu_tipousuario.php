@@ -38,7 +38,7 @@ class USU_TIPOUSUARIO
 
     /**
      * Obtiene los campos de una tabla con un identificador
-     * determinado
+     * determinado 
      *
      * @param $IdTabla Identificador de la $IdTabla
      * @return mixed
@@ -69,27 +69,51 @@ class USU_TIPOUSUARIO
         }
     }
 
+/**
+     * Obtiene los campos de una tabla con un identificador
+     * determinado para mostrar menos el Tipo Administrador
+     *
+     * @param $IdTabla Identificador de la $IdTabla
+     * @return mixed
+     */
+    public static function getByJuridicos($IdJuridicos)
+    {
+        // Consulta de la tabla de tablas
+        $consulta = "SELECT ".$GLOBALS['Llave'].",TUS_Nombre, TUS_Estado ".
+					" FROM ".$GLOBALS['TABLA'].
+					" WHERE TUS_ID_TipoUsuario <> ? ORDER BY TUS_Nombre; ";
+        try {
+            // Preparar sentencia
+            $comando = Database::getInstance()->getDb()->prepare($consulta);
+            // Ejecutar sentencia preparada
+            $comando->execute(array($IdJuridicos));
+            // Capturar primera fila del resultado            
+            return $comando->fetchAll(PDO::FETCH_ASSOC);
+
+        } catch (PDOException $e) {
+            // Aquí puedes clasificar el error dependiendo de la excepción
+            // para presentarlo en la respuesta Json
+            return -1;
+        }
+    }
 
     /**
-     * Obtiene los campos de una GEN_TIPOPERSONA con un estado Activo
+     * Obtiene los campos de USU_TIPOUSUARIO diferente al administrador
      * determinado
-     *
      * @param $IdEstadoTabla Identificador del estado de la tabla
      * @return mixed
      */
     public static function getByIdEstado($IdEstadoTabla)
     {
-        // Consulta de la GEN_PAIS
+        // Consulta de USU_Tipo Usuario
         $consulta = "SELECT ".$GLOBALS['Llave'].", TUS_Nombre, TUS_Estado ".
                     " FROM ". $GLOBALS['TABLA'].
                     " WHERE TUS_Estado = ? ORDER BY TUS_Nombre; ";
-
         try {
             // Preparar sentencia
             $comando = Database::getInstance()->getDb()->prepare($consulta);
             // Ejecutar sentencia preparada
             $comando->execute(array($IdEstadoTabla));
-
             // Muestra todos los rows
             return $comando->fetchAll(PDO::FETCH_ASSOC);
 

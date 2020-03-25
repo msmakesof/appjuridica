@@ -1,0 +1,1 @@
+[05-Sep-2019 22:48:37 America/Bogota] PHP Warning:  session_start(): Cannot send session cache limiter - headers already sent (output started at /home/okbeco/public_html/appjuridica/pages/forms/editarusuario.php:1) in /home/okbeco/public_html/appjuridica/pages/forms/editarusuario.php on line 6

@@ -51,22 +51,35 @@ $from ="";
 if( isset($_POST['from']) )
 {
     $from = trim($_POST['from']);
-    $inicio = _formatear($_POST['from']);
-    $from = str_replace(' ','%20', $from);
+    $from = strtotime(str_replace('/', '-', $from));
+	$from = date("Y-m-d H:i:s", $from ) ;
+	
+	$inicio = strtotime($from) * 1000 ;
+	$from = str_replace(' ','%20', $from);	
 }
+
 
 $to ="";
 if( isset($_POST['to']) )
 {
     $to = trim($_POST['to']);
-    $final  = _formatear($_POST['to']);
-    $to = str_replace(' ','%20', $to);
+	$to = strtotime(str_replace('/', '-', $to));
+	$to = date("Y-m-d H:i:s", $to );
+    
+	$final = strtotime($to) * 1000;
+	$to = str_replace(' ','%20', $to);	
 }
 
 $proceso ="";
 if( isset($_POST['proceso']) )
 {
     $proceso = trim($_POST['proceso']);
+}
+
+$tipousuario ="";
+if( isset($_POST['tipousuario']) )
+{
+    $tipousuario = trim($_POST['tipousuario']);
 }
 
 $responsable ="";
@@ -137,7 +150,7 @@ if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
     else
     {
       
-      $parameters = "insert=insert&Title=$title&Body=$body&Tipo=$tipo&Inicio=$inicio&Final=$final&From=$from&To=$to&Proceso=$proceso&Responsable=$responsable";
+      $parameters = "insert=insert&Title=$title&Body=$body&Tipo=$tipo&Inicio=$inicio&Final=$final&From=$from&To=$to&Proceso=$proceso&Responsable=$responsable&Tipousuario=$tipousuario";
       $soportecURL = "S";
       $url         = urlServicios."consultadetalle/eve_evento.php?".$parameters;
       $existe      = "";
@@ -145,7 +158,8 @@ if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
       $sigue       = "";
       $sigueins    = "";
       $sigueupd    = "";
-      //echo "<script>console.log($url)</script>" ;
+      //echo "<script>console.log('PHP ins: ".$url.")</script>" ;
+	  //echo "ins.....$url<br>";
       if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
       {    
           $ch = curl_init();

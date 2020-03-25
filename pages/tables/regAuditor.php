@@ -1,7 +1,15 @@
 <?php
+ob_start(); 
 // Registro Auditoria
 // function regAuditor()
 // {
+	if(!isset($_SESSION)) 
+    { 
+        session_start(); 
+    }
+	
+	//echo "id....".$_POST['user_id'];
+	//echo "id....".$_GET['user_id'];
     $fecha = date_default_timezone_set('America/Bogota'); //configuro un nuevo timezone
     //echo 'TimeZonePHP configurado: ', date_default_timezone_get();
     //echo "<br>";
@@ -12,12 +20,14 @@
     
     if(file_exists($nombre_archivo))
     {
-        $mensaje = "$existe<br>$cookie_value" ;
+        //$mensaje = "$existe<br>$cookie_value" ;
+		$mensaje = "$existe<br>" ;
     }
 
     else
     {
-        $mensaje = "$existe<br>$cookie_value ";
+        //$mensaje = "$existe<br>$cookie_value ";
+		$mensaje = "$existe<br>" ;
     }
 
     if($archivo = fopen($nombre_archivo, "a"))
@@ -53,4 +63,5 @@
 //     echo "Error is : ".curl_error ( $ch); 
 //     curl_close($ch); //fclose($handle); 
 // }  //end function 
+ ob_end_flush();
 ?>

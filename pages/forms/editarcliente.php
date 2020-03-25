@@ -1,4 +1,4 @@
-﻿<?php 
+<?php 
 require_once('../../Connections/cnn_kn.php'); 
 require_once('../../Connections/config2.php');
 if(!isset($_SESSION)) 
@@ -43,6 +43,7 @@ if (!function_exists("GetSQLValueString"))
 $idTabla = 0;
 require_once('../../apis/general/tipodocumento.php');
 require_once('../../apis/general/tipocliente.php');
+require_once('../../apis/empresa/Empresa.php');
 
 if( isset($_GET['f'])  && !empty($_GET['f']) )
 {    
@@ -70,6 +71,8 @@ $Clave = $mcliente['cli_cliente']['CLI_Clave'];
 $EstadoEst = $mcliente['cli_cliente']['CLI_Estado'];
 $Verseguimiento = $mcliente['cli_cliente']['CLI_SeguimientoProceso'];
 $TipoCliente = $mcliente['cli_cliente']['CLI_IdTipoCliente'];
+$Empresa = $mcliente['cli_cliente']['CLI_Empresa'];
+$FechaCreado = $mcliente['cli_cliente']['CLI_FechaCreado'];
 ?>
 <!DOCTYPE html>
 <html>
@@ -117,7 +120,14 @@ $TipoCliente = $mcliente['cli_cliente']['CLI_IdTipoCliente'];
         <div class="container-fluid">
             <div class="block-header">
                 <h2>
-                    FORMULARIO: Edición <?php echo $Tabla; ?>.
+					<?php 
+						$textoCreado ="";
+						if($_SESSION['TipoUsuario'] == 4 )  // SA
+						{	
+							$textoCreado = "           Fecha Creación:  ".$FechaCreado;
+						}
+					?>
+                    FORMULARIO: Edición_ <?php echo $Tabla; echo $textoCreado ?>..
                     <!--<small>Editar.</small>-->
                 </h2>
             </div>
@@ -140,7 +150,7 @@ $TipoCliente = $mcliente['cli_cliente']['CLI_IdTipoCliente'];
                                 <div class="form-group">
                                     <div style="float: left;">                                    
                                         <label class="form-label">
-                                            Tipo Documento
+                                            Tipo Documento:
                                         </label>                                    
                                         <div class="col-sm-4">                                           
                                             <select class="selectpicker show-tick" data-live-search="true" data-width="90%" name="tipodocumento" id="tipodocumento" required>
@@ -244,7 +254,37 @@ $TipoCliente = $mcliente['cli_cliente']['CLI_IdTipoCliente'];
 											</select>
 										</div>
 									</div>										
-                                </div> 
+                                </div>
+
+								<div class="form-group">                                    							                                    
+									<div class="row">										
+										<div class="col-md-6">
+											<label class="form-label">
+												Empresa encargada del Proceso
+											</label>
+											<select class="selectpicker show-tick" data-live-search="true" data-width="100%" name="empresa" id="empresa" required>
+												<option value="" >Seleccione Opción...</option>
+												<?php
+													for($i=0; $i<count($mempresa['emp_empresa']); $i++)
+													{
+														$IdEmpresa = $mempresa['emp_empresa'][$i]['EMP_IdEmpresa'];                                                    
+														$Nombre = trim($mempresa['emp_empresa'][$i]['NombreEmpresa']);
+														$Estado = $mempresa['emp_empresa'][$i]['EMP_IdEstado'];
+												?>
+														<option value="<?php echo $IdEmpresa; ?>" <?php if ($IdEmpresa == $Empresa){ echo "selected";} else{ echo "";} ?>>
+															<?php echo $Nombre ; ?>                                                
+														</option>
+												<?php
+													}
+												?>
+											</select>
+										</div>
+										
+										<div class="col-md-6">
+										
+										</div>
+									</div>
+								</div>
 								
 								<div class="form-group">
                                     <label class="form-label">Autoriza acceso a la herramienta para que el cliente pueda ver seguimiento de su proceso?
@@ -380,10 +420,11 @@ $TipoCliente = $mcliente['cli_cliente']['CLI_IdTipoCliente'];
             var tipocliente = $("#tipocliente").val();			
 			var estado = $('input:radio[name=estado]:checked').val();
 			var seguimiento = $('input:checkbox[name=verseguimiento]:checked').val();
+			var empresa = $("#empresa").val();
 			
 			var idtabla =  "<?php echo $idtabla; ?>";
             var OldClave = "<?php echo $Clave; ?>";
-            if( tipodocumento == "" || numerodocumento =="" || nombre == "" || apellido1 == "" || apellido2 == "" || clave =="" || direccion == "" || email == "" || celular == "" || estado == undefined || seguimiento == "" || tipocliente == undefined || tipocliente == "")
+            if( tipodocumento == "" || numerodocumento =="" || nombre == "" || apellido1 == "" || apellido2 == "" || clave =="" || direccion == "" || email == "" || celular == "" || estado == undefined || seguimiento == "" || tipocliente == undefined || tipocliente == "" || empresa == "")
             {               
                 swal({
                   title: "Error:  Ingrese información en todos los campos...",
@@ -397,7 +438,7 @@ $TipoCliente = $mcliente['cli_cliente']['CLI_IdTipoCliente'];
             else
             {
     			$.ajax({
-    				data : {"tipodocumento": tipodocumento, "numerodocumento": numerodocumento, "nombre": nombre, "apellido1": apellido1, "apellido2": apellido2, "clave": clave, "direccion": direccion, "email": email, "celular": celular, "estado": estado, "idtabla": idtabla, "OldClave": OldClave, "verseguimiento": seguimiento, "tipocliente": tipocliente },
+    				data : {"tipodocumento": tipodocumento, "numerodocumento": numerodocumento, "nombre": nombre, "apellido1": apellido1, "apellido2": apellido2, "clave": clave, "direccion": direccion, "email": email, "celular": celular, "estado": estado, "idtabla": idtabla, "OldClave": OldClave, "verseguimiento": seguimiento, "tipocliente": tipocliente, "empresa": empresa },
     				type: "POST",				
     				url : "editar_<?php echo strtolower($Tabla); ?>.php",
                 })  

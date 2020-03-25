@@ -57,6 +57,14 @@ if(isset($_GET['funcion']) && !empty($_GET['funcion'])) {
             $mjuzgadox= str_replace(")","",$mjuzgadox);    
             $mretorno= "{".$mjuzgadox;
             break;
+			
+		case "ru": 
+            include('../../apis/combos/tipousuario.php');
+            $mjuzgado= json_encode($mjuzgado, JSON_PRETTY_PRINT);
+            $mjuzgadox = substr($mjuzgado, 1);
+            $mjuzgadox= str_replace(")","",$mjuzgadox);    
+            $mretorno= "{".$mjuzgadox;
+            break;
     }    
         
     print_r($mretorno);

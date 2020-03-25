@@ -42,7 +42,7 @@ if (!function_exists("GetSQLValueString"))
 }
 
 require_once('../../Connections/DataConex.php');
-$parameters = "update=update&Ubicacion=$ubicacion&Ciudad=$ciudad&Direccion=$direccion&Piso=$piso&TipoJuzgado=$tipojuzgado&Area=$area&Estado=$estado&idtabla=$idtabla";
+$parameters = "update=update&Ubicacion=$ubicacion&Ciudad=$ciudad&Direccion=$direccion&Piso=$piso&TipoJuzgado=$tipojuzgado&Area=$area&Estado=$estado&Edificio=$edificio&Email=$email&idtabla=$idtabla";
 $soportecURL = "S";
 $url         = urlServicios."consultadetalle/consultadetalle_juzgado.php?".$parameters;
 $existe      = "";

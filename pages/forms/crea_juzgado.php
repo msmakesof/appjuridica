@@ -53,7 +53,8 @@ $pubicacion ="";
 if( isset($_POST['ubicacion']) )
 {
     $pubicacion = trim($_POST['ubicacion']);
-    $pubicacion = str_replace(' ','%20', $pubicacion);
+	$pubicacion = strtoupper($pubicacion);
+    $pubicacion = str_replace(' ','%20', $pubicacion);	
 }
 
 $pciudad ="";
@@ -66,6 +67,7 @@ $pdireccion ="";
 if( isset($_POST['direccion']) )
 {
     $pdireccion = trim($_POST['direccion']);
+	$pdireccion = strtoupper($pdireccion);
     $pdireccion = str_replace(' ','%20', $pdireccion);
     $pdireccion = str_replace('#','No.', $pdireccion);
 }
@@ -94,12 +96,25 @@ if( isset($_POST['estado']) )
     $pestado = trim($_POST['estado']);
 }
 
+$pemail ="";
+if( isset($_POST['email']) )
+{
+    $pemail = trim($_POST['email']);
+	$pemail = strtolower($pemail);
+}
+
+$pedificio ="";
+if( isset($_POST['edificio']) )
+{
+    $pedificio = trim($_POST['edificio']);
+}
+
 require_once('../../Connections/DataConex.php');
 //Verifico si existe una Tabla con las siguientes caracteristicas
 // Nombres iguales 
 if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
 {
-  $parameters = "ExisteJuzgado=1&Ubicacion=$pubicacion&Ciudad=$pciudad&Direccion=$pdireccion&Piso=$ppiso&TipoJuzgado=$ptipojuzgado&Area=$parea";
+  $parameters = "ExisteJuzgado=1&Ubicacion=$pubicacion&Ciudad=$pciudad&Direccion=$pdireccion&Piso=$ppiso&TipoJuzgado=$ptipojuzgado&Area=$parea&Edificio=$pedificio&Email=$pemail";
   $url = urlServicios."consultadetalle/consultadetalle_juzgado.php?".$parameters;
   //echo "<script>console.log($url)</script>" ;
   $ch = curl_init();
@@ -135,7 +150,7 @@ if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
     else
     {
       
-      $parameters = "insert=insert&Ubicacion=$pubicacion&Ciudad=$pciudad&Direccion=$pdireccion&Piso=$ppiso&TipoJuzgado=$ptipojuzgado&Area=$parea&Estado=$pestado";
+      $parameters = "insert=insert&Ubicacion=$pubicacion&Ciudad=$pciudad&Direccion=$pdireccion&Piso=$ppiso&TipoJuzgado=$ptipojuzgado&Area=$parea&Estado=$pestado&Email=$pemail&Edificio=$pedificio";
       $soportecURL = "S";
       $url         = urlServicios."consultadetalle/consultadetalle_juzgado.php?".$parameters;
       $existe      = "";

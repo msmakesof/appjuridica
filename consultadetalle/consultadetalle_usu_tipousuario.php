@@ -14,7 +14,31 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         $parametro = $_GET['IdTabla'];
 
         // Tratar retorno
-        $retorno = USU_TIPOUSUARIO::getById($parametro);
+        $retorno = USU_TIPOUSUARIO::getByJuridicos($parametro);
+
+        if ($retorno) {
+            $usu_tipousuario["estado"] = "1";
+            $usu_tipousuario["usu_tipousuario"] = $retorno;
+            // Enviar objeto json de la meta
+            header('Content-Type: application/json');
+            echo json_encode($usu_tipousuario);
+        } else {
+            // Enviar respuesta de error general
+            print json_encode(
+                array(
+                    'estado' => '2',
+                    'mensaje' => 'No se obtuvo el registro en Tabla'
+                )
+            );
+        }
+    }
+	elseif (isset($_GET['IdJuridicos'])) {
+
+        // Obtener parámetro IdTabla
+        $parametro = $_GET['IdJuridicos'];
+
+        // Tratar retorno
+        $retorno = USU_TIPOUSUARIO::getByJuridicos($parametro);
 
         if ($retorno) {
             $usu_tipousuario["estado"] = "1";

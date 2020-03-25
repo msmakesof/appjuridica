@@ -1,9 +1,10 @@
-<?php 
+<?php
+session_start();
 require_once('../../Connections/cnn_kn.php'); 
 require_once('../../Connections/config2.php');
 if(!isset($_SESSION)) 
 { 
-  session_start(); 
+   
 } 
 ?>
 <?php
@@ -41,6 +42,11 @@ if (!function_exists("GetSQLValueString")) {
 $idUsuario ="";
 if(isset($_POST['idtabla'])){
   $idUsuario = trim($_POST['idtabla']);
+}
+
+$empresa ="";
+if(isset($_POST['empresa'])){
+  $empresa = trim($_POST['empresa']);
 }
 
 $tipodocumento ="";

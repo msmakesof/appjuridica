@@ -1,11 +1,17 @@
-﻿<?php
+<?php
 ob_start();
 require_once('../../Connections/cnn_kn.php'); 
 require_once('../../Connections/config2.php');
 if(!isset($_SESSION)) 
 { 
     session_start(); 
+}
+if( !isset($_SESSION['IdUsuario']) && !isset($_SESSION['NombreUsuario']) )
+{
+	header("Location: ../../index.html");
+    exit;
 } 
+
 ?>
 <?php
 if (!function_exists("GetSQLValueString")) 
@@ -774,7 +780,7 @@ require_once('../../Connections/DataConex.php');
 		<div class="modal-dialog" role="document">
 			<div class="modal-content" >
 				<div class="modal-header">
-					<h4 class="modal-title" id="defaultModalLabel">Editar</h4>
+					<h4 class="modal-title" id="defaultModalLabel">Editar...</h4>
 				</div>
 				
 				<div class="modal-body">

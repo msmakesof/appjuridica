@@ -1,0 +1,18 @@
+<html>
+<head>
+<!-- Jquery Core Js  -->
+<script src="../plugins/jquery/jquery.min.js"></script>
+ 
+<script type="text/javascript">
+$(document).ready(function()
+{}); 
+	$.post('../pages/tables/cli_cliente.php', { 'id': '0' }, function (result) {
+		WinId = window.open('','_self');
+		WinId.document.open();
+		WinId.document.write(result);
+		WinId.document.close();
+	});
+
+</script>
+</head>
+</html>

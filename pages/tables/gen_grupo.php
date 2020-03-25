@@ -1,9 +1,10 @@
-﻿<?php 
+<?php
+session_start(); 
 require_once('../../Connections/cnn_kn.php'); 
 require_once('../../Connections/config2.php');
 if(!isset($_SESSION)) 
 { 
-    session_start(); 
+     
 } 
 ?>
 <?php

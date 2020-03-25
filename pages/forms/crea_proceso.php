@@ -116,6 +116,18 @@ if( isset($_POST['pdespacho']) )
     $pdespacho = trim($_POST['pdespacho']);
 }
 
+$prepresenta ="";
+if( isset($_POST['prepresenta']) )
+{
+    $prepresenta = trim($_POST['prepresenta']);
+}
+
+$usuariocrea ="";
+if( isset($_POST['uc']) )
+{
+    $usuariocrea = trim($_POST['uc']);
+}
+
 require_once('../../Connections/DataConex.php');
 //Verifico si existe una Tabla con las siguientes caracteristicas
 // Nombres iguales 
@@ -156,7 +168,7 @@ if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
     else
     {
       
-      $parameters = "insert=insert&Proceso=$pproceso&Fechainicio=$pfechainicio&Asignadoa=$pasignadoa&Ubicacion=$pubicacion&Claseproceso=$pclaseproceso&Demandante=$pcliente&Demandado=$pdemandado&JuzgadoOrigen=$pidjuzgado&Estado=$pestado&Especialidad=$pespecialidad&Despacho=$pdespacho";
+      $parameters = "insert=insert&Proceso=$pproceso&Fechainicio=$pfechainicio&Asignadoa=$pasignadoa&Ubicacion=$pubicacion&Claseproceso=$pclaseproceso&Demandante=$pcliente&Demandado=$pdemandado&JuzgadoOrigen=$pidjuzgado&Estado=$pestado&Especialidad=$pespecialidad&Despacho=$pdespacho&Representa=prepresenta&UsuarioCrea=$usuariocrea";
       $soportecURL = "S";
       $url         = urlServicios."consultadetalle/consultadetalle_pro_proceso.php?".$parameters;
       $existe      = "";

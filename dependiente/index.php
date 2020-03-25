@@ -1,10 +1,16 @@
-﻿<?php
-include('../Connections/cnn_kn.php'); 
-include('../Connections/config2.php'); 
+<?php
+ob_start();
 if(!isset($_SESSION)) 
 { 
-    session_start(); 
+	session_start();   
 }
+if( !isset($_SESSION['IdUsuario']) && !isset($_SESSION['NombreUsuario']) )
+{
+	header("Location: ../index.html");
+    exit;
+}
+include('../Connections/cnn_kn.php'); 
+include('../Connections/config2.php');  
 ?>
 <?php
 if (!function_exists("GetSQLValueString")) {
@@ -351,11 +357,41 @@ $email  = "";
                 <div class="info-container">
 
                     <div class="name" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">                        
-                        <span id="xNom"><?php echo $_SESSION['NombreUsuario']; ?></span>                   
+                        <span id="xNom">
+							<?php 
+								if ( isset( $_SESSION['NombreUsuario'] ) && !empty( $_SESSION['NombreUsuario'] ) ) 
+								{
+									// Variable definida y no vacia
+									echo $_SESSION['NombreUsuario'];
+									//header("Content-Type: text/html; charset=UTF-8");
+								} 
+								else 
+								{
+									// Variable no definida o vacia
+									//header("Content-Type: text/html; charset=UTF-8");
+									header('Location: ../');
+								}
+							?>
+						</span>                   
                     </div>
 
                     <div class="email">                       
-                        <span id="xMail"><?php echo $_SESSION['EmailUsuario']; ?></span>
+                        <span id="xMail">
+							<?php								
+								if ( isset( $_SESSION['EmailUsuario'] ) && !empty( $_SESSION['EmailUsuario'] ) ) 
+								{
+									// Variable definida y no vacia
+									echo $_SESSION['EmailUsuario'];
+									//header("Content-Type: text/html; charset=UTF-8");
+								} 
+								else 
+								{
+									// Variable no definida o vacia
+									header('Location: ../');
+								}							
+								//echo $_SESSION['EmailUsuario']; 
+							?>
+						</span>
                     </div>
                     
                     <!-- <div class="name" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><?php echo trim($nombre); ?></div> 
@@ -407,7 +443,7 @@ $email  = "";
                             <i class="material-icons">gavel</i>
                         </div>
                         <div class="content">
-                            <div class="text">Mis Procesos: <?php echo $nombremes. ' '.$yy ;?> </div>
+                            <div class="text">Mis Procesos: <?php //echo $nombremes. ' '.$yy ;?> </div>
                             <div class="number count-to" data-from="0" data-to="<?php echo $cantclases; ?>" data-speed="15" data-fresh-interval="20"></div>
                         </div>
                     </div>
@@ -704,7 +740,7 @@ $email  = "";
                     <div class="col-lg-12 col-md-12 col-sm-12">
                         <div class="row"  style="padding:10px !important;">
                             <div class="col-xs-10">                                                
-                                <label class="form-label">Seleccione N&uacute;mero del Proceso: </label>
+                                <label class="form-label">Seleccione N&uacute;mero del Proceso : </label>
                                 <div class="xform-line">                                                    
                                     
                                     <!-- <select  name="nroproceso" id="nroproceso"> -->
@@ -815,8 +851,8 @@ $email  = "";
         }
     }
     </script>
-      <!-- Camara Js -->                                            
-      <script src="js/camjs/script.js"></script>
+    <!-- Camara Js -->                                            
+    <script src="js/camjs/script.js"></script>
 </body>
-
 </html>
+<?php ob_end_flush();?>

@@ -1,5 +1,4 @@
 <?php require_once('../Connections/cnn_kn.php'); ?>
-
 <?php
 if (!function_exists("GetSQLValueString")) {
 	function GetSQLValueString($theValue, $theType, $theDefinedValue = "", $theNotDefinedValue = "") 

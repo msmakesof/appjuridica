@@ -1,4 +1,8 @@
 <?php
+//if(!isset($_SESSION)) 
+//{ 
+    //session_start(); 
+//}
 	require_once('./Connections/config2.php');       
     require_once('./Connections/DataConex.php');    
     $clave = encryptor('encrypt', $clave);
@@ -48,11 +52,45 @@
         $m = json_decode($resultado, true);	        
     }        
     $existe    = $m['usu_usuario']['TotalUsuario'];
-    $IdUsuario = $m['usu_usuario']['USU_IdUsuario'];    
+    $IdUsuario = $m['usu_usuario']['USU_IdUsuario'];
+
+	function getRealIP(){
+
+        if (isset($_SERVER["HTTP_CLIENT_IP"])){
+
+            return $_SERVER["HTTP_CLIENT_IP"];
+
+        }elseif (isset($_SERVER["HTTP_X_FORWARDED_FOR"])){
+
+            return $_SERVER["HTTP_X_FORWARDED_FOR"];
+
+        }elseif (isset($_SERVER["HTTP_X_FORWARDED"])){
+
+            return $_SERVER["HTTP_X_FORWARDED"];
+
+        }elseif (isset($_SERVER["HTTP_FORWARDED_FOR"])){
+
+            return $_SERVER["HTTP_FORWARDED_FOR"];
+
+        }elseif (isset($_SERVER["HTTP_FORWARDED"])){
+
+            return $_SERVER["HTTP_FORWARDED"];
+
+        }else{
+
+            return $_SERVER["REMOTE_ADDR"];
+
+        }
+    }    
     
     if($existe == 1 && $IdUsuario != "")
     {   
+        getRealIP();
+        //echo("<script>console.log('PHP ip: ".getRealIP()."');</script>");
         $soportecURL = "S";
+        $url   = urlServicios."consultadetalle/consultadetalle_acceso.php?IdUsuario=$IdUsuario";
+		
+		$soportecURL = "S";
         $url   = urlServicios."consultadetalle/consultadetalle_Usuario.php?IdUsuario=$IdUsuario";
         //echo("<script>console.log('PHP usuario Existe: ".$url."');</script>");
 		if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
@@ -82,18 +120,37 @@
             $nombres =  $m['usu_usuario']['USU_Nombre'].' '.$m['usu_usuario']['USU_PrimerApellido'].' '.$m['usu_usuario']['USU_SegundoApellido'];
             $email = trim($m['usu_usuario']['USU_Email']);
             $tipousuario = $m['usu_usuario']['USU_TipoUsuario'];
+			$idempresa = $m['usu_usuario']['USU_IdEmpresa'];
+			$esabogado = $m['usu_usuario']['USU_EsAbogado'];
+			$nombreempresa = $m['usu_usuario']['NombreEmpresa'];
             
+			$_SESSION['Usuario'] = "";
+			$_SESSION['NombreUsuario'] = "" ;
+			$_SESSION['EmailUsuario'] = "" ;
+			$_SESSION['user_id'] = "";
+			$_SESSION['opcMenu'] = "";	
+			$_SESSION['TipoUsuario'] = "";	
+			$_SESSION['IdUsuario'] = "" ;
+			$_SESSION['IdEmpresa'] = "";
+			$_SESSION['EsAbogado'] = "";
+	
             $_SESSION['Usuario'] = preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $usulocal);
             $_SESSION['NombreUsuario'] = $nombres ;
             $_SESSION['EmailUsuario'] = $email ;			
 			$_SESSION['TipoUsuario'] = $tipousuario;
+			$_SESSION['IdEmpresa'] = $idempresa;
+			$_SESSION['EsAbogado'] = $esabogado;
+			$_SESSION['IdEmpresa'] = $idempresa;
+			$_SESSION['NombreEmpresa'] = $nombreempresa ;
 			
-			$cookie_name = "_gus";
-			$cookie_value = encryptor('encrypt', $usulocal);
+			//$cookie_name = "_gus";
+			//$cookie_value = encryptor('encrypt', $usulocal);
 			$_SESSION['user_id'] = encryptor('encrypt', $usulocal);
 			$_SESSION['IdUsuario'] = $IdUsuario ;
-			setcookie($cookie_name, $cookie_value, time() + (86400 * 30), "/"); // 86400 = 1 day 
+			$user_id = $_SESSION['user_id'] ;
 			
+			/* 20191019: no se trabaja con cookies porque algunos hosting no lo permiten.
+			setcookie($cookie_name, $cookie_value, time() + (86400 * 30), "/"); // 86400 = 1 day			
 			$cookiename='_geo';
 			$value=$IdUsuario;
 			$expiry=time()+(86400 * 30);
@@ -101,7 +158,8 @@
 			$secure=true;
 			$httponly=true;
 			//setcookie($cookie_name,$value,$expiry,$path,$domain,$secure,$httponly);
-			setcookie($cookiename, $value, $expiry);			
+			setcookie($cookiename, $value, $expiry);
+			*/
         }
         else
         {
@@ -111,8 +169,8 @@
     }    
    
     //echo trim($existe.'- cookie...'.$_COOKIE['_gus']);
-    require_once('./pages/tables/regAuditor.php');
+    //include('./pages/tables/regAuditor.php');
     //regAuditor();
     //echo trim("$existe$cookie_value");
-	echo trim("$existe");
+	echo trim($existe);
 ?>

@@ -1,9 +1,10 @@
-﻿<?php 
+<?php
+session_start();  
 require_once('../../Connections/cnn_kn.php'); 
 require_once('../../Connections/config2.php');
 if(!isset($_SESSION)) 
 { 
-    session_start(); 
+    
 } 
 ?>
 <?php
@@ -149,38 +150,6 @@ if( isset($_POST['ƒ×'])  && !empty($_POST['ƒ×']) )
                     <img src="../../images/user.png" width="48" height="48" alt="User" />
                 </div>
                 <div class="info-container">
-					<!-- <div class="name" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <script type="text/javascript">
-                        var jsNombre = "";
-                        $(document).ready(function(){
-                            var name = sessionStorage.getItem("Trojan");
-                            $.post("../../valida_usuario.php", {pusuario: name}, function(result){
-                                var respstr = result;            
-                                var y = JSON.parse(respstr);
-                                jsNombre = y[1]; 
-                                $("#xNom").html(jsNombre);
-                            });
-                        });                    
-                        </script>
-                        <span id="xNom"></span>                   
-                    </div> -->
-
-
-                    <!-- <div class="email">
-                        <script type="text/javascript">
-                        var jsEmail = "";
-                        $(document).ready(function(){
-                            var name = sessionStorage.getItem("Trojan");
-                            $.post("../../valida_usuario.php", {pusuario: name}, function(result){
-                                var respstr = result;            
-                                var y = JSON.parse(respstr);
-                                jsEmail = y[0];
-                                $("#xMail").html(jsEmail);                         
-                            });
-                        });                     
-                        </script>
-                        <span id="xMail"></span>
-                    </div> -->
 
                     <div class="name" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">                        
                         <span id="xNom"><?php echo $_SESSION['NombreUsuario']; ?></span>                   
@@ -189,7 +158,6 @@ if( isset($_POST['ƒ×'])  && !empty($_POST['ƒ×']) )
                     <div class="email">                       
                         <span id="xMail"><?php echo $_SESSION['EmailUsuario']; ?></span>
                     </div>
-
 
                     <!-- <div class="name" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><?php echo trim($nombre); ?></div>
                     <div class="email"><?php echo trim($email); ?></div> -->
@@ -235,7 +203,7 @@ if( isset($_POST['ƒ×'])  && !empty($_POST['ƒ×']) )
                     <div class="card">
                         <div class="header">
                             <h2>
-                                Opciones para Exportar
+                                Opciones para Exportar...
                             </h2>
                             <ul class="header-dropdown m-r--1">
                                 <li class="dropdown">                                   
@@ -244,10 +212,13 @@ if( isset($_POST['ƒ×'])  && !empty($_POST['ƒ×']) )
                                     </a>
                                     <ul class="dropdown-menu pull-right">
                                        <li>
+									   <!--
                                         <a href="javascript:void(0);" onclick="crear('../forms/form-validationBase<?php echo $nombre_lnk ;?>.php')" 
                                             class="btn btn-warning btn-xs waves-effect" data-toggle="modal" data-target="#defaultModal">
                                             Nuevo...
                                         </a>
+										-->
+										<a id="nuevo" class="btn btn-warning btn-xs waves-effect">Nuevo</a>
                                         
                                       <!--  <button type="button" class="btn btn-default waves-effect m-r-20" data-toggle="modal" data-target="#defaultModal">Nuevo</button>-->
                                         </li>                                        
@@ -261,7 +232,8 @@ if( isset($_POST['ƒ×'])  && !empty($_POST['ƒ×']) )
                                     <tr>
                                         <th>Nombre</th>
                                         <th>Email</th>
-                                        <th>Sede</th>
+                                        <th>Empresa</th>
+										<th>Tipo Usuario</th>
 										<th>Estado</th>
                                     </tr>
                                 </thead>
@@ -269,7 +241,8 @@ if( isset($_POST['ƒ×'])  && !empty($_POST['ƒ×']) )
                                     <tr>
                                         <th>Nombre</th>                                        
                                         <th>Email</th>
-                                        <th>Sede</th>
+                                        <th>Empresa</th>
+										<th>Tipo Usuario</th>
 										<th>Estado</th>
                                     </tr>
                                 </tfoot>
@@ -330,15 +303,18 @@ if( $muser['estado'] < 2)
         $archivo = $NombreUsuario.".php";
         $idTabla = $muser['usu_usuario'][$i]['USU_IdUsuario'];
         $Email = trim($muser['usu_usuario'][$i]['USU_Email']);
-        $NombreSucursal = "";
+		$TUS_Nombre = trim($muser['usu_usuario'][$i]['TUS_Nombre']);        
+		$NombreEmpresa = trim($muser['usu_usuario'][$i]['NombreEmpresa']);
         $EstadoUsuario = $muser['usu_usuario'][$i]['EstadoUsuario'];
     ?>
         <tr>
             <td>
-            <a href="javascript:void(0);" onclick="cambiar('../forms/editarusuario.php?f=<?php echo $idTabla; ?>')" class="nav nav-tabs nav-stacked" data-toggle="modal" data-target="#defaultModalEditar" style="text-decoration:none;"><?php echo $NombreUsuario; ?></a>
+            <!-- <a href="javascript:void(0);" onclick="cambiar('../forms/editarusuario.php?f=<?php echo $idTabla; ?>')" class="nav nav-tabs nav-stacked" data-toggle="modal" data-target="#defaultModalEditar" style="text-decoration:none;"><?php echo $NombreUsuario; ?></a> -->
+			<a href="javascript:void(0);" onclick="editar(<?php echo $idTabla; ?>)"><?php echo $NombreUsuario; ?></a>
             </td>        
             <td><?php echo $Email; ?></td>
-            <td><?php echo $NombreSucursal; ?></td>
+            <td><?php echo $NombreEmpresa; ?></td>
+			<td><?php echo $TUS_Nombre; ?></td>
             <td><?php echo $EstadoUsuario; ?></td>
         </tr>
     <?php                          
@@ -434,7 +410,21 @@ if( $muser['estado'] < 2)
     	$("#cerrarModalC").click(function(){
     	 	 window.location="usu_usuario.php";
     	});
-    });     
+		
+		$("#nuevo").on("click", function(){        
+			window.location = 'usuarioforma.php';
+		});
+    });
+
+	function editar(id) 
+	{    	
+		$.post('../forms/editarusuario.php', { 'id': id }, function (result) {
+			WinId = window.open('','_self');
+			WinId.document.open();
+			WinId.document.write(result);
+			WinId.document.close();
+		});
+	}	
 
     function cambiar(nuevaurl) 
     { 

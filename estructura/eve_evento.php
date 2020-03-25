@@ -200,15 +200,16 @@ class EVE_EVENTO
     /**
      * Insertar un nueva Tabla
      *         
-     * @param $Title               identificador
-     * @param $Body               Proceso     
+     * @param $Title          identificador
+     * @param $Body           Proceso     
      * @param $Tipo           Fechainicio
-     * @param $From             Asignadoa     
+     * @param $From           Asignadoa     
      * @param $To             Ubicacion   
-     * @param $Inicio          Claseproceso      
-     * @param $Final            Demandante 
-     * @param $Proceso             Demandado
-     * @param $Responsable                Estado     
+     * @param $Inicio         Claseproceso      
+     * @param $Final          Demandante 
+     * @param $Proceso        Demandado
+     * @param $Responsable    Estado 
+	 * @param $Tipousuario    Tipousuario 
      * @return PDOStatement
      */
     public static function insert(        
@@ -220,7 +221,8 @@ class EVE_EVENTO
         $From,    
         $To,                    
         $Proceso,
-        $Responsable        
+        $Responsable,
+		$Tipousuario	
     )
     {
         // Sentencia INSERT
@@ -232,10 +234,11 @@ class EVE_EVENTO
             " end, " .            
             " inicio_normal, " . 
             " final_normal, " .            
-            " IdProceso, " . 
-            " IdUsuario " .            
+            " IdProceso, " .             
+            " IdUsuario, " .
+			" TipoUsuario " .
             " )".     
-            " VALUES(?,?,?,?,?,?,?,?,?) ;";
+            " VALUES(?,?,?,?,?,?,?,?,?,?) ;";
 
         // Preparar la sentencia
         $sentencia = Database::getInstance()->getDb()->prepare($comando);
@@ -250,7 +253,8 @@ class EVE_EVENTO
                 $From,    
                 $To,                            
                 $Proceso,
-                $Responsable
+                $Responsable,
+				$Tipousuario
             )
         );
     }

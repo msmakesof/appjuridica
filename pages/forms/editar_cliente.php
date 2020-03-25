@@ -111,14 +111,24 @@ if($OldClave != $clave)
   $clave = encryptor('encrypt',$clave);
 }
 
-$verseguimiento ="";
+
+$verseguimiento = 0;
 if(isset($_POST['verseguimiento'])){
   $verseguimiento = trim($_POST['verseguimiento']);
-  if($verseguimiento == "on")
-  {
-	  $verseguimiento = 1;
-  }
+  //if($verseguimiento == "on")
+  //{
+//	  $verseguimiento = 1;
+  //}
 }
 
+$empresa ="";
+if(isset($_POST['empresa'])){
+	$empresa = trim($_POST['empresa']);
+}
+
+$usuariomodifica ="";
+if(isset($_POST['uc'])){
+	$usuariomodifica = trim($_POST['uc']);
+}
 require_once('../../apis/cliente/infoCliente.upd.php');
 ?>

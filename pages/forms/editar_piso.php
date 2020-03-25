@@ -1,7 +1,7 @@
 <?php 
 require_once('../../Connections/cnn_kn.php'); 
 require_once('../../Connections/config2.php');
-if(!isset($_SESSION)) 
+if(!isset($_SESSION))
 { 
   session_start(); 
 } 
@@ -42,6 +42,11 @@ $nombre ="";
 if(isset($_POST['nombre'])){
     $nombre = trim($_POST['nombre']);
     $nombre = str_replace(' ', '%20', $nombre);
+}
+$numero ="";
+if(isset($_POST['numero'])){
+    $numero = trim($_POST['numero']);
+    $numero = str_replace(' ', '%20', $numero);
 }
 
 $estado ="";

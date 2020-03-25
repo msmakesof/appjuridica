@@ -18,9 +18,20 @@ class CLI_CLIENTE
      * @param $IdUsuario Identificador del registro
      * @return array Datos del registro
      */
-    public static function getAll()
+    public static function getAll($all, $iu)
     {
-        $consulta = "SELECT ".$GLOBALS['Llave']." ,
+        $condi = "";
+		//$condisel = "";
+		$condiwhere="";
+		if($all > 0)
+		{
+			$condi = " WHERE CLI_Empresa = ".$all;
+		}
+		if($iu > 0)
+		{
+			$condiwhere = " JOIN pro_proceso P ON P.PRO_IdUsuario = $iu AND (P.PRO_IdDemandante = CLI_IdCliente OR P.PRO_IdDemandado = CLI_IdCliente)";
+		}
+		$consulta = "SELECT ".$GLOBALS['Llave']." ,
         CLI_TipoDocumento,
         CLI_Identificacion,
         CLI_PrimerApellido,
@@ -29,7 +40,8 @@ class CLI_CLIENTE
         CLI_Email,
         CLI_Celular,
         CLI_Usuario,
-        CLI_Clave,        
+        CLI_Clave,
+		CLI_Direccion,
         CLI_Estado,
         CLI_FechaCreado,
         CLI_UsuarioCrea,
@@ -39,9 +51,15 @@ class CLI_CLIENTE
         CLI_IdInterno,
         CLI_Local ,
 		CLI_IdTipoCliente, 
+		CLI_Empresa,
         CASE CLI_Estado WHEN 1 THEN 'Activo' ELSE 'Inactivo' END EstadoUsuario,
-        concat_WS(' ',CLI_Nombre, CLI_PrimerApellido, CLI_SegundoApellido) AS NombreUsuario 
-        FROM ".$GLOBALS['TABLA']." ORDER BY CLI_Nombre; ";
+        concat_WS(' ',CLI_Nombre, CLI_PrimerApellido, CLI_SegundoApellido) AS NombreUsuario, 
+		concat_WS(' ',EMP_Nombre, EMP_Nombre2, EMP_Apellido, EMP_Apellido2) AS NombreEmpresa
+        FROM ".$GLOBALS['TABLA']."  
+		LEFT JOIN emp_empresa ON emp_empresa.EMP_IdEmpresa = CLI_Empresa AND emp_empresa.EMP_IdEstado = 1
+		$condiwhere
+		$condi ORDER BY CLI_Nombre; ";
+		
         try {
             // Preparar sentencia
             $comando = Database::getInstance()->getDb()->prepare($consulta);
@@ -85,7 +103,8 @@ class CLI_CLIENTE
                         CLI_IdInterno,
                         CLI_Local ,
 						CLI_SeguimientoProceso,
-						CLI_IdTipoCliente ".
+						CLI_IdTipoCliente,
+						CLI_Empresa, CLI_FechaCreado ".
                         " FROM ".$GLOBALS['TABLA'].
                         " WHERE ".$GLOBALS['Llave']." = ? ORDER BY CLI_Nombre; ";
 
@@ -195,6 +214,7 @@ class CLI_CLIENTE
      * @param $Local                nueva Id Interno Cliente
 	 * @param $Verseguimiento       marca si autoriza al cliente acceso a la herramenta para que pueda ver el seguimiento del proceso
 	 * @param $TipoCliente          nueva Tipo de Cliente
+	 * @param $CLI_Empresa			nueva CLI_Empresa
      * 
      */
     public static function update(        
@@ -207,24 +227,26 @@ class CLI_CLIENTE
         $Direccion,
         $Celular,
         $Usuario,
-        $Clave,        
-        $Estado,
+        $Clave,
+		$TipoCliente,        
+        $Estado,		
 		$Verseguimiento,
-		$TipoCliente,
+		$Empresa,
+		$UsuarioModifica,
         $IdUsuario		
     )
     {
         // Creando consulta UPDATE
         $consulta = "UPDATE ". $GLOBALS['TABLA']. 
             " SET CLI_TipoDocumento=?, CLI_Identificacion=?, CLI_PrimerApellido=?, CLI_SegundoApellido=?, CLI_Nombre=?, CLI_Email=?, ".
-            " CLI_Direccion=?, CLI_Celular=?, CLI_Usuario=?, CLI_Clave=?, CLI_Estado=?, CLI_SeguimientoProceso=?, CLI_IdTipoCliente=? " .
+            " CLI_Direccion=?, CLI_Celular=?, CLI_Usuario=?, CLI_Clave=?, CLI_IdTipoCliente=? , CLI_Estado=?, CLI_SeguimientoProceso=?, CLI_Empresa=?, CLI_UsuarioModifica=? " .
             " WHERE ". $GLOBALS['Llave'] ."=? ;";
 
         // Preparar la sentencia
         $cmd = Database::getInstance()->getDb()->prepare($consulta);
 
         // Relacionar y ejecutar la sentencia
-        $cmd->execute(array($TipoDocumento, $Identificacion, $PrimerApellido, $SegundoApellido, $Nombre, $Email, $Direccion, $Celular, $Usuario, $Clave, $Estado, $Verseguimiento, $TipoCliente, $IdUsuario ));
+        $cmd->execute(array($TipoDocumento, $Identificacion, $PrimerApellido, $SegundoApellido, $Nombre, $Email, $Direccion, $Celular, $Usuario, $Clave, $TipoCliente, $Estado, $Verseguimiento, $Empresa, $UsuarioModifica, $IdUsuario ));
 
         return $cmd;
     }
@@ -253,11 +275,13 @@ class CLI_CLIENTE
      * @param $Local                nueva Id Interno Cliente 
 	 * @param $Verseguimiento       marca si autoriza al cliente acceso a la herramenta para que pueda ver el seguimiento del proceso
 	 * @param $TipoCliente          nueva Tipo de usuario
+	 * @param $CLI_Empresa			nueva CLI_Empresa
+	 * @param $IdUsuarioCrea        nuevo IdUsuarioCrea
      * @return PDOStatement
      */
 
     public static function insert( $TipoDocumento, $Identificacion, $PrimerApellido, $SegundoApellido, $Nombre, $Email, $Direccion, $Celular, $Usuario,
-        $Clave, $Estado, $IdInterno, $Local, $Verseguimiento, $TipoCliente )
+        $Clave, $TipoCliente, $Estado, $IdInterno, $Local, $Verseguimiento, $Empresa, $IdUsuarioCrea )
     {
         // Sentencia INSERT
         $comando = "INSERT INTO ". $GLOBALS['TABLA'] ." ( " .            
@@ -270,15 +294,16 @@ class CLI_CLIENTE
             " CLI_Direccion," .
             " CLI_Celular," .
             " CLI_Usuario," .
-            " CLI_Clave," .            
+            " CLI_Clave," . 
+			" CLI_IdTipoCliente," .
             " CLI_Estado, " .
-            " CLI_IdInterno, CLI_Local, CLI_SeguimientoProceso, CLI_IdTipoCliente ) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);";
+            " CLI_IdInterno, CLI_Local, CLI_SeguimientoProceso, CLI_Empresa, CLI_UsuarioCrea ) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);";
         try {
             // Preparar la sentencia
             $sentencia = Database::getInstance()->getDb()->prepare($comando);
             return $sentencia->execute(
                 array($TipoDocumento, $Identificacion, $PrimerApellido, $SegundoApellido, $Nombre, $Email,
-                $Direccion, $Celular, $Usuario, $Clave, $Estado, $IdInterno, $Local, $Verseguimiento, $TipoCliente )    
+                $Direccion, $Celular, $Usuario, $Clave, $TipoCliente, $Estado, $IdInterno, $Local, $Verseguimiento, $Empresa, $IdUsuarioCrea )    
             );
            
         } catch (PDOException $e) {

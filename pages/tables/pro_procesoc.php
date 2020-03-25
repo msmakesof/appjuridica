@@ -1,4 +1,4 @@
-﻿<?php 
+<?php 
 require_once('../../Connections/cnn_kn.php'); 
 require_once('../../Connections/config2.php');
 if(!isset($_SESSION)) 
@@ -372,10 +372,18 @@ if($usuario == "")
         <aside id="leftsidebar" class="sidebar">
             <!-- User Info -->
             <div class="user-info">
-                <div class="image">
-                    <img src="../../images/user.png" width="48" height="48" alt="User" />
-                </div>
-                <div class="info-container">
+				<div style="width:100%;">
+                    <div class="image" style="width:20%; float:left !important; ">
+						<img src="../../images/user.png" width="48" height="48" alt="User" />
+					</div>
+					<div style="width:70%; float:left !important; line-height: 10px;">
+						<span style="font-size:12px; color:white; padding-left: 10px; white-space: pre-line; line-height: 1;">
+							<?php echo strtoupper(trim($_SESSION['NombreEmpresa'])); ?>
+						</span>
+					</div>
+				</div>	
+					
+                <div class="info-container" style="width:100%; float:left !important;">
 					<div class="name" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">                       
                         <span id="xNom"><?php echo $_SESSION['NombreUsuario']; ?></span>                   
                     </div>
@@ -567,7 +575,7 @@ if($usuario == "")
         <div class="container-fluid">
             <div class="block-header">
                 <h2>
-                    INFORMACION DE: <?php echo strtoupper($nombre_lnk); ?>
+                    INFORMACION DE: <?php echo strtoupper($nombre_lnk); ?> CERRADOS
                     <small>Opciones: <a href="#" target="_blank">consultar, crear, modificar.</a></small>
                 </h2>
             </div>
@@ -582,17 +590,17 @@ if($usuario == "")
                             </h2>
                             <ul class="header-dropdown m-r--1">
                                 <li class="dropdown">
+									<!-- 
                                     <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                                         <i class="material-icons" style="font-size:24px;color:red">add_circle_outline</i>  										      
                                     </a>
-                                     
+                                    --> 
                                     
                                     <ul class="dropdown-menu pull-right">
                                        <li>
                                        <!-- <a id="nuevo" class="btn btn-warning btn-xs waves-effect" data-toggle="modal" data-target="#defaultModal">Nuevo</a> -->
 
-                                       <a id="nuevo" class="btn btn-warning btn-xs waves-effect">Nuevo</a>
-
+                                       <!-- <<a id="nuevo" class="btn btn-warning btn-xs waves-effect">Nuevo</a> -->
 
                                       <!--  <button type="button" class="btn btn-default waves-effect m-r-20" data-toggle="modal" data-target="#defaultModal">Nuevo</button>-->
                                         </li>

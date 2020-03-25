@@ -36,6 +36,11 @@ function GetSQLValueString($theValue, $theType, $theDefinedValue = "", $theNotDe
 date_default_timezone_set('America/Bogota');
 $fechaCreado = date('Y-m-d g:ia');
 
+$empresa ="";
+if(isset($_POST['empresa'])){
+  $empresa = trim($_POST['empresa']);
+}
+
 $tipodocumento ="";
 if(isset($_POST['tipodocumento'])){
   $tipodocumento = trim($_POST['tipodocumento']);
@@ -102,7 +107,7 @@ require_once('../../Connections/DataConex.php');
 // Nombres iguales o nro documento igual o email igual
 if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
 {
-  $parameters = "ExisteUsuario=1&Identificacion=$numerodocumento&PrimerApellido=$apellido1&SegundoApellido=$apellido2&Nombre=$nombre&Email=$email";
+  $parameters = "ExisteUsuario=1&empresa=$empresa&Identificacion=$numerodocumento&PrimerApellido=$apellido1&SegundoApellido=$apellido2&Nombre=$nombre&Email=$email";
   $url = urlServicios."consultadetalle/consultadetalle_Usuario.php?".$parameters;
   $ch = curl_init();
   curl_setopt($ch, CURLOPT_VERBOSE, true);
@@ -142,7 +147,7 @@ if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
       $local = rand(10000000,1234567890000);
       $clave = encryptor('encrypt',$clave);
 
-      $parameters = "insert=insert&TipoDocumento=$tipodocumento&Identificacion=$numerodocumento&PrimerApellido=$apellido1&SegundoApellido=$apellido2&Nombre=$nombre&Email=$email&Direccion=$direccion&Celular=$celular&Usuario=$email&Clave=$clave&TipoUsuario=$tipousuario&Estado=$estado&IdInterno=$interno&Local=$local&Abogado=$abogado";
+      $parameters = "insert=insert&Empresa=$empresa&TipoDocumento=$tipodocumento&Identificacion=$numerodocumento&PrimerApellido=$apellido1&SegundoApellido=$apellido2&Nombre=$nombre&Email=$email&Direccion=$direccion&Celular=$celular&Usuario=$email&Clave=$clave&TipoUsuario=$tipousuario&Estado=$estado&IdInterno=$interno&Local=$local&Abogado=$abogado";
       //$parameters = array("insert" => "insert", "TipoDocumento" => "$tipodocumento","Identificacion" => "$numerodocumento","PrimerApellido" => "$apellido1", "SegundoApellido" => "$apellido2","Nombre" => "$nombre","Email" => "$email", "Direccion" => "$direccion","Celular" => "$celular", "Usuario" => "$email", "Clave" => "$clave", "TipoUsuario" => "$tipousuario", "Estado" => "$estado", "IdInterno" => "$interno", "Local" => "$local");
      
       $soportecURL = "S";

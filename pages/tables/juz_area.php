@@ -1,10 +1,10 @@
-﻿<?php 
+<?php
+session_start();  
 require_once('../../Connections/cnn_kn.php'); 
 require_once('../../Connections/config2.php');
-if(!isset($_SESSION)) 
-{ 
-    session_start(); 
-} 
+//if(!isset($_SESSION)) 
+//{ 
+//} 
 ?>
 <?php
 if (!function_exists("GetSQLValueString")) 
@@ -382,7 +382,9 @@ else
             </div>
             <!-- #User Info -->
             <!-- Menu -->
-            <?php require_once('menu.php'); ?> 
+            <?php require_once('menu.php'); 
+			//include("../../menu/menu.php");
+			?> 
             <!-- #Menu -->
             <!-- Footer -->
             <div class="legal">
@@ -691,7 +693,7 @@ if( $marea['estado'] < 2)
                 </div>
                 
                 <div class="modal-body">                                
-                    <object style="padding :0px; position: relative; height: 55vh; max-height:55vh; bottom:0; overflow: hidden; margin: 0px;" 
+                    <object style="padding :0px; position: relative; height: 75vh; max-height:100vh; bottom:0; overflow: hidden; margin: 0px;" 
                     type="text/html" data="../forms/editar<?php echo $nombre_lnk ;?>.php" id="carga"></object>                           
                 </div>
 
@@ -710,7 +712,7 @@ if( $marea['estado'] < 2)
                 </div>
                 
                 <div class="modal-body">                         
-                    <object style="padding :0px; position: relative; height: 50vh; max-height:50vh; bottom:0; overflow: hidden; margin: 0px;" 
+                    <object style="padding :0px; position: relative; height: 70vh; max-height:100vh; bottom:0; overflow: hidden; margin: 0px;" 
                     type="text/html" data="../forms/form-validationBase<?php echo $nombre_lnk ;?>.php" id="crear">                            
                     </object>
                 </div>

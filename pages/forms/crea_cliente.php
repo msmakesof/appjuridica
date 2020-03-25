@@ -90,7 +90,7 @@ if(isset($_POST['tipocliente'])){
   $tipocliente = trim($_POST['tipocliente']);
 }
 
-$verseguimiento ="";
+$verseguimiento =0;
 if(isset($_POST['verseguimiento'])){
   $verseguimiento = trim($_POST['verseguimiento']);
   if($verseguimiento == "on")
@@ -102,6 +102,16 @@ if(isset($_POST['verseguimiento'])){
 $estado ="";
 if(isset($_POST['estado'])){
   $estado = trim($_POST['estado']);
+}
+
+$empresa = "";
+if(isset($_POST['empresa'])){
+  $empresa = trim($_POST['empresa']);
+}
+
+$usuariocrea = "";
+if(isset($_POST['uc'])){
+  $usuariocrea = trim($_POST['uc']);
 }
 
 require_once('../../Connections/DataConex.php');
@@ -148,8 +158,8 @@ if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
       $interno = rand(10000000,100000123456789);
       $local = rand(10000000,1234567890000);
       $clave = encryptor('encrypt',$clave);
-
-      $parameters = "insert=insert&TipoDocumento=$tipodocumento&Identificacion=$numerodocumento&PrimerApellido=$apellido1&SegundoApellido=$apellido2&Nombre=$nombre&Email=$email&Direccion=$direccion&Celular=$celular&Usuario=$email&Clave=$clave&Estado=$estado&IdInterno=$interno&Local=$local&Verseguimiento=$verseguimiento&TipoCliente=$tipocliente";
+		
+      $parameters = "insert=insert&TipoDocumento=$tipodocumento&Identificacion=$numerodocumento&PrimerApellido=$apellido1&SegundoApellido=$apellido2&Nombre=$nombre&Email=$email&Direccion=$direccion&Celular=$celular&Usuario=$email&Clave=$clave&Estado=$estado&IdInterno=$interno&Local=$local&Verseguimiento=$verseguimiento&TipoCliente=$tipocliente&Empresa=$empresa&UsuarioCrea=$usuariocrea";
            
       $soportecURL = "S";
       $url         = urlServicios."consultadetalle/consultadetalle_Cliente.php?".$parameters;

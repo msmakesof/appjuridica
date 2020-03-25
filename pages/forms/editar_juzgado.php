@@ -52,6 +52,7 @@ if(isset($_POST['ciudad'])){
 $direccion ="";
 if(isset($_POST['direccion'])){
     $direccion = trim($_POST['direccion']);
+	$direccion = strtoupper($direccion);
     $direccion = str_replace(' ', '%20', $direccion);
     $direccion = str_replace('#', 'No.', $direccion);    
 }
@@ -74,6 +75,19 @@ if(isset($_POST['area'])){
 $estado ="";
 if(isset($_POST['estado'])){
 	$estado = trim($_POST['estado']);
+}
+
+$pemail ="";
+if( isset($_POST['email']) )
+{
+    $email = trim($_POST['email']);
+	$email = strtolower($email);
+}
+
+$edificio ="";
+if( isset($_POST['edificio']) )
+{
+    $edificio = trim($_POST['edificio']);
 }
 
 $idtabla = 0;

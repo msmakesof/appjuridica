@@ -20,9 +20,9 @@ class JUZ_PISO
      */
     public static function getAll()
     {
-        $consulta = "SELECT ".$GLOBALS['Llave'].", PIS_Nombre, ".
+        $consulta = "SELECT ".$GLOBALS['Llave'].", PIS_Numero, PIS_Nombre, ".
             " CASE PIS_Estado WHEN 1 THEN 'Activo' ELSE 'Inactivo' END EstadoTabla ".
-            " FROM ".$GLOBALS['TABLA']." ORDER BY PIS_Nombre; ";
+            " FROM ".$GLOBALS['TABLA']." ORDER BY ABS(PIS_Numero); ";
         try {
             // Preparar sentencia
             $comando = Database::getInstance()->getDb()->prepare($consulta);
@@ -46,11 +46,9 @@ class JUZ_PISO
     public static function getById($IdTabla)
     {
         // Consulta de la tabla de tablas
-        $consulta = "SELECT ".$GLOBALS['Llave'].",
-            PIS_Nombre,                            
-            PIS_Estado ".
+        $consulta = "SELECT ".$GLOBALS['Llave'].", PIS_Numero, PIS_Nombre, PIS_Estado ".
             " FROM ".$GLOBALS['TABLA'].
-            " WHERE ".$GLOBALS['Llave']." = ? ORDER BY PIS_Nombre; ";
+            " WHERE ".$GLOBALS['Llave']." = ? ORDER BY ABS(PIS_Numero); ";
 
         try {
             // Preparar sentencia
@@ -79,9 +77,9 @@ class JUZ_PISO
     public static function getByIdEstado($IdEstadoTabla)
     {
         // Consulta de la GEN_PAIS
-        $consulta = "SELECT ".$GLOBALS['Llave'].", PIS_Nombre, PIS_Estado".
+        $consulta = "SELECT ".$GLOBALS['Llave'].", PIS_Numero, PIS_Nombre, PIS_Estado".
                     " FROM ". $GLOBALS['TABLA'].
-                    " WHERE PIS_Estado = ? ORDER BY PIS_Nombre; ";
+                    " WHERE PIS_Estado = ? ORDER BY ABS(PIS_Numero); ";
 
         try {
             // Preparar sentencia
@@ -136,26 +134,28 @@ class JUZ_PISO
      * en los nuevos valores relacionados con un identificador
      *
      * @param $IdTabla           identificador
-     * @param $Nombre            nuevo Nombre Tipo Cliente
+     * @param $Nombre            nuevo Nombre
+	 * @param $Numero            nuevo Numero
      * @param $IdEstadoTabla     nueva Estado       
      * 
      */
     public static function update(
-        $nombre,        
+        $nombre,
+		$numero,
         $estado,
         $idtabla
     )
     {
         // Creando consulta UPDATE
         $consulta = "UPDATE ". $GLOBALS['TABLA']. 
-            " SET PIS_Nombre=?, PIS_Estado=? " .
+            " SET PIS_Nombre=?, PIS_Numero=?, PIS_Estado=? " .
             " WHERE ". $GLOBALS['Llave'] ." =? ;";
 
         // Preparar la sentencia
         $cmd = Database::getInstance()->getDb()->prepare($consulta);
 
         // Relacionar y ejecutar la sentencia
-        $cmd->execute(array($nombre, $estado, $idtabla ));
+        $cmd->execute(array($nombre, $numero, $estado, $idtabla ));
 
         return $cmd;
     }
@@ -164,28 +164,32 @@ class JUZ_PISO
      * Insertar un nueva Tipo Documento
      *         
      * @param $IdTabla            identificador
-     * @param $Nombre             nuevo Nombre Tipo Cliente    
+     * @param $Nombre             nuevo Nombre
+	 * @param $Numero			  Numero	
      * @param $Estado             Estado   
      * @return PDOStatement
      */
     public static function insert(        
-        $Nombre,       
+        $Nombre,
+		$Numero,	
         $Estado
     )
     {
         // Sentencia INSERT
         $comando = "INSERT INTO ". $GLOBALS['TABLA'] ." ( " .            
-            " PIS_Nombre," .            
+            " PIS_Nombre," .
+			" PIS_Numero," .	
             " PIS_Estado" . 
             " )".     
-            " VALUES(?,?) ;";
+            " VALUES(?,?,?) ;";
 
         // Preparar la sentencia
         $sentencia = Database::getInstance()->getDb()->prepare($comando);
 
         return $sentencia->execute(
             array(                
-                $Nombre,                 
+                $Nombre,
+				$Numero,
                 $Estado
             )
         );
@@ -214,16 +218,16 @@ class JUZ_PISO
      * @param $IdUsuario identificador de la gen_Tipo Documento
      * @return bool Respuesta de la consulta
      */
-    public static function existetabla($Nombre)
+    public static function existetabla($Nombre, $Numero)
     {
-        $consulta = "SELECT count(". $GLOBALS['Llave']. ") existe, PIS_Nombre FROM ".$GLOBALS['TABLA'].
-        " WHERE PIS_Nombre = ? ; ";
+        $consulta = "SELECT count(". $GLOBALS['Llave']. ") existe, PIS_Nombre, PIS_Numero FROM ".$GLOBALS['TABLA'].
+        " WHERE PIS_Nombre = ? AND PIS_Numero = ? ; ";
 
         try {
             // Preparar sentencia
             $comando = Database::getInstance()->getDb()->prepare($consulta);
             // Ejecutar sentencia preparada
-            $comando->execute(array($Nombre));
+            $comando->execute(array($Nombre, $Numero));
             // Capturar primera fila del resultado
             $row = $comando->fetch(PDO::FETCH_ASSOC);
             return $row;
@@ -231,7 +235,7 @@ class JUZ_PISO
         } catch (PDOException $e) {
             // Aquí puedes clasificar el error dependiendo de la excepción
             // para presentarlo en la respuesta Json
-            return -1;
+            return "Err.Cons(Ln221)=>...$consulta";
         }
     }
 }

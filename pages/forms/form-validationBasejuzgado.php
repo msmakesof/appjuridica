@@ -1,4 +1,4 @@
-﻿<?php 
+<?php 
 require_once('../../Connections/cnn_kn.php'); 
 require_once('../../Connections/config2.php');
 if(!isset($_SESSION)) 
@@ -43,6 +43,7 @@ $NombreTabla ="JUZGADO";
 $idTabla = 0;
 require_once('../../apis/general/ciudad.php');
 require_once('../../apis/general/piso.php');
+require_once('../../apis/general/edificio.php');
 require_once('../../apis/general/tipojuzgado.php');
 require_once('../../apis/general/area.php');
 ?>
@@ -137,7 +138,7 @@ require_once('../../apis/general/area.php');
                 select.val(selectedOption);
                 $('#area').selectpicker('refresh');
             });
-        }    
+        }
 
         $(document).ready(function()
         {       
@@ -161,27 +162,45 @@ require_once('../../apis/general/area.php');
             $('#tipojuzgado').change(function() {
                 populateFruitVariety();
             });
-
+			
+			$('#edificio').on('change', function(e){
+				var id = $('#edificio').val();				
+				$.ajax({
+					type: 'GET',					
+					url: '../../consultadetalle/consultadetalle_gen_edificio.php?IdTabla='+id,
+					contentType: "application/json; charset=utf-8",
+					dataType: "json",
+					success: function(respuesta) {						
+						var dir = respuesta.gen_edificio.EDI_Direccion;
+						$("#direccion").val(dir);
+					},
+					error: function() {
+						console.log("No se ha podido obtener la información");
+					}
+				});
+			});
+			
 
             $("#grabar").on('click', function(e) { 
-                var ubicacion = $("#ubicacion").val();
-                ubicacion = ubicacion.toUpperCase();
+                var ubicacion = $("#ubicacion").val();               
                 var ciudad = $("#ciudad").val();
                 var direccion = $("#direccion").val();
                 var piso = $("#piso").val();            
                 var tipojuzgado = $("#tipojuzgado").val();
                 var area = $("#area").val();            
                 var estado = $('input:radio[name=estado]:checked').val();
+				var edificio = $("#edificio").val();
+				var email = $("#email").val();				
                 e.preventDefault();
 
-                if( ubicacion == "" || ciudad =="" || direccion == "" || piso == "" || tipojuzgado == "" || area == "" || estado == undefined )
+                if( ubicacion == "" || ciudad =="" || direccion == "" || piso == "" || tipojuzgado == "" || area == "" || edificio == "" || estado == undefined )
                 {
                     swal({
-                    title: "Error:  Ingrese información en todos los campos...",
-                    text: "un momento por favor.",
-                    imageUrl: "../../js/sweet/2.gif",
-                    timer: 1500,
-                    showConfirmButton: false
+						title: "Error:  Ingrese información en todos los campos...",
+						text: "un momento por favor.",
+						imageUrl: "../../js/sweet/2.gif",
+						timer: 1500,
+						showConfirmButton: false
                     });
                     return false;
                 }
@@ -189,7 +208,7 @@ require_once('../../apis/general/area.php');
                 else
                 {
                     $.ajax({
-                        data : {"ubicacion": ubicacion, "ciudad": ciudad, "direccion": direccion, "piso": piso, "tipojuzgado": tipojuzgado, "area": area, "estado": estado}, 
+                        data : {"ubicacion": ubicacion, "ciudad": ciudad, "direccion": direccion, "piso": piso, "tipojuzgado": tipojuzgado, "area": area, "estado": estado, "edificio": edificio, "email": email}, 
                         type: "POST",
                         dataType: "html",
                         url : "crea_<?php echo strtolower($NombreTabla); ?>.php",
@@ -300,7 +319,7 @@ require_once('../../apis/general/area.php');
 
                                 <div class="form-group form-float" style="clear:both;">
                                     <label class="form-label">N&uacute;mero Despacho</label>
-                                    <div class="form-line">                                        
+                                    <div class="form-line col-sm-4">                                        
                                         <input type="text" class="form-control" name="ubicacion" id="ubicacion" value="" maxlength="3" required>                                    
                                     </div>
                                 </div>								
@@ -327,7 +346,32 @@ require_once('../../apis/general/area.php');
                                             ?>
                                         </select>
                                     </div>
-                                </div>                                
+                                </div>
+
+								<div style="form-group form-float">                                     
+                                    <label class="form-label">
+                                        Edificio
+                                    </label>                                    
+                                    <div class="col-sm-4">                                       
+                                        <select class="selectpicker show-tick" data-live-search="true" data-width="80%" name="edificio" id="edificio" required>
+                                            <option value="" >Seleccione Opción...</option>
+                                            <?php
+                                                for($i=0; $i<count($medificio['gen_edificio']); $i++)
+                                                {
+                                                    $EDI_IdEdificio = $medificio['gen_edificio'][$i]['EDI_IdEdificio'];                                                    
+                                                    $EDI_Nombre = $medificio['gen_edificio'][$i]['EDI_Nombre'];
+													$EDI_Direccion = $medificio['gen_edificio'][$i]['EDI_Direccion'];
+                                                    $EDI_Estado = $medificio['gen_edificio'][$i]['EDI_Estado'];
+                                            ?>
+                                                    <option value="<?php echo $EDI_IdEdificio; ?>" >
+                                                        <?php echo $EDI_Nombre ; ?>                                                
+                                                    </option>
+                                            <?php
+                                                }
+                                            ?>
+                                        </select>
+                                    </div>
+                                </div>
 
                                 <div class="form-group form-float" style="clear: both;">
                                     <label class="form-label">Direcci&oacute;n</label>
@@ -335,7 +379,6 @@ require_once('../../apis/general/area.php');
                                         <input type="text" class="form-control" name="direccion" id="direccion" value="" required>                                       
                                     </div>
                                 </div>
-
 
                                 <div style="form-group form-float">                                     
                                     <label class="form-label">
@@ -348,16 +391,24 @@ require_once('../../apis/general/area.php');
                                                 for($i=0; $i<count($mpiso['juz_piso']); $i++)
                                                 {
                                                     $PIS_IdPiso = $mpiso['juz_piso'][$i]['PIS_IdPiso'];                                                    
-                                                    $PIS_Nombre = $mpiso['juz_piso'][$i]['PIS_Nombre'];
+                                                    $PIS_Numero = $mpiso['juz_piso'][$i]['PIS_Numero'];
                                                     $PIS_Estado = $mpiso['juz_piso'][$i]['PIS_Estado'];
                                             ?>
                                                     <option value="<?php echo $PIS_IdPiso; ?>" >
-                                                        <?php echo $PIS_Nombre ; ?>                                                
+                                                        <?php echo $PIS_Numero ; ?>                                                
                                                     </option>
                                             <?php
                                                 }
                                             ?>
                                         </select>
+                                    </div>
+                                </div>			
+								
+
+								<div class="form-group form-float" style="clear: both;">
+                                    <label class="form-label">Email</label>
+                                    <div class="form-line">
+                                        <input type="text" class="form-control" name="email" id="email" value="" required>                                       
                                     </div>
                                 </div>                                
                                 

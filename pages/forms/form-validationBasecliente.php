@@ -264,7 +264,7 @@ require_once('../../apis/general/tipocliente.php');
             <div class="block-header">
                 <h2>
                     FORMULARIO: <?php echo $NombreTabla; ?>.
-                    <small>acción: Crear.</small>
+                    <small>acción: Crear...</small>
                 </h2>
             </div>
             

@@ -32,7 +32,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             );
         }
     }
-
     elseif(isset($_GET['IdResponsable'])) {
 
         // Obtener parámetro IdTabla
@@ -57,7 +56,55 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             );
         }
     }
+	
+	elseif(isset($_GET['IdProcesoResponsable'])) {
 
+        // Obtener parámetro IdTabla
+        $parametro = $_GET['IdProcesoResponsable'];
+
+        // Tratar retorno
+        $retorno = PRO_PROCESO::getByIdProcesoResponsable($parametro);
+
+        if ($retorno) {
+            $pro_proceso["estado"] = "1";
+            $pro_proceso["pro_proceso"] = $retorno;
+            // Enviar objeto json de la meta
+            header('Content-Type: application/json');
+            echo json_encode($pro_proceso);
+        } else {
+            // Enviar respuesta de error general
+            print json_encode(
+                array(
+                    'estado' => '2',
+                    'mensaje' => 'No se obtuvo el registro en Proceso por su Id'
+                )
+            );
+        }
+    }
+	elseif(isset($_GET['IdResponsableProceso'])) {
+
+        // Obtener parámetro IdTabla
+        $parametro = $_GET['IdResponsableProceso'];
+
+        // Tratar retorno
+        $retorno = PRO_PROCESO::getByIdResponsableProceso($parametro);
+
+        if ($retorno) {
+            $pro_proceso["estado"] = "1";
+            $pro_proceso["pro_proceso"] = $retorno;
+            // Enviar objeto json de la meta
+            header('Content-Type: application/json');
+            echo json_encode($pro_proceso);
+        } else {
+            // Enviar respuesta de error general
+            print json_encode(
+                array(
+                    'estado' => '2',
+                    'mensaje' => 'No se obtuvo el registro en Proceso por su Id'
+                )
+            );
+        }
+    }
 	elseif (isset($_GET['EmailProceso']))
 	{
 		// Obtener parámetro EmailProceso
@@ -187,19 +234,31 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         // Obtener parámetro IdMostrar de PRO_PROCESO		
         $parametro = $_GET['IdMostrar'];
 		$parametro2 = "";
+		$parametrousu = $_GET['iu'];
+		$parametroemp = $_GET['em'];
+		
 		if( isset($_GET['e']) )
 		{
 			$parametro2 = $_GET['e'];
-		}
-		
+		}		
 		
         if($parametro == 0)
         {
             $parametro == "";
         }
+		
+		if($parametrousu == 0)
+		{
+			$parametrousu = "";
+		}
+		
+		if($parametroemp == 0 OR $parametroemp == "")
+		{
+			$parametroemp = "";
+		}
 
         // Tratar retorno
-        $retorno = PRO_PROCESO::getAll($parametro,$parametro2);
+        $retorno = PRO_PROCESO::getAll($parametro,$parametro2,$parametrousu,$parametroemp );
 
         if ($retorno) 
         {
@@ -235,8 +294,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         $par9 = $_GET['Estado'];
         $par10 = $_GET['Especialidad'];
         $par11 = $_GET['Despacho'];
+		$par12 = $_GET['Representa'];
+		$par13 = $_GET['UsuarioCrea'];
 
-        $retorno = PRO_PROCESO::insert($par1, $par2, $par3, $par4, $par5, $par6, $par7, $par8, $par9, $par10, $par11);
+        $retorno = PRO_PROCESO::insert($par1, $par2, $par3, $par4, $par5, $par6, $par7, $par8, $par9, $par10, $par11, $par12, $par13);
         $msj = $retorno;
         if($retorno)
         {
@@ -268,9 +329,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         $par6 = $_GET['demandante'];
 		$par7 = $_GET['demandado'];        
         $par8 = $_GET['estado'];
-        $par9 = $_GET['idtabla'];
+		$par9 = $_GET['enviaemailcli'];
+        $par10 = $_GET['representa'];
+		$par11 = $_GET['usuariomodifica'];
+		$par12 = $_GET['idtabla'];
 
-        $retorno = PRO_PROCESO::update($par1, $par2, $par3, $par4, $par5, $par6, $par7, $par8, $par9);
+        $retorno = PRO_PROCESO::update($par1, $par2, $par3, $par4, $par5, $par6, $par7, $par8, $par9, $par10, $par11, $par12);
         $msj = $retorno;
         if($retorno)
         {

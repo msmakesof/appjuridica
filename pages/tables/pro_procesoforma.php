@@ -1,11 +1,11 @@
-﻿<?php
-ob_start(); 
+<?php
+session_start(); 
+if( !isset($_SESSION['IdUsuario']) && !isset($_SESSION['NombreUsuario']) )
+{
+	header("Location: ../../index.html");
+}
 require_once('../../Connections/cnn_kn.php'); 
-require_once('../../Connections/config2.php');
-if(!isset($_SESSION)) 
-{ 
-    session_start(); 
-} 
+require_once('../../Connections/config2.php'); 
 ?>
 <?php
 if (!function_exists("GetSQLValueString")) 
@@ -277,7 +277,6 @@ else
     {       
         $("#msj").hide();
 		$("#area").attr("value", "");
-        //$('#zip').numeric();
         $('#anio').numeric();
 		$('#ndv').numeric();
         $('#consecutivo').numeric();
@@ -317,15 +316,11 @@ else
 
         $('#cliente').change(function() {
             var __cliente = $('#cliente').val();
-            // var __demandado =$('#cliente').val(); //original
             var __demandado = $('#demandado').val();
-            $.getJSON('../tables/urlink.php', {funcion: "cd", origen: __cliente +'-'+ __demandado }, function (data) {
-                console.log("cliente......"+data);               
+            $.getJSON('../tables/urlink.php', {funcion: "cd", origen: __cliente +'-'+ __demandado }, function (data) {               
 
             });
-            //$("#demandado option:selected").remove();
             $("#demandado.selectpicker.show-tick option[value='"+ __cliente+"']").remove();
-            //$("#demandado").siblings().find("option[value='"+ __cliente+"']").remove();
             if (__cliente != "")
             {
                 $('#demandado').prop('disabled', false);
@@ -344,11 +339,9 @@ else
 
         $('#demandado').change(function() {
             var __cliente = $('#cliente').val();
-            //alert(__cliente);
-            // var __demandado =$('#cliente').val(); //original
             var __demandado = $('#demandado').val();
             $.getJSON('../tables/urlink.php', {funcion: "cd", origen: __cliente +'-'+ __demandado }, function (data) {
-                console.log("demandado......"+data);
+                
             });        
         });
 
@@ -411,7 +404,6 @@ else
         $("#grabar").on('click', function(e) {
 
             var nombre = $("#proceso").val();
-            //nombre = nombre.toUpperCase();
             fechainicio = $("#txtFecha").val();
             usuario = $("#usuario").val();
             ubicacion = $("#ubicacion").val();
@@ -422,20 +414,22 @@ else
             despacho = $("#despacho").val();
             cliente = $("#cliente").val();
             demandado = $("#demandado").val();
+			var uc = <?php echo $_SESSION['IdUsuario']; ?>;
 			var origen ="p";
 
             var estado = $('input:radio[name=estado]:checked').val();
+			var representa = $('input:radio[name=representa]:checked').val();
             e.preventDefault();
-            if( estado == undefined || nombre == "" || fechainicio == "" || ubicacion == "" || claseproceso == "" || juzgado == "" || cliente == "" || demandado == "" || especialidad == "" || despacho == "" || usuario == "") 
+            if( estado == undefined || representa == undefined || nombre == "" || fechainicio == "" || ubicacion == "" || claseproceso == "" || juzgado == "" || cliente == "" || demandado == "" || especialidad == "" || despacho == "" || usuario == "") 
             {                 
-                swal("Atencion:", "Debe digitar un Nombre y/o seleccionar un Estado y/o Fecha de Inicio  y/o Usuario  y/o Ubicacion  y/o  clase Proceso  y/o  Juzgado y/o especialidad y/o despacho.");
+                swal("Atencion:", "Debe digitar un Nombre y/o seleccionar un Estado y/o Fecha de Inicio y/o Usuario y/o Ubicacion y/o clase Proceso y/o Juzgado y/o especialidad y/o despacho y/o Representante De.");
                 e.stopPropagation();
                 return false;
             }
             else
             {
                 $.ajax({
-                    data : {"pnombre": nombre, "pfechainicio": fechainicio, "pusuario": usuario, "pubicacion": ubicacion, "pclaseproceso": claseproceso ,"pjuzgado": juzgado,"pestado": estado, "pproceso": pproceso,"pcliente": cliente, "pdemandado":demandado, "pespecialidad":especialidad, "pdespacho":despacho},
+                    data : {"pnombre": nombre, "pfechainicio": fechainicio, "pusuario": usuario, "pubicacion": ubicacion, "pclaseproceso": claseproceso ,"pjuzgado": juzgado,"pestado": estado, "pproceso": pproceso,"pcliente": cliente, "pdemandado":demandado, "pespecialidad":especialidad, "pdespacho":despacho, "prepresenta":representa, "uc": uc},
                     type: "POST",
                     dataType: "html",
                     url : "../forms/crea_<?php echo strtolower($NombreTabla); ?>.php",
@@ -453,9 +447,7 @@ else
                     {    
                         if( respstr == "S" )
                         {                        
-                            //swal("Atención: ", msj, "success");
-                            //return false;							
-							var nombreciu = $('select[name="zip"] option:selected').text();
+                            var nombreciu = $('select[name="zip"] option:selected').text();
 							var corporacion = $('select[name="tipojuzgado"] option:selected').text();
 							var area = $('select[name="area"] option:selected').text();
 							var despacho = $('select[name="despacho"] option:selected').text();
@@ -464,8 +456,7 @@ else
 							var claseproceso = $('select[name="claseproceso"] option:selected').text();
 							var cliente = $('select[name="cliente"] option:selected').text();
 							var demandado = $('select[name="demandado"] option:selected').text();							
-							//var area = $('select[name="area"] option:selected').text();
-							
+														
 							$.ajax({
 								data : {"pnombre": nombre, "pfechainicio": fechainicio, "pusuario": usuario, "pubicacion": ubicacion, "pclaseproceso": claseproceso ,"pjuzgado": juzgado,"pestado": estado, "pproceso": pproceso,"pcliente": cliente, "pdemandado":demandado, "pespecialidad":especialidad, "pdespacho":despacho, "origen": origen, "nombreciu": nombreciu, "corporacion": corporacion, "area": area, "despacho": despacho, "asignadoa": asignadoa, "ubicacion": ubicacion, "claseproceso": claseproceso, "cliente": cliente, "demandado": demandado, "maxid": maxid},
 								type: "POST",
@@ -473,8 +464,7 @@ else
 								url : "../../email/",
 							})
 							.done(function( data, textStatus, jqXHR){
-								xrespstr = data.trim();
-								//alert("Email enviado..."+xrespstr);
+								xrespstr = data.trim();							
 								swal("Atención: ", msj, "success");
 								return false;
 							})
@@ -495,8 +485,7 @@ else
                                 type: "error" 
                             });
                             return false;                                 
-                        }
-                        //$('#form_validation')[0].reset();
+                        }                        
                     }    
                 })
                 .fail(function( jqXHR, textStatus, errorThrown ) {
@@ -746,47 +735,27 @@ else
         <aside id="leftsidebar" class="sidebar">
             <!-- User Info -->
             <div class="user-info">
-                <div class="image">
-                    <img src="../../images/user.png" width="48" height="48" alt="User" />
+				<div style="width:100%;">
+                    <div class="image" style="width:20%; float:left !important; ">
+						<img src="../../images/user.png" width="48" height="48" alt="User" />
+					</div>
+					<div style="width:70%; float:left !important; line-height: 10px;">
+						<span style="font-size:12px; color:white; padding-left: 10px; white-space: pre-line; line-height: 1;">
+							<?php echo strtoupper(trim($_SESSION['NombreEmpresa'])); ?>
+						</span>
+					</div>
                 </div>
-                <div class="info-container">
+                <div class="info-container" style="width:100%; float:left !important;">
 					<div class="name" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">                       
                         <span id="xNom">
-							<?php
-								if ( isset( $_SESSION['NombreUsuario'] ) && !empty( $_SESSION['NombreUsuario'] ) ) 
-								{
-									// Variable definida y no vacia
-									echo $_SESSION['NombreUsuario'];
-									//header("Content-Type: text/html; charset=UTF-8");
-								} 
-								else 
-								{
-									// Variable no definida o vacia
-									//header("Content-Type: text/html; charset=UTF-8");
-									header('Location: ../../');
-								}							
-								//echo $_SESSION['NombreUsuario']; 
-							?>
+							<?php echo $_SESSION['NombreUsuario']; ?>
 						</span>                   
                     </div>
 
 
                     <div class="email">                        
                         <span id="xMail">
-							<?php 
-								if ( isset( $_SESSION['EmailUsuario'] ) && !empty( $_SESSION['EmailUsuario'] ) ) 
-								{
-									// Variable definida y no vacia
-									echo $_SESSION['EmailUsuario'];
-									//header("Content-Type: text/html; charset=UTF-8");
-								} 
-								else 
-								{
-									// Variable no definida o vacia
-									header('Location: ../../');
-								}	
-								//echo $_SESSION['EmailUsuario']; 
-							?>
+							<?php echo $_SESSION['EmailUsuario']; ?>
 						</span>
                     </div>
 
@@ -1100,15 +1069,15 @@ if( $mproceso['estado'] < 2)
                                 </div> 
                                 
                                 <div class="form-group">
-                                    <div class="col-lg-12 col-md-12 col-sm-12">
+                                    <div class="col-lg-7 col-md-7 col-sm-7">
 										<div class="row">											
 											<div class="xcol-sm-8">
                                                 <label class="form-label">Apoderado(a):</label>
 												<select class="selectpicker show-tick" data-live-search="true" data-width="100%" name="usuario" id="usuario" required>
 												<option value="" >Seleccione Apoderado(a)...</option>
 												<?php
-                                                    $idTabla = 0;
-                                                    require_once('../../apis/usuario/infoUsuario.php');
+                                                    $idTabla = 1;
+                                                    require_once('../../apis/usuario/infoUsuarioAbogado.php');
 													for($i=0; $i<count($muser['usu_usuario']); $i++)
 													{
 														$USU_IdUsuario = $muser['usu_usuario'][$i]['USU_IdUsuario'];                                                
@@ -1123,7 +1092,21 @@ if( $mproceso['estado'] < 2)
 												</select>
 											</div>
 										</div>	
-                                    </div>                                       
+                                    </div> 
+									<div class="col-lg-5 col-md-5 col-sm-5">                                
+                                        <div class="row">
+                                            <div class="xcol-sm-8" style="margin-left:15px;">
+												<label class="form-label">Representante de: </label>
+                                                <div class="form-group">                                                    
+													<input type="radio" name="representa" id="acusador" class="with-gap" value="0">
+													<label for="acusador">Demandante</label>
+
+													<input type="radio" name="representa" id="acusado" class="with-gap" value="1">
+													<label for="acusado" class="m-l-20">Demandado</label>
+												</div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
 
                                 <div class="form-group">
@@ -1219,7 +1202,7 @@ if( $mproceso['estado'] < 2)
 												<?php
 													for($i=0; $i<count($mcliente['cli_cliente']); $i++)
 													{
-                                                        if( $mcliente['cli_cliente'][$i]['CLI_IdTipoCliente'] == 3 )
+                                                        if( $mcliente['cli_cliente'][$i]['CLI_IdTipoCliente'] == 2 )
                                                         {
                                                             $CLI_IdCliente = $mcliente['cli_cliente'][$i]['CLI_IdCliente'];
                                                             $CLI_Nombre = $mcliente['cli_cliente'][$i]['NombreUsuario'];                                                        
@@ -1247,7 +1230,7 @@ if( $mproceso['estado'] < 2)
                                                     <label for="activo">Abierto</label>
 
                                                     <input type="radio" name="estado" id="inactivo" class="with-gap" value="2">
-                                                    <label for="inactivo" class="m-l-20">Cerrado</label>
+                                                    <label for="inactivo" class="m-l-20">Cerrado</label>																										
                                                 </div>
                                             </div>
                                         </div>
@@ -1264,9 +1247,7 @@ if( $mproceso['estado'] < 2)
                                             </div>
                                         </div>
                                     </div>
-                                </div> 
-
-                                <!-- <div id="g" class='alert'>GRabado</div> -->                            
+                                </div>                                                      
                         </form>                        
                         <!-- end form -->
                         </div>
@@ -1293,10 +1274,22 @@ if( $mproceso['estado'] < 2)
 	});	
 
     $("#nuevo").on("click", function(){
-        //window.location='../forms/form-validationBasepais.php';
+
+    });
+	
+	$("#actoprocesal").on("click", function(){
+		var id = "<?php echo $idTabla ?>";
+		var proceso ="<?php echo $NombreTabla; ?>";
+		$.post('editaractprocesal.php', { 'id': id, 'proceso': proceso }, function (result) {
+			WinId = window.open('','_self');
+			WinId.document.open();
+			WinId.document.write(result);
+			WinId.document.close();
+		});
+		
     });
 
- }); 
+ });
 
 function cambiar(nuevaurl) 
 { 
@@ -1337,4 +1330,4 @@ function isNumeric (evt) {
 </script>	
 </body>
 </html>
-<?php ob_end_flush(); ?>
+<?php //ob_end_flush(); ?>

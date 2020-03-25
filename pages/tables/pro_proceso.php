@@ -1,17 +1,13 @@
-﻿<?php
+<?php
 ob_start();
-require_once('../../Connections/cnn_kn.php'); 
-require_once('../../Connections/config2.php');
-if(!isset($_SESSION)) 
-{ 
-    session_start(); 
-}
+session_start();
 if( !isset($_SESSION['IdUsuario']) && !isset($_SESSION['NombreUsuario']) )
 {
 	header("Location: ../../index.html");
-    exit;
+    //exit;
 } 
-ob_start();
+require_once('../../Connections/cnn_kn.php'); 
+require_once('../../Connections/config2.php');
 ?>
 <?php
 if (!function_exists("GetSQLValueString")) 
@@ -84,6 +80,10 @@ if($usuario == "")
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&subset=latin,cyrillic-ext" rel="stylesheet" type="text/css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" type="text/css">
+	
+	<link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+	
+	
 
     <!-- Bootstrap Core Css -->
     <link href="../../plugins/bootstrap/css/bootstrap.css" rel="stylesheet">
@@ -131,6 +131,30 @@ if($usuario == "")
         margin: auto; /* Important */ 
         text-align: center; 
       }
+	  
+[data-md-tooltip] {
+  position: relative;
+}
+[data-md-tooltip]:before {
+    content: attr(data-md-tooltip);
+    position: absolute;
+    bottom: -35px;
+    left: 50%;
+    padding: 8px;
+    transform: translateX(-50%) scale(0);
+    transition: transform 0.3s ease-in-out;
+    transform-origin: top;
+    background: #616161e6;
+    color: white;
+    border-radius: 2px;
+    font-size: 12px;
+    font-family: Roboto,sans-serif;
+    font-weight: 400;
+}
+[data-md-tooltip]:hover:before {
+  transform: translateX(-50%) scale(1); 
+}
+
    </style>     
 </head>
 
@@ -379,10 +403,17 @@ if($usuario == "")
         <aside id="leftsidebar" class="sidebar">
             <!-- User Info -->
             <div class="user-info">
-                <div class="image">
-                    <img src="../../images/user.png" width="48" height="48" alt="User" />
+				<div style="width:100%;">
+                    <div class="image" style="width:20%; float:left !important; ">
+						<img src="../../images/user.png" width="48" height="48" alt="User" />
+					</div>
+					<div style="width:70%; float:left !important; line-height: 10px;">
+							<span style="font-size:12px; color:white; padding-left: 10px; white-space: pre-line; line-height: 1;">
+								<?php echo strtoupper(trim($_SESSION['NombreEmpresa'])); ?>
+							</span>
+					</div>
                 </div>
-                <div class="info-container">
+                <div class="info-container" style="width:100%; float:left !important;">
 					<div class="name" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">                       
                         <span id="xNom">
 							<?php 								
@@ -402,7 +433,6 @@ if($usuario == "")
 						</span>                   
                     </div>
 
-
                     <div class="email">                        
                         <span id="xMail">
 							<?php								
@@ -421,8 +451,6 @@ if($usuario == "")
 							?>
 						</span>
                     </div>
-
-
                     <!-- <div class="name" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><?php echo trim($nombre); ?></div>
                     <div class="email"><?php //echo trim($email); ?></div> -->
                     <div class="btn-group user-helper-dropdown">
@@ -649,6 +677,7 @@ if($usuario == "")
                                 <thead>
                                     <tr>
                                         <th>No. Proceso</th>
+										<th>Acciones</th>
                                         <th>Apoderado(a)</th>
                                         <th>Ubicaci&oacute;n</th>
                                         <th>Clase Proceso</th>
@@ -659,6 +688,7 @@ if($usuario == "")
                                 <tfoot>
                                     <tr>
                                         <th>No. Proceso</th>
+										<th>Acciones</th>
                                         <th>Apoderado(a)</th>
                                         <th>Ubicaci&oacute;n</th>
                                         <th>Clase Proceso</th>
@@ -668,13 +698,23 @@ if($usuario == "")
                                 </tfoot>
                                 <tbody>
 <?php
+$IdUsuario = 0;
+$empresa = "";
+// Administrador(1) o Abogado(2)
+if($_SESSION["TipoUsuario"] <= 2 ) {
+	$IdUsuario = $_SESSION['IdUsuario'];
+	//if($_SESSION["TipoUsuario"] == 2 ) 
+	//{
+		$empresa = $_SESSION['IdEmpresa'];
+	//}
+}
 require_once('../../Connections/DataConex.php');
 $soportecURL = "S";
-$url         = urlServicios."consultadetalle/consultadetalle_pro_proceso.php?IdMostrar=0&e=1";
+$url         = urlServicios."consultadetalle/consultadetalle_pro_proceso.php?IdMostrar=0&e=1&iu=$IdUsuario&em=$empresa";
 $existe      = "";
 $usulocal    = "";
 $siguex      = "";
-//echo("<script>console.log('PHP proproceso: $url');</script>");
+echo("<script>console.log('PHP proproceso: $url');</script>");
 if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
 {
     $ch = curl_init();
@@ -739,36 +779,39 @@ if( $mproceso['estado'] != 2)
     ?>
         <tr>
             <td>
-                <div class="procesodiv">
+                <div class="procesodivx">
                     <input type='hidden' id="hf" name="hf" value="<?php echo $idTabla; ?>">
                     <a href='javascript:void(0)' onclick="cambiar(<?php echo $idTabla; ?>)">   
                         <?php if($icon == "t" ) { ?>
 							<div class="procesodiv2">
-							<i class="material-icons">label_important</i>
+							<i class="material-icons md-24">label_important</i>
 							</div>
 						<?php } ?>
+						<i class="md-24 md-tooltip--right" data-md-tooltip="Información Proceso">
 						<?php  echo $NombreTabla; ?>
+						</i>
                     </a>
-                </div>
-                <div class="procesodiv">
-                    <a href="javascript:void(0);" onclick='actprocesal("<?php echo $idTabla; ?>","<?php echo trim($NombreTabla); ?>")'>
-                    <div class="procesodiv2">
-                        <i class="material-icons material-icons md-36" style="color:#b30000">art_track</i>
-                        <span class="txt">Actuaci&oacute;n Procesal</span>
+                </div>                
+            </td>
+			<td>
+				<div class="procesodiv" style="float: left">
+                    <a href="javascript:void(0);" id="imgap" onclick='actprocesal("<?php echo $idTabla; ?>","<?php echo trim($NombreTabla); ?>")'>
+                    <div class="procesodiv2">                       
+						<i class="material-icons md-tooltip--left" data-md-tooltip="Actuación Procesal">description</i>
                     </div>
                     </a>
                 </div>
-                <div class="procesodiv">
+				
+                <div class="procesodiv"  style="float: left; margin-left:20px">
                     <a href="javascript:void(0);" onclick="docsxproceso(<?php echo $idTabla; ?>)">
                     <div class="procesodiv2">
-                        <i class="material-icons material-icons md-24" style="color:#01A30A">library_books</i>
-                        <span class="txt">Documentaci&oacute;n</span>
+                        <i class="material-icons md-tooltip--left" data-md-tooltip="Documentaci&oacute;n" style="color:#01A30A">assignment</i>                        
                     </div>
                     </a>
                 </div>
-            </td>            
+			</td>
             <td><?php echo $AsignadoA; ?></td>
-            <td><?php echo $Ubicacion; ?></td>
+            <td><?php echo $Ubicacion .'-'. $_SESSION["TipoUsuario"] .'-'. $_SESSION['IdUsuario'] ;?></td>
             <td><?php echo $ClaseProceso; ?></td>            
             <td><?php echo $Juzgado; ?></td>
             <td><?php echo $estadoTabla; ?></td>
@@ -865,7 +908,11 @@ if( $mproceso['estado'] != 2)
 
 <script type="text/javascript">
 var variableValue;
- $(document).ready(function () {	 
+ $(document).ready(function () {
+	
+	//$('#imgap').tooltip('toggle');
+	$('.tooltipped').tooltip({delay: 50});
+	
 	$("#cerrarModal").click(function(){
 	 	 window.location="pro_<?php echo $nombre_lnk; ?>.php";
 	});

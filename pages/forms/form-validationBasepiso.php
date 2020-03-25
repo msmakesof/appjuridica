@@ -126,13 +126,14 @@ $NombreTabla ="PISO";
     <script src="../../js/demo.js"></script>
 
     <!-- <script src="../../js/alertify.min.js"></script> -->
-     <script src="../../js/jquery.numeric.js"></script>
+    <script src="../../js/jquery.numeric.js"></script>
 
     <script type="text/javascript">
     var nombre ="";
     $(document).ready(function()
     {       
-        $("#msj").hide();        
+        $("#msj").hide();
+		$('#numero').numeric();
 
         function reset () {
             $("#toggleCSS").attr("href", "../../css/themes2/alertify.default.css");
@@ -149,12 +150,13 @@ $NombreTabla ="PISO";
         
 
         $("#grabar").on('click', function(e) {             
-            var nombre = $("#nombre").val();
+            var numero = $("#numero").val();
+			var nombre = $("#nombre").val();			
             nombre = nombre.toUpperCase();            
             var estado = $('input:radio[name=estado]:checked').val();
             e.preventDefault();
 
-            if( estado == undefined || nombre == "" )
+            if( estado == undefined || nombre == "" || numero == "" )
             {               
                 swal({
                   title: "Atención:  Ingrese información en todos los campos...",
@@ -169,7 +171,7 @@ $NombreTabla ="PISO";
             else
             {
                 $.ajax({
-                    data : {"pnombre": nombre, "pestado": estado}, 
+                    data : {"pnombre": nombre, "pnumero": numero, "pestado": estado}, 
                     type: "POST",
                     dataType: "html",
                     url : "crea_<?php echo strtolower($NombreTabla); ?>.php",
@@ -243,7 +245,13 @@ $NombreTabla ="PISO";
                             <form id="form_validation" method="POST">
                                 
                                 <div class="form-group form-float" style="clear: both;">
-                                    <label class="form-label">Nombre Area</label>
+                                    <label class="form-label">N&uacute;mero</label>
+                                    <div class="form-line">
+                                        <input type="text" class="form-control" name="numero" id="numero" maxlength="2" value="" required>                                       
+                                    </div>
+                                </div>
+								<div class="form-group form-float" style="clear: both;">
+                                    <label class="form-label">Nombre Piso</label>
                                     <div class="form-line">
                                         <input type="text" class="form-control" name="nombre" id="nombre" value="" required>                                       
                                     </div>

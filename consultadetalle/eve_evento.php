@@ -152,8 +152,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         $par7 = $_GET['To'];        
         $par8 = $_GET['Proceso'];
         $par9 = $_GET['Responsable'];
+		$par10= $_GET['Tipousuario'];
 
-        $retorno = EVE_EVENTO::insert($par1, $par2, $par3, $par4, $par5, $par6, $par7, $par8, $par9);
+        $retorno = EVE_EVENTO::insert($par1, $par2, $par3, $par4, $par5, $par6, $par7, $par8, $par9, $par10);
         $msj = $retorno;
         if($retorno)
         {
@@ -233,10 +234,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         $par1 = $_GET['proceso'];        
         $par2 = $_GET['fechainicio'];
         $par3 = $_GET['asignadoa'];
-	$par4 = $_GET['ubicacion'];        
+	    $par4 = $_GET['ubicacion'];        
         $par5 = $_GET['claseproceso'];
         $par6 = $_GET['demandante'];
-	$par7 = $_GET['demandado'];        
+	    $par7 = $_GET['demandado'];        
         $par8 = $_GET['estado'];
         $par9 = $_GET['idtabla'];
 

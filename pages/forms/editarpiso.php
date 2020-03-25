@@ -1,11 +1,10 @@
-﻿<?php 
+<?php 
 require_once('../../Connections/cnn_kn.php'); 
 require_once('../../Connections/config2.php');
 if(!isset($_SESSION)) 
 { 
     session_start(); 
-} 
-
+}
 ?>
 <?php
 if (!function_exists("GetSQLValueString")) {
@@ -43,13 +42,13 @@ if( isset($_GET['f'])  && !empty($_GET['f']) )
 {    
     $idTabla = trim($_GET['f']);
 }
-
 $Tabla ="PISO";
 $idtabla = 0;
 
 require_once('../../apis/general/piso.php');
 
 $Nombre = trim($mpiso['juz_piso']['PIS_Nombre']);
+$Numero = trim($mpiso['juz_piso']['PIS_Numero']);
 $estado = $mpiso['juz_piso']['PIS_Estado'];
 $idtabla = $mpiso['juz_piso']['PIS_IdPiso'];
 
@@ -120,7 +119,15 @@ $idtabla = $mpiso['juz_piso']['PIS_IdPiso'];
                         </div>
                         <div class="body  table-responsive">
                             <form id="form_validation" method="POST">
-                                <div class="form-group form-float">
+                                
+								<div class="form-group form-float">
+                                    <label class="form-label">N&uacute;mero</label>
+                                    <div class="form-line">
+                                        <input type="text" class="form-control" name="numero" id="numero" value="<?php echo $Numero ;?>" maxlength="2" required>                                    
+                                    </div>
+                                </div>
+								
+								<div class="form-group form-float">
                                     <label class="form-label">Nombre</label>
                                     <div class="form-line">
                                         <input type="text" class="form-control" name="nombre" id="nombre" value="<?php echo $Nombre ;?>" required>                                    
@@ -189,10 +196,10 @@ $idtabla = $mpiso['juz_piso']['PIS_IdPiso'];
 
     <script src="../../js/pages/ui/dialogs.js"></script>
     <!-- Demo Js -->
-    <script src="../../js/demo.js"></script>
-    
+    <script src="../../js/demo.js"></script>    
 
     <script src="../../js/alertify.min.js"></script>
+	<script src="../../js/jquery.numeric.js"></script>
 
     <script type="text/javascript">    
     $(document).ready(function()
@@ -201,17 +208,19 @@ $idtabla = $mpiso['juz_piso']['PIS_IdPiso'];
         $("#form_validation").show();
         $("#form_validation").click(function() {
 			$("#msj").html("");
-		})
+		});
+		$('#numero').numeric();
 		
 		$("#grabar").on('click', function(e) {
             $("#mensaje").hide();
 			var nombre = $("#nombre").val();
             nombre = nombre.toUpperCase();
+			var numero = $("#numero").val();
 			var estado = $('input:radio[name=estado]:checked').val();
 			var idtabla = "<?php echo $idtabla; ?>";
 			
 			$.ajax({
-				data : {"nombre": nombre, "estado": estado, "idtabla": idtabla},
+				data : {"nombre": nombre, "numero": numero, "estado": estado, "idtabla": idtabla},
 				type: "POST",
 				dataType: "html",
 				url : "editar_<?php echo strtolower($Tabla); ?>.php",

@@ -17,24 +17,41 @@ class PRO_PROCESO
      *
      * @param $IdTabla Identificador del registro
      * @return array Datos del registro
+	 * @parametrousu = IdUsuario
+	 * @Estado = Estado del proceso
      */
-    public static function getAll($par1, $Estado)
+    public static function getAll($par1, $Estado, $parametrousu, $parametroemp)
     {
-        $consulta = "SELECT ".$GLOBALS['Llave'].", PRO_NumeroProceso, PRO_FechaInicio, 
+        $condi = "";
+		$condijoin = "";
+		$condijoin2 = ""; 
+		if($parametrousu != "")
+		{
+			$condi = " AND PRO_IdUsuario = $parametrousu ";
+		}
+		if($parametroemp != "")
+		{
+			$condijoin = "  AND usu_usuario.USU_IdEmpresa = $parametroemp AND usu_usuario.USU_Estado = 1 ";
+			$condijoin2 = " JOIN emp_empresa E ON E.EMP_IdEmpresa = usu_usuario.USU_IdEmpresa AND E.EMP_IdEstado = 1 ";
+			$condi = "";
+		}
+		$consulta = "SELECT ".$GLOBALS['Llave'].", PRO_NumeroProceso, PRO_FechaInicio, 
             PRO_IdUsuario, concat_WS(' ', USU_Nombre, USU_PrimerApellido,USU_SegundoApellido) AS AsignadoA,
             PRO_IdUbicacion, UBI_Nombre AS Ubicacion, 
             PRO_IdClaseProceso, CPR_Nombre AS ClaseProceso,
             PRO_IdJuzgadoOrigen, JUZ_Ubicacion AS Juzgado, 
-            PRO_EstadoProceso, 
+            PRO_EstadoProceso, PRO_EnviaEmail, PRO_RepresentanteDe ,
             EPR_Nombre AS EstadoTabla 
             FROM ".$GLOBALS['TABLA'].
-            " LEFT JOIN usu_usuario ON usu_usuario.USU_IdUsuario = PRO_IdUsuario ".
+            " LEFT JOIN usu_usuario ON usu_usuario.USU_IdUsuario = PRO_IdUsuario ". $condijoin .
             " JOIN pro_ubicacion ON pro_ubicacion.UBI_IdUbicacion = PRO_IdUbicacion ".
             " JOIN pro_claseproceso ON pro_claseproceso.CPR_IdClaseProceso = PRO_IdClaseProceso ".
             " LEFT JOIN juz_juzgado ON juz_juzgado.JUZ_IdJuzgado = PRO_IdJuzgadoOrigen ".
             " JOIN pro_estadoproceso ON pro_estadoproceso.EPR_IdEstado = PRO_EstadoProceso AND pro_estadoproceso.EPR_Estado = 1 ".
-            " WHERE PRO_NumeroProceso > '' AND PRO_EstadoProceso = ? ".
+			$condijoin2.
+            " WHERE PRO_NumeroProceso > '' AND PRO_EstadoProceso = ? ". $condi .
             " ORDER BY PRO_NumeroProceso; ";
+			//echo $consulta ;
         try {
             // Preparar sentencia
             $comando = Database::getInstance()->getDb()->prepare($consulta);
@@ -72,7 +89,9 @@ class PRO_PROCESO
 					PRO_IdJuzgado,
 					PRO_FechaCierre,
 					PRO_ObservacionCierre,
-					PRO_IdUsuarioCierre
+					PRO_IdUsuarioCierre,
+					PRO_RepresentanteDe ,
+					PRO_EnviaEmail, PRO_FechaCreado 
 					FROM ".$GLOBALS['TABLA'].
 					" WHERE ".$GLOBALS['Llave']." = ? ; ";
 
@@ -116,7 +135,37 @@ class PRO_PROCESO
 					PRO_IdJuzgado,
 					PRO_FechaCierre,
 					PRO_ObservacionCierre,
-					PRO_IdUsuarioCierre
+                    PRO_IdUsuarioCierre,
+					PRO_EnviaEmail, 
+					PRO_RepresentanteDe , PRO_FechaCreado, 
+                    IF(CHAR_LENGTH(PRO_NumeroProceso)<23,CONCAT(PRO_NumeroProceso,'-',PRO_IdProceso),PRO_NumeroProceso) AS NP
+					FROM ".$GLOBALS['TABLA'].
+					" WHERE PRO_IdUsuario = ? AND PRO_EstadoProceso = 1 ORDER BY PRO_NumeroProceso; ";
+        try {
+            // Preparar sentencia
+            $comando = Database::getInstance()->getDb()->prepare($consulta);
+            // Ejecutar sentencia preparada
+            $comando->execute(array($IdTabla));
+
+            return $comando->fetchAll(PDO::FETCH_ASSOC);
+
+        } catch (PDOException $e) {
+            return false;
+        }
+    }
+	
+	/**
+     * Obtiene los campos de todos los procesos activos que tiene
+     * asignado un abogado
+     *
+     * @param $IdTabla Identificador del Usuario (Abogado)
+     * @return mixed
+     */
+    public static function getByIdProcesoResponsable($IdTabla)
+    {
+        // Consulta de la tabla Proceso
+        $consulta = "SELECT ".$GLOBALS['Llave'].",					
+					PRO_NumeroProceso
 					FROM ".$GLOBALS['TABLA'].
 					" WHERE PRO_IdUsuario = ? AND PRO_EstadoProceso = 1 ORDER BY PRO_NumeroProceso; ";
         try {
@@ -132,6 +181,29 @@ class PRO_PROCESO
         }
     }
 
+/**
+     * Obtiene informacio los procesos asignado(s) un abogado     
+     * @param $IdTabla Identificador del Usuario (Abogado)
+     * @return mixed
+     */
+    public static function getByIdResponsableProceso($IdTabla)
+    {
+        // Consulta de la tabla Proceso
+        $consulta = "SELECT Count(".$GLOBALS['Llave'].") AS totalProcesos
+					FROM ".$GLOBALS['TABLA'].
+					" WHERE PRO_IdUsuario = ? AND PRO_EstadoProceso = 1 ORDER BY PRO_NumeroProceso; ";
+        try {
+            // Preparar sentencia
+            $comando = Database::getInstance()->getDb()->prepare($consulta);
+            // Ejecutar sentencia preparada
+            $comando->execute(array($IdTabla));
+
+            return $comando->fetchAll(PDO::FETCH_ASSOC);
+
+        } catch (PDOException $e) {
+            return false;
+        }
+    }
 
     /**
      * Obtiene los campos de una PRO_PROCESO con un estado Activo
@@ -207,6 +279,7 @@ class PRO_PROCESO
      * @param $Demandante,
      * @param $Demandado,
      * @param $Estado,
+	 * @param $Representa,
      * @param $IdTabla      
      * 
      */
@@ -219,20 +292,23 @@ class PRO_PROCESO
         $Demandante,
         $Demandado,
         $Estado,
+		$Enviaemailcli,
+		$Representa,
+		$UsuarioModifica,
         $IdTabla
     )
     {
         // Creando consulta UPDATE
         $consulta = "UPDATE ". $GLOBALS['TABLA']. 
             " SET PRO_NumeroProceso=?, PRO_Fechainicio=?, PRO_IdUsuario=?, PRO_IdUbicacion=?, PRO_IdClaseProceso=?, ".
-            " PRO_IdDemandante =?, PRO_IdDemandado=?, PRO_EstadoProceso=? ".
+            " PRO_IdDemandante =?, PRO_IdDemandado=?, PRO_EstadoProceso=?, PRO_EnviaEmail = ?, PRO_RepresentanteDe =?, PRO_IdUsuarioModifica=? ".
             " WHERE ". $GLOBALS['Llave'] ." =? ;";
 
         // Preparar la sentencia
         $cmd = Database::getInstance()->getDb()->prepare($consulta);
 
         // Relacionar y ejecutar la sentencia
-        $cmd->execute(array($Proceso, $Fechainicio, $Asignadoa, $Ubicacion, $Claseproceso, $Demandante, $Demandado, $Estado, $IdTabla ));
+        $cmd->execute(array($Proceso, $Fechainicio, $Asignadoa, $Ubicacion, $Claseproceso, $Demandante, $Demandado, $Estado, $Enviaemailcli, $Representa, $UsuarioModifica, $IdTabla ));
 
         return $cmd;
     }
@@ -251,6 +327,7 @@ class PRO_PROCESO
      * @param $Estado                Estado
      * @param $Especialidad          Especialidad o Area
      * @param $Despacho              Despacho
+	 * @param $Representa            Representa
      * @return PDOStatement
      */
     public static function insert(        
@@ -264,7 +341,9 @@ class PRO_PROCESO
         $JuzgadoOrigen,                
         $Estado,
         $Especialidad,
-        $Despacho
+        $Despacho,
+		$Representa,
+		$UsuarioCrea
     )
     {
         // Sentencia INSERT
@@ -279,9 +358,11 @@ class PRO_PROCESO
             " PRO_IdJuzgadoOrigen, " . 
             " PRO_EstadoProceso, " . 
             " PRO_IdArea, ".
-            " PRO_IdJuzgado".
+            " PRO_IdJuzgado, ".
+			" PRO_RepresentanteDe, ".
+			" PRO_IdUsuarioCrea ".
             " )".     
-            " VALUES(?,?,?,?,?,?,?,?,?,?,?) ;";
+            " VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?) ;";
 
         // Preparar la sentencia
         $sentencia = Database::getInstance()->getDb()->prepare($comando);
@@ -298,7 +379,9 @@ class PRO_PROCESO
                 $JuzgadoOrigen,                
                 $Estado,
                 $Especialidad,
-                $Despacho
+                $Despacho,
+				$Representa,
+				$UsuarioCrea
             )
         );
     }
@@ -337,7 +420,7 @@ class PRO_PROCESO
      */
     public static function existetabla($Proceso, $Demandante, $Demandado, $Fecha, $Asignadoa)
     {
-        $consulta = "SELECT count(". $GLOBALS['Llave']. ") existe, PRO_NumeroProceso FROM ".$GLOBALS['TABLA'].
+        $consulta = "SELECT Count(". $GLOBALS['Llave']. ") AS existe, PRO_NumeroProceso FROM ".$GLOBALS['TABLA'].
         " WHERE PRO_NumeroProceso = ? AND PRO_IdDemandante = ? AND PRO_IdDemandado = ? AND PRO_Fechainicio = ? 
 		AND PRO_IdUsuario = ? AND PRO_EstadoProceso = 1; ";
 

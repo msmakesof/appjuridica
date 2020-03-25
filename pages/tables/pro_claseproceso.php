@@ -1,10 +1,11 @@
-﻿<?php 
+<?php
+session_start();
 require_once('../../Connections/cnn_kn.php'); 
 require_once('../../Connections/config2.php');
-if(!isset($_SESSION)) 
-{ 
-    session_start(); 
-} 
+//if(!isset($_SESSION)) 
+//{ 
+     
+//} 
 ?>
 <?php
 if (!function_exists("GetSQLValueString")) 
@@ -685,7 +686,8 @@ if( $mclaseproceso['estado'] < 2)
 				</div>
 				
 				<div class="modal-body">
-					<object type="text/html" data="../forms/editar<?php echo $nombre_lnk ;?>.php" id="carga"></object>                           
+					<object style="padding :0px; position: relative; height: 65vh; max-height:100vh; bottom:0; overflow: hidden; margin: 0px;"
+					type="text/html" data="../forms/editar<?php echo $nombre_lnk ;?>.php" id="carga"></object>                           
 				</div>
 
 				<div class="modal-footer">
@@ -703,7 +705,8 @@ if( $mclaseproceso['estado'] < 2)
 				</div>
 				
 				<div class="modal-body">                         
-					<object type="text/html" data="../forms/form-validationBase<?php echo $nombre_lnk ;?>.php" id="crear"></object>
+					<object style="padding :0px; position: relative; height: 75vh; max-height:100vh; bottom:0; overflow: hidden; margin: 0px;"
+					type="text/html" data="../forms/form-validationBase<?php echo $nombre_lnk ;?>.php" id="crear"></object>
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-info waves-effect" data-dismiss="modal" id="cerrarModalC">CERRAR Crear.</button>
