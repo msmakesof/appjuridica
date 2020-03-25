@@ -14667,6 +14667,7 @@ fcViews.basic = {
 	'class': BasicView
 };
 
+
 fcViews.basicDay = {
 	type: 'basic',
 	duration: { days: 1 }

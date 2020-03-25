@@ -1,11 +1,11 @@
 <?php
-//ob_start();
-include('../../Connections/cnn_kn.php'); 
-include('../../Connections/config2.php');
+ob_start();
 if(!isset($_SESSION)) 
 { 
     session_start(); 
 }
+include('../../Connections/cnn_kn.php'); 
+include('../../Connections/config2.php');
 ?>
 <?php
 if (!function_exists("GetSQLValueString")) {
@@ -39,18 +39,29 @@ function GetSQLValueString($theValue, $theType, $theDefinedValue = "", $theNotDe
 }
 }
 
+require_once('../../Connections/DataConex.php');
 $idresponsable = "";
+$tipousuario = "";
 if (isset($_GET['id']))
 {
 	$idresponsable = trim($_GET['id']);
 }
-require_once('../../Connections/DataConex.php');
-$params = "IdResponsable=$idresponsable";
+if (isset($_GET['tu']))
+{
+	$tipousuario = trim($_GET['tu']);
+}
+
+$params = "IdProcesoResponsable=$idresponsable";
 $soportecURL = "S";
 $url         = urlServicios."consultadetalle/consultadetalle_pro_proceso.php?".$params;
 $existe      = "";
 $usulocal    = "";
 $siguex      = "";
+
+if($tipousuario == 3) // 2 = Abogado , 3 = Dependiente Judicial
+{
+	$url = urlServicios."consultadetalle/consultadetalle_pro_proceso.php?IdMostrar=0&e=1";
+}
 //echo("<script>console.log('PHP Apoderado: ".$url."');</script>");
 if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
 {
@@ -63,10 +74,13 @@ if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
     curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
     curl_setopt($ch, CURLOPT_POST, 0);
     $resultado = curl_exec ($ch);
-    curl_close($ch);
-
-    $mproceso = preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $resultado);    
-    $mproceso = json_decode($mproceso, true);
+    curl_close($ch);	
+	
+    $mproceso = preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $resultado).PHP_EOL;	
+	$mproceso = preg_replace('/\x{feff}$/u', '', $mproceso).PHP_EOL;	
+	$mproceso = trim(preg_replace('/\s+/', ' ', $mproceso));
+	$mproceso = json_decode($mproceso, true);	
+	
     //echo("<script>console.log('PHP: ".print_r($mproceso)."');</script>");
     //echo("<script>console.log('PHP: ".count($m['pro_proceso'])."');</script>");
     
@@ -94,7 +108,10 @@ if($soportecURL == "N")
 }
 if( $mproceso['estado'] == 1)
 {
-	echo json_encode($mproceso);	
+	ob_end_clean();
+	$filas = json_encode($mproceso['pro_proceso']);	
+	header('Content-Type: application/json; charset=utf-8');	
+	echo trim($filas);		
 }
 else
 {

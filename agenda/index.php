@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 ob_start();
 if(!isset($_SESSION)) 
 { 
@@ -51,8 +51,14 @@ switch($nrodia)
 		$dia = $dia + 2;
 		break;	
 }
-$fecha_actual = $nombredia." ". $hoy['month'] ." ". $hoy['mday'] ." ". $hoy['year']." ". $hoy['hours'].":".$hoy['minutes'].":".$hoy['seconds']." GMT-0500 (hora estándar de Colombia)";
-$fecha_actualdef = $nombredia." ". $hoy['month'] ." ". $dia ." ". $hoy['year']." ". $hoy['hours'].":".$hoy['minutes'].":".$hoy['seconds']." GMT-0500 (hora estándar de Colombia)";
+$diahoy = $hoy['mday'] ;
+if( strlen($diahoy) == 1 )
+{
+	$diahoy = "0".$diahoy;
+}
+
+$fecha_actual = $nombredia." ". date("M") ." ". $diahoy ." ". $hoy['year']." ". $hoy['hours'].":".$hoy['minutes'].":".$hoy['seconds']." GMT-0500 (hora estándar de Colombia)";
+$fecha_actualdef = $nombredia." ". date("M") ." ". $dia ." ". $hoy['year']." ". $hoy['hours'].":".$hoy['minutes'].":".$hoy['seconds']." GMT-0500 (hora estándar de Colombia)";
 //echo $fecha_actual; 
 $comparaph = substr($fecha_actual, 0,15);
 echo "<script>
@@ -60,9 +66,9 @@ echo "<script>
 	var fechajs = x.toString();
 	comparajs = fechajs.substring(0,15);
 	var comparaphp = '". $comparaph ."';
-	if (comparajs != comparaphp)
+	if (comparajs !== comparaphp)
 	{
-		//alert('Tu computador tiene fecha diferente a la actual.  Debes revisar');
+		alert('Tu computador tiene fecha diferente a la actual.  Debes revisar.  '+comparajs +' / '+comparaphp);
 		window.location = 'inde.php';
 		
 	}
@@ -139,13 +145,13 @@ if (isset($_POST['from']))
         $clase  = evaluar($_POST['class']);
         $conexion = $cnn_kn;
         // insertamos el evento
-        $query="INSERT INTO eventos VALUES(null,'$titulo','$body','','$clase','$inicio','$final','$inicio_normal','$final_normal')";
+        $query="INSERT INTO eve_evento VALUES(null,'$titulo','$body','','$clase','$inicio','$final','$inicio_normal','$final_normal')";
 //echo "<br><br><br><br><br><br>..............................................................................sel.......$query";
         // Ejecutamos nuestra sentencia sql
         $conexion->query($query); 
 
         // Obtenemos el ultimo id insetado
-        $im=$conexion->query("SELECT MAX(id) AS id FROM eventos");
+        $im=$conexion->query("SELECT MAX(id) AS id FROM eve_evento");
         $row = $im->fetch_row();  
         $id = trim($row[0]);
 
@@ -154,7 +160,7 @@ if (isset($_POST['from']))
         $link = "fc/descripcion_evento.php?id=$id";
 
         // y actualizamos su link
-        $query="UPDATE eventos SET url = '$link' WHERE id = $id";
+        $query="UPDATE eve_evento SET url = '$link' WHERE id = $id";
 
         // Ejecutamos nuestra sentencia sql
         $conexion->query($query); 
@@ -172,7 +178,7 @@ $email  = "";
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
+    <meta "Content-type: application/json; charset=utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=Edge">
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <title>Bienvenido a | <?php echo $empresa; ?> Administrador</title>
@@ -223,7 +229,16 @@ $email  = "";
     -->        
     <script src="fc/js/bootstrap-datetimepicker.js"></script>
     <link rel="stylesheet" href="fc/css/bootstrap-datetimepicker.min.css" />
-   <script src="fc/js/bootstrap-datetimepicker.es.js"></script>   
+	<script src="fc/js/bootstrap-datetimepicker.es.js"></script>
+	
+	<script src="../js/jsRelocate.js"></script>
+	<style>
+	.page-headerx {
+		padding-bottom: 1px;
+		margin: 40px 0 5px;
+		border-bottom: 1px solid #eee;
+	}
+	</style>
 </head>
 
 <body class="theme-red">
@@ -543,7 +558,7 @@ $email  = "";
 
                     <div class="row" style="width:100%; margin-top: -40px">
                         <div class="page-header"><h2></h2></div> 
-                        <div class="pull-left form-inline" style="margin-top: -30px">
+                        <div class="pull-left form-inline">
                             <div class="btn-group">
                                 <button class="btn btn-primary" data-calendar-nav="prev">
                                     << Anterior
@@ -558,10 +573,10 @@ $email  = "";
                                 <button class="btn btn-warning" data-calendar-view="week" style="margin-right: 3px; cursor: pointer">Semana</button>
                                 <button class="btn btn-warning" data-calendar-view="day" style="cursor: pointer">Dia</button>                               
                             
-                                <button class="btn btn-info" data-toggle='modal' data-target='#add_evento'>+</button>
+                                <button class="btn btn-info" data-toggle="modal" data-target="#add_evento" id="addEvento">+</button>
                             </div>
                         </div>
-                        <br><hr>
+                        
                         <!--<div class="pull-left form-inline"><br></div>   -->
                         <div class="row">
                             <div id="calendar" style="width: 100%;"></div> <!-- Aqui se mostrara nuestro calendario -->
@@ -572,11 +587,12 @@ $email  = "";
                     <!--ventana modal para el calendario-->
                     <div class="modal fade" id="events-modal">
                         <div class="modal-dialog">
-                            <div class="modal-content">
+                            <div class="modal-content" style="height:490px !important;">
                                 <div class="modal-body" style="height: 400px !important">
                                     <p>One fine body&hellip;</p>
                                 </div>
-                                <div class="modal-footer">
+                                <div class="modal-footer" style="margin-top:-15px;">
+									<hr>
                                     <button type="button" class="btn btn-info" data-dismiss="modal">Cerrar</button>
                                 </div>
                             </div><!-- /.modal-content -->
@@ -693,189 +709,128 @@ $email  = "";
                                 calendar.setOptions({first_day: value});
                                 calendar.view();
                             });
+							
+							$('#addEvento').click(function(){
+								relocate("evento.php");
+							})
                     });
                 </script>
                 <!-- fin 1 -->
                 
                 <!-- 2Modal -->
-                <div class="modal fade" id="add_evento" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
+                <div class="xmodal fade" id="xadd_evento" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
                     <div class="modal-dialog" id="modalAgenda">
-                        <div class="modal-content">
-                            <div class="modal-header">
+                        <div class="flex-container modal-content" style="height:520px !important">
+                            <div class="modal-header" style="height:70px">
                                 <div style="display:table-cell">
                                 <h4 class="modal-title" id="myModalLabel">    
                                     <span class="glyphicon glyphicon-list-alt"></span>                                                                    
-                                    Agendar Actividad / Visita
+                                    Agendar Actividad / Visita                                    
                                 </h4>
-                                </div>
-                            
-                                 <div  style="display:table-cell" id="msg">Grabado</div>
-                                <hr>                                
+                                </div>                            
+                                <!-- <div  style="display:table-cell" id="msg">Grabado</div> -->
+                                <hr style="margin-top:-0.5px; border: 0.5px solid red;">                                
                             </div>
                                                            
                         
-                            <div class="modal-body">
+                            <div class="modal-body" style="height:520px !important">
                                 
-                                <form action="" method="post" >
+                                <form action="" method="post">
                                     
-                                <div class="form-group">
-                                    <div class="col-lg-4 col-md-4 col-sm-4">
-                                        <div class="row">											
-                                            <div class="xcol-sm-6">
-                                                <label class="form-label">Fecha Inicio</label>												
-                                                <div class='input-group date form-line' id="from" readonly required>
-                                                    <input type='text' id="fromx" name="fromx" class="form-control" readonly/>
-                                                    <span class="input-group-addon">
-                                                        <span class="glyphicon glyphicon-calendar"></span>
-                                                    </span>
-                                                </div>
-                                            </div>																						
+                                <div class="form-group" style="margin-top:-33px !important; height:60px  !important;">
+                                    <div class="row">
+                                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">                                                                                  
+                                            <label class="form-label">Fecha Inicio</label>												
+                                            <div class='input-group date form-line' id="from" readonly required>
+                                                <input type='text' id="fromx" name="fromx" class="form-control" readonly/>
+                                                <span class="input-group-addon">
+                                                    <span class="glyphicon glyphicon-calendar"></span>
+                                                </span>
+                                            </div>                                        
+                                        </div>
+                                
+                                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">                                        
+                                            <label class="form-label">Fecha Final</label>												
+                                            <div class='input-group date form-line' id="to" readonly required>
+                                                <input type='text' id="tox" name="tox" class="form-control" readonly/>
+                                                <span class="input-group-addon">
+                                                    <span class="glyphicon glyphicon-calendar"></span>
+                                                </span>
+                                            </div>                                        
                                         </div>
                                     </div>	
-                                </div>
-                                
-                                <div class="form-group">
-                                    <div class="col-lg-2 col-md-2 col-sm-2">
-                                        <div class="row">											
-                                            <div class="xcol-sm-6">
-                                                &nbsp;
-                                            </div>																						
-                                        </div>
-                                    </div>	
-                                </div>
-                                    
-                                <!--
-                                <label for="from">Inicio</label>
-                                <div class='input-group date' id='from'>
-                                    <input type='text' id="from" name="from" class="form-control" readonly />
-                                    <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span>
-                                </div>
-                                <br>
-                                
-
-                                <label for="to">Final</label>
-                                <div class='input-group date' id='to'>
-                                    <input type='text' name="to" id="to" class="form-control" readonly />
-                                    <span class="input-group-addon">
-                                        <span class="glyphicon glyphicon-calendar"></span>
-                                    </span>    
-                                </div>
-                                <br>
-                                -->
-                                
-                                <div class="form-group">
-                                    <div class="col-lg-4 col-md-4 col-sm-4">
-                                        <div class="row">											
-                                            <div class="xcol-sm-6">
-                                                <label class="form-label">Fecha Final</label>												
-                                                <div class='input-group date form-line' id="to" readonly required>
-                                                    <input type='text' id="tox" name="tox" class="form-control" readonly/>
-                                                    <span class="input-group-addon">
-                                                        <span class="glyphicon glyphicon-calendar"></span>
-                                                    </span>
-                                                </div>
-                                            </div>																						
-                                        </div>
-                                    </div>	
-                                </div>
+                                </div>                                
 								
 								<div class="form-group">
-                                    <div class="col-lg-12 col-md-12 col-sm-12">
-                                        <div class="row">											
-                                            <div class="xcol-sm-6">
-                                                <label for="tipo">Asignar a</label>                                                
-                                                <select class="selectpicker show-tick" data-live-search="true" data-width="95%" name="responsable" id="responsable" required>    
-                                                    <option value="">Seleccione a quien se Asigna la Agenda</option>
-                                                    <?php 
-                                                    $idTabla = 0;
-                                                    require_once('../apis/usuario/infoUsuarioagenda.php');                                                    
-                                                    for($i=0; $i<count($muser['usu_usuario']); $i++)
-                                                    {
-                                                        $USU_IdUsuario = $muser['usu_usuario'][$i]['USU_IdUsuario'];                                                    
-                                                        $USU_NombreUsuario = trim($muser['usu_usuario'][$i]['NombreUsuario']);
-														//$USU_Email = trim($muser['usu_usuario'][$i]['USU_Email']);
-                                                    ?>
-                                                        <option value="<?php echo $USU_IdUsuario; ?>"><?php echo $USU_NombreUsuario; ?></option>                                                    
-                                                    <?php
-                                                    }
-                                                    ?>
-                                                </select>
-                                            </div>																						
+                                    <div class="row">
+                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">                                            
+                                            <label for="tipo">Asignar a</label>                                                
+                                            <select class="selectpicker show-tick" data-live-search="true" data-width="95%" name="responsable" id="responsable" required>    
+                                                <option value="">Seleccione a quien se Asigna la Agenda</option>
+                                                <?php 
+                                                $idTabla = 0;
+                                                require_once('../apis/usuario/infoUsuarioagenda.php');                                                    
+                                                for($i=0; $i<count($muser['usu_usuario']); $i++)
+                                                {
+                                                    $USU_IdUsuario = $muser['usu_usuario'][$i]['USU_IdUsuario'];                                                    
+                                                    $USU_NombreUsuario = trim($muser['usu_usuario'][$i]['NombreUsuario']);														
+                                                ?>
+                                                    <option value="<?php echo $USU_IdUsuario; ?>"><?php echo $USU_NombreUsuario; ?></option>                                                    
+                                                <?php
+                                                }
+                                                ?>
+                                            </select>
                                         </div>
                                     </div>	
-                                </div>
-								
-								<!--
-								<div class="form-group">
-                                    <div class="row"></div>
-                                </div>
-								-->
+                                </div>								
                                 
                                 <div class="form-group">
-                                    <div class="col-lg-12 col-md-12 col-sm-12">
-                                        <div class="row">											
-                                            <div class="xcol-sm-6">
-                                                <label for="tipo">N&uacute;mero de Proceso</label>                                                
-                                                <select class="selectpicker show-tick" data-live-search="true" data-width="95%" name="proceso" id="proceso" required>    
-                                                    <option value="">Seleccione Proceso</option>                                                    
-                                                </select>
-                                            </div>																						
+                                    <div class="row">                
+                                        <div class="col-md-6">                                            
+                                            <label for="tipo">N&uacute;mero de Proceso</label>                                                
+                                            <select class="selectpicker show-tick" data-live-search="true" data-width="95%" name="proceso" id="proceso" required>    
+                                                <option value="">Seleccione Proceso</option>                                                    
+                                            </select>                                            
                                         </div>
-                                    </div>	
-                                </div>
                                 
-								<!--
-                                <div class="form-group">
-                                    <div class="row"></div>
-                                </div>
-								-->
-                                
-                                <div class="form-group" style="margin-top: 14px !important">
-                                    <div class="col-lg-12 col-md-12 col-sm-12">
-                                        <div class="row">											
-                                            <div class="xcol-sm-6">
-                                                <label for="tipo">Tipo de Actividad</label>                                                
-                                                <select class="selectpicker show-tick" data-live-search="true" data-width="95%" name="tipo" id="tipo" required>    
-                                                    <option value="event-info">Informaci&oacute;n Proceso</option>
-                                                    <option value="event-success">Cita en Juzgado</option>
-                                                    <option value="event-important">Cita con Cliente</option>
-                                                    <option value="event-warning">Visita a Juzgado</option>
-                                                    <option value="event-special">Documentos Adjuntos</option>
-                                                </select>
-                                            </div>																						
+                                        <div class="col-md-6">                                           
+                                            <label for="tipo">Tipo de Actividad</label>                                                
+                                            <select class="selectpicker show-tick" data-live-search="true" data-width="95%" name="tipo" id="tipo" required>    
+                                                <option value="event-info">Informaci&oacute;n Proceso</option>
+                                                <option value="event-success">Cita en Juzgado</option>
+                                                <option value="event-important">Cita con Cliente</option>
+                                                <option value="event-warning">Visita a Juzgado</option>
+                                                <option value="event-special">Documentos Adjuntos</option>
+                                            </select>                                            
                                         </div>
                                     </div>	
                                 </div>
 
                                 <div class="form-group">
-                                    <div class="col-lg-12 col-md-12 col-sm-12">
-                                        <div class="row" style="margin-top:20px">											
-                                            <div class="xcol-sm-6">
-                                                <label for="title">Título</label>
-                                                <div class="form-line" style="width: 70%">
-                                                <input type="text" required autocomplete="off" name="title" class="form-control" id="title" placeholder="Introduce un título">
-                                                </div>
-                                            </div>																						
+                                    <div class="row" style="margin-top:20px">
+                                        <div class="col-lg-12 col-md-12 col-sm-12">
+                                            <label for="title">Asunto</label>
+                                            <div class="form-line" style="width: 70%">
+                                            <input type="text" required autocomplete="off" name="title" class="form-control" id="title" placeholder="Introduce un título">
+                                            </div>
                                         </div>
                                     </div>	
                                 </div>
                                 
                                 <div class="form-group">
-                                    <div class="col-lg-12 col-md-12 col-sm-12">
-                                        <div class="row" style="margin-top:20px">											
-                                            <div class="xcol-sm-6">
-                                                <label for="body">Observaciones</label>
-                                                <div class="form-line" style="width: 90%">
-                                                <textarea id="body" name="event" required class="form-control" rows="3"></textarea>
-                                                </div>
-                                            </div>																						
+                                    <div class="row" style="margin-top:20px">
+                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">                                            
+                                            <label for="body">Observaciones</label>
+                                            <div class="form-line" style="width: 90%">
+                                            <textarea id="body" name="event" required class="form-control" rows="3"></textarea>
+                                            </div>                                            
                                         </div>
                                     </div>	
                                 </div>
 								
-								<div class="modal-footer">
-                                    <div class="col-lg-12 col-md-12 col-sm-12">
-                                        <div class="row" style="margin-top:20px">
+								<div class="modal-footer"  style="margin-top:-20px !important; height:60px;">
+                                    <div class="row">
+                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">                                        
                                             <button type="button" class="btn btn-danger" data-dismiss="modal">
                                                 <i class="fa fa-times"></i> Salir
                                             </button>
@@ -916,14 +871,16 @@ $email  = "";
                                         });
 										
 										$("#responsable").on('change', function(){
-											var idresponsable = $("#responsable").val();											
+											var idresponsable = $("#responsable").val();
+											//alert(idresponsable);											
 											$.ajax({
 												data: {"id": idresponsable },
 												url: 'fc/procesosxapoderado.php',
 												type: 'GET',                            
 												dataType: 'json',												
 												success: function( data, textStatus, jQxhr ){													
-													var zdata= data.pro_proceso;
+													var zdata = unescape(data);
+													zdata = data.pro_proceso;
 													var selectedOption = '0';
 													var newOptions = zdata;
 													var select = $('#proceso');
@@ -940,7 +897,7 @@ $email  = "";
 													if(newOptions != 'undefined')
 													{
 														$.each(newOptions, function(val, text) {
-															options[options.length] = new Option(text.PRO_NumeroProceso, text.PRO_IdProceso);
+															options[options.length] = new Option(text.NP, text.PRO_IdProceso);
 														});
 													}
 													
@@ -1033,27 +990,39 @@ $email  = "";
 								}
                                 </script>
                                 
-                            </form>
+                                </form>
                             </div>
                         </div>
                     </div>
 					
-					<div class="modal-dialog" id="modalAgendaOk">
+					<div class="modal-dialog" id="modalAgendaOk" style="height:30% !important;">
                         <div class="modal-content">
-							<div>
-								<div class="sa-placeholder"></div>
-								<h2>Agenda Grabada correctamente.</h2>
-							</div>
-							<div class="modal-footer">
-								<div class="col-lg-12 col-md-12 col-sm-12">
-									<div class="row" style="margin-top:20px">
-										<button type="button" class="btn btn-danger" data-dismiss="modal" id="volver" onclick="location.reload(true);">
-											<i class="fa fa-times"></i> Salir
-										</button>
-										
-									</div>
-								</div>
-							</div>
+                        <div class="sa-placeholder">
+								<div class="container">
+                                    <div class="row">
+                                        <div class="col-lg-6 col-md-6 col-sm-6">
+                                            <h2>Atención.</h2>
+                                            <hr>
+                                        </div>                                        
+                                    </div>
+
+                                    <div class="row">
+										<div class="col-lg-4 col-md-4 col-sm-4">
+											<p>Agenda Grabada correctamente.</p>
+										</div>
+                                    </div>
+                                    
+                                    <div class="modal-footer">
+                                        <div class="col-lg-6 col-md-6 col-sm-6">
+                                            <div class="row" style="margin-top:-20px">
+                                                <button type="button" class="btn btn-danger" data-dismiss="modal" id="volver" onclick="location.reload(true);">
+                                                    <i class="fa fa-times"></i> Salir
+                                                </button>                                                
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
 						</div>
 					</div>
 					

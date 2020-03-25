@@ -92,16 +92,21 @@ if (isset($_POST['eliminar_evento']))
     <script src="../../plugins/bootstrap/js/bootstrap.js"></script>
 </head>
 <body>
-    <h3><?php echo $titulo; ?></h3>
-    <hr>
-    <p>
-    <b>Fecha Inicio: </b> <?php echo $inicio; ?>
-    <b>Fecha Finalizaci&oacute;n: </b> <?php echo $final; ?>
-    </p>
-    <p><b>N&uacute;mero de Proceso: </b> <?php echo $nroproceso; ?></p>
-    <p><b>Asignado a: </b><?php echo $nombre; ?></p>
-    <p><b>Tipo de Actividad: </b><?php echo $tipoactividad; ?></p>
-    <p><b>Observaciones: </b> <?php echo $evento; ?></p>
+
+			<div style="margin-bottom:4px; font-size:13px;">Agenda:</div>
+			<h3><?php echo $titulo; ?></h3>
+			<hr>
+			<p>
+			<b>Fecha Inicio: </b> <?php echo $inicio; ?>
+			</p>
+			<p>
+			<b>Fecha Finalizaci&oacute;n: </b> <?php echo $final; ?>
+			</p>
+			<p><b>N&uacute;mero de Proceso: </b> <?php echo $nroproceso; ?></p>
+			<p><b>Asignado a: </b><?php echo $nombre; ?></p>
+			<p><b>Tipo de Actividad: </b><?php echo $tipoactividad; ?></p>
+			<p><b>Observaciones: </b> <?php echo $evento; ?></p>
+			
 </body>
 <form action="" method="post">
     <button type="submit" class="btn btn-danger" name="eliminar_evento">Eliminar</button>
