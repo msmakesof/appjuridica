@@ -7,7 +7,7 @@ require_once('../../Connections/config2.php');
 
 if( !isset($_SESSION['IdUsuario']) && !isset($_SESSION['NombreUsuario']) )
 {
-	header("Location: ../../index.html");
+	header("Location: ../../index.php");
     exit;
 } 
 //ob_start();

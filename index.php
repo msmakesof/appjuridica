@@ -1,40 +1,5 @@
-<?php
-/**
- * Obtener y guardar la IP de un visitante en PHP
- *
- * @author parzibyte
- */
-# Para obtener la fecha correcta hay que poner la zona horaria
-date_default_timezone_set("America/Bogota");
-$fechaHoraIngreso = date("Y-m-d H:i:s");
-# Si no hay REMOTE_ADDR entonces ponemos "Desconocida"
-$ipInterna = empty($_SERVER["REMOTE_ADDR"]) ? "Desconocida" : $_SERVER["REMOTE_ADDR"];
-# Formatear mensaje
-$mensaje = sprintf("La IP %s accedió en %s%s", $ipInterna, $fechaHoraIngreso, PHP_EOL);
-
-echo $mensaje."<br>";
-
-$nombreHost = gethostbyaddr($_SERVER['REMOTE_ADDR']);
-
-//echo $nombre_host;
-echo "<br>";
-echo "El nombre del servidor es: {$_SERVER['SERVER_NAME']}<hr>"; 
-//echo "Vienes procedente de la página: {$_SERVER['HTTP_REFERER']}<hr>"; 
-echo "Te has conectado usando el puerto: {$_SERVER['REMOTE_PORT']}<hr>"; 
-echo "El agente de usuario de tu navegador es: {$_SERVER['HTTP_USER_AGENT']}";
-
-# Y adjuntarlo o escribirlo en ips.txt
-//file_put_contents("ips.txt", $mensaje, FILE_APPEND);
-# Ya registramos la ip, ahora seguimos con el flujo normal ;)
-echo "<br>";
-$servidor = $_SERVER['SERVER_NAME'];
-$puerto = $_SERVER['REMOTE_PORT'];
-$agente = $_SERVER['HTTP_USER_AGENT'];
-
-?>
 <!DOCTYPE html>
 <html>
-
 <head>
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
@@ -115,7 +80,7 @@ $agente = $_SERVER['HTTP_USER_AGENT'];
                     <div class="row">
                         <div class="col-xs-8 p-t-5">
                             <input type="checkbox" name="rememberme" id="rememberme" class="filled-in chk-col-pink">
-                            <label for="rememberme">Recordarme</label>
+                            <label for="rememberme">Recordarme...</label>
                         </div>
                         <div class="col-xs-4">
                             <button class="btn btn-block bg-pink waves-effect" type="submit" id="ingresar" name="ingresar">INGRESAR</button>
@@ -166,8 +131,10 @@ $agente = $_SERVER['HTTP_USER_AGENT'];
 
         <div id="ip"></div>
 <div id="address"></div>
+<!--
 Respuesta completa: 
 <pre id="details"></pre>
+-->
 		
 		<div id="div-cookies" style="display: none;">
 			Necesitamos usar cookies para que funcione todo, si permanece aquí acepta su uso, más información en
@@ -265,7 +232,8 @@ Respuesta completa:
 					var respstr = dataX.trim();                   
                     if( respstr.substr(0,1) == "1" )
                     {   						
-						relocate("pages/tables/");
+                        //relocate("pages/tables/");
+                        relocate("pages/indice.php");
                     }
                     else
                     {                     
@@ -299,8 +267,8 @@ Respuesta completa:
 		//$(document).ready(function() {
 		checkAcceptCookies();
 		//});
-
 	});
+    /*
     var ip="";
     $.get("https://ipinfo.io", function (response) {    
         $("#ip").html("IP: " + response.ip);
@@ -308,14 +276,17 @@ Respuesta completa:
         $("#address").html("Ubicaci&#243;n: " + response.city + ", " + response.region);
         $("#details").html(JSON.stringify(response, null, 4));    
     }, "jsonp");
+    */
     </script>
-    <div id="resultado"></div>
+    <!-- <div id="resultado"></div> -->
     <?php
+    /*
         $ipPublica = "";
         $ipPublica = "<script> document.writeln(ip); </script>";        
         $dataArray = json_decode(file_get_contents("http://www.geoplugin.net/json.gp?ip=".$ipPublica));        
         var_dump($dataArray);
         //ipinterna=$ipInterna&fechaHoraIngreso=$fechaHoraIngreso&nombreHost=$nombreHost&servidor=$servidor&puerto=$puerto&agente=$agente&ippublica=$ipPublica
+    */
     ?>
 </body>
 

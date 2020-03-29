@@ -31,7 +31,7 @@ if (!function_exists("GetSQLValueString")) {
 	}
 }
 
-$soportecURL = "S";
+//$soportecURL = "S";
 //$url         = urlServicios."consultadetalle/consultadetalle_Usuario.php?idU=$usuario&idC=$clave";
 
 
@@ -46,8 +46,8 @@ if ($resultado = mysqli_query($cnn_kn, $query_rs_keyED)) {
 	while($strowreg = mysqli_fetch_assoc($resultado))
 	{ 
 		$secret_key = trim($strowreg["CON_LlaveInicial"]);
-    $secret_iv = trim($strowreg["CON_LlaveIv"]);
-    $encrypt_method = trim($strowreg["CON_MetodoEncriptacion"]);
+		$secret_iv = trim($strowreg["CON_LlaveIv"]);
+		$encrypt_method = trim($strowreg["CON_MetodoEncriptacion"]);
 		$tipo_hash = trim($strowreg["CON_TipoHash"]);
 		
 		$GLOBALS['tipo_hash'] = $tipo_hash;
