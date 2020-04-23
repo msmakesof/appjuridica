@@ -296,12 +296,12 @@ if( $muser['estado'] < 2)
 {
     for($i=0; $i<count($muser['usu_usuario']); $i++)
     {
-        $NombreUsuario = trim($muser['usu_usuario'][$i]['NombreUsuario']);
+        $NombreUsuario = trim(strtoupper($muser['usu_usuario'][$i]['NombreUsuario']));
         $archivo = $NombreUsuario.".php";
         $idTabla = $muser['usu_usuario'][$i]['USU_IdUsuario'];
         $Email = trim($muser['usu_usuario'][$i]['USU_Email']);
 		$TUS_Nombre = trim($muser['usu_usuario'][$i]['TUS_Nombre']);        
-		$NombreEmpresa = trim($muser['usu_usuario'][$i]['NombreEmpresa']);
+		$NombreEmpresa = trim(strtoupper($muser['usu_usuario'][$i]['NombreEmpresa']));
         $EstadoUsuario = $muser['usu_usuario'][$i]['EstadoUsuario'];
     ?>
         <tr>
