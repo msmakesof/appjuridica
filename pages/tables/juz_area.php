@@ -1,6 +1,7 @@
 <?php
-session_start();  
-require_once('../../Connections/cnn_kn.php'); 
+include_once("header.inc.php"); 
+require_once ('../../Connections/DataConex.php'); //('../../Connections/cnn_kn.php');
+$LogoInterno = LogoInterno; 
 require_once('../../Connections/config2.php');
 //if(!isset($_SESSION)) 
 //{ 
@@ -38,7 +39,7 @@ if (!function_exists("GetSQLValueString"))
     return $theValue;
     }
 }
-$empresa = "AppJuridica";
+$empresa = Company;
 if( isset($_POST['ƒ¤']) && !empty($_POST['ƒ¤']) )
 {    
     $clave = trim($_POST['ƒ¤']);
@@ -138,8 +139,8 @@ else
             <div class="navbar-header">
                 <a href="javascript:void(0);" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse" aria-expanded="false"></a>
                 <a href="javascript:void(0);" class="bars"></a>
-                <a class="navbar-brand" href="../../index.html">
-                <img src="../../images/logomw.fw.png" style="margin-top: -10px;">
+                <a class="navbar-brand">
+                <img src="<?php echo $LogoInterno; ?>" style="margin-top: -6px;">
                 </a>
 
             </div>
@@ -375,7 +376,7 @@ else
                             <li><a href="javascript:void(0);"><i class="material-icons">shopping_cart</i>Tareas</a></li>
                             <li><a href="javascript:void(0);"><i class="material-icons">book</i>Notificaciones</a></li>
                             <li role="seperator" class="divider"></li> -->
-                            <li><a href="../../"><i class="material-icons">input</i>Salir</a></li>
+                            <li><a href="./close.php"><i class="material-icons">input</i>Salir</a></li>
                         </ul>
                     </div>
                 </div>
@@ -589,7 +590,7 @@ else
                                         <th>Nombre Especialidad</th>
                                         <th>C&oacute;digo</th>
                                         <th>Corporaci&oacute;n</th>
-                                        <th>Activo</th>
+                                        <th>Estado</th>
                                     </tr>
                                 </thead>
                                 <tfoot>
@@ -597,7 +598,7 @@ else
                                         <th>Nombre Especialidad</th>                                        
                                         <th>C&oacute;digo</th>
                                         <th>Corporaci&oacute;n</th>
-                                        <th>Activo</th>
+                                        <th>Estado</th>
                                 </tfoot>
                                 <tbody>
 <?php
@@ -660,13 +661,14 @@ if( $marea['estado'] < 2)
         $tipojuzgado = $marea['juz_area'][$i]['TJU_Nombre'];
         $idTabla = $marea['juz_area'][$i]['ARE_IdArea'];
         $estadoTabla = trim($marea['juz_area'][$i]['EstadoTabla']);
+        $IdCorporacion = $marea['juz_area'][$i]['TJU_Codigo'];
     ?>
         <tr>
             <td>
                 <a href="javascript:void(0);" onclick="cambiar('../forms/editar<?php echo $nombre_lnk ;?>.php?f=<?php echo $idTabla; ?>')" class="nav nav-tabs nav-stacked" data-toggle="modal" data-target="#defaultModalEditar" style="text-decoration:none;"><?php echo $NombreTabla; ?></a>
             </td>
             <td><?php echo $codigo; ?></td>
-            <td><?php echo $tipojuzgado; ?></td>
+            <td><?php echo $IdCorporacion . ' - ' . $tipojuzgado; ?></td>
             <td><?php echo $estadoTabla; ?></td>
         </tr>
     <?php                          

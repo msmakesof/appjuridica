@@ -1,11 +1,7 @@
 <?php
-session_start(); 
-if( !isset($_SESSION['IdUsuario']) && !isset($_SESSION['NombreUsuario']) )
-{
-	header("Location: ../../index.html");
-}
-require_once('../../Connections/cnn_kn.php'); 
-require_once('../../Connections/config2.php'); 
+include_once("header.inc.php");
+require_once ('../../Connections/DataConex.php'); //require_once('../../Connections/cnn_kn.php');
+$LogoInterno = LogoInterno; 
 ?>
 <?php
 if (!function_exists("GetSQLValueString")) 
@@ -42,10 +38,11 @@ if (!function_exists("GetSQLValueString"))
 
 $NombreTabla ="PROCESO";
 $idTabla = 0;
+$tipoCLiente = 0 ;
 //require_once('../../apis/juzgado/juzgado.php');
-require_once('../../apis/cliente/infoCliente.php');
+//require_once('../../apis/cliente/infoCliente.php');
 $yy = date("Y");
-$empresa = "AppJuridica";
+$empresa = Company;
 if( isset($_POST['ƒ¤']) && !empty($_POST['ƒ¤']) )
 {    
     $clave = trim($_POST['ƒ¤']);
@@ -205,6 +202,7 @@ else
             }
             $('option', select).remove();
             
+			options[options.length] = new Option('-- Seleccione Especialidad o Area.... --', '');
             if(newOptions != 'undefined')
             {
                 $.each(newOptions, function(val, text) {
@@ -241,6 +239,8 @@ else
                 var options = select.attr('options');
             }
             $('option', select).remove();
+			
+			options[options.length] = new Option('-- Seleccione Despacho.... --', '');
             if(newOptions != undefined)
             {
                 $.each(newOptions, function(val, text) {
@@ -258,12 +258,24 @@ else
 
     function nroProceso(){
         _area = "";
-        if(_tipojuzgado != "")
+        if( _area != "" && _area.substring(0, 1) == "-")
         {
             _area =  $("#area").val();
         }
+		
+		if(_tipojuzgado.substring(0, 1) == "-")
+		{
+			_tipojuzgado = "";
+		}
+		
+		if(_despacho.substring(0, 1) == "-")
+		{
+			_despacho = "";
+		}
+				
         _Proceso = _zipDeptoCiudad + _tipojuzgado + _area + _despacho + $("#anio").val() + _nProceso + _nDv;
-        $("#proceso").attr("value",_Proceso);
+        //$("#proceso").attr("value",_Proceso);
+		$("#proceso").prop("value",_Proceso);
         init_contador("#proceso","#muestrocantidadcaracteresid");
     }
 
@@ -274,7 +286,10 @@ else
     }
 
     $(document).ready(function()
-    {       
+    {   
+		
+		$('#activo').prop("checked", true);
+		
         $("#msj").hide();
 		$("#area").attr("value", "");
         $('#anio').numeric();
@@ -284,12 +299,25 @@ else
         $('.selectpicker').selectpicker();
 		var exclude_dates = ['2019-04-18', '2019-04-19'];
 		var disabledWeekDays = [0,6];
+		var x = new Date();
+		var n = x.getDay();
+		var y =  new Date();
+		var f="";
+		if ( n == 6)
+		{
+			f = y.setDate(x.getDate()+2);
+		}
+		if ( n == 0 )
+		{
+			f = y.setDate(x.getDate()+1);
+		}
+		
         $('#fechainicio').datetimepicker({			
 			language: 'es',											
 			daysOfWeekDisabled: [0, 6],
 			datesDisabled: exclude_dates,
 			autoclose: true,
-			defaultDate: new Date(),											
+			defaultDate: f,											
 			format:'YYYY/MM/DD',
 			minDate: new Date(),
 			viewMode: 'days'		
@@ -329,7 +357,17 @@ else
             {
                 $('#demandado').prop('disabled','disabled');
                 $('#demandado').val("");;
-            }            
+            }
+
+			$.getJSON('../tables/urlink.php', {funcion: "dd", origen: __cliente +'-'+ __demandado }, function (data) {
+				var msj = data.juz_areasxjuzgado.Total;
+                if(msj != null)
+				{
+					swal("Atención:", msj, "warning" );
+					event.stopPropagation();
+					return false;
+				}
+            });		
 
         });
         
@@ -342,9 +380,18 @@ else
             var __demandado = $('#demandado').val();
             $.getJSON('../tables/urlink.php', {funcion: "cd", origen: __cliente +'-'+ __demandado }, function (data) {
                 
-            });        
+            });
+			
+			$.getJSON('../tables/urlink.php', {funcion: "dd", origen: __cliente +'-'+ __demandado }, function (data) {
+				var msj = data.juz_areasxjuzgado.Total;
+                if(msj != null)
+				{
+					swal("Atención:", msj, "warning" );
+					event.stopPropagation();
+					return false;
+				}
+            });			
         });
-
 
         $('#tipojuzgado').change(function() {
             populateFruitVariety();
@@ -370,6 +417,14 @@ else
         });
 
         $("#zip").on('change', function(e) {
+			
+			
+			_Proceso = "";
+			$("#tipojuzgado").val('default').selectpicker("refresh");
+			$("#area").val('default').selectpicker("refresh");
+			$("#despacho").val('default').selectpicker("refresh");	
+			
+			
             _zip = $("#zip").val();
             $.ajax({
                 url: "urlink.php",
@@ -420,7 +475,7 @@ else
             var estado = $('input:radio[name=estado]:checked').val();
 			var representa = $('input:radio[name=representa]:checked').val();
             e.preventDefault();
-            if( estado == undefined || representa == undefined || nombre == "" || fechainicio == "" || ubicacion == "" || claseproceso == "" || juzgado == "" || cliente == "" || demandado == "" || especialidad == "" || despacho == "" || usuario == "") 
+            if( estado == undefined || representa == undefined || nombre == "" || fechainicio == "" || ubicacion == "" || claseproceso == "" || juzgado == "" || cliente == "" || demandado == "" || especialidad == "" || usuario == "") 
             {                 
                 swal("Atencion:", "Debe digitar un Nombre y/o seleccionar un Estado y/o Fecha de Inicio y/o Usuario y/o Ubicacion y/o clase Proceso y/o Juzgado y/o especialidad y/o despacho y/o Representante De.");
                 e.stopPropagation();
@@ -461,21 +516,48 @@ else
 								data : {"pnombre": nombre, "pfechainicio": fechainicio, "pusuario": usuario, "pubicacion": ubicacion, "pclaseproceso": claseproceso ,"pjuzgado": juzgado,"pestado": estado, "pproceso": pproceso,"pcliente": cliente, "pdemandado":demandado, "pespecialidad":especialidad, "pdespacho":despacho, "origen": origen, "nombreciu": nombreciu, "corporacion": corporacion, "area": area, "despacho": despacho, "asignadoa": asignadoa, "ubicacion": ubicacion, "claseproceso": claseproceso, "cliente": cliente, "demandado": demandado, "maxid": maxid},
 								type: "POST",
 								dataType: "html",
-								url : "../../email/",
-							})
-							.done(function( data, textStatus, jqXHR){
-								xrespstr = data.trim();							
-								swal("Atención: ", msj, "success");
-								return false;
-							})
-							.fail(function( jqXHR, textStatus, errorThrown ) {
-								if ( console && console.log ) 
+								url : "../../email/",								
+								beforeSend: function () 
+								{ 										
+									$("#precargamsj").show();
+										   
+								},
+								success: function( dataX, textStatus, jqXHR )
 								{
-									console.log( "La solicitud a fallado: " +  textStatus);
-									$("#msj").html("");
+									
+									xrespstr = data.trim();							
+									swal("Atención: ", msj, "success");
+									
+									//$('form')[0].reset();							
+									$("#zip").val('default').selectpicker("refresh");
+									$("#tipojuzgado").val('default').selectpicker("refresh");
+									$("#area").val('default').selectpicker("refresh");
+									$("#despacho").val('default').selectpicker("refresh");							
+									$("#usuario").val('default').selectpicker("refresh");
+									$("#ubicacion").val('default').selectpicker("refresh");							
+									$("#claseproceso").val('default').selectpicker("refresh");
+									$("#cliente").val('default').selectpicker("refresh");							
+									$("#demandado").val('default').selectpicker("refresh");
+									$("#proceso").val('');
+									$("#actoprocesal").show();
+									$('#activo').prop("checked", true);
+									return false;
+									
+								},
+								error: function( jqXHR, textStatus, errorThrown ) 
+								{
+									if ( console && console.log ) 
+									{
+										console.log( "La solicitud a fallado: " +  textStatus);
+										$("#msj").html("");
+									}
+								},
+								complete: function( jqXHR, textStatus, errorThrown ) 
+								{
+									$("#precargamsj").hide();
 								}
-							});
-                            $("#actoprocesal").show();                          
+							});							
+													
                         }
                         else
                         {                            
@@ -496,16 +578,21 @@ else
                     }
                 });
             }    
-        });
+        });	
+		
+		$("#limpiar").on('click', function(e) {
+			
+		});
+		
     });    
     </script>      
 </head>
 
 <body class="theme-red">
     <!-- Page Loader -->
-    <div class="page-loader-wrapper">
-        <div class="loader">
-            <div class="md-preloader pl-size-md">
+    <div id="precargamsj" class="page-loader-wrapper">
+        <div class="loader">		
+            <div class="md-preloader pl-size-md">				
                 <svg viewbox="0 0 75 75">
                     <circle cx="37.5" cy="37.5" r="33.5" class="pl-red" stroke-width="4" />
                 </svg>
@@ -513,18 +600,21 @@ else
             <p>Por Favor espere...</p>
         </div>
     </div>
-    <!-- #END# Page Loader -->
+    <!-- #END# Page Loader --> 
+	
     <!-- Overlay For Sidebars -->
     <div class="overlay"></div>
     <!-- #END# Overlay For Sidebars -->
+	
+	
     <!-- Top Bar -->
     <nav class="navbar">
         <div class="container-fluid">
             <div class="navbar-header">
                 <a href="javascript:void(0);" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse" aria-expanded="false"></a>
                 <a href="javascript:void(0);" class="bars"></a>
-                <a class="navbar-brand" href="../../index.html">
-                <img src="../../images/logomw.fw.png" style="margin-top: -10px;">
+                <a class="navbar-brand">
+                <img src="<?php echo $LogoInterno; ?>" style="margin-top: -6px;">
                 </a>
 
             </div>
@@ -771,7 +861,7 @@ else
                             <li><a href="javascript:void(0);"><i class="material-icons">shopping_cart</i>Tareas</a></li>
                             <li><a href="javascript:void(0);"><i class="material-icons">book</i>Notificaciones</a></li>
                             <li role="seperator" class="divider"></li> -->
-                            <li><a href="../../"><i class="material-icons">input</i>Salir</a></li>
+                            <li><a href="./close.php"><i class="material-icons">input</i>Salir</a></li>
                         </ul>
                     </div>
                 </div>
@@ -912,7 +1002,7 @@ if( $mproceso['estado'] < 2)
                                 <div class="form-group">
                                     <div class="col-lg-6 col-md-6 col-sm-6">
                                         <div class="row">
-                                            <div class="xcol-xs-10">                                                
+                                            <div class="xcol-xs-10"><span style="color:red;">*</span>                                                 
                                                 <label class="form-label">C&oacute;digo DANE Departamento / Municipio:</label>
                                                 <div class="xform-line">                                                    
                                                     <select class="selectpicker show-tick" data-live-search="true" data-width="95%" name="zip" id="zip" required>
@@ -943,8 +1033,8 @@ if( $mproceso['estado'] < 2)
                                 <div class="form-group">
                                     <div class="col-lg-6 col-md-6 col-sm-6">
                                         <div class="row">
-                                            <div class="xcol-xs-10">
-                                                <label class="form-label">Corporaci&oacute;n:</label>                                        
+                                            <div class="xcol-xs-10"><span style="color:red;">*</span> 
+                                                <label class="form-label">Corporaci&oacute;n / Jurisdicci&oacute;n:</label>                                        
                                                 <select class="selectpicker show-tick" data-live-search="true" data-width="95%" name="tipojuzgado" id="tipojuzgado" required>
                                                     <option value="" >Seleccione Corporaci&oacute;n...</option>
                                                     <?php
@@ -972,11 +1062,11 @@ if( $mproceso['estado'] < 2)
                                 <div class="form-group">                               
                                     <div class="col-lg-6 col-md-6 col-sm-6">
                                         <div class="row">
-                                            <div class="xcol-xs-10">
+                                            <div class="xcol-xs-10"><span style="color:red;">*</span> 
                                                 <label class="form-label">Especialidad o &Aacute;rea:</label>                                                
                                                 <!-- <input type="text" class="form-control" name="area" id="area" value="<?php //echo $JUZ_Area ;?>" maxlength="5" autocomplete="ÑÖcompletes" required> -->
                                                 <select id="area" name="area" class="selectpicker show-tick" data-live-search="true" data-width="95%" required>
-                                                    <option value="">-- Seleccione Especializacion.... --</option>
+                                                    <option value="">-- Seleccione Especialidad o Area.... --</option>
                                                 </select>                                                
                                             </div>
                                         </div>	
@@ -1018,7 +1108,7 @@ if( $mproceso['estado'] < 2)
 											<div class="xcol-xs-9">
 												<label class="form-label">Nro. Consecutivo Radicaci&oacute;n:</label>
                                                 <div class="form-line" style="width: 70%">
-                                                    <input type="number" onkeypress="return isNumeric(event)" oninput="maxLengthCheck(this)" class="form-control" name="nproceso"id="nproceso" min="1" max="99999" maxlength="5" autocomplete="off" required>
+                                                    <input type="number" onkeypress="return isNumeric(event)" oninput="maxLengthCheck(this)" class="form-control" name="nproceso"id="nproceso" min="1" max="99999" maxlength="5" placeholder="Si no tiene número del Radicado dejarlo en blanco." autocomplete="off" required>
                                                 </div>                                                    											
 											</div>
                                         </div>	
@@ -1041,7 +1131,7 @@ if( $mproceso['estado'] < 2)
                                 <div class="form-group">
 									<div class="col-lg-6 col-md-6 col-sm-6">
                                         <div class="row">
-											<div class="xcol-sm-9">
+											<div class="xcol-sm-9"><span style="color:red;">*</span> 
 												<label class="form-label">C&oacute;digo &Uacute;nico del Proceso:</label>
 												<div class="form-line" style="width: 80%">
 													<input type="text" class="form-control" name="proceso"id="proceso" value="" maxlength="23" required readonly/>													
@@ -1056,7 +1146,7 @@ if( $mproceso['estado'] < 2)
                                 <div class="form-group">
 									<div class="col-lg-4 col-md-4 col-sm-4">
                                         <div class="row">											
-											<div class="xcol-sm-6">
+											<div class="xcol-sm-6"><span style="color:red;">*</span> 
 												<label class="form-label">Fecha Inicio</label>												
 												<div class='input-group date form-line' name="fechainicio" id="fechainicio" required>
 													<input type='text' id="txtFecha" class="form-control" value="" readonly/>
@@ -1071,7 +1161,7 @@ if( $mproceso['estado'] < 2)
                                 <div class="form-group">
                                     <div class="col-lg-7 col-md-7 col-sm-7">
 										<div class="row">											
-											<div class="xcol-sm-8">
+											<div class="xcol-sm-8"><span style="color:red;">*</span> 
                                                 <label class="form-label">Apoderado(a):</label>
 												<select class="selectpicker show-tick" data-live-search="true" data-width="100%" name="usuario" id="usuario" required>
 												<option value="" >Seleccione Apoderado(a)...</option>
@@ -1095,13 +1185,13 @@ if( $mproceso['estado'] < 2)
                                     </div> 
 									<div class="col-lg-5 col-md-5 col-sm-5">                                
                                         <div class="row">
-                                            <div class="xcol-sm-8" style="margin-left:15px;">
+                                            <div class="xcol-sm-8" style="margin-left:15px;"><span style="color:red;">*</span> 
 												<label class="form-label">Representante de: </label>
                                                 <div class="form-group">                                                    
-													<input type="radio" name="representa" id="acusador" class="with-gap" value="0">
+													<input type="radio" name="representa" id="acusador" class="with-gap" value="1">
 													<label for="acusador">Demandante</label>
 
-													<input type="radio" name="representa" id="acusado" class="with-gap" value="1">
+													<input type="radio" name="representa" id="acusado" class="with-gap" value="2">
 													<label for="acusado" class="m-l-20">Demandado</label>
 												</div>
                                             </div>
@@ -1112,7 +1202,7 @@ if( $mproceso['estado'] < 2)
                                 <div class="form-group">
                                     <div class="col-lg-6 col-md-6 col-sm-6">
                                         <div class="row">
-                                            <div class="xcol-sm-6">
+                                            <div class="xcol-sm-6"><span style="color:red;">*</span> 
                                                 <label class="form-label">Ubicación:</label>                                                                                   
                                                 <select class="selectpicker show-tick" data-live-search="true" data-width="94%" name="ubicacion" id="ubicacion" required>
                                                 <option value="" >Seleccione Ubicación...</option>
@@ -1140,7 +1230,7 @@ if( $mproceso['estado'] < 2)
                                 <div class="form-group">
                                     <div class="col-lg-6 col-md-6 col-sm-6">
                                         <div class="row">
-                                            <div class="xcol-sm-8">
+                                            <div class="xcol-sm-8"><span style="color:red;">*</span> 
                                                 <label class="form-label">Clase Proceso:</label>                                                
                                                     <select class="selectpicker show-tick" data-live-search="true" data-width="94%" name="claseproceso" id="claseproceso" required>
                                                     <option value="" >Seleccione Clase Proceso...</option>
@@ -1167,14 +1257,17 @@ if( $mproceso['estado'] < 2)
 								<div class="form-group">
                                     <div class="col-lg-6 col-md-6 col-sm-6">
 										<div class="row">											
-											<div class="xcol-sm-8">
+											<div class="xcol-sm-8"><span style="color:red;">*</span> 
                                                 <label class="form-label">Demandante:</label>
 												<select class="selectpicker show-tick" data-live-search="true" data-width="94%" name="cliente" id="cliente" required>
-												<option value="" >Seleccione Cliente...</option>
+												<option value="" >Seleccione Demandante...</option>
 												<?php
+													$idTabla = 0;
+													$tipoCLiente = 1;
+                                                    include '../../apis/cliente/infoCliente.php';
 													for($i=0; $i<count($mcliente['cli_cliente']); $i++)
 													{
-                                                        if( $mcliente['cli_cliente'][$i]['CLI_IdTipoCliente'] == 2 )
+                                                        if( $mcliente['cli_cliente'][$i]['CLI_IdTipoCliente'] == 1 )
                                                         {
                                                             $CLI_IdCliente = $mcliente['cli_cliente'][$i]['CLI_IdCliente'];
                                                             $CLI_Nombre = $mcliente['cli_cliente'][$i]['NombreUsuario'];                                                            
@@ -1195,11 +1288,14 @@ if( $mproceso['estado'] < 2)
 								<div class="form-group">
                                     <div class="col-lg-6 col-md-6 col-sm-6">
 										<div class="row">											
-											<div class="xcol-sm-8">
+											<div class="xcol-sm-8"><span style="color:red;">*</span> 
                                                 <label class="form-label">Demandado:</label>
 												<select class="selectpicker show-tick" data-live-search="true" data-width="94%" name="demandado" id="demandado" required>
 												<option value="" >Seleccione Demandado...</option>
 												<?php
+													$idTabla = 0;
+													$tipoCLiente = 2;
+                                                    include '../../apis/cliente/infoCliente.php';
 													for($i=0; $i<count($mcliente['cli_cliente']); $i++)
 													{
                                                         if( $mcliente['cli_cliente'][$i]['CLI_IdTipoCliente'] == 2 )
@@ -1244,6 +1340,7 @@ if( $mproceso['estado'] < 2)
                                                 <button class="btn btn-primary waves-effect" type="submit" id="grabar">GRABAR</button>
                                                 <button class="btn btn-info waves-effect" type="button" id="actoprocesal">ACTUACION PROCESAL</button>
                                                 <button class="btn btn-danger waves-effect" type="submit" id="cerrar">SALIR</button>
+												<div><span style="color:red;">* Campos Obligatorios.</span></div>
                                             </div>
                                         </div>
                                     </div>

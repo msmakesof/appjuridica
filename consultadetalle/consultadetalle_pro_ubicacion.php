@@ -82,9 +82,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 
     elseif (isset($_GET['ExisteTabla']) )
     {
-        $par1 = $_GET['Nombre'];        
+        $par1 = $_GET['Nombre'];
+		$par2 = $_GET['idtabla'];
 
-        $retorno = PRO_UBICACION::existetabla($par1);
+        $retorno = PRO_UBICACION::existetabla($par1, $par2);
         if ($retorno) 
         {
             $pro_ubicacion["estado"] = "1";

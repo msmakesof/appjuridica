@@ -1,10 +1,16 @@
-﻿<?php 
+<?php
+include_once("../tables/header.inc.php");
+require_once ('../../Connections/DataConex.php');
+$LogoInterno = LogoInterno; 
+//require_once('../../Connections/config2.php');
+/* 
 require_once('../../Connections/cnn_kn.php'); 
 require_once('../../Connections/config2.php');
 if(!isset($_SESSION)) 
 { 
     session_start(); 
-} 
+}
+*/ 
 ?>
 <?php
 if (!function_exists("GetSQLValueString")) 
@@ -39,7 +45,7 @@ if (!function_exists("GetSQLValueString"))
     }
 }
 
-$NombreTabla ="PROCESO";
+$NombreTabla = Company ;
 $idTabla = 0;
 require_once('../../apis/general/ciudad.php');
 require_once('../../apis/usuario/infoUsuario.php');
@@ -322,8 +328,8 @@ else
             <div class="navbar-header">
                 <a href="javascript:void(0);" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse" aria-expanded="false"></a>
                 <a href="javascript:void(0);" class="bars"></a>
-                <a class="navbar-brand" href="../../index.html">
-                <img src="../../images/logomw.fw.png" style="margin-top: -10px;">
+                <a class="navbar-brand">
+                <img src="<?php echo $LogoInterno; ?>" style="margin-top: -6px;">
                 </a>
 
             </div>
@@ -559,7 +565,7 @@ else
                             <li><a href="javascript:void(0);"><i class="material-icons">shopping_cart</i>Tareas</a></li>
                             <li><a href="javascript:void(0);"><i class="material-icons">book</i>Notificaciones</a></li>
                             <li role="seperator" class="divider"></li> -->
-                            <li><a href="../../"><i class="material-icons">input</i>Salir</a></li>
+                            <li><a href="./close.php"><i class="material-icons">input</i>Salir</a></li>
                         </ul>
                     </div>
                 </div>

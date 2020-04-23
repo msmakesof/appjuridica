@@ -1,4 +1,8 @@
 <?php 
+include_once("../tables/header.inc.php");
+require_once ('../../Connections/DataConex.php'); //('../../Connections/cnn_kn.php');
+//require_once('../../Connections/config2.php');
+/*
 require_once('../../Connections/cnn_kn.php'); 
 require_once('../../Connections/config2.php');
 if(!isset($_SESSION)) 
@@ -9,6 +13,7 @@ else
 {
     header('Location: ../../index.html');
 }
+*/
 ?>
 <?php
   if (!function_exists("GetSQLValueString")) {
@@ -67,9 +72,15 @@ $pdireccion ="";
 if( isset($_POST['direccion']) )
 {
     $pdireccion = trim($_POST['direccion']);
-	$pdireccion = strtoupper($pdireccion);
+	  $pdireccion = strtoupper($pdireccion);
     $pdireccion = str_replace(' ','%20', $pdireccion);
     $pdireccion = str_replace('#','No.', $pdireccion);
+}
+
+$ptelefono ="";
+if( isset($_POST['telefono']) )
+{
+    $ptelefono = trim($_POST['telefono']);    
 }
 
 $ppiso ="";
@@ -114,7 +125,9 @@ require_once('../../Connections/DataConex.php');
 // Nombres iguales 
 if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
 {
-  $parameters = "ExisteJuzgado=1&Ubicacion=$pubicacion&Ciudad=$pciudad&Direccion=$pdireccion&Piso=$ppiso&TipoJuzgado=$ptipojuzgado&Area=$parea&Edificio=$pedificio&Email=$pemail";
+  //$parameters = "ExisteJuzgado=1&Ubicacion=$pubicacion&Ciudad=$pciudad&Direccion=$pdireccion&Piso=$ppiso&TipoJuzgado=$ptipojuzgado&Area=$parea&Edificio=$pedificio&Email=$pemail";
+  /* Modificado 2020/04/11 revisión para impedir que permita q se duplique juzgado */
+  $parameters = "ExisteJuzgado=1&Ubicacion=$pubicacion&Ciudad=$pciudad&TipoJuzgado=$ptipojuzgado&Area=$parea&idtabla=0";
   $url = urlServicios."consultadetalle/consultadetalle_juzgado.php?".$parameters;
   //echo "<script>console.log($url)</script>" ;
   $ch = curl_init();
@@ -145,12 +158,12 @@ if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
     $existe = $m['juz_juzgado']['existe'];
     if($existe > 0)
     {
-      $sigue = "E-Existe un Juzgado registrado con el mismo Nombre.";
+      $sigue = "E-Existe un Juzgado registrado con la misma Información básica.";
     }
     else
     {
       
-      $parameters = "insert=insert&Ubicacion=$pubicacion&Ciudad=$pciudad&Direccion=$pdireccion&Piso=$ppiso&TipoJuzgado=$ptipojuzgado&Area=$parea&Estado=$pestado&Email=$pemail&Edificio=$pedificio";
+      $parameters = "insert=insert&Ubicacion=$pubicacion&Ciudad=$pciudad&Direccion=$pdireccion&Telefono=$ptelefono&Piso=$ppiso&TipoJuzgado=$ptipojuzgado&Area=$parea&Estado=$pestado&Email=$pemail&Edificio=$pedificio";
       $soportecURL = "S";
       $url         = urlServicios."consultadetalle/consultadetalle_juzgado.php?".$parameters;
       $existe      = "";

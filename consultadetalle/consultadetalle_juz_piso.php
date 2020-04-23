@@ -87,8 +87,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     {
         $par1 = $_GET['Nombre'];
 		$par2 = $_GET['Numero'];
+		$par3 = $_GET['idtabla'];
 
-        $retorno = JUZ_PISO::existetabla($par1, $par2);
+        $retorno = JUZ_PISO::existetabla($par1, $par2, $par3);
         if ($retorno) 
         {
             $juz_piso["estado"] = "1";

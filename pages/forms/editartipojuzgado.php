@@ -1,11 +1,16 @@
-﻿<?php 
+<?php
+include_once("../tables/header.inc.php");
+require_once ('../../Connections/DataConex.php'); //('../../Connections/cnn_kn.php');
+$LogoInterno = LogoInterno;
+require_once('../../Connections/config2.php'); 
+/*
 require_once('../../Connections/cnn_kn.php'); 
 require_once('../../Connections/config2.php');
 if(!isset($_SESSION)) 
 { 
     session_start(); 
 } 
-
+*/
 ?>
 <?php
 if (!function_exists("GetSQLValueString")) {
@@ -44,7 +49,7 @@ if( isset($_GET['f'])  && !empty($_GET['f']) )
     $idTabla = trim($_GET['f']);
 }
 
-$Tabla ="CORPORACION";
+$Tabla ="tipojuzgado";
 $idtabla = 0;
 
 require_once('../../apis/general/tipojuzgado.php');
@@ -100,7 +105,7 @@ $idtabla = $mtipojuzgado['juz_tipojuzgado']['TJU_IdTipoJuzgado'];
         <div class="container-fluid">
             <div class="block-header">
                 <h2>
-                    FORMULARIO: <?php echo $Tabla; ?>.
+                    FORMULARIO: <?php echo $Tabla. ' - CORPORACIÓN' ; ?>.
                     <!--<small>Editar.</small>-->
                 </h2>
             </div>

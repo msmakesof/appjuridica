@@ -1,5 +1,10 @@
 <?php
 ob_start();
+include_once("./header.inc.php");
+require_once ('../../Connections/DataConex.php'); //('../../Connections/cnn_kn.php');
+$LogoInterno = LogoInterno;
+require_once('../../Connections/config2.php');
+/*
 session_start();
 require_once('../../Connections/cnn_kn.php'); 
 require_once('../../Connections/config2.php');
@@ -10,8 +15,11 @@ if( !isset($_SESSION['IdUsuario']) && !isset($_SESSION['NombreUsuario']) )
 	header("Location: ../../index.php");
     exit;
 } 
+
 //ob_start();
 include('../../Connections/DataConex.php');
+$LogoInterno = LogoInterno;
+*/
 ?>
 <?php
 if (!function_exists("GetSQLValueString")) {
@@ -45,6 +53,7 @@ function GetSQLValueString($theValue, $theType, $theDefinedValue = "", $theNotDe
 }
 }
 $empresa = "AppJuridica";
+
 if( isset($_POST['ƒ¤']) && !empty($_POST['ƒ¤']) )
 {    
     $clave = trim($_POST['ƒ¤']);
@@ -143,8 +152,8 @@ if( isset($_POST['ƒ×'])  && !empty($_POST['ƒ×']) )
             <div class="navbar-header">
                 <a href="javascript:void(0);" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse" aria-expanded="false"></a>
                 <a href="javascript:void(0);" class="bars"></a>
-                <a class="navbar-brand" href="../">
-                    <img src="../../images/logoaj.png" style="margin-top: -10px;">
+                <a class="navbar-brand">
+                    <img src="<?php echo $LogoInterno; ?>" style="margin-top: -6px;">					
                 </a>
             </div>
             <!--  Notificaciones  -->
@@ -377,7 +386,7 @@ if( isset($_POST['ƒ×'])  && !empty($_POST['ƒ×']) )
                         <i class="material-icons" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">keyboard_arrow_down</i>
                         <ul class="dropdown-menu pull-right">
                             <li><a href="javascript:void(0);"><i class="material-icons">person</i>Perfil</a></li>
-                            <li><a href="../../"><i class="material-icons">input</i>Salir</a></li>
+                            <li><a href="./close.php"><i class="material-icons">input</i>Salir</a></li>
                         </ul>
                     </div>
                 </div>

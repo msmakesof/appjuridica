@@ -1,16 +1,7 @@
 <?php
-ob_start();
-session_start();
-require_once('../../Connections/cnn_kn.php'); 
-require_once('../../Connections/config2.php');
-//if(!isset($_SESSION)) {}
-
-if( !isset($_SESSION['IdUsuario']) && !isset($_SESSION['NombreUsuario']) )
-{
-	header("Location: ../../index.html");
-    exit;
-} 
-//ob_start(); 
+include_once("header.inc.php");
+require_once ('../../Connections/DataConex.php'); 
+$LogoInterno = LogoInterno; 
 ?>
 <?php
 if (!function_exists("GetSQLValueString")) {
@@ -43,7 +34,7 @@ function GetSQLValueString($theValue, $theType, $theDefinedValue = "", $theNotDe
   return $theValue;
 }
 }
-$empresa = "AppJuridica";
+$empresa = Company;
 if( isset($_POST['ƒ¤']) && !empty($_POST['ƒ¤']) )
 {    
     $clave = trim($_POST['ƒ¤']);
@@ -144,8 +135,8 @@ if( isset($_POST['ƒ×'])  && !empty($_POST['ƒ×']) )
             <div class="navbar-header">
                 <a href="javascript:void(0);" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse" aria-expanded="false"></a>
                 <a href="javascript:void(0);" class="bars"></a>
-                <a class="navbar-brand" href="../../index.html">
-                <img src="../../images/logomw.fw.png" style="margin-top: -10px;">
+                <a class="navbar-brand">
+                <img src="<?php echo $LogoInterno; ?>" style="margin-top: -6px;">
                 </a>
             </div>
         </div>
@@ -175,7 +166,7 @@ if( isset($_POST['ƒ×'])  && !empty($_POST['ƒ×']) )
                         <i class="material-icons" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">keyboard_arrow_down</i>
                         <ul class="dropdown-menu pull-right">
                             <li><a href="javascript:void(0);"><i class="material-icons">person</i>Perfil</a></li>
-                            <li><a href="../../"><i class="material-icons">input</i>Salir</a></li>
+                            <li><a href="./close.php"><i class="material-icons">input</i>Salir</a></li>
                         </ul>
                     </div>
                 </div>
@@ -278,7 +269,7 @@ if( isset($_POST['ƒ×'])  && !empty($_POST['ƒ×']) )
                                 </tfoot>
                                 <tbody>
 <?php
-require_once('../../Connections/DataConex.php');
+//require_once('../../Connections/DataConex.php');
 $soportecURL = "S";
 $url         = urlServicios."consultadetalle/consultadetalle_Empresa.php?IdMostrar=0";
 $existe      = "";
@@ -341,11 +332,11 @@ if( $mempresa['estado'] < 2)
 		if( is_null($TotalContactos) )
 		{
 			$TotalContactos = 0;
-			$badge = "badge badge-warning";
+			$badge = "badge badge-pill badge-secondary";
 		}
 		else 
 		{
-			$badge = "badge badge-info";
+			$badge = "badge badge-pill badge-success";
 		}
     ?>
         <tr>
@@ -356,7 +347,7 @@ if( $mempresa['estado'] < 2)
 			<td>
 				<a href="javascript:void(0);" onclick="verContacto(<?php echo $idTabla; ?>, '<?php echo trim($NombreUsuario); ?>', <?php echo $idTabla; ?>)">					
 				</a>
-				<span class="badge badge-pill badge-info"><?php echo $TotalContactos; ?></span>
+				<span class="<?php echo $badge; ?>"><?php echo $TotalContactos; ?></span>				
 				<span style="margin-right:20px;"></span>
 				<a href="javascript:void(0);" onclick="verContacto(<?php echo $idTabla; ?>, '<?php echo trim($NombreUsuario); ?>', <?php echo $idTabla; ?>)">
 					<img src="../../images/agregar-usuario.png" width="25" height="25" style="margin-right;7px">
@@ -398,7 +389,7 @@ if( $mempresa['estado'] < 2)
 				
 				<div class="modal-body">
 					<object class="xmodal-content" type="text/html" 
-					style="padding :0px; position: relative; height: 77vh; max-height:77vh; bottom:0; overflow: hidden; margin: 0;" 
+					style="padding:0px; position: relative; height: 77vh; max-height:77vh; bottom:0; overflow: hidden; margin: 0;" 
 					data="../forms/editar<?php echo $nombre_lnk ;?>.php" id="carga" ></object>
 				</div>
 
@@ -484,7 +475,7 @@ if( $mempresa['estado'] < 2)
 	
 	function verContacto(id, ne, ie) 
 	{   		
-		$.post('../tables/emp_contactoempresa.php', { 'id': id ,'ne': ne, 'ie': ie}, function (result) {
+		$.post('emp_contactoempresa.php', { 'id': id ,'ne': ne, 'ie': ie}, function (result) {		
 			WinId = window.open('','_self');
 			WinId.document.open();
 			WinId.document.write(result);
@@ -572,4 +563,3 @@ if( $mempresa['estado'] < 2)
     </script>	
 </body>
 </html>
-<?php ob_end_flush(); ?>

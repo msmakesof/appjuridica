@@ -3544,6 +3544,9 @@ tbody.collapse.in {
   border-radius: 4px;
   -webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, .175);
           box-shadow: 0 6px 12px rgba(0, 0, 0, .175);
+		  
+	/* -webkit-padding-left: 20px !important;  mks77 */
+	-webkit-padding-start: 20px !important; /* mks77 */
 }
 .dropdown-menu.pull-right {
   right: 0;
@@ -3593,6 +3596,7 @@ tbody.collapse.in {
 }
 .open > .dropdown-menu {
   display: block;
+  
 }
 .open > a {
   outline: 0;

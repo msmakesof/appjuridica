@@ -85,9 +85,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 
     elseif (isset($_GET['ExisteTabla']) )
     {
-        $par1 = $_GET['Nombre'];        
+        $par1 = $_GET['Nombre'];
+		$par2 = $_GET['idtabla'];
 
-        $retorno = GEN_FESTIVO::existetabla($par1);
+        $retorno = GEN_FESTIVO::existetabla($par1,$par2);
         if ($retorno) 
         {
             $gen_festivo["estado"] = "1";

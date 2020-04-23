@@ -6,7 +6,7 @@ if(!isset($_SESSION))
 }
 if( !isset($_SESSION['IdUsuario']) && !isset($_SESSION['NombreUsuario']) )
 {
-	header("Location: ../index.html");
+	header("Location: ../index.php");
     exit;
 }
 date_default_timezone_set('America/Bogota');

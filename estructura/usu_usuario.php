@@ -42,6 +42,7 @@ class USU_USUARIO
         USU_IdInterno,
         USU_Local ,
 		USU_EsAbogado ,
+		USU_Desarrollador,
         CASE USU_Estado WHEN 1 THEN 'Activo' ELSE 'Inactivo' END EstadoUsuario,
         concat_WS(' ',USU_Nombre, USU_PrimerApellido, USU_SegundoApellido) AS NombreUsuario ,
 		CASE USU_TipoUsuario WHEN 1 THEN CONCAT(TUS_Nombre,'- ABOGADO') ELSE TUS_Nombre END TUS_Nombre, 
@@ -94,6 +95,7 @@ class USU_USUARIO
         USU_IdInterno,
         USU_Local ,
 		USU_EsAbogado ,
+		USU_Desarrollador,
         CASE USU_Estado WHEN 1 THEN 'Activo' ELSE 'Inactivo' END EstadoUsuario,
         concat_WS(' ',USU_Nombre, USU_PrimerApellido, USU_SegundoApellido) AS NombreUsuario ,
 		CASE USU_EsAbogado WHEN 1 THEN CONCAT(TUS_Nombre,'- ABOGADO') ELSE TUS_Nombre END TUS_Nombre
@@ -142,7 +144,8 @@ class USU_USUARIO
         USU_UsuarioEstado,
         USU_IdInterno,
         USU_Local ,
-        CASE USU_Estado WHEN 1 THEN 'Activo' ELSE 'Inactivo' END EstadoUsuario,
+		USU_Desarrollador,
+        CASE USU_Estado WHEN 1 THEN 'Activo' ELSE 'Inactivo' END EstadoUsuario, 
         concat_WS(' ',USU_Nombre, USU_PrimerApellido, USU_SegundoApellido) AS NombreUsuario
         FROM ".$GLOBALS['TABLA'].		
 		" WHERE USU_EsAbogado = 1 AND  USU_Estado = 1 ".
@@ -193,6 +196,7 @@ class USU_USUARIO
                         USU_IdInterno,
                         USU_Local,
 						USU_EsAbogado ,
+						USU_Desarrollador,
 						concat_WS(' ',emp_empresa.EMP_Nombre, emp_empresa.EMP_Nombre2, emp_empresa.EMP_Apellido, emp_empresa.EMP_Apellido2) AS NombreEmpresa ".
                         " FROM ".$GLOBALS['TABLA'].
 						" LEFT JOIN emp_empresa ON emp_empresa.EMP_IdEmpresa = USU_IdEmpresa ".

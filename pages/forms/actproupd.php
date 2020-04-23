@@ -1,17 +1,21 @@
-﻿<?php
-ob_start();
-require_once('../../Connections/cnn_kn.php'); 
+<?php
+//ob_start();
+include_once("../tables/header.inc.php");
+require_once ('../../Connections/DataConex.php'); //require_once('../../Connections/cnn_kn.php');
+$LogoInterno = LogoInterno;
+$empresa = Company ;
 require_once('../../Connections/config2.php');
+/*
 if(!isset($_SESSION)) 
 { 
     session_start(); 
 }
 if( !isset($_SESSION['IdUsuario']) && !isset($_SESSION['NombreUsuario']) )
 {
-	header("Location: ../../index.html");
+	header("Location: ../../index.php");
     exit;
 } 
-
+*/
 ?>
 <?php
 if (!function_exists("GetSQLValueString")) 
@@ -78,6 +82,7 @@ $Observaciones = $mactuacionprocesal['pro_actuacionprocesal']['APR_Observaciones
 $IdUsuario = $mactuacionprocesal['pro_actuacionprocesal']['APR_IdUsuario'];
 $FechaHabil = $mactuacionprocesal['pro_actuacionprocesal']['APR_FechaHabil'];
 $EstadoActProcesal = $mactuacionprocesal['pro_actuacionprocesal']['APR_EstadoActProcesal'];
+$Gasto = $mactuacionprocesal['pro_actuacionprocesal']['APR_Gasto'];
 ?>
 <!DOCTYPE html>
 <html>
@@ -166,8 +171,8 @@ $EstadoActProcesal = $mactuacionprocesal['pro_actuacionprocesal']['APR_EstadoAct
             <div class="navbar-header">
                 <a href="javascript:void(0);" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse" aria-expanded="false"></a>
                 <a href="javascript:void(0);" class="bars"></a>
-                <a class="navbar-brand" href="../../index.html">
-                <img src="../../images/logomw.fw.png" style="margin-top: -10px;">
+                <a class="navbar-brand">
+                <img src="<?php echo $LogoInterno; ?>" style="margin-top: -6px;">
                 </a>
 
             </div>
@@ -663,7 +668,21 @@ $EstadoActProcesal = $mactuacionprocesal['pro_actuacionprocesal']['APR_EstadoAct
 												</div>
 											</div>	
 										</div>
-									</div>                                
+									</div>
+
+									<div class="form-group">
+										<div class="col-lg-12 col-md-12 col-sm-12">									
+											<div class="col-lg-3 col-md-3 col-sm-3">
+												<div class="row">
+													<label class="form-label">Gasto:</label>
+													<div class="form-line">
+														<input type="input" class="form-control" name="gasto" id="gasto" value="<?php echo $Gasto; ?>" maxlength="14" required>
+													</div>
+												</div>											
+											</div>
+										</div>
+									</div>
+									
                                 <!-- </div> -->
                                <div class="form-group" style="clear: both; margin-top:-10px !important">
                                     <div class="col-lg-12 col-md-12 col-sm-12">                                
@@ -760,6 +779,7 @@ $EstadoActProcesal = $mactuacionprocesal['pro_actuacionprocesal']['APR_EstadoAct
 	function salir(idproceso, nroproceso) 
 	{    
 		//alert(idproceso + ' - ' + nroproceso);
+		event.preventDefault();
 		$.post('editaractprocesal.php', { 'id': idproceso, 'proceso': nroproceso }, function (result) {
 			WinId = window.open('','_self');
 			WinId.document.open();
@@ -771,7 +791,8 @@ $EstadoActProcesal = $mactuacionprocesal['pro_actuacionprocesal']['APR_EstadoAct
 	$(document).ready(function(){			
         $("#mensaje").hide();
         $("#form_validation").show();
-        $('#proceso').numeric();       
+        $('#proceso').numeric();
+		$('#gasto').numeric();
         $('.selectpicker').selectpicker();
 		var exclude_dates = ['2019-04-18', '2019-04-19'];
 		var disabledWeekDays = [0,6];
@@ -813,11 +834,12 @@ $EstadoActProcesal = $mactuacionprocesal['pro_actuacionprocesal']['APR_EstadoAct
             var actpro = $("#actpro").val();			
 			var fechaestado = $("#txtFechaEstado").val();            
             var observacion = $("#observacion").val();
+			var gasto = $('#gasto').val();
 			var idproceso = "<?php echo $idtabla; ?>";			
             if( fechainicio == "" || actpro == "" || fechaestado == "" ||  observacion == "" )
             {               
                 swal({
-                  title: "Error:  Ingrese información en todos los campos...",
+                  title: "Atención:  Ingrese información en todos los campos...",
                   text: "un momento por favor.",
                   imageUrl: "../../js/sweet/2.gif",
                   timer: 1500,
@@ -828,7 +850,7 @@ $EstadoActProcesal = $mactuacionprocesal['pro_actuacionprocesal']['APR_EstadoAct
             else
             {
     			$.ajax({
-    				data : {"idproceso": idproceso, "fechainicio": fechainicio, "actpro": actpro, "fechaestado": fechaestado, "observacion": observacion},
+    				data : {"idproceso": idproceso, "fechainicio": fechainicio, "actpro": actpro, "fechaestado": fechaestado, "observacion": observacion, "gasto": gasto},
     				type: "POST",				
     				url : "../forms/editar_<?php echo strtolower($Tabla); ?>.php",
                 })  
@@ -907,4 +929,4 @@ $EstadoActProcesal = $mactuacionprocesal['pro_actuacionprocesal']['APR_EstadoAct
     </script>    
 </body>
 </html>
-<?php ob_end_flush(); ?>
+<?php //ob_end_flush(); ?>

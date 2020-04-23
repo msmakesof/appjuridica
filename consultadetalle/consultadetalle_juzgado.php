@@ -92,12 +92,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     {
         $par2  = $_GET['Ubicacion'];        
         $par3  = $_GET['Ciudad'];
-        $par4  = $_GET['Direccion'];
-        $par5  = $_GET['Piso'];
+        //$par4  = $_GET['Direccion'];
+        //$par5  = $_GET['Piso'];
         $par6  = $_GET['TipoJuzgado'];
         $par7  = $_GET['Area'];
+		$par8  = $_GET['idtabla'];
 
-        $retorno = JUZ_JUZGADO::existejuzgado($par2,$par3,$par4,$par5,$par6,$par7);
+        //$retorno = JUZ_JUZGADO::existejuzgado($par2,$par3,$par4,$par5,$par6,$par7);
+		$retorno = JUZ_JUZGADO::existejuzgado($par2,$par3,$par6,$par7,$par8);
         if ($retorno) 
         {
             $juz_juzgado["estado"] = "1";
@@ -124,14 +126,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         $par1 = $_GET['Ubicacion'];
         $par2 = $_GET['Ciudad'];        
         $par3 = $_GET['Direccion'];
-        $par4 = $_GET['Piso'];
-        $par5 = $_GET['TipoJuzgado'];
-        $par6 = $_GET['Area'];
-        $par7 = $_GET['Estado'];
-		$par8 = $_GET['Email'];
-		$par9 = $_GET['Edificio'];
+        $par4 = $_GET['Telefono'];
+        $par5 = $_GET['Piso'];
+        $par6 = $_GET['TipoJuzgado'];
+        $par7 = $_GET['Area'];
+        $par8 = $_GET['Estado'];
+		$par9 = $_GET['Email'];
+		$par10 = $_GET['Edificio'];
         
-        $retorno = JUZ_JUZGADO::insert($par1,$par2,$par3,$par4,$par5,$par6,$par7,$par8,$par9);        
+        $retorno = JUZ_JUZGADO::insert($par1,$par2,$par3,$par4,$par5,$par6,$par7,$par8,$par9,$par10);
         $msj =$retorno;
         if ($retorno) 
         {
@@ -159,15 +162,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         $par1 = $_GET['Ubicacion'];
         $par2 = $_GET['Ciudad'];        
         $par3 = $_GET['Direccion'];
-        $par4 = $_GET['Piso'];
-        $par5 = $_GET['TipoJuzgado'];
-        $par6 = $_GET['Area'];
-        $par7 = $_GET['Estado'];
-		$par8 = $_GET['Email'];
-		$par9 = $_GET['Edificio'];
+        $par4 = $_GET['Telefono'];
+        $par5 = $_GET['Piso'];
+        $par6 = $_GET['TipoJuzgado'];
+        $par7 = $_GET['Area'];
+        $par8 = $_GET['Estado'];
+		$par9 = $_GET['Email'];
+		$par10 = $_GET['Edificio'];
         $par0 = $_GET['idtabla'];    
 
-        $retorno = JUZ_JUZGADO::update($par1,$par2,$par3,$par4,$par5,$par6,$par7,$par8,$par9,$par0);
+        $retorno = JUZ_JUZGADO::update($par1,$par2,$par3,$par4,$par5,$par6,$par7,$par8,$par9,$par10,$par0);
         $msj =$retorno;
         if ($retorno) 
         {

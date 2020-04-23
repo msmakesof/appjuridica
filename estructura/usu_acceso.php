@@ -52,8 +52,7 @@ class USU_ACCESO
             $sentencia = Database::getInstance()->getDb()->prepare($comando);
             return $sentencia->execute(
                 array($IdUsuario, $IpInterna, $FechaAcceso, $NombreHost, $Puerto, $Servidor, $Agente, $IpExterna, $hostname, $region, $pais, $latitud, $longitud, $organizacion, $codigopostal)
-            );
-            // 
+            );			
            
         } catch (PDOException $e) {
             // Aquí puedes clasificar el error dependiendo de la excepción

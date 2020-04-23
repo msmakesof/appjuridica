@@ -12,6 +12,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 
         // Obtener parámetro IdUsuario
         $parametro = $_GET['IdUsuario'];
+		//$p2 = $_GET['p2'];
+		//$p3 = $_GET['p3'];
 
         // Tratar retorno
         $retorno = CLI_CLIENTE::getById($parametro);
@@ -63,12 +65,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         {
             $parametro == "";
         }
-		$parametro2 = "";
-		if(isset($_GET['iu'])) {
-			$parametro2 = $_GET['iu'];
-		}	
+		$p2 = $_GET['p2'];  // Tipo Uusario 2. Abogado, 1. Admin
+		
+		$p3 = $_GET['p3'];  // $_SESSION['TipoUsuario'] == 2 --> IdUsuario, / $_SESSION['TipoUsuario'] == 1  (Admin)--> IdEmpresa
+		
+		$p4 = $_GET['p4'];  // Tipo Cliente  ==> 1.Demandante    2.Demandado
+		
         // Tratar retorno
-        $retorno = CLI_CLIENTE::getAll($parametro, $parametro2);
+        $retorno = CLI_CLIENTE::getAll($parametro, $p2, $p3, $p4);
 
         if ($retorno) 
         {
@@ -76,7 +80,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             $cli_cliente["cli_cliente"] = $retorno;
             // Enviar objeto json de la usu_usuario
             header('Content-Type: application/json');
-            echo json_encode($cli_cliente);
+            echo json_encode($cli_cliente);			
         } 
         else 
         {
@@ -126,9 +130,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         $par3  = $_GET['PrimerApellido'];
         $par4  = $_GET['SegundoApellido'];
         $par5  = $_GET['Nombre'];
-        $par6  = $_GET['Email']; 
+        //$par6  = $_GET['Email']; ,$par6
+		$par7  = $_GET['TipoCliente'];
+		$par8  = $_GET['IdCliente'];
+		
 
-        $retorno = CLI_CLIENTE::existeusuario($par2,$par3,$par4,$par5,$par6);
+        $retorno = CLI_CLIENTE::existeusuario($par2,$par7,$par3,$par4,$par5,$par8);
+		$msj =$retorno;
         if ($retorno) 
         {
             $cli_cliente["estado"] = "1";
@@ -143,7 +151,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             print json_encode(
                 array(
                     'estado' => '2',
-                    'mensaje' => 'No se obtuvo el registro'
+                    'mensaje' => 'No se obtuvo el registro',
+					'msj' => print_r($msj),
+					'msj2' => var_dump ($msj)
                 )
             );
         }
@@ -169,8 +179,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 		$par15 = $_GET['Verseguimiento'];
 		$par16 = $_GET['Empresa'];
 		$par17 = $_GET['UsuarioCrea'];
+		
+		$par18 = $_GET['TipoDocumentorl'];
+		$par19 = $_GET['Identificacionrl'];
+		$par20 = $_GET['Nombrerl'];
+		$par21 = $_GET['Apellido1rl'];
+		$par22 = $_GET['Emailrl'];
+		$par23 = $_GET['Celularrl'];
+		$par24 = $_GET['TipoDocumentorl2'];
+		$par25 = $_GET['Identificacionrl2'];
+		$par26 = $_GET['Nombrerl2'];
+		$par27 = $_GET['Apellidosrl2'];
+		$par28 = $_GET['Emailrl2'];
+		$par29 = $_GET['Celularrl2'];		
         
-        $retorno = CLI_CLIENTE::insert($par1,$par2,$par3,$par4,$par5,$par6,$par7,$par8,$par9,$par10,$par11,$par12,$par13,$par14,$par15,$par16,$par17);        
+        $retorno = CLI_CLIENTE::insert($par1,$par2,$par3,$par4,$par5,$par6,$par7,$par8,$par9,$par10,$par11,$par12,$par13,$par14,$par15,$par16,$par17,$par18,$par19,$par20,$par21,$par22,$par23,$par24,$par25,$par26,$par27,$par28,$par29);        
         $msj =$retorno;
         if ($retorno) 
         {
@@ -186,7 +209,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             print json_encode(
                 array(
                     'estado' => '2',
-                    'mensaje' => 'No se obtuvo el registro'
+                    'mensaje' => 'No se obtuvo el registro',
+					'msj' => print_r($msj),
+					'msj2' => var_dump ($msj)
                 )
             );
         }
@@ -210,9 +235,23 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 		$par13 = $_GET['verseguimiento'];
 		$par14 = $_GET['empresa'];
 		$par15 = $_GET['usuariomodifica'];
+		
+		$par18 = $_GET['tipodocumentorl'];
+		$par19 = $_GET['identificacionrl'];
+		$par20 = $_GET['nombrerl'];
+		$par21 = $_GET['apellido1rl'];
+		$par22 = $_GET['emailrl'];
+		$par23 = $_GET['celularrl'];
+		$par24 = $_GET['tipodocumentorl2'];
+		$par25 = $_GET['identificacionrl2'];
+		$par26 = $_GET['nombrerl2'];
+		$par27 = $_GET['apellidosrl2'];
+		$par28 = $_GET['emailrl2'];
+		$par29 = $_GET['celularrl2'];
+		
         $par0  = $_GET['idtabla'];    
 
-        $retorno = CLI_CLIENTE::update($par1,$par2,$par3,$par4,$par5,$par6,$par7,$par8,$par9,$par10,$par11,$par12,$par13,$par14,$par15,$par0);
+        $retorno = CLI_CLIENTE::update($par1,$par2,$par3,$par4,$par5,$par6,$par7,$par8,$par9,$par10,$par11,$par12,$par13,$par14,$par15,$par18,$par19,$par20,$par21,$par22,$par23,$par24,$par25,$par26,$par27,$par28,$par29,$par0);
         $msj =$retorno;
         if ($retorno) 
         {
@@ -220,7 +259,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             $cli_cliente["cli_cliente"] = $retorno;
             // Enviar objeto json de la usu_usuario
             header('Content-Type: application/json');
-            echo json_encode($cli_cliente);
+            echo json_encode($cli_cliente);			
         } 
         else 
         {
@@ -228,7 +267,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             print json_encode(
                 array(
                     'estado' => '2',
-                    'mensaje' => 'No se obtuvo el registro'
+                    'mensaje' => 'No se obtuvo el registro',
+					'msj' => print_r($msj),
+					'msj2' => var_dump ($msj)
                 )
             );
         }

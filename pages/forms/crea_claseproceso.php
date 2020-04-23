@@ -1,4 +1,8 @@
 <?php 
+include_once("../tables/header.inc.php");
+require_once ('../../Connections/DataConex.php'); //('../../Connections/cnn_kn.php');
+require_once('../../Connections/config2.php');
+/* 
 require_once('../../Connections/cnn_kn.php'); 
 require_once('../../Connections/config2.php');
 if(!isset($_SESSION)) 
@@ -9,6 +13,7 @@ else
 {
     header('Location: ../../index.html');
 }
+*/
 ?>
 <?php
   if (!function_exists("GetSQLValueString")) {
@@ -66,7 +71,7 @@ require_once('../../Connections/DataConex.php');
 // Nombres iguales 
 if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
 {
-  $parameters = "ExisteTabla=1&Nombre=$pnombre";
+  $parameters = "ExisteTabla=1&Nombre=$pnombre&idtabla=0";
   $url = urlServicios."consultadetalle/consultadetalle_pro_claseproceso.php?".$parameters;
   //echo("<script>console.log('PHP existe: ".$url."');</script>");
   $ch = curl_init();

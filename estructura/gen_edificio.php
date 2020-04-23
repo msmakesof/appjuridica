@@ -218,16 +218,16 @@ class GEN_EDIFICIO
      * @param $IdEdificio identificador de la gen_Edificio
      * @return bool Respuesta de la consulta
      */
-    public static function existetabla($Nombre)
+    public static function existetabla($Nombre, $par2)
     {
-        $consulta = "SELECT count(". $GLOBALS['Llave']. ") existe, EDI_Nombre FROM ".$GLOBALS['TABLA'].
-        " WHERE EDI_Nombre = ? ; ";
+        $consulta = "SELECT count(". $GLOBALS['Llave']. ") existe FROM ".$GLOBALS['TABLA'].
+        " WHERE EDI_Nombre = ? AND ". $GLOBALS['Llave']. " <> ? ; ";
 
         try {
             // Preparar sentencia
             $comando = Database::getInstance()->getDb()->prepare($consulta);
             // Ejecutar sentencia preparada
-            $comando->execute(array($Nombre));
+            $comando->execute(array($Nombre, $par2));
             // Capturar primera fila del resultado
             $row = $comando->fetch(PDO::FETCH_ASSOC);
             return $row;

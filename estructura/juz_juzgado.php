@@ -24,6 +24,7 @@ class JUZ_JUZGADO
         JUZ_Ubicacion,
         JUZ_IdCiudad,
         JUZ_Direccion,
+        JUZ_Telefono,
         JUZ_Piso,
         JUZ_IdTipoJuzgado,
         JUZ_IdArea,
@@ -65,6 +66,7 @@ class JUZ_JUZGADO
                     JUZ_Ubicacion,
                     JUZ_IdCiudad,
                     JUZ_Direccion,
+                    JUZ_Telefono,
                     JUZ_Piso,
                     JUZ_IdTipoJuzgado,
                     JUZ_IdArea,
@@ -167,7 +169,8 @@ class JUZ_JUZGADO
      * @param $IdJuzgado           identificador
      * @param $Ubicacion           nuevo titulo
      * @param $Ciudad              nueva descripcion
-     * @param $Direccion           nueva fecha limite de cumplimiento
+     * @param $Direccion           nueva Direccion
+     * @param $Telefono            nueva Telefono
      * @param $Piso                nueva categoria
      * @param $TipoJuzgado         nueva Nombre
      * @param $Area                nueva Email
@@ -179,6 +182,7 @@ class JUZ_JUZGADO
         $Ubicacion,
         $Ciudad,
         $Direccion,
+        $Telefono,
         $Piso,
         $TipoJuzgado,        
         $Area,
@@ -190,15 +194,16 @@ class JUZ_JUZGADO
     {
         // Creando consulta UPDATE
         $consulta = "UPDATE ". $GLOBALS['TABLA'].
-            " SET JUZ_Ubicacion=?, JUZ_IdCiudad=?, JUZ_Direccion=?, JUZ_Piso=?, JUZ_IdTipoJuzgado=?, JUZ_IdArea=?, ".
+            " SET JUZ_Ubicacion=?, JUZ_IdCiudad=?, JUZ_Direccion=?, JUZ_Telefono=?, JUZ_Piso=?, JUZ_IdTipoJuzgado=?, JUZ_IdArea=?, ".
             " JUZ_Estado=?, JUZ_Email=?, JUZ_Edificio=? " .
             " WHERE ". $GLOBALS['Llave'] ." =? ;";
-
+            ////echo $consulta;
+            ////echo "<br>".$Ubicacion.' / '. $Ciudad.' / '.  $Direccion.' / '.  $Telefono.' / '.  $Piso.' / '.  $TipoJuzgado.' / '.  $Area.' / '.  $Estado.' / '.  $Email.' / '.  $Edificio.' / '.  $IdUsuario;
         // Preparar la sentencia
         $cmd = Database::getInstance()->getDb()->prepare($consulta);
 
         // Relacionar y ejecutar la sentencia
-        $cmd->execute(array($Ubicacion, $Ciudad, $Direccion, $Piso, $TipoJuzgado, $Area, $Estado, $Email, $Edificio, $IdUsuario ));
+        $cmd->execute(array($Ubicacion, $Ciudad, $Direccion, $Telefono, $Piso, $TipoJuzgado, $Area, $Estado, $Email, $Edificio, $IdUsuario ));
 
         return $cmd;
     }
@@ -209,7 +214,8 @@ class JUZ_JUZGADO
      * @param $IdJuzgado           identificador
      * @param $Ubicacion           nuevo titulo
      * @param $Ciudad              nueva descripcion
-     * @param $Direccion           nueva fecha limite de cumplimiento
+     * @param $Direccion           nueva direccion
+     * @param $Telefono            nueva telefono
      * @param $Piso                nueva categoria
      * @param $TipoJuzgado         nueva Nombre
      * @param $Area                nueva Email
@@ -217,25 +223,26 @@ class JUZ_JUZGADO
      * @return PDOStatement
      */
 
-    public static function insert( $Ubicacion, $Ciudad, $Direccion, $Piso, $TipoJuzgado, $Area, $Estado, $Email, $Edificio)
+    public static function insert( $Ubicacion, $Ciudad, $Direccion, $Telefono, $Piso, $TipoJuzgado, $Area, $Estado, $Email, $Edificio)
     {
         // Sentencia INSERT
         $comando = "INSERT INTO ". $GLOBALS['TABLA'] ."( " .            
             " JUZ_Ubicacion," .
             " JUZ_IdCiudad," .
-            " JUZ_Direccion," . 
+            " JUZ_Direccion," .
+            " JUZ_Telefono," . 
             " JUZ_Piso," .
             " JUZ_IdTipoJuzgado," .
             " JUZ_IdArea," .
             " JUZ_Estado, " .
 			" JUZ_Email, " .
 			" JUZ_Edificio " .
-            " ) VALUES(?,?,?,?,?,?,?,?,?);";
+            " ) VALUES(?,?,?,?,?,?,?,?,?,?);";
         try {
             // Preparar la sentencia
             $sentencia = Database::getInstance()->getDb()->prepare($comando);
             return $sentencia->execute(
-                array( $Ubicacion, $Ciudad, $Direccion, $Piso, $TipoJuzgado, $Area, $Estado, $Email, $Edificio )    
+                array( $Ubicacion, $Ciudad, $Direccion, $Telefono, $Piso, $TipoJuzgado, $Area, $Estado, $Email, $Edificio )    
             );
            
         } catch (PDOException $e) {
@@ -268,17 +275,23 @@ class JUZ_JUZGADO
      * @param $IdJuzgado identificador de la usu_usuario
      * @return bool Respuesta de la consulta
      */
-    public static function existejuzgado($Ubicacion, $Ciudad, $Direccion, $Piso, $TipoJuzgado, $Area)
+    public static function existejuzgado($Ubicacion, $Ciudad, $TipoJuzgado, $Area, $idtabla) //($Ubicacion, $Ciudad, $Direccion, $Piso, $TipoJuzgado, $Area)
     {
-        $consulta = "SELECT count(". $GLOBALS['Llave']. ") existe, JUZ_Ubicacion, JUZ_IdCiudad, JUZ_Direccion, JUZ_Piso, JUZ_IdTipoJuzgado, JUZ_IdArea
+        $consulta = "SELECT count(". $GLOBALS['Llave']. ") existe
         FROM " .$GLOBALS['TABLA'].
-        " WHERE JUZ_Ubicacion = ? AND JUZ_IdCiudad = ? AND JUZ_Direccion = ? AND JUZ_Piso = ? AND JUZ_IdTipoJuzgado =? AND JUZ_IdArea =? ;";
+		" WHERE JUZ_Ubicacion = ? AND JUZ_IdCiudad = ? AND JUZ_IdTipoJuzgado = ? AND JUZ_IdArea = ? AND ". $GLOBALS['Llave'] ." <> ? ;";
+		
+		//echo "queyr....$consulta".$Ubicacion.' - '.$Ciudad.' - '.$TipoJuzgado.' - '.$Area.' - '.$idtabla;
+		
+        ////" WHERE JUZ_Ubicacion = ? AND JUZ_IdCiudad = ? AND JUZ_Direccion = ? AND JUZ_Piso = ? AND JUZ_IdTipoJuzgado =? AND JUZ_IdArea =? ;";
+		////, JUZ_Ubicacion, JUZ_IdCiudad, JUZ_Direccion, JUZ_Piso, JUZ_IdTipoJuzgado, JUZ_IdArea
 
         try {
             // Preparar sentencia
             $comando = Database::getInstance()->getDb()->prepare($consulta);
             // Ejecutar sentencia preparada
-            $comando->execute(array($Ubicacion, $Ciudad, $Direccion, $Piso, $TipoJuzgado, $Area));
+                ////$comando->execute(array($Ubicacion, $Ciudad, $Direccion, $Piso, $TipoJuzgado, $Area));
+				$comando->execute(array($Ubicacion, $Ciudad, $TipoJuzgado, $Area, $idtabla));
             // Capturar primera fila del resultado
             $row = $comando->fetch(PDO::FETCH_ASSOC);
             return $row;
@@ -286,7 +299,7 @@ class JUZ_JUZGADO
         } catch (PDOException $e) {
             // Aquí puedes clasificar el error dependiendo de la excepción
             // para presentarlo en la respuesta Json
-            return -1;
+            return e;
         }
     }
 }

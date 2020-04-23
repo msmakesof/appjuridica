@@ -1,13 +1,6 @@
 <?php
-session_start();
-//ob_start();
-require_once('../../Connections/cnn_kn.php'); 
-require_once('../../Connections/config2.php');
-if( !isset($_SESSION['IdUsuario']) && !isset($_SESSION['NombreUsuario']) )
-{
-	header("Location: ../../index.html");
-    exit;
-}
+include_once("header.inc.php");
+require_once ('../../Connections/DataConex.php'); 
 ?>
 <?php
 if (!function_exists("GetSQLValueString")) 
@@ -134,6 +127,7 @@ require_once('../../apis/general/tipousuario.php');
     var nombre ="";
     $(document).ready(function()
     {       
+        $('#estado').prop("checked", true);
         $("#msj").hide();
         $("#numerodocumento").numeric();
         $("#celular").numeric();
@@ -150,7 +144,7 @@ require_once('../../apis/general/tipousuario.php');
             else 
             {                
                 swal({
-                  title: "Error:  La dirección de correo no es valida...",
+                  title: "Atención:  La dirección de correo no es valida...",
                   text: "un momento por favor.",
                   imageUrl: "../../js/sweet/3red.gif",
                   timer: 1500,
@@ -209,7 +203,7 @@ require_once('../../apis/general/tipousuario.php');
             if( empresa== "" || tipodocumento == "" || numerodocumento =="" || nombre == "" || apellido1 == "" ||  clave =="" || direccion == "" || email == "" || celular == "" || estado == undefined || tipousuario == "" || abogado == "" )
             {
                 swal({
-					title: "Error:  Ingrese información en todos los campos...",
+					title: "Atención:  Ingrese información en todos los campos...",
 					text: "un momento por favor.",
 					imageUrl: "../../js/sweet/2.gif",
 					timer: 1500,
@@ -269,7 +263,7 @@ require_once('../../apis/general/tipousuario.php');
 
 <body class="theme-indigo">
     <?php require_once('secciones.html'); ?>  
-    <section class="content" style="margin-top:45px;">
+    <section class="content" style="margin-top:80px;">
         <div class="container-fluid">
             <div class="block-header">
                 <h2>
@@ -297,7 +291,7 @@ require_once('../../apis/general/tipousuario.php');
 
                                 <div class="form-group">                                    
 									<div class="row">
-										<div class="col-md-8">
+										<div class="col-md-8"><span style="color:red;">*</span> 
 											<label class="form-label">
 												Empresa
 											</label>                                    
@@ -333,7 +327,7 @@ require_once('../../apis/general/tipousuario.php');
 								
 								<div class="form-group">                                    
 									<div class="row">
-										<div class="col-md-4">
+										<div class="col-md-4"><span style="color:red;">*</span> 
 											<label class="form-label">
 												Tipo Documento
 											</label>                                    
@@ -357,7 +351,7 @@ require_once('../../apis/general/tipousuario.php');
                                             </select>
                                         </div>
                                         
-										<div class="col-md-4">
+										<div class="col-md-4"><span style="color:red;">*</span> 
 											<label class="form-label">N&uacute;mero Documento</label>
 											<div class="form-line">
 											   <input type="text" class="form-control" name="numerodocumento" id="numerodocumento" value="" maxlength="13" required>
@@ -368,14 +362,14 @@ require_once('../../apis/general/tipousuario.php');
 
                                 <div class="form-group form-float">
 									<div class="row">
-										<div class="col-md-4">
-											<label class="form-label">Nombre Usuario</label>
+										<div class="col-md-4"><span style="color:red;">*</span> 
+											<label class="form-label">Nombre</label>
 											<div class="form-line">
 												<input type="text" class="form-control" name="nombre" id="nombre" value="" required>											   
 											</div>
 										</div>
 										
-										<div class="col-md-4">
+										<div class="col-md-4"><span style="color:red;">*</span> 
 											<label class="form-label">Primer Apellido</label>
 											<div class="form-line">
 												<input type="text" class="form-control" name="apellido1" id="apellido1" value="" required>                                       
@@ -393,13 +387,13 @@ require_once('../../apis/general/tipousuario.php');
 
                                 <div class="form-group form-float">
 									<div class="row">										
-										<div class="col-md-8">
+										<div class="col-md-8"><span style="color:red;">*</span> 
 											<label class="form-label">Direcci&oacute;n</label>
 											<div class="form-line">
 												<input type="text" class="form-control" name="direccion" id="direccion" value="" maxlength="50" required>										   
 											</div>
 										</div>
-										<div class="col-md-4">                               
+										<div class="col-md-4"><span style="color:red;">*</span>                                
 											<label class="form-label">Celular</label>
 											<div class="form-line">
 												<input type="text" class="form-control" name="celular" id="celular" value="" maxlength="13" required>                                       <!---->
@@ -410,7 +404,7 @@ require_once('../../apis/general/tipousuario.php');
 								
                                 <div class="form-group form-float">
 									<div class="row">
-										<div class="col-md-8">
+										<div class="col-md-8"><span style="color:red;">*</span> 
 											<label class="form-label">Email</label>
 											<div class="form-line">
 												<input type="text" class="form-control" name="email" id="email" value="" maxlength="60" required>                                       
@@ -427,7 +421,7 @@ require_once('../../apis/general/tipousuario.php');
 
                                 <div style="form-group form-float">
 									<div class="row">
-										<div class="col-md-7">
+										<div class="col-md-7"><span style="color:red;">*</span> 
 											<label class="form-label">
 												Tipo Usuario
 											</label>                                    
@@ -450,7 +444,7 @@ require_once('../../apis/general/tipousuario.php');
 												</select>
 											
 										</div>
-										<div class="col-md-5">
+										<div class="col-md-5"><span style="color:red;">*</span> 
 											<label class="form-label">Abogado</label>
 											<input type="radio" name="abogado" id="si" class="with-gap" value="1">
 											<label for="si">Si</label>
@@ -472,8 +466,8 @@ require_once('../../apis/general/tipousuario.php');
                                 
                                 <button class="btn btn-primary waves-effect" type="submit" id="grabar">GRABAR</button>
 								<button class="btn btn-danger waves-effect" type="submit" id="cerrar">SALIR</button>
-
-                                <!-- <div id="g" class='alert'>GRabado</div> -->
+                                <div><span style="color:red;">* Campos Obligatorios.</span></div>
+                                
                             </form>                        
                     	</div>
                 	</div>    

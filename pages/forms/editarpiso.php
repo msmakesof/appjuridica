@@ -1,10 +1,16 @@
-<?php 
+<?php
+include_once("../tables/header.inc.php");
+require_once ('../../Connections/DataConex.php'); //('../../Connections/cnn_kn.php');
+$LogoInterno = LogoInterno;
+require_once('../../Connections/config2.php'); 
+/*  
 require_once('../../Connections/cnn_kn.php'); 
 require_once('../../Connections/config2.php');
 if(!isset($_SESSION)) 
 { 
     session_start(); 
 }
+*/
 ?>
 <?php
 if (!function_exists("GetSQLValueString")) {
@@ -51,7 +57,6 @@ $Nombre = trim($mpiso['juz_piso']['PIS_Nombre']);
 $Numero = trim($mpiso['juz_piso']['PIS_Numero']);
 $estado = $mpiso['juz_piso']['PIS_Estado'];
 $idtabla = $mpiso['juz_piso']['PIS_IdPiso'];
-
 ?>
 <!DOCTYPE html>
 <html>

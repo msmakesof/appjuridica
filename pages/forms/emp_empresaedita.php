@@ -1,10 +1,8 @@
 <?php 
-require_once('../../Connections/cnn_kn.php'); 
+include_once("../tables/header.inc.php");
+require_once ('../../Connections/DataConex.php'); 
+$LogoInterno = LogoInterno; 
 require_once('../../Connections/config2.php');
-if(!isset($_SESSION)) 
-{ 
-    session_start(); 
-} 
 ?>
 <?php
 if (!function_exists("GetSQLValueString")) 
@@ -256,7 +254,7 @@ $apellido2 = $mempresa['emp_empresa']['EMP_Apellido2'];
             if( tipocliente == "" || tipodocumento == "" || numerodocumento =="" || direccion == "" || email == "" || fijo == "" || celular == "" || estado == undefined || tipocliente == undefined || sitioweb == "" || ciudad == "")
             {               
                 swal({
-                  title: "Error:  Ingrese información en todos los campos...",
+                  title: "Atención:  Ingrese información en todos los campos...",
                   text: "un momento por favor.",
                   imageUrl: "../../js/sweet/2.gif",
                   timer: 1500,
@@ -272,7 +270,7 @@ $apellido2 = $mempresa['emp_empresa']['EMP_Apellido2'];
 					{
 						graba = 0;
 						swal({
-							title: "Error:  Ingrese información en el campo Nombre.",
+							title: "Atención:  Ingrese información en el campo Nombre.",
 							text: "un momento por favor.",
 							imageUrl: "../../js/sweet/2.gif",
 							timer: 1500,
@@ -293,7 +291,7 @@ $apellido2 = $mempresa['emp_empresa']['EMP_Apellido2'];
 						
 						graba = 0;
 						swal({
-							title: "Error:  Ingrese información en los campos de Nombres y Apellidos",
+							title: "Atención:  Ingrese información en los campos de Nombres y Apellidos",
 							text: "un momento por favor.",
 							imageUrl: "../../js/sweet/2.gif",
 							timer: 1500,
@@ -370,11 +368,11 @@ $apellido2 = $mempresa['emp_empresa']['EMP_Apellido2'];
 
 <body class="theme-indigo">
     <?php require_once('../tables/secciones.html'); ?>
-     <section class="content" style="margin-top:45px;">
+     <section class="content" style="margin-top:85px;">
         <div class="container-fluid">
             <div class="block-header">
                 <h2>
-                    FORMULARIO: <?php echo $NombreTabla; ?>.
+                    FORMULARIO ...: <?php echo $NombreTabla; ?>.
                     <small>acción: Editar.</small>
                 </h2>
             </div>
@@ -401,7 +399,7 @@ $apellido2 = $mempresa['emp_empresa']['EMP_Apellido2'];
 									
 									<!-- <div style="float: left;">	-->									                                    
 									<div class="row">
-										<div class="col-md-4">										
+										<div class="col-md-4"><span style="color:red;">*</span> 										
 											<label class="form-label">
 												Tipo Persona
 											</label>
@@ -425,7 +423,7 @@ $apellido2 = $mempresa['emp_empresa']['EMP_Apellido2'];
 											</select>
 										</div>
 									
-										<div class="col-md-4">										
+										<div class="col-md-4"><span style="color:red;">*</span> 										
 											<label class="form-label">
 												Tipo Documento
 											</label>                                    
@@ -451,7 +449,7 @@ $apellido2 = $mempresa['emp_empresa']['EMP_Apellido2'];
 											</select>
 										</div>
 									
-										<div class="col-md-4">
+										<div class="col-md-4"><span style="color:red;">*</span> 
 											<label class="form-label">N&uacute;mero Documento</label>
 											<div class="form-line">
 											   <input type="text" class="form-control" name="numerodocumento" id="numerodocumento" value="<?php echo $identificacion; ?>" maxlength="13" required>
@@ -463,7 +461,7 @@ $apellido2 = $mempresa['emp_empresa']['EMP_Apellido2'];
 
                                 <div class="form-group form-float" id="pjur">
 									<div class="row">
-										<div class="col-md-12">
+										<div class="col-md-12"><span style="color:red;">*</span> 
 											<label class="form-label">Nombre Empresa o Cliente</label>
 											<div class="form-line">
 												<input type="text" class="form-control" name="nombre" id="nombre" value="<?php echo $nombre; ?>" required>
@@ -475,7 +473,7 @@ $apellido2 = $mempresa['emp_empresa']['EMP_Apellido2'];
 								
 								<div class="form-group form-float" id="pnat">
 									<div class="row">
-										<div class="col-md-3">
+										<div class="col-md-3"><span style="color:red;">*</span> 
 											<label class="form-label">Primer Nombre</label>
 											<div class="form-line">
 												<input type="text" class="form-control" name="nombre1" id="nombre1" value="<?php echo $nombre; ?>" required>											   
@@ -489,7 +487,7 @@ $apellido2 = $mempresa['emp_empresa']['EMP_Apellido2'];
 											</div>
 										</div>
 									
-										<div class="col-md-3">
+										<div class="col-md-3"><span style="color:red;">*</span> 
 											<label class="form-label">Primer Apellido</label>
 											<div class="form-line">
 												<input type="text" class="form-control" name="apellido1" id="apellido1" value="<?php echo $apellido; ?>" required>											   
@@ -507,13 +505,13 @@ $apellido2 = $mempresa['emp_empresa']['EMP_Apellido2'];
                                 
                                 <div class="form-group form-float">
 									<div class="row">
-										<div class="col-md-8">
+										<div class="col-md-8"><span style="color:red;">*</span> 
 											<label class="form-label">Direcci&oacute;n</label>
 											<div class="form-line">
 												<input type="text" class="form-control" name="direccion" id="direccion" value="<?php echo $direccion; ?>" maxlength="50" required>                                
 											</div>
 										</div>
-										<div class="col-md-4">										
+										<div class="col-md-4"><span style="color:red;">*</span> 										
 											<label class="form-label">Ciudad</label>                                    
 																			   
 											<select class="selectpicker show-tick" data-live-search="true" data-width="100%" name="ciudad" id="ciudad" required>
@@ -546,7 +544,7 @@ $apellido2 = $mempresa['emp_empresa']['EMP_Apellido2'];
 											   <input type="text" class="form-control" name="sitioweb" id="sitioweb" value="<?php echo $sitioweb; ?>" maxlength="100" required>                                       
 											</div>
 										</div>
-										<div class="col-md-8">
+										<div class="col-md-8"><span style="color:red;">*</span> 
 											<label class="form-label">Email</label>
 											<div class="form-line">
 											   <input type="text" class="form-control" name="email" id="email" value="<?php echo $email; ?>" maxlength="60" required>                                       
@@ -558,7 +556,7 @@ $apellido2 = $mempresa['emp_empresa']['EMP_Apellido2'];
 								
                                 <div class="form-group form-float">
 									<div class="row">
-										<div class="col-md-4">									
+										<div class="col-md-4"><span style="color:red;">*</span> 									
 											<label class="form-label">Teléfono Fijo</label>
 											<div class="form-line">
 												<input type="text" class="form-control" name="fijo" id="fijo" value="<?php echo $fijo; ?>" maxlength="13" required>                                       
@@ -585,7 +583,7 @@ $apellido2 = $mempresa['emp_empresa']['EMP_Apellido2'];
                                 
                                 <button class="btn btn-primary waves-effect" type="submit" id="grabar">GRABAR</button>								
 								<button class="btn btn-danger waves-effect" type="submit" id="cerrar">SALIR</button>
-                                
+                                <div><span style="color:red;">* Campos Obligatorios.</span></div>
                             </form>                        
                     	</div>
                 	</div>    

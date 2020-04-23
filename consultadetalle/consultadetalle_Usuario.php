@@ -15,7 +15,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 
         // Tratar retorno
         $retorno = USU_USUARIO::getById($parametro);
-
+        $msj =$retorno;
         if ($retorno) {
             $usu_usuario["estado"] = "1";
             $usu_usuario["usu_usuario"] = $retorno;
@@ -27,7 +27,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             print json_encode(
                 array(
                     'estado' => '2',
-                    'mensaje' => 'No se obtuvo el registro'
+                    'mensaje' => 'No se obtuvo el registro',
+                    'msj' => print_r($msj),
+                    'msj2' => var_dump ($msj)
                 )
             );
         }
@@ -39,7 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 
         // Tratar retorno
         $retorno = USU_USUARIO::getByIdAbogado($parametro);
-
+        $msj =$retorno;
         if ($retorno) {
             $usu_usuario["estado"] = "1";
             $usu_usuario["usu_usuario"] = $retorno;
@@ -51,7 +53,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             print json_encode(
                 array(
                     'estado' => '2',
-                    'mensaje' => 'No se obtuvo el registro'
+                    'mensaje' => 'No se obtuvo el registro',
+                    'msj' => print_r($msj),
+                    'msj2' => var_dump ($msj)
                 )
             );
         }
@@ -62,7 +66,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 
         // Tratar retorno
         $retorno = USU_USUARIO::getByIdEstado($parametro);
-
+        $msj =$retorno;
         if ($retorno) 
         {
             $usu_usuario["estado"] = "1";
@@ -75,7 +79,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             print json_encode(
                 array(
                     'estado' => '2',
-                    'mensaje' => 'No se obtuvo el registro'
+                    'mensaje' => 'No se obtuvo el registro',
+                    'msj' => print_r($msj),
+                    'msj2' => var_dump ($msj)
                 )
             );
         }
@@ -90,7 +96,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 
         // Tratar retorno
         $retorno = USU_USUARIO::getAll($parametro);
-
+        $msj =$retorno;
         if ($retorno) 
         {
             $usu_usuario["estado"] = "1";
@@ -105,7 +111,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             print json_encode(
                 array(
                     'estado' => '2',
-                    'mensaje' => 'No se obtuvo el registro'
+                    'mensaje' => 'No se obtuvo el registro',
+                    'msj' => print_r($msj),
+                    'msj2' => var_dump ($msj)
                 )
             );
         }
@@ -121,7 +129,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 
         // Tratar retorno
         $retorno = USU_USUARIO::getAllSU($parametro);
-
+        $msj =$retorno;
         if ($retorno) 
         {
             $usu_usuario["estado"] = "1";
@@ -136,7 +144,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             print json_encode(
                 array(
                     'estado' => '2',
-                    'mensaje' => 'No se obtuvo el registro'
+                    'mensaje' => 'No se obtuvo el registro',
+                    'msj' => print_r($msj),
+                    'msj2' => var_dump ($msj)
                 )
             );
         }
@@ -152,7 +162,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 
         // Tratar retorno
         $retorno = USU_USUARIO::usuarioresponsable($parametro);
-
+        $msj =$retorno;
         if ($retorno) 
         {
             $usu_usuario["estado"] = "1";
@@ -167,7 +177,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             print json_encode(
                 array(
                     'estado' => '2',
-                    'mensaje' => 'No se obtuvo el registro'
+                    'mensaje' => 'No se obtuvo el registro',
+                    'msj' => print_r($msj),
+                    'msj2' => var_dump ($msj)
                 )
             );
         }    
@@ -180,8 +192,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         $par4  = $_GET['SegundoApellido'];
         $par5  = $_GET['Nombre'];
         $par6  = $_GET['Email']; 
-
+        
         $retorno = USU_USUARIO::existeusuario($par1,$par2,$par3,$par4,$par5,$par6);
+        $msj =$retorno;
         if ($retorno) 
         {
             $usu_usuario["estado"] = "1";
@@ -196,7 +209,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             print json_encode(
                 array(
                     'estado' => '2',
-                    'mensaje' => 'No se obtuvo el registro'
+                    'mensaje' => 'No se obtuvo el registro',
+                    'msj' => print_r($msj),
+                    'msj2' => var_dump ($msj)
                 )
             );
         }
@@ -209,7 +224,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         $par4  = $_GET['SegundoApellido'];
         $par5  = $_GET['Nombre'];
         $par6  = $_GET['Email']; 
-
+        $msj =$retorno;
         $retorno = USU_USUARIO::existeusuarioSU($par1,$par2,$par3,$par4,$par5,$par6);
         if ($retorno) 
         {
@@ -225,7 +240,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             print json_encode(
                 array(
                     'estado' => '2',
-                    'mensaje' => 'No se obtuvo el registro'
+                    'mensaje' => 'No se obtuvo el registro',
+                    'msj' => print_r($msj),
+                    'msj2' => var_dump ($msj)
                 )
             );
         }
@@ -431,7 +448,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 
         // Tratar retorno
         $retorno = USU_USUARIO::getByIdExiste($parametro,$parametroC);
-
+        $msj = $retorno;
         if ($retorno) {
             $usu_usuario["estado"] = "1";
             $usu_usuario["usu_usuario"] = $retorno;
@@ -443,7 +460,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             print json_encode(
                 array(
                     'estado' => '2',
-                    'mensaje' => 'No se obtuvo el registro'
+                    'mensaje' => 'No se obtuvo el registro',
+                    'msj' => print_r($msj),
+                    'msj2' => var_dump ($msj)
                 )
             );
         }

@@ -1,10 +1,15 @@
-<?php 
+<?php
+include_once("../tables/header.inc.php");
+require_once ('../../Connections/DataConex.php'); //('../../Connections/cnn_kn.php');
+//require_once('../../Connections/config2.php');
+/* 
 require_once('../../Connections/cnn_kn.php'); 
 require_once('../../Connections/config2.php');
 if(!isset($_SESSION)) 
 { 
   session_start(); 
 } 
+*/
 ?>
 <?php
 if (!function_exists("GetSQLValueString")) {
@@ -57,6 +62,11 @@ if(isset($_POST['direccion'])){
     $direccion = str_replace('#', 'No.', $direccion);    
 }
 
+$telefono ="";
+if(isset($_POST['telefono'])){
+    $telefono = trim($_POST['telefono']);    
+}
+
 $piso ="";
 if(isset($_POST['piso'])){
     $piso = trim($_POST['piso']);    
@@ -77,7 +87,7 @@ if(isset($_POST['estado'])){
 	$estado = trim($_POST['estado']);
 }
 
-$pemail ="";
+$email ="";
 if( isset($_POST['email']) )
 {
     $email = trim($_POST['email']);

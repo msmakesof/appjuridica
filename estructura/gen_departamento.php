@@ -227,15 +227,15 @@ class GEN_DEPARTAMENTO
      * @param $IdUsuario identificador de la gen_departamento
      * @return bool Respuesta de la consulta
      */
-    public static function existetabla($Nombre)
+    public static function existetabla($Nombre, $par2)
     {
-        $consulta = "SELECT count(DEP_IdDepartamento) existe, DEP_Nombre FROM DEP_IdDepartamento WHERE DEP_Nombre = ? ; ";
+        $consulta = "SELECT count(DEP_IdDepartamento) existe FROM gen_departamento WHERE DEP_Nombre = ? AND DEP_IdDepartamento <> ?; ";
 
         try {
             // Preparar sentencia
             $comando = Database::getInstance()->getDb()->prepare($consulta);
             // Ejecutar sentencia preparada
-            $comando->execute(array($Nombre));
+            $comando->execute(array($Nombre, $par2));
             // Capturar primera fila del resultado
             $row = $comando->fetch(PDO::FETCH_ASSOC);
             return $row;

@@ -1,4 +1,9 @@
-﻿<?php 
+<?php
+include_once("../tables/header.inc.php");
+require_once ('../../Connections/DataConex.php'); //('../../Connections/cnn_kn.php');
+$LogoInterno = LogoInterno;
+require_once('../../Connections/config2.php'); 
+/*  
 if(!isset($_SESSION)) 
 { 
     session_start(); 
@@ -7,6 +12,7 @@ else
 {
     header('Location: ../../index.html');
 }
+*/
 $NombreTabla ="SUBCLASEPROCESO";
 $idTabla = 0;
 require_once('../../apis/proceso/claseproceso.php');
@@ -47,18 +53,14 @@ require_once('../../apis/proceso/claseproceso.php');
     <!-- AdminBSB Themes. You can choose a theme from css/themes instead of get all themes -->
     <link href="../../css/themes/all-themes.css" rel="stylesheet" />
 
-   
-
-<!-- mks 20170128
+   <!-- mks 20170128
     <link rel="stylesheet" href="../../css/themes2/alertify.core.css" />
     <link rel="stylesheet" href="../../css/themes2/alertify.default.css" id="toggleCSS" /> -->
-
-
+	
 
  <!-- Jquery Core Js -->
-    <!-- <script src="../../plugins/jquery/jquery.min.js"></script> -->
-    <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
-    
+    <script src="../../plugins/jquery/jquery.min.js"></script>
+    <!-- <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script> -->    
 
 
         <!-- Sweet Alert Plugin Js -->

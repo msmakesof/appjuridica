@@ -5,7 +5,7 @@ if(!isset($_SESSION))
 }
 else
 {
-    header('Location: ../../index.html');
+    header('Location: ../../index.php');
 }
 $NombreTabla ="TIPOACTUACIONPROCESAL";
 ?>
@@ -52,8 +52,8 @@ $NombreTabla ="TIPOACTUACIONPROCESAL";
 
 
  <!-- Jquery Core Js -->
-    <!-- <script src="../../plugins/jquery/jquery.min.js"></script> -->
-    <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+    <script src="../../plugins/jquery/jquery.min.js"></script>
+    <!-- <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script> -->
     
 
 

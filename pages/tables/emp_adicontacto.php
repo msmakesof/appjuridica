@@ -142,6 +142,7 @@ require_once('../../apis/general/ciudad.php');
 	
 	function cerrar(id, ne, ie) 
 	{    	
+		event.preventDefault();
 		$.post('emp_contactoempresa.php', { 'id': id ,'ne': ne, 'ie': ie}, function (result) {
 			WinId = window.open('','_self');
 			WinId.document.open();
@@ -155,7 +156,7 @@ require_once('../../apis/general/ciudad.php');
         $("#msj").hide();
         $("#numerodocumento").numeric();
         $("#celular").numeric();
-        $("#telefonoFijo").numeric();
+        $("#fijo").numeric();
 		
 		$('#email').on('blur', function() {
             // Expresion regular para validar el correo
@@ -190,13 +191,12 @@ require_once('../../apis/general/ciudad.php');
                 buttonReverse : false,
                 buttonFocus   : "ok"
             });
-        }
+        }		
 		
-		$("#Xcerrar").on('click', function(e) {
-            e.preventDefault();
-            window.location = 'emp_empresa.php';
-        }); 
-        
+		$("#bcerrar").on('click', function(e) {
+			e.preventDefault();
+			$(location).prop('href', "emp_contactoempresa.php?id=<?php echo $pid; ?>&ne=<?php echo $pne; ?>&ie=<?php echo $pie; ?>");
+        });
 
         $("#grabar").on('click', function(e) {
 			var empresa = <?php echo $pie; ?>;
@@ -254,7 +254,8 @@ require_once('../../apis/general/ciudad.php');
 								  confirmButtonText: "OK"
 								},
 								function(isConfirm){
-									if (isConfirm) {											
+									if (isConfirm) {																					
+										//e.preventDefault();										
 										cerrar(<?php echo $pid; ?>, '<?php echo $pne; ?>', <?php echo $pie; ?>);
 									}
 								}); 
@@ -289,11 +290,11 @@ require_once('../../apis/general/ciudad.php');
 
 <body class="theme-indigo">
     <?php require_once('secciones.html'); ?>
-     <section class="content" style="margin-top:45px;">
+     <section class="content" style="margin-top:85px;">
         <div class="container-fluid">
             <div class="block-header">
                 <h2>
-                    FORMULARIO CONTACTO: <?php echo $NombreTabla; ?> - <?php echo strtoupper($pne); ?>.
+                    FORMULARIO CONTACTO EMPRESA: <?php echo $NombreTabla; ?> - <?php echo strtoupper($pne); ?>.
                     <small>acción: Crear.</small>
                 </h2>
             </div>
@@ -445,6 +446,7 @@ require_once('../../apis/general/ciudad.php');
                                 
                                 <button class="btn btn-primary waves-effect" type="submit" id="grabar">GRABAR</button>
 								<button class="btn btn-danger waves-effect" onClick="cerrar(<?php echo $pid; ?>, '<?php echo $pne; ?>', <?php echo $pie; ?>)">SALIR</button>
+								<!-- <button class="btn btn-danger waves-effect" id="bcerrar">SALIR</button> -->
                                 
                             </form>                        
                     	</div>

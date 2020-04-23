@@ -1,4 +1,4 @@
-﻿<!-- Page Loader -->
+<!-- Page Loader -->
     <div class="page-loader-wrapper">
         <div class="loader">
             <div class="md-preloader pl-size-md">
@@ -14,13 +14,13 @@
     <div class="overlay"></div>
     <!-- #END# Overlay For Sidebars -->
     <!-- Top Bar -->
-    <nav class="navbar" style="background-color: #00BCD4 !important;">
+    <nav class="navbar" style="background-color: #56b7e9 !important;">
         <div class="container-fluid">
             <div class="navbar-header">
                 <a href="javascript:void(0);" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse" aria-expanded="false"></a>
                 <a href="javascript:void(0);" class="bars"></a>
-                <a class="navbar-brand" href="../../index.html">
-                <img src="../../images/logomw.fw.png" style="margin-top: -10px;">
+                <a class="navbar-brand">
+                <img src="../../images/logoLitigant.gif" style="margin-top: -6px;">
                 </a>
 
             </div>
@@ -231,9 +231,29 @@
         <aside id="leftsidebar" class="sidebar">
             <!-- User Info -->
             <div class="user-info">
-                <div class="image">
-                    <img src="../../images/user.png" width="48" height="48" alt="User" />
-                </div>
+				<?php if($_SESSION["TipoUsuario"] <= 2)	{ ?>
+					<div style="width:100%;">
+						
+						<div class="image">
+							<div style="float: left;">
+								<img src="../../images/user.png" width="48" height="48" alt="User" />
+							</div>	
+							<div style="float: left; margin-left: 17px; margin-top: 8px">
+								<span style="font-size:12px; color:white;">
+									<?php echo strtoupper(trim($_SESSION['NombreEmpresa'])); ?>
+								</span>
+							</div>
+						</div>
+						
+					</div>
+				<?php } 
+				else {
+				?>	
+					 <div class="image">
+						<img src="../../images/user.png" width="48" height="48" alt="User" />
+					</div>
+
+				<?php } ?>
                 <div class="info-container">
 					<div class="name" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">                       
                         <span id="xNom">

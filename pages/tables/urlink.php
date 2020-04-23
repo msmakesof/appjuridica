@@ -1,11 +1,4 @@
 <?php
-// require_once('../../Connections/cnn_kn.php'); 
-// require_once('../../Connections/config2.php');
-// if(!isset($_SESSION)) 
-// { 
-//     session_start(); 
-// } 
-
 //Comprobamos que el valor no venga vacío
 if(isset($_GET['funcion']) && !empty($_GET['funcion'])) {
 
@@ -65,9 +58,15 @@ if(isset($_GET['funcion']) && !empty($_GET['funcion'])) {
             $mjuzgadox= str_replace(")","",$mjuzgadox);    
             $mretorno= "{".$mjuzgadox;
             break;
+			
+		case "dd": 
+            include('../../apis/combos/clientexdemandado.php');
+            $mjuzgado= json_encode($mjuzgado, JSON_PRETTY_PRINT);
+			$mretorno = $mjuzgado;
+            break;	
     }    
         
-    print_r($mretorno);
+    print_r($mretorno);	
 
     switch (json_last_error()) {
         case JSON_ERROR_NONE:
@@ -111,6 +110,7 @@ if(isset($_GET['funcion']) && !empty($_GET['funcion'])) {
                 "status" => 1,
                 "value" => 'Unknown error'
             );
-    } 
+    }
+	echo $mretorno;
 }
 ?>

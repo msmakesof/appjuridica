@@ -234,7 +234,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         // Obtener parámetro IdMostrar de PRO_PROCESO		
         $parametro = $_GET['IdMostrar'];
 		$parametro2 = "";
-		$parametrousu = $_GET['iu'];
+		$parametrousu = $_GET['iu']; //Administrador(1) o Abogado(2)
 		$parametroemp = $_GET['em'];
 		
 		if( isset($_GET['e']) )
@@ -411,6 +411,31 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             );
         }
     }
+	
+	elseif (isset($_GET['HeadProceso'])) {
+
+        // Obtener parámetro HeadProceso
+        $parametro = $_GET['HeadProceso'];
+
+        // Tratar retorno
+        $retorno = PRO_PROCESO::getHeadProceso($parametro);
+
+        if ($retorno) {
+            $pro_proceso["estado"] = "1";
+            $pro_proceso["pro_proceso"] = $retorno;
+            // Enviar objeto json de la meta
+            header('Content-Type: application/json');
+            echo json_encode($pro_proceso);
+        } else {
+            // Enviar respuesta de error general
+            print json_encode(
+                array(
+                    'estado' => '2',
+                    'mensaje' => 'No se obtuvo el registro en Proceso por su Id'
+                )
+            );
+        }	
+	}
     else {
         // Enviar respuesta de error
         print json_encode(

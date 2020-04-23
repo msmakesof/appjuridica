@@ -1,5 +1,6 @@
 <?php
-require_once('../../Connections/cnn_kn.php'); 
+require_once('../../Connections/DataConex.php');
+//require_once('../../Connections/cnn_kn.php'); 
 require_once('../../Connections/config2.php');
 if(!isset($_SESSION)) 
 { 
@@ -40,7 +41,7 @@ if (!function_exists("GetSQLValueString"))
     return $theValue;
   }
 }
-require_once('../../Connections/DataConex.php');
+// require_once('../../Connections/DataConex.php');
 
 $params ="";
 //$idTabla = 0;
@@ -68,7 +69,7 @@ $url         = urlServicios."consultadetalle/consultadetalle_usu_tipousuario.php
 $existe      = "";
 $usulocal    = "";
 $siguex      = "";
-echo("<script>console.log('PHP: ".$url."');</script>");
+//echo("<script>console.log('PHP usu_tipousuario: ".$url."');</script>");
 if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
 {
     $ch = curl_init();
@@ -84,7 +85,7 @@ if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
 
     $mtipousuario =  preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $resultado);    
     $mtipousuario = json_decode($mtipousuario, true);
-    //echo("<script>console.log('PHP: ".print_r($mtipouser)."');</script>");
+    //echo("<script>console.log('PHP: ".print_r($mtipousuario)."');</script>");
     //echo("<script>console.log('PHP: ".count($m['usu_tipousuario'])."');</script>");
     
     $json_errors = array(

@@ -21,7 +21,7 @@ class MENU
      */
     public static function getAll()
     {
-        $consulta = "SELECT ".$GLOBALS['Llave'].", TAB_Nombre_Tabla, TAB_NombreMostrar, TAB_Grupo, 
+        $consulta = "SELECT ".$GLOBALS['Llave'].", TAB_Nombre_Tabla, TAB_NombreMostrar, TAB_Grupo, TAB_Desarrollador,
             CASE TAB_IdEstadoTabla WHEN 1 THEN 'Activo' ELSE 'Inactivo' END EstadoTabla
             FROM ".$GLOBALS['TABLA']." WHERE TAB_IdEstadoTabla = 1 ORDER BY TAB_NombreMostrar; ";
         try {

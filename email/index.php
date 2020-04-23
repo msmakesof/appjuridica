@@ -1,11 +1,4 @@
-﻿<?php
-require_once('../Connections/cnn_kn.php'); 
-require_once('../Connections/config2.php');
-if(!isset($_SESSION)) 
-{ 
-  session_start(); 
-}
-
+<?php
 if (!function_exists("GetSQLValueString")) 
 {
   function GetSQLValueString($theValue, $theType, $theDefinedValue = "", $theNotDefinedValue = "") 
@@ -39,6 +32,7 @@ if (!function_exists("GetSQLValueString"))
     return $theValue;
   }
 }
+
 
 $origen = "";
 $accion = "";
@@ -127,7 +121,7 @@ if ($origen == "a")
 				<b>Fecha/Hora Finalizaci&oacute;n:</b> $from<br>
 				<b>Apoderado(a):</b> $nr<br>
 				<b>Tipo de Actividad:</b> $title<br>
-				<b>Observaciones:</b> $body<hr>
+				<b>Observaciones:</b> $body<hr><br><br>
 				</p>Cordialmente,<br><br><br>Sistema de Gesti&oacute;n de Agenda.<br>AppJur&iacute;dica";
 }
 else
@@ -185,10 +179,13 @@ else
 		$pnproceso = trim($_POST['pnproceso']);
 	}
 	
+	$enviaemailcli = false;
+	/* 20200417: Temporalmente en comentario
 	if(isset($_POST['enviaemailcli']))
 	{
 		$enviaemailcli =$_POST['enviaemailcli'];
 	}
+	*/
 	
 	if( isset($_POST['pproceso']) )
 	{
@@ -197,7 +194,7 @@ else
 
 		require_once('../apis/proceso/procesoemail.php');
 		
-		//Busco el email del abogago q tiene asignado al Proceso
+		//Busco el email del abogado q tiene asignado al Proceso
 		$NumeroProceso = $mproceso['pro_proceso']['PRO_NumeroProceso'];
 		$emailAbogado = $mproceso['pro_proceso']['USU_Email'];
 		$IdenDemandante = $mproceso['pro_proceso']['IdenDemandante'];
@@ -235,7 +232,12 @@ else
 	if( isset($_POST['pdespacho']) )
 	{
 		$pdespacho = trim($_POST['pdespacho']);
-	}
+		if( substr($pdespacho, 0, 2) == "--" )
+		{
+			$pdespacho = " ** sin asignar. ** ";
+		}
+	}	
+	
 	$nombreciu = "";
 	if( isset($_POST['nombreciu']) )
 	{
@@ -255,6 +257,11 @@ else
 	if( isset($_POST['despacho']) )
 	{
 		$despacho = trim($_POST['despacho']);
+		$pdespacho = trim($_POST['pdespacho']);
+		if( substr($pdespacho, 0, 2) == "--" )
+		{
+			$pdespacho = " ** sin asignar. ** ";
+		}
 	}
 	$asignadoa ="";
 	if( isset($_POST['asignadoa']) )
@@ -292,20 +299,45 @@ else
 	$mensaje = "<p>Le ha sido asignado el Proceso Judicial con la siguiente informaci&oacute;n:<br><hr>				
 				<b>Proceso Nro.:</b> $pproceso<br>
 				<b>Ciudad:</b> $nombreciu<br>
-				<b>Corporación:</b> $corporacion<br>
+				<b>Corporaci&oacute;n / Juzgado:</b> $corporacion<br>
 				<b>Especialidad / Area:</b> $area<br>
 				<b>Despacho:</b> $despacho<br>
 				<b>Fecha/Hora Creaci&oacute;n:</b> $pfechainicio <br>
 				<b>Apoderado(a):</b> $asignadoa<br>				
-				<b>Ubicación:</b> $ubicacion<br>
+				<b>Ubicaci&oacute;n:</b> $ubicacion<br>
 				<b>Clase Proceso:</b> $claseproceso<br>				
 				<b>Estado:</b> Activo $txtEstado<br>
 				<b>Cliente:</b> $cliente<br>
 				$AbreDemandante No. : $IdenDemandante<br>	
 				<b>Demandado:</b> $demandado<br>
-				$AbreDemandado No. : $IdenDemandado<br>					
-				</p>Cordialmente,<br><br><br>Sistema de Gesti&oacute;n de Procesos.<br>AppJur&iacute;dica";
+				$AbreDemandado No. : $IdenDemandado<br><br>					
+				</p>Cordialmente,<br><br><br>Sistema de Gesti&oacute;n de Procesos.<br>Litigantes";
 }
+
+
+if( isset($_POST['Asunto']) )
+{
+	$asunto = trim($_POST['Asunto']);
+	$asunto = str_replace(' ','%20', $asunto);
+}
+
+if( isset($_POST['Mensaje']) )
+{
+	$mensaje = trim($_POST['Mensaje']);
+	$mensaje = str_replace(' ','%20', $mensaje);
+}
+
+if( isset($_POST['EmailAbogado']) )
+{
+	$emailAbogado = trim($_POST['EmailAbogado']);
+	//$emailAbogado = str_replace(' ','%20', $emailAbogado);
+}
+
+if( isset($_POST['Emailcliente']) )
+{
+	$EmailCliente = trim($_POST['Emailcliente']);	
+}
+
 
 require("../mailer_v204/class.phpmailer.php");
 require("../mailer_v204/class.smtp.php");
@@ -315,16 +347,20 @@ $mail = new PHPMailer();
 $mail->IsSMTP();
 $mail->SMTPAuth = true;
 $mail->SMTPSecure = "ssl";
-$mail->Host = "mail.ok-be.co"; 
+$mail->Host = "mail.litigantes.lawyer"; 
 $mail->Port = 465;
  
 //Nos autenticamos con nuestras credenciales en el servidor de correo 
-$mail->Username = "envianotificaciones@ok-be.co";
+$mail->Username = "notificaciones@litigantes.lawyer";
 $mail->Password = "Vialibre90$";
+
+//el valor por defecto 10 de Timeout es un poco escaso dado que voy a usar 
+//una cuenta gratuita, por tanto lo pongo a 30  
+$mail->Timeout=10;
  
 //Agregamos la información que el correo requiere
-$mail->From = "envianotificaciones@ok-be.co";  			//"$mail_usu_por";   
-$mail->FromName = "Notificador AppJuridica";            //"$usu_por";    
+$mail->From = "notificaciones@litigantes.lawyer";  		//"$mail_usu_por";   
+$mail->FromName = "Notificador Litigantes";            //"$usu_por";    
 $mail->Subject = $subject;
 $mail->AltBody = "";
 //if($_POST['tipo_req'] == 1){
@@ -339,10 +375,22 @@ if($enviaemailcli)
 	$mail->AddAddress("$EmailCliente", "$cliente");
 }
 $mail->IsHTML(true);
+
+//se envia el mensaje, si no ha habido problemas 
+//la variable $exito tendra el valor true
+$exito = $mail->Send();
+
+$intentos = 1; 
+while ((!$exito) && ($intentos < 5)) {
+	sleep(5);
+	//echo $mail->ErrorInfo;
+	$exito = $mail->Send();
+	$intentos = $intentos+1;	
+}
  
-//Enviamos el correo electrónico
-$mail->Send();
-if(!$mail->send()) 
+//Enviamos el correo electrónico : $mail->Send();
+//if(!$mail->Send()) 
+ if(!$exito)	
 {
 	echo "N - EMail Error: " . $mail->ErrorInfo;
 }
@@ -350,5 +398,5 @@ else
 {
 	echo "S";
 }
-	//fin send email
+//fin send email
 ?>

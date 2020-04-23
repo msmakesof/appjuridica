@@ -218,16 +218,16 @@ class JUZ_PISO
      * @param $IdUsuario identificador de la gen_Tipo Documento
      * @return bool Respuesta de la consulta
      */
-    public static function existetabla($Nombre, $Numero)
+    public static function existetabla($Nombre, $Numero, $par3)
     {
         $consulta = "SELECT count(". $GLOBALS['Llave']. ") existe, PIS_Nombre, PIS_Numero FROM ".$GLOBALS['TABLA'].
-        " WHERE PIS_Nombre = ? AND PIS_Numero = ? ; ";
+        " WHERE PIS_Nombre = ? AND PIS_Numero = ? AND ". $GLOBALS['Llave']. " <> ?; ";
 
         try {
             // Preparar sentencia
             $comando = Database::getInstance()->getDb()->prepare($consulta);
             // Ejecutar sentencia preparada
-            $comando->execute(array($Nombre, $Numero));
+            $comando->execute(array($Nombre, $Numero, $par3));
             // Capturar primera fila del resultado
             $row = $comando->fetch(PDO::FETCH_ASSOC);
             return $row;

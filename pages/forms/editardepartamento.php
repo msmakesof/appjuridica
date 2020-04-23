@@ -1,11 +1,7 @@
-﻿<?php 
-require_once('../../Connections/cnn_kn.php'); 
-require_once('../../Connections/config2.php');
-if(!isset($_SESSION)) 
-{ 
-    session_start(); 
-} 
-
+<?php
+include_once("../tables/header.inc.php");
+require_once ('../../Connections/DataConex.php'); //('../../Connections/cnn_kn.php');
+$LogoInterno = LogoInterno;
 ?>
 <?php
 if (!function_exists("GetSQLValueString")) {
@@ -294,7 +290,7 @@ $idtabla = $mdepartamento['gen_departamento']['DEP_IdDepartamento'];
                     data : {"pidtabla": idtabla},
                     type: "POST",
                     dataType: "html",
-                    url : "../forms/borrar_ciudad.php",
+                    url : "../forms/borrar_departamento.php",
                 })  
                 .done(function( dataX, textStatus, jqXHR ){                       
                     var xrespstr = dataX.trim();
@@ -307,7 +303,7 @@ $idtabla = $mdepartamento['gen_departamento']['DEP_IdDepartamento'];
                     else
                     {                    
                         swal({
-                            title: "Atencion: ",   
+                            title: "Atención: ",   
                             text: msj,   
                             type: "error" 
                         });                    

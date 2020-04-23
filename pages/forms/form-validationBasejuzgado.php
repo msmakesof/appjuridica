@@ -1,10 +1,14 @@
-<?php 
+<?php
+include_once("../tables/header.inc.php");
+require_once ('../../Connections/DataConex.php');
+/*
 require_once('../../Connections/cnn_kn.php'); 
 require_once('../../Connections/config2.php');
 if(!isset($_SESSION)) 
 { 
     session_start(); 
 } 
+*/
 ?>
 <?php
 if (!function_exists("GetSQLValueString")) 
@@ -143,7 +147,8 @@ require_once('../../apis/general/area.php');
         $(document).ready(function()
         {       
             $("#msj").hide();
-            $("#ubicacion").numeric(); 
+            $("#ubicacion").numeric();
+            $("#telefono").numeric();
             $("#piso").numeric();
 
             function reset () {
@@ -185,6 +190,7 @@ require_once('../../apis/general/area.php');
                 var ubicacion = $("#ubicacion").val();               
                 var ciudad = $("#ciudad").val();
                 var direccion = $("#direccion").val();
+                var telefono = $("#telefono").val();
                 var piso = $("#piso").val();            
                 var tipojuzgado = $("#tipojuzgado").val();
                 var area = $("#area").val();            
@@ -208,7 +214,7 @@ require_once('../../apis/general/area.php');
                 else
                 {
                     $.ajax({
-                        data : {"ubicacion": ubicacion, "ciudad": ciudad, "direccion": direccion, "piso": piso, "tipojuzgado": tipojuzgado, "area": area, "estado": estado, "edificio": edificio, "email": email}, 
+                        data : {"ubicacion": ubicacion, "ciudad": ciudad, "direccion": direccion, "telefono":telefono, "piso": piso, "tipojuzgado": tipojuzgado, "area": area, "estado": estado, "edificio": edificio, "email": email}, 
                         type: "POST",
                         dataType: "html",
                         url : "crea_<?php echo strtolower($NombreTabla); ?>.php",
@@ -377,6 +383,13 @@ require_once('../../apis/general/area.php');
                                     <label class="form-label">Direcci&oacute;n</label>
                                     <div class="form-line">
                                         <input type="text" class="form-control" name="direccion" id="direccion" value="" required>                                       
+                                    </div>
+                                </div>
+
+                                <div class="form-group form-float" style="clear: both;">
+                                    <label class="form-label">Teléfono</label>
+                                    <div class="form-line">
+                                        <input type="text" class="form-control" name="telefono" id="telefono" maxlength="13" value="" required>                                       
                                     </div>
                                 </div>
 

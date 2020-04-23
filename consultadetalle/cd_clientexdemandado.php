@@ -42,7 +42,40 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
                     )
                 );
             }
-        }    
+        }
+
+		if($_GET['fn'] == "dd")
+        {
+            // Obtener parámetro IdTabla = idCliente y IdDemandado
+            $parametro = $_GET['IdTabla'];
+
+            $valor = explode('-',$parametro); 
+            $Cliente = $valor[0];
+            $Demandado = $valor[1];   
+
+            // Tratar retorno            
+            $retorno = CLIENTEXDEMANDADO::getByDoc($Cliente, $Demandado);
+
+            if ($retorno) 
+            {
+                $ja_areasxjuzgado["estado"] = "1";
+                $ja_areasxjuzgado["juz_areasxjuzgado"] = $retorno;
+                // Enviar objeto json de la meta
+                header('Content-Type: application/json');
+                echo json_encode($ja_areasxjuzgado);
+            } 
+            else 
+            {
+                // Enviar respuesta de error general
+                print json_encode(
+                    array(
+                        'estado' => '2',
+                        'mensaje' => 'No se obtuvo resultado en la consulta Cliente - Demandado.',
+                        'sql ' => $retorno
+                    )
+                );
+            }
+        }		
     }
 }
 ?>

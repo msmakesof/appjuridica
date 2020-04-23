@@ -111,7 +111,6 @@ if($OldClave != $clave)
   $clave = encryptor('encrypt',$clave);
 }
 
-
 $verseguimiento = 0;
 if(isset($_POST['verseguimiento'])){
   $verseguimiento = trim($_POST['verseguimiento']);
@@ -130,5 +129,70 @@ $usuariomodifica ="";
 if(isset($_POST['uc'])){
 	$usuariomodifica = trim($_POST['uc']);
 }
+
+$tipodocumentorl ="";
+if(isset($_POST['tipodocumentorl'])){
+  $tipodocumentorl = trim($_POST['tipodocumentorl']);
+}
+
+$numerodocumentorl ="";
+if(isset($_POST['numerodocumentorl'])){
+  $numerodocumentorl = trim($_POST['numerodocumentorl']);
+}
+
+$nombrerl ="";
+if(isset($_POST['nombrerl'])){
+  $nombrerl = trim($_POST['nombrerl']);
+  $nombrerl = str_replace(" ","%20",$nombrerl);  
+}
+
+$apellido1rl ="";
+if(isset($_POST['apellido1rl'])){
+  $apellido1rl = trim($_POST['apellido1rl']);
+  $apellido1rl = str_replace(" ","%20",$apellido1rl);  
+}
+
+$emailrl ="";
+if(isset($_POST['emailrl'])){
+  $emailrl = trim($_POST['emailrl']);
+}
+
+$celularrl ="";
+if(isset($_POST['celularrl'])){
+  $celularrl = trim($_POST['celularrl']);
+}
+
+$tipodocumentorl2 ="";
+if(isset($_POST['tipodocumentorl2'])){
+  $tipodocumentorl2 = trim($_POST['tipodocumentorl2']);
+}
+
+$numerodocumentorl2 ="";
+if(isset($_POST['numerodocumentorl2'])){
+  $numerodocumentorl2 = trim($_POST['numerodocumentorl2']);
+}
+
+$nombrerl2 ="";
+if(isset($_POST['nombrerl2'])){
+  $nombrerl2 = trim($_POST['nombrerl2']);
+  $nombrerl2 = str_replace(" ","%20",$nombrerl2);  
+}
+
+$apellidosrl2 ="";
+if(isset($_POST['apellidosrl2'])){
+  $apellidosrl2 = trim($_POST['apellidosrl2']);
+  $apellidosrl2 = str_replace(" ","%20",$apellidosrl2);  
+}
+
+$emailrl2 ="";
+if(isset($_POST['emailrl2'])){
+  $emailrl2 = trim($_POST['emailrl2']);
+}
+
+$celularrl2 ="";
+if(isset($_POST['celularrl2'])){
+  $celularrl2 = trim($_POST['celularrl2']);
+}
+
 require_once('../../apis/cliente/infoCliente.upd.php');
 ?>

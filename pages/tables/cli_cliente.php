@@ -1,11 +1,8 @@
 <?php
-session_start();
-require_once('../../Connections/cnn_kn.php'); 
+include_once("header.inc.php");
+require_once ('../../Connections/DataConex.php'); //('../../Connections/cnn_kn.php');
+$LogoInterno = LogoInterno;
 require_once('../../Connections/config2.php');
-//if(!isset($_SESSION)) 
-//{ 
-
-//} 
 ?>
 <?php
 if (!function_exists("GetSQLValueString")) {
@@ -38,7 +35,7 @@ function GetSQLValueString($theValue, $theType, $theDefinedValue = "", $theNotDe
   return $theValue;
 }
 }
-$empresa = "AppJuridica";
+$empresa = Company;
 //if( isset($_POST['id']){ echo "id...".$_POST['id'];}
 /*
 if( isset($_POST['ƒ¤']) && !empty($_POST['ƒ¤']) )
@@ -143,8 +140,8 @@ if( isset($_POST['ƒ×'])  && !empty($_POST['ƒ×']) )
             <div class="navbar-header">
                 <a href="javascript:void(0);" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse" aria-expanded="false"></a>
                 <a href="javascript:void(0);" class="bars"></a>
-                <a class="navbar-brand" href="../../index.html">
-                <img src="../../images/logomw.fw.png" style="margin-top: -10px;">
+                <a class="navbar-brand">
+                <img src="<?php echo $LogoInterno; ?>" style="margin-top: -6px;">
                 </a>
             </div>
         </div>
@@ -192,7 +189,7 @@ if( isset($_POST['ƒ×'])  && !empty($_POST['ƒ×']) )
                         <i class="material-icons" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">keyboard_arrow_down</i>
                         <ul class="dropdown-menu pull-right">
                             <li><a href="javascript:void(0);"><i class="material-icons">person</i>Perfil</a></li>
-                            <li><a href="../../"><i class="material-icons">input</i>Salir</a></li>
+                            <li><a href="./close.php"><i class="material-icons">input</i>Salir</a></li>
                         </ul>
                     </div>
                 </div>
@@ -265,42 +262,51 @@ if( isset($_POST['ƒ×'])  && !empty($_POST['ƒ×']) )
                                 <thead>
                                     <tr>
                                         <th>Nombre</th>
+                                        <th>Identificaci&oacute;n</th>
                                         <th>Email</th>
                                         <th>Dirección</th>
 										<th>Celular</th>
+										<?php if($_SESSION['TipoUsuario'] == 2){
+											echo "<th>Proceso</th>";
+										} ?>
 										<th>Empresa</th>
 										<th>Estado</th>																				
-										<th>Accion</th>
+										<th>Acción</th>
                                     </tr>
                                 </thead>
                                 <tfoot>
                                     <tr>
-                                        <th>Nombre</th>                                        
+                                        <th>Nombre</th>
+                                        <th>Identificaci&oacute;n</th>                                        
                                         <th>Email</th>
                                         <th>Dirección</th>
 										<th>Celular</th>
+										<?php if($_SESSION['TipoUsuario'] == 2){
+											echo "<th>Proceso</th>";
+										} ?>
 										<th>Empresa</th>
 										<th>Estado</th>										
-										<th>Accion</th>
+										<th>Acción</th>
                                     </tr>
                                 </tfoot>
                                 <tbody>
 <?php
-require_once('../../Connections/DataConex.php');
+//require_once('../../Connections/DataConex.php');
 $soportecURL = "S";
-if($_SESSION['TipoUsuario'] == 4 )  // SA
+$condi = 0;
+$sesionUsuario = $_SESSION['TipoUsuario'];
+if($sesionUsuario != 4 )  // SA  => Muestra todos los clientes.
 {
-	$url = urlServicios."consultadetalle/consultadetalle_Cliente.php?IdMostrar=0";
-}
-if($_SESSION['TipoUsuario'] <= 2 )  // 1.Admin o  2.Abogado
-{
-	$condi = $_SESSION['IdEmpresa'];
-	if($_SESSION['TipoUsuario'] == 2 )  // 2.Abogado
+	if($_SESSION['TipoUsuario'] == 2 )  // 2.Abogado => Solo mostrarà los clientes del abogado
 	{
-		$condi .= "&iu=".$_SESSION['IdUsuario']; 
+		$condi = $_SESSION['IdUsuario']; 
 	}
-	$url  = urlServicios."consultadetalle/consultadetalle_Cliente.php?IdMostrar=". $condi;
-}	
+	else // 1.Admin => Mostrarà todos los clientes de la empresa a la cual pertenece el usuario
+	{
+		$condi = $_SESSION['IdEmpresa']; 
+	}
+}
+$url  = urlServicios."consultadetalle/consultadetalle_Cliente.php?IdMostrar=0&p2=$sesionUsuario&p3=". $condi ."&p4=1" ;
 $existe      = "";
 $usulocal    = "";
 $siguex      = "";
@@ -349,26 +355,38 @@ if( $mcliente['estado'] < 2)
 {
     for($i=0; $i<count($mcliente['cli_cliente']); $i++)
     {
-        $NombreUsuario = trim($mcliente['cli_cliente'][$i]['NombreUsuario']);
+        $NombreUsuario = trim(strtoupper($mcliente['cli_cliente'][$i]['NombreUsuario']));
         $archivo = $NombreUsuario.".php";
         $idTabla = $mcliente['cli_cliente'][$i]['CLI_IdCliente'];
         $Email = trim($mcliente['cli_cliente'][$i]['CLI_Email']);
-        $Direccion = trim($mcliente['cli_cliente'][$i]['CLI_Direccion']);
+        $Direccion = trim(strtoupper($mcliente['cli_cliente'][$i]['CLI_Direccion']));
 		$Celular = trim($mcliente['cli_cliente'][$i]['CLI_Celular']);
         $EstadoUsuario = $mcliente['cli_cliente'][$i]['EstadoUsuario'];
-		$NombreEmpresa = trim($mcliente['cli_cliente'][$i]['NombreEmpresa']);
+        $NombreEmpresa = trim(strtoupper($mcliente['cli_cliente'][$i]['NombreEmpresa']));
+        $Identificacion = trim($mcliente['cli_cliente'][$i]['CLI_Identificacion']);
+		if($_SESSION['TipoUsuario'] == 2){
+			$Proceso = trim($mcliente['cli_cliente'][$i]['PRO_NumeroProceso']);
+		}
     ?>
         <tr>
             <td>
 				<!-- <a href="javascript:void(0);" onclick="cambiar('../pages/forms/editar<?php echo $nombre_lnk; ?>.php?f=<?php //echo $idTabla; ?>')" class="nav nav-tabs nav-stacked" data-toggle="modal" data-target="#defaultModalEditar" style="text-decoration:none;"><?php //echo $NombreUsuario; ?></a> -->
 				<a href="javascript:void(0);" onclick="editar(<?php echo $idTabla; ?>)"><?php echo $NombreUsuario; ?></a>
-            </td>        
+            </td>
+            <td><?php echo $Identificacion; ?></td>        
             <td><?php echo $Email; ?></td>
             <td><?php echo $Direccion; ?></td>
 			<td><?php echo $Celular; ?></td>
+			<?php if($_SESSION['TipoUsuario'] == 2){
+				echo "<td>$Proceso</td>";
+			} ?>
 			<td><?php echo $NombreEmpresa; ?></td>
             <td><?php echo $EstadoUsuario; ?></td>
-			<td><a href="javascript:void(0);" onclick='borraremp(<?php echo $idTabla; ?>,"<?php echo $NombreUsuario; ?>")'>Borrar</a></td>
+			<td>
+				<a href="javascript:void(0);" onclick='borraremp(<?php echo $idTabla; ?>,"<?php echo $NombreUsuario; ?>");'>
+					<img src="../../images/borrar.png" width="25" height="25">
+				</a>
+			</td>
         </tr>
     <?php                          
     } 

@@ -1,5 +1,11 @@
-<?php require_once('../../Connections/cnn_kn.php'); 
+<?php 
+//include_once("../tables/header.inc.php");
+require_once ('../../Connections/DataConex.php'); //('../../Connections/cnn_kn.php');
 require_once('../../Connections/config2.php');
+/* 
+require_once('../../Connections/cnn_kn.php'); 
+require_once('../../Connections/config2.php');
+*/
 ?>
 <?php
 if (!function_exists("GetSQLValueString")) {
@@ -113,12 +119,12 @@ if(isset($_POST['ciudad'])){
 }
 
 
-require_once('../../Connections/DataConex.php');
+//require_once('../../Connections/DataConex.php');
 //Verifico si existe un usuario con las siguientes caracteristicas
 // Nombres iguales o nro documento igual o email igual
 if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
 {
-  $parameters = "ExisteUsuario=1&Identificacion=$numerodocumento&Nombre=$nombre&Email=$email";
+  $parameters = "ExisteUsuario=1&Identificacion=$numerodocumento&Nombre=$nombre&Email=$email&Ciudad=$ciudad&IdEmpresa=0";
   $url = urlServicios."consultadetalle/consultadetalle_Empresa.php?".$parameters;
   $ch = curl_init();
   curl_setopt($ch, CURLOPT_VERBOSE, true);

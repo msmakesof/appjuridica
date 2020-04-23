@@ -110,8 +110,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         $par1 = $_GET['Nombre'];
         $par2 = $_GET['Abreviatura'];
 		$par3 = $_GET['Departamento'];
+		$par4 = $_GET['idtabla'];
 
-        $retorno = GEN_CIUDAD::existetabla($par1, $par2, $par3);
+        $retorno = GEN_CIUDAD::existetabla($par1, $par2, $par3, $par4);
         if ($retorno) 
         {
             $gen_ciudad["estado"] = "1";

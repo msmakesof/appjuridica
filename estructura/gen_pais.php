@@ -216,15 +216,15 @@ class GEN_PAIS
      * @param $IdUsuario identificador de la GEN_PAIS
      * @return bool Respuesta de la consulta
      */
-    public static function existetabla($Nombre)
+    public static function existetabla($Nombre, $par2)
     {
-        $consulta = "SELECT count(PAI_IdPais) existe, PAI_Nombre FROM gen_pais WHERE PAI_Nombre = ? ; ";
+        $consulta = "SELECT count(PAI_IdPais) existe FROM gen_pais WHERE PAI_Nombre = ? AND PAI_IdPais <> ? ; ";
 
         try {
             // Preparar sentencia
             $comando = Database::getInstance()->getDb()->prepare($consulta);
             // Ejecutar sentencia preparada
-            $comando->execute(array($Nombre));
+            $comando->execute(array($Nombre, $par2));
             // Capturar primera fila del resultado
             $row = $comando->fetch(PDO::FETCH_ASSOC);
             return $row;

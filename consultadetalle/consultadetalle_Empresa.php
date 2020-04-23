@@ -93,8 +93,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         $par2  = $_GET['Identificacion'];        
         $par3  = $_GET['Nombre'];
         $par4  = $_GET['Email']; 
+		$par5  = $_GET['Ciudad']; 
+		$par6  = $_GET['IdEmpresa']; 
 
-        $retorno = EMP_EMPRESA::existeusuario($par2,$par3,$par4);
+        $retorno = EMP_EMPRESA::existeusuario($par2,$par3,$par4,$par5,$par6);
         if ($retorno) 
         {
             $emp_empresa["estado"] = "1";

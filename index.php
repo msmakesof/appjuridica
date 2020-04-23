@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-    <title>.:: Dependiente Judicial  |  Principal ::.</title>
+    <title>.:: Litigantes  |  Principal ::.</title>
     <!-- Favicon-->
     <link rel="icon" href="images/favicon.ico" type="image/x-icon">
 
@@ -55,8 +55,8 @@
         <div class="card">
             <div class="body">
                 <form id="sign_in" method="post">
-                	<div style="font-family: verdana; font-size: 26px; color: #00568C; font-weight: bold;" id="titulo"></div>
-                	<div style="text-align: center;" id="logo"></div>
+                	<div style="font-family: verdana; font-size: 26px; color: #00568C; font-weight: bold; text-align:center;" id="titulo"></div>
+                	<div style="text-align: center !important;" id="logo"></div>
                 	<hr>
                     <div style="font-size: 19px; font-weight: bold; color: #000045;text-align: center;margin-top: -10px; margin-bottom: -10px;">Bienvenido</div>
                     <hr>
@@ -140,7 +140,8 @@ Respuesta completa:
 			Necesitamos usar cookies para que funcione todo, si permanece aquí acepta su uso, más información en
 			<a hreflang="es" href="/info/aviso-legal">Aviso Legal</a>
 			y la
-			<a hreflang="es" href="/info/politica-de-privacidad">Política de Privacidad</a>.
+			<a hreflang="es" href="/info/politica-de-privacidad">Política de Privacidad</a> y/o
+			<a hreflang="es" href="/info/politica-de-privacidad">Términos y Condiciones de Uso</a>.
 			<button type="button" class="btn btn-sm btn-primary" id="acceptCookies">
 				Acepto el uso de cookies
 			</button>

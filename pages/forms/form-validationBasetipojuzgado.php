@@ -1,4 +1,7 @@
-﻿<?php 
+<?php 
+include_once("../tables/header.inc.php");
+require_once ('../../Connections/DataConex.php');
+/*
 require_once('../../Connections/cnn_kn.php'); 
 require_once('../../Connections/config2.php');
 if(!isset($_SESSION)) 
@@ -7,8 +10,9 @@ if(!isset($_SESSION))
 } 
 else
 {
-    header('Location: ../../index.html');
+    header('Location: ../../index.php');
 }
+*/
 ?>
 <?php
 if (!function_exists("GetSQLValueString")) 
@@ -44,8 +48,7 @@ if (!function_exists("GetSQLValueString"))
     }
 }
 $idTabla = 0;
-$NombreTabla ="CORPORACIÓN";
-
+$NombreTabla ="TIPOJUZGADO";
 ?>
 <!DOCTYPE html>
 <html>
@@ -162,7 +165,7 @@ $NombreTabla ="CORPORACIÓN";
                   title: "Atención:  Ingrese información en todos los campos...",
                   text: "un momento por favor.",
                   imageUrl: "../../js/sweet/2.gif",
-                  timer: 1500,
+                  timer: 2000,
                   showConfirmButton: false
                 });
                 return false;
@@ -301,5 +304,4 @@ $NombreTabla ="CORPORACIÓN";
         </div>
     </section>  
 </body>
-
 </html>

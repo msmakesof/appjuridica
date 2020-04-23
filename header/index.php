@@ -53,7 +53,7 @@ if (!function_exists("GetSQLValueString"))
 	}
 }
 
-$empresa = "AppJuridica";
+$empresa = "Litigantes.";
 //$arrayMeses = array('Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio','Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre');
 
 date_default_timezone_set('America/Bogota');
@@ -134,7 +134,7 @@ $script_tz = date_default_timezone_get();
                 <a href="javascript:void(0);" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse" aria-expanded="false"></a>
                 <a href="javascript:void(0);" class="bars"></a>
                 <a class="navbar-brand" href="../">
-                    <img src="../images/logoaj.png" style="margin-top: -10px;">
+                    <img src="../images/logoLitigant.gif" style="margin-top: -6px;">
                 </a>
             </div>
             <!--  Notificaciones  -->

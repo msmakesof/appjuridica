@@ -1,10 +1,7 @@
-<?php 
-require_once('../../Connections/cnn_kn.php'); 
-require_once('../../Connections/config2.php');
-if(!isset($_SESSION)) 
-{ 
-    session_start(); 
-} 
+<?php
+include_once("../tables/header.inc.php");
+require_once ('../../Connections/DataConex.php'); 
+//require_once('../../Connections/config2.php');
 ?>
 <?php
 if (!function_exists("GetSQLValueString")) 
@@ -62,6 +59,22 @@ if ( isset( $_POST["id"]))
     $idTabla = $_POST["id"];
 }
 
+//$condi = "&IdTipouser=0";
+$tipoCLiente = 0;
+$tipoCLi = 0 ;
+$sesionUsuario = $_SESSION['TipoUsuario'];
+if($sesionUsuario != 4 )  // SA  => Muestra todos los clientes.
+{
+	if($_SESSION['TipoUsuario'] == 2 )  // 2.Abogado => Solo mostrarà los clientes del abogado
+	{
+		$tipoCLiente = $_SESSION['IdUsuario']; 
+	}
+	else // 1.Admin => Mostrarà todos los clientes de la empresa a la cual pertenece el usuario
+	{
+		$tipoCLiente = $_SESSION['IdEmpresa']; 
+	}
+}
+
 require_once('../../apis/cliente/infoCliente.php');
 
 $idtabla = $mcliente['cli_cliente']['CLI_IdCliente'];
@@ -80,6 +93,19 @@ $Verseguimiento = $mcliente['cli_cliente']['CLI_SeguimientoProceso'];
 $TipoCliente = $mcliente['cli_cliente']['CLI_IdTipoCliente'];
 $Empresa = $mcliente['cli_cliente']['CLI_Empresa'];
 $FechaCreado = $mcliente['cli_cliente']['CLI_FechaCreado'];
+
+$TipoDocumentorl = $mcliente['cli_cliente']['CLI_IdTipoDocumentoRepLegal'];
+$NumeroDocumentorl = trim($mcliente['cli_cliente']['CLI_IdentificacionRepLegal']);
+$Nombrerl = trim($mcliente['cli_cliente']['CLI_NombreRepLegal']);
+$Apellido1rl = trim($mcliente['cli_cliente']['CLI_APellidosRepLegal']);
+$Emailrl = trim($mcliente['cli_cliente']['CLI_EmailRepLegal']);
+$Celularrl = trim($mcliente['cli_cliente']['CLI_CelularRepLegal']);
+$TipoDocumentorl2 = $mcliente['cli_cliente']['CLI_IdTipoDocumentoContacto'];
+$NumeroDocumentorl2 = trim($mcliente['cli_cliente']['CLI_IdentificacionContacto']);
+$Nombrerl2 = trim($mcliente['cli_cliente']['CLI_NombreContacto']);
+$Apellido1rl2 = trim($mcliente['cli_cliente']['CLI_APellidosContacto']);
+$Emailrl2 = trim($mcliente['cli_cliente']['CLI_EmailContacto']);
+$Celularrl2 = trim($mcliente['cli_cliente']['CLI_CelularContacto']);
 ?>
 <!DOCTYPE html>
 <html>
@@ -162,19 +188,22 @@ $FechaCreado = $mcliente['cli_cliente']['CLI_FechaCreado'];
     <!-- <script src="../../js/alertify.min.js"></script> -->
     <script src="../../js/jquery.numeric.js"></script>
 	 
-	<!-- toggle botton --> 
+	<!-- toggle botton
 	<link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
-	<script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+	<script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>  --> 
+	
+	<link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/css/bootstrap4-toggle.min.css" rel="stylesheet">
+	<script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/js/bootstrap4-toggle.min.js"></script>
 
 </head>
 <body class="theme-indigo">
     <?php require_once('../tables/secciones.html'); ?>  
-    <section class="content" style="margin-top:45px;">
+    <section class="content" style="margin-top:85px;">
         <div class="container-fluid">
             <div class="block-header">
                 <h2>
 					<?php 
-						$textoCreado ="";
+						$textoCreado ="";						
 						if($_SESSION['TipoUsuario'] == 4 )  // SA
 						{	
 							$textoCreado = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Fecha Creación: ".$FechaCreado;
@@ -187,17 +216,7 @@ $FechaCreado = $mcliente['cli_cliente']['CLI_FechaCreado'];
             <!-- Basic Validation -->
             <div class="row info-container">
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                    <div class="card">
-                        <!--<div class="header">
-                            <h2>REGISTRO EDICION DE ESTUDIANTES.</h2>
-                             <ul class="header-dropdown m-r--5">
-                               <li class="dropdown">
-                                    <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                                        <i class="material-icons">more_vert</i>
-                                    </a>                                    
-                                </li>
-                            </ul>
-                        </div>-->
+                    <div class="card">                        
                         <div class="body  table-responsive">
                             <form id="form_validation" method="POST">
 							
@@ -213,18 +232,21 @@ $FechaCreado = $mcliente['cli_cliente']['CLI_FechaCreado'];
 														$TCL_IdTipoCliente = $mtipocliente['cli_tipocliente'][$i]['TCL_IdTipoCliente'];                                                    
 														$TCL_Nombre = $mtipocliente['cli_tipocliente'][$i]['TCL_Nombre'];
 														$TCL_Estado = $mtipocliente['cli_tipocliente'][$i]['TCL_Estado'];
+														
+														if($TCL_IdTipoCliente == 1) {
 												?>                                            
-												<option value="<?php echo $TCL_IdTipoCliente; ?>" <?php if ($TCL_IdTipoCliente == $TipoCliente){ echo "selected";} else{ echo "";} ?>>
-													<?php echo $TCL_Nombre ; ?>                                                
-												</option>
-												<?php                    
+															<option value="<?php echo $TCL_IdTipoCliente; ?>" <?php if ($TCL_IdTipoCliente == $TipoCliente ){ echo "selected";} else{ echo "";} ?>>
+																<?php echo $TCL_Nombre ; ?>                                                
+															</option>
+												<?php
+														}
 													} 
 												?>
 											</select>
 										</div>
 										
 										<div class="col-md-4">
-											<label class="form-label">
+											<label class="form-label"><span style="color:red;">*</span>  
 												Tipo Documento
 											</label>                                    
 											                                           
@@ -246,35 +268,46 @@ $FechaCreado = $mcliente['cli_cliente']['CLI_FechaCreado'];
 										</div>	
 										
 										<div class="col-md-4">	
-											<label class="form-label">Número Documento</label>
+											<label class="form-label"><span style="color:red;">*</span> Número Documento</label>
 											<div class="form-line">
-												<input type="text" class="form-control" name="numerodocumento" id="numerodocumento" value="<?php echo $NumeroDocumento ;?>" maxlength="13" required>
+												<input type="text" class="form-control" name="numerodocumento" id="numerodocumento" value="<?php echo $NumeroDocumento ;?>" maxlength="13" required placeholder="No digitar puntos ni guiones.">
 											</div>
 										</div>
 									</div>    
 								</div>
 
                                 <div class="form-group form-float">
-									<div class="row">
-										<div class="col-md-4">
-											<label class="form-label">Nombre Usuario</label>
-											<div class="form-line">
-												<input type="text" class="form-control" name="nombre" id="nombre" value="<?php echo $NombreAlumno ;?>" required>
-											   <!-- -->
+									
+									<div class="form-group form-float" id="pjur">
+										<div class="row">
+											<div class="col-md-12">
+												<label class="form-label"><span style="color:red;">*</span> Nombre Empresa</label>
+												<div class="form-line">
+													<input type="text" class="form-control" name="nombre" id="nombre" value="<?php echo $NombreAlumno ;?>" required>												   
+												</div>
 											</div>
 										</div>
-										<div class="col-md-4">									   
-											<label class="form-label">Primer Apellido</label>
-											<div class="form-line">
-												<input type="text" class="form-control" name="apellido1" id="apellido1" value="<?php echo $Apellido1 ;?>" required>
-											   <!-- -->
+									</div>
+									
+									<div class="form-group form-float" id="pnat">
+										<div class="row">
+											<div class="col-md-4">
+												<label class="form-label"><span style="color:red;">*</span> Nombre</label>
+												<div class="form-line">
+													<input type="text" class="form-control" name="nombre1" id="nombre1" value="<?php echo $NombreAlumno ;?>" required>												   
+												</div>
 											</div>
-										</div>
-										<div class="col-md-4">
-											<label class="form-label">Segundo Apellido</label>
-											<div class="form-line">
-												<input type="text" class="form-control" name="apellido2" id="apellido2" value="<?php echo $Apellido2 ;?>" required>
-											   <!-- -->
+											<div class="col-md-4">									   
+												<label class="form-label"><span style="color:red;">*</span> Primer Apellido</label>
+												<div class="form-line">
+													<input type="text" class="form-control" name="apellido1" id="apellido1" value="<?php echo $Apellido1 ;?>" required>												   
+												</div>
+											</div>
+											<div class="col-md-4">
+												<label class="form-label">Segundo Apellido</label>
+												<div class="form-line">
+													<input type="text" class="form-control" name="apellido2" id="apellido2" value="<?php echo $Apellido2 ;?>" required>												   
+												</div>
 											</div>
 										</div>
 									</div>
@@ -283,95 +316,108 @@ $FechaCreado = $mcliente['cli_cliente']['CLI_FechaCreado'];
 								
 								<div class="form-group form-float">
 									<div class="row">
-										<div class="col-md-8">
-											<label class="form-label">Dirección</label>
+										<div class="col-md-5">
+											<label class="form-label"><span id="datopj" style="color:red;">*</span> Dirección</label>
 											<div class="form-line">
 												<input type="text" class="form-control" name="direccion" id="direccion" value="<?php echo $Direccion ;?>" maxlength="50" required>											   
 											</div>
 										</div>
 										
-										<div class="col-md-4">
-											<label class="form-label">Celular</label>
+										<div class="col-md-3">
+											<label class="form-label">N&uacute;mero Celular</label>
 											<div class="form-line">
 												<input type="text" class="form-control" name="celular" id="celular" value="<?php echo $Celular ;?>" maxlength="13" required>                                      
 											</div>
 										</div>
-									</div>
-								</div>
-								
-
-                                 <div class="form-group form-float">
-									<div class="row">
-										<div class="col-md-8">
+										
+										<div class="col-md-4">
 											<label class="form-label">Email</label>
 											<div class="form-line">
 												<input type="text" class="form-control" name="email" id="email" value="<?php echo $Email ;?>" maxlength="60" required>                                       
 											</div>
 										</div>
 										
-										<div class="col-md-4">
+									</div>
+								</div>						
+
+								
+								<div class="form-group">                                    							                                    
+									<div class="row">
+										<div class="col-md-3">
+											<label class="form-label">Autoriza acceso a la herramienta para que el cliente pueda ver seguimiento de su proceso?												
+												<input type="checkbox" name="verseguimiento" id="verseguimiento" data-toggle="toggle" data-on="Aceptar" data-off="Cancelar" data-onstyle="success" data-offstyle="danger" data-size="sm" <?php if( $Verseguimiento == 1){?>checked="checked"<?php } ?>>
+											</label>									
+											<hr style="margin-top:5px">
+										</div>
+										
+										<div class="col-md-3">
 											<label class="form-label">Clave</label>
 											<div class="form-line">
 												<input type="password" class="form-control" name="clave" id="clave" value="<?php echo $Clave ;?>" maxlength="30" required>
 											   
 											</div>
-										</div>										
-									</div>
-                                </div>
-								
-								<div class="form-group">                                    							                                    
-									<div class="row">										
-										<div class="col-md-6">
-											<label class="form-label">
-												Empresa encargada del Proceso
-											</label>
-											<select class="selectpicker show-tick" data-live-search="true" data-width="100%" name="empresa" id="empresa" required>
-												<option value="" >Seleccione Opción...</option>
-												<?php
-													for($i=0; $i<count($mempresa['emp_empresa']); $i++)
-													{
-														$IdEmpresa = $mempresa['emp_empresa'][$i]['EMP_IdEmpresa'];                                                    
-														$Nombre = trim($mempresa['emp_empresa'][$i]['NombreEmpresa']);
-														$Estado = $mempresa['emp_empresa'][$i]['EMP_IdEstado'];
-												?>
-														<option value="<?php echo $IdEmpresa; ?>" <?php if ($IdEmpresa == $Empresa){ echo "selected";} else{ echo "";} ?>>
-															<?php echo $Nombre ; ?>                                                
-														</option>
-												<?php
-													}
-												?>
-											</select>
 										</div>
 										
-										<div class="col-md-6">
-										
-										</div>
-									</div>
-								</div>
-								
-                               							
-								<div class="form-group">
-									<div class="row">
-										<div class="col-md-8">
-											<label class="form-label">Autoriza acceso a la herramienta para que el cliente pueda ver seguimiento de su proceso?
-											<input type="checkbox" name="verseguimiento" id="verseguimiento" data-toggle="toggle" data-size="mini" data-on="Si" data-off="No" data-onstyle="success" data-offstyle="danger" <?php if( $Verseguimiento == 1){?>checked="checked"<?php } ?>>
-											</label>									
-											<hr style="margin-top:5px">
-										</div>
-                                
-										<div class="col-md-4">
+										<div class="col-md-2">
 											<input type="radio" name="estado" id="activo" class="with-gap" value="1" <?php if( $EstadoEst == 1){?>checked="checked"<?php } ?>>
 											<label for="activo">Activo</label>
 											<input type="radio" name="estado" id="inactivo" class="with-gap" value="0" <?php if( $EstadoEst == 0){?>checked="checked"<?php } ?>>
 											<label for="inactivo" class="m-l-20">Inactivo</label>											
 										</div>
+									
+										<div class="col-md-4">
+											<label class="form-label"><span style="color:red;">*</span> 
+												Empresa encargada del Proceso
+											</label>
+											<select class="selectpicker show-tick" data-live-search="true" data-width="100%" name="empresa" id="empresa" required>
+												<option value="" >Seleccione Opción...</option>
+												<?php
+													if($_SESSION["TipoUsuario"] <= 2)
+													{
+														$empresausuario = $_SESSION['IdEmpresa'];
+														for($i=0; $i<count($mempresa['emp_empresa']); $i++)
+														{
+															$IdEmpresa = $mempresa['emp_empresa'][$i]['EMP_IdEmpresa'];                                                    
+															$Nombre = trim($mempresa['emp_empresa'][$i]['NombreEmpresa']);
+															$Estado = $mempresa['emp_empresa'][$i]['EMP_IdEstado'];
+															if ($IdEmpresa == $empresausuario)
+															{
+												?>
+																<option value="<?php echo $IdEmpresa; ?>" <?php if ($IdEmpresa == $empresausuario){ echo "selected";} else{ echo "";} ?>>
+																	<?php echo $Nombre ; ?>                                                
+																</option>
+												<?php
+															}
+														}
+													}
+													else
+													{
+														for($i=0; $i<count($mempresa['emp_empresa']); $i++)
+														{
+															$IdEmpresa = $mempresa['emp_empresa'][$i]['EMP_IdEmpresa'];                                                    
+															$Nombre = trim($mempresa['emp_empresa'][$i]['NombreEmpresa']);
+															$Estado = $mempresa['emp_empresa'][$i]['EMP_IdEstado'];
+												?>
+															<option value="<?php echo $IdEmpresa; ?>" <?php if ($IdEmpresa == $Empresa){ echo "selected";} else{ echo "";} ?>>
+																<?php echo $Nombre ; ?>                                                
+															</option>
+												<?php
+														}
+													}
+												?>
+											</select>
+										</div>										
 									</div>
-                                </div>                             
+								</div>
+								
+                               	<div class="form-group form-float" id="rl">
+									<?php include './cli_contactos.inc.php' ; ?>
+                                </div>                           
 								
                                 <div class="form-group" style="clear: both; margin-top:5px; margin-bottom:15px;">
-									<button class="btn btn-primary waves-effect" type="button" id="grabar">GRABAR</button>								   
-									<!-- <button type="button" class="btn btn-warning waves-effect" id="borrar">BORRAR</button> -->
+									<button class="btn btn-primary waves-effect" type="button" id="grabar">GRABAR</button>
 									<button class="btn btn-danger waves-effect" type="submit" id="cerrar">SALIR</button>
+									<div><span style="color:red;">* Campos Obligatorios.</span></div>
 								</div>
 								
                             </form>                        
@@ -389,14 +435,77 @@ $FechaCreado = $mcliente['cli_cliente']['CLI_FechaCreado'];
         </div>
     </section>
 
-    <script type="text/javascript">    
+    <script type="text/javascript">
+	var nombre ="";    
     $(document).ready(function()
 	{			
 		$("#mensaje").hide();
         $("#form_validation").show();
-        $("#numerodocumento").numeric();
+        $("#numerodocumento").numeric();		
         $("#celular").numeric();
-        //$("#telefonoFijo").numeric(); 
+		$("#celularrl").numeric();
+		$("#celularrl2").numeric();
+		$("#datopj").hide();
+		$("#datopj1").hide();
+		
+		if(<?php echo $TipoDocumento ?> != 2)
+		{
+			$("#pjur").hide();
+			$("#pnat").show();
+			$("#rl").hide();
+			$("#datopj").hide();
+			$("#datopj1").hide();			
+		}
+		else
+		{
+			$("#pnat").hide();
+			$("#pjur").show();
+			$("#rl").show();
+			$("#datopj").show();
+			$("#datopj1").show();			
+		}
+		
+		$("#tipodocumento").change(function(){
+			var tipodocumento = $("#tipodocumento").val();			
+			if (tipodocumento == 2)
+			{
+				$("#pnat").hide();
+				$("#pjur").show();
+				$("#rl").show();
+				$("#datopj").show();
+				$("#datopj1").show();
+			}
+			else
+			{
+				$("#pjur").hide();
+				$("#pnat").show();
+				$("#rl").hide();
+				$("#datopj").hide();
+				$("#datopj1").hide();
+			}
+		});
+		
+		if($('#verseguimiento').prop('checked') == false)
+		{
+			$( "#clave" ).prop( "disabled", true );
+			$("#clave").attr("value", "");
+			$("#clave").attr("placeholder", "No habilitado");
+		}
+		
+
+		$('#verseguimiento').on('change', function () {			
+			if($(this).prop('checked') == false )
+			{
+				$( "#clave" ).prop( "disabled", true );
+				$("#clave").attr("placeholder", "No habilitado");
+			}
+			else
+			{
+				$( "#clave" ).prop( "disabled", false );
+				$("#clave").attr("placeholder", "");
+			}
+		});			
+        
         $('#email').on('blur', function() {
             // Expresion regular para validar el correo
             var regex = /[\w-\.]{2,}@([\w-]{2,}\.)*([\w-]{2,}\.)[\w-]{2,4}/;
@@ -408,7 +517,7 @@ $FechaCreado = $mcliente['cli_cliente']['CLI_FechaCreado'];
             else 
             {                
                 swal({
-                  title: "Error:  La dirección de correo no es valida...",
+                  title: "Atención:  La dirección de correo no es valida...",
                   text: "un momento por favor.",
                   imageUrl: "../../js/sweet/3red.gif",
                   timer: 1500,
@@ -434,6 +543,7 @@ $FechaCreado = $mcliente['cli_cliente']['CLI_FechaCreado'];
             var tipodocumento = $("#tipodocumento").val();
             var numerodocumento = $("#numerodocumento").val();
             var nombre = $("#nombre").val();
+			var nombre1 = $("#nombre1").val();
             var apellido1 = $("#apellido1").val();
             var apellido2 = $("#apellido2").val();
             var clave = $("#clave").val();            
@@ -445,6 +555,33 @@ $FechaCreado = $mcliente['cli_cliente']['CLI_FechaCreado'];
 			var seguimiento = $('input:checkbox[name=verseguimiento]:checked').val();
 			var empresa = $("#empresa").val();
 			var uc = <?php echo $_SESSION['IdUsuario']; ?>;
+			
+			var tipodocumentorl = "";
+			var numerodocumentorl = "";
+			var nombrerl = "";
+			var apellido1rl = "";
+			var celularrl= "";
+			var emailrl= "";
+			var tipodocumentorl2= "";
+			var numerodocumentorl2= ""; 
+			var nombrerl2 = "";
+			var apellidosrl2 = "";
+			var celularrl2= "";
+			var emailrl2= "";			
+			
+			tipodocumentorl = $("#tipodocumentorl").val();
+			numerodocumentorl = $("#numerodocumentorl").val();
+			nombrerl = $("#nombrerl").val();			
+			apellido1rl = $("#apellido1rl").val();
+			celularrl = $("#celularrl").val();
+			emailrl = $("#emailrl").val();
+			tipodocumentorl2 = $("#tipodocumentorl2").val();
+			numerodocumentorl2 = $("#numerodocumentorl2").val();
+			nombrerl2 = $("#nombrerl2").val();
+			apellidosrl2 = $("#apellidosrl2").val();
+			celularrl2 = $("#celularrl2").val();
+			emailrl2 = $("#emailrl2").val();
+			
 			if(seguimiento == undefined)
 			{
 				seguimiento = 0;
@@ -455,12 +592,23 @@ $FechaCreado = $mcliente['cli_cliente']['CLI_FechaCreado'];
 			}
 		
 			var idtabla =  "<?php echo $idtabla; ?>";
-            var OldClave = "<?php echo $Clave; ?>";
-			// seguimiento == "" ||
-            if( tipodocumento == "" || numerodocumento =="" || nombre == "" || apellido1 == "" ||  clave =="" || direccion == "" || email == "" || celular == "" || estado == undefined ||  tipocliente == undefined || tipocliente == "" || empresa == "")
+            var OldClave = "<?php echo $Clave; ?>";			
+			
+			if( tipodocumento != 2)
+			{
+				nombre = nombre1;
+			}
+			if( tipodocumento == 2)
+			{
+				apellido1 = " ";
+				apellido2 = " ";
+			}
+			
+			/*
+            if( tipodocumento == "" || numerodocumento =="" || numerodocumento == 0 || nombre == "" || apellido1 == "" ||  direccion == "" || celular == "" || estado == undefined ||  tipocliente == undefined || tipocliente == "" || empresa == "")
             {               
                 swal({
-					title: "Error:  Ingrese información en todos los campos...",
+					title: "Atención:  Ingrese información en todos los campos...",
 					text: "un momento por favor.",
 					imageUrl: "../../js/sweet/2.gif",
 					timer: 1500,
@@ -470,39 +618,86 @@ $FechaCreado = $mcliente['cli_cliente']['CLI_FechaCreado'];
             }
             else
             {
-    			$.ajax({
-    				data : {"tipodocumento": tipodocumento, "numerodocumento": numerodocumento, "nombre": nombre, "apellido1": apellido1, "apellido2": apellido2, "clave": clave, "direccion": direccion, "email": email, "celular": celular, "estado": estado, "idtabla": idtabla, "OldClave": OldClave, "verseguimiento": seguimiento, "tipocliente": tipocliente, "empresa": empresa, "uc": uc },
-    				type: "POST",				
-    				url : "../forms/editar_<?php echo strtolower($Tabla); ?>.php",
-                })  
-    			.done(function( dataX, textStatus, jqXHR ){	    			    
-    				var xrespstr = dataX.trim();
-                    var respstr = xrespstr.substr(0,1);
-                    var msj = xrespstr.substr(2);    				
-    				if( respstr == "S" )
-                    {
-                        swal("Atención: ", msj, "success");
-                        return false;
-                    }
-    				else
-    				{
-                        swal({
-                            title: "Atención: ",   
-                            text: msj,   
-                            type: "error" 
-                        });
-                        return false;  
-    				}
-    			})
-    			.fail(function( jqXHR, textStatus, errorThrown ) {
-    			 	//e.stopPropagation();
-    				if ( console && console.log ) 
-    				{						
-    					console.log( "La solicitud a fallado: " +  textStatus);
-    					$("#msj").html("");
-    			 	}
-    			});
-            }    
+			}
+			*/
+				if( tipodocumento == 2)
+				{
+					//if( nombre == "" || tipodocumentorl == "" || numerodocumentorl == "" || numerodocumentorl == 0 || nombrerl  == "" || apellido1rl == "" || celularrl == "" || emailrl== "")
+					if( tipodocumento == "" || tipodocumentorl == "" || numerodocumento == "" || numerodocumento == 0 || nombre == "" || direccion == "" || numerodocumentorl == "" || numerodocumentorl == 0 || nombrerl  == "" || apellido1rl == "" || empresa == "")
+					{
+						graba = 0;
+						swal({
+							title: "Atención:  Ingrese información en los campos Obligatorios, marcados con *.",
+							text: "un momento por favor.",
+							imageUrl: "../../js/sweet/2.gif",
+							timer: 3000,
+							showConfirmButton: false
+						});
+						return false;
+					}
+					else
+					{
+						graba = 1;
+					}
+				}
+				if( tipodocumento != 2)
+				{
+					nombre = nombre1;					
+					//alert(tipodocumento + ' / ' + numerodocumento + ' / ' + nombre + ' / ' + apellido1 + ' / ' +  empresa);
+					if (tipodocumento == "" || numerodocumento == "" || numerodocumento == 0 || nombre == "" || apellido1 == "" || empresa == "")
+					{
+						
+						graba = 0;
+						swal({
+							title: "Atención:  Ingrese información en los campos Obligatorios, marcados con *.",
+							text: "un momento por favor.",
+							imageUrl: "../../js/sweet/2.gif",
+							timer: 3000,
+							showConfirmButton: false
+						});
+						return false;
+					}
+					else
+					{
+						graba = 1;
+					}
+				}
+				if(graba == 1)
+				{
+				
+					$.ajax({
+						data : {"tipodocumento": tipodocumento, "numerodocumento": numerodocumento, "nombre": nombre, "apellido1": apellido1, "apellido2": apellido2,"clave": clave, "direccion": direccion, "email": email, "celular": celular, "estado": estado, "idtabla": idtabla, "OldClave": OldClave,"verseguimiento": seguimiento, "tipocliente": tipocliente, "empresa": empresa, "uc": uc, "tipodocumentorl": tipodocumentorl , "numerodocumentorl": numerodocumentorl , "nombrerl": nombrerl, "apellido1rl": apellido1rl, "celularrl": celularrl , "emailrl": emailrl, "tipodocumentorl2": tipodocumentorl2 , "numerodocumentorl2": numerodocumentorl2 , "nombrerl2": nombrerl2, "apellidosrl2": apellidosrl2, "celularrl2": celularrl2 , "emailrl2": emailrl2 },
+						type: "POST",				
+						url : "../forms/editar_<?php echo strtolower($Tabla); ?>.php",
+					})  
+					.done(function( dataX, textStatus, jqXHR ){	    			    
+						var xrespstr = dataX.trim();
+						var respstr = xrespstr.substr(0,1);
+						var msj = xrespstr.substr(2);    				
+						if( respstr == "S" )
+						{
+							swal("Atención: ", msj, "success");
+							return false;
+						}
+						else
+						{
+							swal({
+								title: "Atención: ",   
+								text: msj,   
+								type: "error" 
+							});
+							return false;  
+						}
+					})
+					.fail(function( jqXHR, textStatus, errorThrown ) {						
+						if ( console && console.log ) 
+						{						
+							console.log( "La solicitud a fallado: " +  textStatus);
+							$("#msj").html("");
+						}
+					});
+				}
+                
 		});
 
 	
@@ -524,16 +719,11 @@ $FechaCreado = $mcliente['cli_cliente']['CLI_FechaCreado'];
                         var respstr = xrespstr.substr(0,1);
                         var msj = xrespstr.substr(2);         
                         if( respstr == "S" )
-                        {            
-                            //$("#form_validation").hide();
-                            //$("#mensaje").show();
+                        {                            
                             swal("Atención: ", msj, "success");
                         }
                         else
-                        {                    
-                            //$("#mensaje").hide();
-                            //$("#form_validation").show();
-                            //$("#msj").html('<div class="alert alert-danger"><span class="glyphicon-hand-right"></span><strong>  Atención: </strong> <?php echo $Tabla; ?> NO Borrada.</div>').fadeIn(3000);
+                        {                         
                             swal({
                                 title: "Atención: ",   
                                 text: msj,   
@@ -541,8 +731,7 @@ $FechaCreado = $mcliente['cli_cliente']['CLI_FechaCreado'];
                             });
                         }
                     })
-                    .fail(function( jqXHR, textStatus, errorThrown ) {
-                        //e.stopPropagation();
+                    .fail(function( jqXHR, textStatus, errorThrown ) {                        
                         if ( console && console.log ) 
                         {                       
                             console.log( "La solicitud a fallado: " +  textStatus);

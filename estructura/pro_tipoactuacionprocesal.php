@@ -214,16 +214,16 @@ class PRO_TIPOACTUACIONPROCESAL
      * @param $IdUsuario identificador de la PRO_TIPOACTUACIONPROCESAL
      * @return bool Respuesta de la consulta
      */
-    public static function existetabla($Nombre)
+    public static function existetabla($Nombre, $par2)
     {
         $consulta = "SELECT count(". $GLOBALS['Llave']. ") existe, TAP_Nombre FROM ".$GLOBALS['TABLA'].
-        " WHERE TAP_Nombre = ? ; ";
+        " WHERE TAP_Nombre = ? AND ". $GLOBALS['Llave']. " <> ?; ";
 
         try {
             // Preparar sentencia
             $comando = Database::getInstance()->getDb()->prepare($consulta);
             // Ejecutar sentencia preparada
-            $comando->execute(array($Nombre));
+            $comando->execute(array($Nombre, $par2));
             // Capturar primera fila del resultado
             $row = $comando->fetch(PDO::FETCH_ASSOC);
             return $row;

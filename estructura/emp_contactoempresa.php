@@ -18,7 +18,7 @@ class EMP_CONTACTOEMPRESA
      * @param $IdUsuario Identificador del registro
      * @return array Datos del registro
      */
-    public static function getAll()
+    public static function getAll($par1,$par2)
     {
         $consulta = "SELECT ".$GLOBALS['Llave']." ,
         COE_IdEmpresa,		
@@ -33,7 +33,10 @@ class EMP_CONTACTOEMPRESA
         CASE COE_Estado WHEN 1 THEN 'Activo' ELSE 'Inactivo' END NombreEstado, 
         concat_WS(' ',COE_Nombre1, COE_Nombre2, COE_Apellido1, COE_Apellido2) AS NombreUsuario, TDO_Nombre 
         FROM ".$GLOBALS['TABLA'].
-		" JOIN gen_tipodocumento ON gen_tipodocumento.TDO_IdTipoDocumento = COE_IdTipoDocumento ORDER BY COE_Nombre1, COE_Nombre2, COE_Apellido1, COE_Apellido2; ";
+		" JOIN gen_tipodocumento ON gen_tipodocumento.TDO_IdTipoDocumento = COE_IdTipoDocumento 
+		WHERE COE_IdEmpresa = $par2 
+		ORDER BY COE_Nombre1, COE_Nombre2, COE_Apellido1, COE_Apellido2; ";
+		//echo $consulta;
         try {
             // Preparar sentencia
             $comando = Database::getInstance()->getDb()->prepare($consulta);
@@ -293,17 +296,17 @@ class EMP_CONTACTOEMPRESA
      * @param $IdUsuario identificador de la usu_usuario
      * @return bool Respuesta de la consulta
      */
-    public static function existeusuario($Identificacion, $PrimerApellido, $SegundoApellido, $Nombre1, $Nombre2, $Email)
+    public static function existeusuario($Identificacion, $Nombre1, $Nombre2, $PrimerApellido, $SegundoApellido, $Email, $TipoDocumento)
     {
         $consulta = "SELECT count(". $GLOBALS['Llave']. ") existe, COE_Identificacion, COE_Apellido1, COE_Apellido2, COE_Nombre1, COE_Nombre2, COE_Email ".        
         " FROM ".$GLOBALS['TABLA'].
-        " WHERE COE_Identificacion = ? OR (COE_Apellido2 = ? AND COE_Apellido1 = ? AND COE_Nombre1 = ?) OR COE_Email = ?";
-
+        " WHERE COE_Identificacion = ? AND COE_Nombre1 = ? AND COE_Nombre2 = ? AND COE_Apellido1 = ? AND COE_Apellido2 = ? AND COE_Email = ? AND COE_IdTipoDocumento = ? ";
+		//echo "sql Existe contacto...".$consulta;
         try {
             // Preparar sentencia
             $comando = Database::getInstance()->getDb()->prepare($consulta);
             // Ejecutar sentencia preparada
-            $comando->execute(array($Identificacion, $PrimerApellido, $SegundoApellido, $Nombre1, $Nombre2, $Email));
+            $comando->execute(array($Identificacion, $Nombre1, $Nombre2, $PrimerApellido, $SegundoApellido, $Email, $TipoDocumento));
             // Capturar primera fila del resultado
             $row = $comando->fetch(PDO::FETCH_ASSOC);
             return $row;

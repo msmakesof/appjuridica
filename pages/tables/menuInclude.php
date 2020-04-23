@@ -1,5 +1,5 @@
 <?php
-require_once('../../Connections/cnn_kn.php'); 
+//require_once('../../Connections/cnn_kn.php'); 
 require_once('../../Connections/config2.php');
 
 require_once('../../Connections/DataConex.php');

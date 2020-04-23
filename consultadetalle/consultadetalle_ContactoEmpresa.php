@@ -63,9 +63,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         {
             $parametro == "";
         }
+		
+		$Empresa = $_GET['par2'];
 
         // Tratar retorno
-        $retorno = EMP_CONTACTOEMPRESA::getAll($parametro);
+        $retorno = EMP_CONTACTOEMPRESA::getAll($parametro, $Empresa);
 
         if ($retorno) 
         {
@@ -91,13 +93,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     elseif(isset($_GET['ExisteUsuario']) )
     {
         $par2  = $_GET['Identificacion'];        
-        $par3  = $_GET['Nombre'];
+        $par3  = $_GET['Nombre1'];
 		$par4  = $_GET['Nombre2'];		
 		$par5  = $_GET['Apellido1'];
         $par6  = $_GET['Apellido2'];
-        $par7  = $_GET['Email']; 
+        $par7  = $_GET['Email'];
+		$par8  = $_GET['TipoDocumento'];
 
-        $retorno = EMP_CONTACTOEMPRESA::existeusuario($par2,$par3,$par4,$par5,$par6,$par7);
+        $retorno = EMP_CONTACTOEMPRESA::existeusuario($par2,$par3,$par4,$par5,$par6,$par7,$par8);
         if ($retorno) 
         {
             $emp_contactoempresa["estado"] = "1";

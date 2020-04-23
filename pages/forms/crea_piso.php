@@ -1,4 +1,8 @@
-<?php 
+<?php
+include_once("../tables/header.inc.php");
+require_once ('../../Connections/DataConex.php'); //('../../Connections/cnn_kn.php');
+require_once('../../Connections/config2.php');
+/*  
 require_once('../../Connections/cnn_kn.php'); 
 require_once('../../Connections/config2.php');
 if(!isset($_SESSION)) 
@@ -9,6 +13,7 @@ else
 {
     header('Location: ../../index.html');
 }
+*/
 ?>
 <?php
   if (!function_exists("GetSQLValueString")) {
@@ -65,7 +70,7 @@ require_once('../../Connections/DataConex.php');
 // Nombres iguales 
 if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
 {
-  $parameters = "ExisteTabla=1&Nombre=$pnombre&Numero=$pnumero";
+  $parameters = "ExisteTabla=1&Nombre=$pnombre&Numero=$pnumero&idtabla=0";
   $url = urlServicios."consultadetalle/consultadetalle_juz_piso.php?".$parameters;
   $ch = curl_init();
   curl_setopt($ch, CURLOPT_VERBOSE, true);
@@ -95,7 +100,7 @@ if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
     $existe = $m['juz_piso']['existe'];
     if($existe > 0)
     {
-      $sigue = "E-Existe un Tipo Documento registrado con el mismo Nombre.";
+      $sigue = "E-Existe un Piso registrado con el mismo Nombre.";
     }
     else
     {

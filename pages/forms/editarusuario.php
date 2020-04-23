@@ -1,4 +1,7 @@
 <?php
+include_once("../tables/header.inc.php");
+require_once ('../../Connections/DataConex.php'); 
+/*
 session_start(); 
 require_once('../../Connections/cnn_kn.php'); 
 require_once('../../Connections/config2.php');
@@ -6,6 +9,7 @@ if(!isset($_SESSION))
 { 
      
 } 
+*/
 ?>
 <?php
 if (!function_exists("GetSQLValueString")) 
@@ -121,7 +125,7 @@ $TipoUsuario = $muser['usu_usuario']['USU_TipoUsuario'];
 
 <body class="theme-indigo">
     <?php require_once('../tables/secciones.html'); ?>  
-    <section class="content" style="margin-top:60px;">
+    <section class="content" style="margin-top:85px;">
         <div class="container-fluid">
             <div class="block-header">
                 <h2>
@@ -148,7 +152,7 @@ $TipoUsuario = $muser['usu_usuario']['USU_TipoUsuario'];
 							
 								<div class="form-group">                                    
 									<div class="row">
-										<div class="col-md-8">
+										<div class="col-md-8"><span style="color:red;">*</span> 
 											<label class="form-label">
 												Empresa
 											</label>                                    
@@ -184,7 +188,7 @@ $TipoUsuario = $muser['usu_usuario']['USU_TipoUsuario'];
 								
                                 <div class="form-group">
                                     <div class="row">
-										<div class="col-md-4">
+										<div class="col-md-4"><span style="color:red;">*</span> 
 											<label class="form-label">
 												Tipo Documento
 											</label>                                    
@@ -207,7 +211,7 @@ $TipoUsuario = $muser['usu_usuario']['USU_TipoUsuario'];
 											</select>
 											 
 										</div>
-										<div class="col-md-4">
+										<div class="col-md-4"><span style="color:red;">*</span> 
 											<label class="form-label">Número Documento</label>
 											<div class="form-line">
 												<input type="text" class="form-control" name="numerodocumento" id="numerodocumento" value="<?php echo $NumeroDocumento ;?>" maxlength="13" required>
@@ -218,13 +222,13 @@ $TipoUsuario = $muser['usu_usuario']['USU_TipoUsuario'];
 
                                 <div class="form-group form-float">
 									<div class="row">
-										<div class="col-md-4">
-											<label class="form-label">Nombre Usuario</label>
+										<div class="col-md-4"><span style="color:red;">*</span> 
+											<label class="form-label">Nombre </label>
 											<div class="form-line">
 												<input type="text" class="form-control" name="nombre" id="nombre" value="<?php echo $NombreAlumno ;?>" required>											   
 											</div>
 										</div>
-										<div class="col-md-4">
+										<div class="col-md-4"><span style="color:red;">*</span> 
 											<label class="form-label">Primer Apellido</label>
 											<div class="form-line">
 												<input type="text" class="form-control" name="apellido1" id="apellido1" value="<?php echo $Apellido1 ;?>" required>                                       
@@ -241,13 +245,13 @@ $TipoUsuario = $muser['usu_usuario']['USU_TipoUsuario'];
 
                                  <div class="form-group form-float">
 									<div class="row">										
-										<div class="col-md-8">
+										<div class="col-md-8"><span style="color:red;">*</span> 
 											<label class="form-label">Dirección</label>
 											<div class="form-line">
 												<input type="text" class="form-control" name="direccion" id="direccion" value="<?php echo $Direccion ;?>" maxlength="50" required>											   
 											</div>
 										</div>
-										<div class="col-md-4">
+										<div class="col-md-4"><span style="color:red;">*</span> 
 											 <label class="form-label">Celular</label>
 											<div class="form-line">
 												<input type="text" class="form-control" name="celular" id="celular" value="<?php echo $Celular ;?>" maxlength="13" required>                                       
@@ -258,13 +262,13 @@ $TipoUsuario = $muser['usu_usuario']['USU_TipoUsuario'];
 								
                                 <div class="form-group form-float">
 									<div class="row">
-										<div class="col-md-8">
+										<div class="col-md-8"><span style="color:red;">*</span> 
 											<label class="form-label">Email</label>
 											<div class="form-line">
 												<input type="text" class="form-control" name="email" id="email" value="<?php echo $Email ;?>" maxlength="60" required>                                      
 											</div>
 										</div>
-										<div class="col-md-4">
+										<div class="col-md-4"><span style="color:red;">*</span> 
 											<label class="form-label">Clave</label>
 											<div class="form-line">
 												<input type="password" class="form-control" name="clave" id="clave" value="<?php echo $Clave ;?>" maxlength="30" required>                                       
@@ -275,7 +279,7 @@ $TipoUsuario = $muser['usu_usuario']['USU_TipoUsuario'];
 
                                 <div class="form-group form-float">
 									<div class="row">
-										<div class="col-md-7">
+										<div class="col-md-7"><span style="color:red;">*</span> 
 											<label class="form-label">Tipo Usuario</label>
 										
 											<select class="selectpicker show-tick" data-live-search="true" data-width="90%" name="tipousuario" id="tipousuario" required>                                            
@@ -294,7 +298,7 @@ $TipoUsuario = $muser['usu_usuario']['USU_TipoUsuario'];
 												?>
 											</select>
 										</div>   
-										<div class="col-md-5">
+										<div class="col-md-5"><span style="color:red;">*</span> 
 											<label class="form-label">Abogado</label>
 											<input type="radio" name="abogado" id="si" class="with-gap" value="1" <?php if( $EsAbogado == 1){?>checked="checked"<?php } ?>>
 											<label for="si">Si</label>
@@ -306,6 +310,7 @@ $TipoUsuario = $muser['usu_usuario']['USU_TipoUsuario'];
                                 </div>
                                 
                                 <div class="form-group">
+                                    <label class="form-label">Estado</label>
                                     <input type="radio" name="estado" id="activo" class="with-gap" value="1" <?php if( $EstadoEst == 1){?>checked="checked"<?php } ?>>
                                     <label for="activo">Activo</label>
 
@@ -315,10 +320,10 @@ $TipoUsuario = $muser['usu_usuario']['USU_TipoUsuario'];
 								
                                 <hr>
                                 <div class="form-group" style="clear: both; margin-top:20px; margin-bottom:20px;">
-									<button class="btn btn-primary waves-effect" type="button" id="grabar">GRABAR</button>
-								   <!--  <button type="button" class="btn btn-danger waves-effect" id="borrar" onclick="borrarc(<?php echo $idtabla ; ?>);">BORRAR</button> -->
+									<button class="btn btn-primary waves-effect" type="button" id="grabar">GRABAR</button>								   
 									<button type="button" class="btn btn-danger waves-effect" id="borrar">BORRAR</button>
-									<button class="btn btn-danger waves-effect" type="submit" id="cerrar">SALIR</button>
+                                    <button class="btn btn-danger waves-effect" type="submit" id="cerrar">SALIR</button>
+                                    <div><span style="color:red;">* Campos Obligatorios.</span></div>
 								</div>
 								
                             </form>                        
@@ -374,7 +379,8 @@ $TipoUsuario = $muser['usu_usuario']['USU_TipoUsuario'];
     <script type="text/javascript">    
     $(document).ready(function()
 	{			
-		$("#mensaje").hide();
+		
+        $("#mensaje").hide();
         $("#form_validation").show();
         $("#numerodocumento").numeric();
         $("#celular").numeric();

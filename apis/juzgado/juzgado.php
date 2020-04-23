@@ -1,10 +1,16 @@
 <?php
+include_once("../tables/header.inc.php");
+require_once ('../../Connections/DataConex.php'); //('../../Connections/cnn_kn.php');
+/*
+$LogoInterno = LogoInterno;
+require_once('../../Connections/config2.php');
 require_once('../../Connections/cnn_kn.php'); 
 require_once('../../Connections/config2.php');
 if(!isset($_SESSION)) 
 { 
   session_start(); 
 } 
+*/
 ?>
 <?php
 if (!function_exists("GetSQLValueString")) 
@@ -40,7 +46,7 @@ if (!function_exists("GetSQLValueString"))
     return $theValue;
   }
 }
-require_once('../../Connections/DataConex.php');
+//require_once('../../Connections/DataConex.php');
 $params ="";
 if(isset($_GET["idTabla"])){
   $idTabla = $_GET["idTabla"];

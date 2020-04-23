@@ -1,10 +1,14 @@
 <?php
+include_once("../pages/tables/header.inc.php");
+require_once ('../Connections/DataConex.php');
+/*
 require_once('../Connections/cnn_kn.php'); 
 require_once('../Connections/config2.php');
 if(!isset($_SESSION)) 
 { 
   session_start(); 
 }
+*/
 ?>
 <?php
 if (!function_exists("GetSQLValueString")) 
@@ -40,7 +44,7 @@ if (!function_exists("GetSQLValueString"))
     return $theValue;
   }
 }
-require_once('../Connections/DataConex.php');
+//require_once('../Connections/DataConex.php');
 $params ="EmailProceso=EmailProceso&Proceso=$pproceso";
 $soportecURL = "S";
 $url         = urlServicios."consultadetalle/consultadetalle_pro_proceso.php?".$params;

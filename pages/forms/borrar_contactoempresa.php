@@ -1,4 +1,5 @@
-<?php require_once('../../Connections/cnn_kn.php'); 
+<?php 
+require_once('../../Connections/cnn_kn.php'); 
 require_once('../../Connections/config2.php');
 if(!isset($_SESSION)) 
 { 

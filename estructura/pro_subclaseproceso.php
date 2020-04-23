@@ -21,8 +21,10 @@ class PRO_SUBCLASEPROCESO
     public static function getAll()
     {
         $consulta = "SELECT ".$GLOBALS['Llave'].", SCP_Nombre, SCP_IdClaseProceso,
-            CASE SCP_Estado WHEN 1 THEN 'Activo' ELSE 'Inactivo' END EstadoTabla
-            FROM ".$GLOBALS['TABLA']." ORDER BY SCP_Nombre; ";
+            CASE SCP_Estado WHEN 1 THEN 'Activo' ELSE 'Inactivo' END EstadoTabla, CPR_Nombre
+            FROM ".$GLOBALS['TABLA']." 
+			JOIN pro_claseproceso ON CPR_IdClaseProceso = SCP_IdClaseProceso
+			ORDER BY SCP_Nombre; ";
         try {
             // Preparar sentencia
             $comando = Database::getInstance()->getDb()->prepare($consulta);
@@ -221,16 +223,16 @@ class PRO_SUBCLASEPROCESO
      * @param $IdUsuario identificador de PRO_UBICACION
      * @return bool Respuesta de la consulta
      */
-    public static function existetabla($Nombre, $ClaseProceso)
+    public static function existetabla($Nombre, $ClaseProceso, $par3)
     {
         $consulta = "SELECT count(". $GLOBALS['Llave']. ") existe, SCP_Nombre, SCP_IdClaseProceso FROM ".$GLOBALS['TABLA'].
-        " WHERE SCP_Nombre = ? AND SCP_IdClaseProceso = ?; ";
+        " WHERE SCP_Nombre = ? AND SCP_IdClaseProceso = ? AND ". $GLOBALS['Llave']. " <> ?; ";
 
         try {
             // Preparar sentencia
             $comando = Database::getInstance()->getDb()->prepare($consulta);
             // Ejecutar sentencia preparada
-            $comando->execute(array($Nombre, $ClaseProceso));
+            $comando->execute(array($Nombre, $ClaseProceso, $par3));
             // Capturar primera fila del resultado
             $row = $comando->fetch(PDO::FETCH_ASSOC);
             return $row;

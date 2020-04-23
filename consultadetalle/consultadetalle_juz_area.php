@@ -87,9 +87,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     {
         $par1 = $_GET['Nombre'];
         $par2 = $_GET['Codigo'];
-        $par3 = $_GET['TipoJuzgado'];       
+        $par3 = $_GET['TipoJuzgado'];
+		$par4 = $_GET['idtabla'];	
 
-        $retorno = JUZ_AREA::existetabla($par1,$par2,$par3);
+        $retorno = JUZ_AREA::existetabla($par1,$par2,$par3,$par4);
         if ($retorno) 
         {
             $juz_area["estado"] = "1";

@@ -1,10 +1,6 @@
 <?php
-require_once('../../Connections/cnn_kn.php'); 
-require_once('../../Connections/config2.php');
-if(!isset($_SESSION)) 
-{ 
-  session_start(); 
-} 
+include_once("../../pages/tables/header.inc.php");
+require_once ('../../Connections/DataConex.php'); //require_once('../../Connections/cnn_kn.php');
 ?>
 <?php
 if (!function_exists("GetSQLValueString")) 
@@ -40,7 +36,7 @@ if (!function_exists("GetSQLValueString"))
     return $theValue;
   }
 }
-require_once('../../Connections/DataConex.php');
+
 $params ="";
 //$idTabla = 0;
 //if(isset($_GET["idTabla"]))
@@ -66,7 +62,7 @@ $url         = urlServicios."consultadetalle/consultadetalle_pro_proceso.php?".$
 $existe      = "";
 $usulocal    = "";
 $siguex      = "";
-//echo("<script>console.log('PHP proceso: ".$url."');</script>");
+echo("<script>console.log('PHP proceso: ".$url."');</script>");
 if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
 {
     $ch = curl_init();

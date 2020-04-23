@@ -1,10 +1,7 @@
 <?php
-require_once('../../Connections/cnn_kn.php'); 
-require_once('../../Connections/config2.php');
-if(!isset($_SESSION)) 
-{ 
-  session_start(); 
-}
+include_once("../tables/header.inc.php");
+require_once ('../../Connections/DataConex.php'); //('../../Connections/cnn_kn.php');
+require_once('../../Connections/config2.php'); 
 
 if (!function_exists("GetSQLValueString")) 
 {
@@ -39,7 +36,7 @@ if (!function_exists("GetSQLValueString"))
     return $theValue;
   }
 }
-require_once('../../Connections/DataConex.php');
+//require_once('../../Connections/DataConex.php');
 $soportecURL = "S";
 $params ="IdTabla=$idTabla&fn=$funcion";
 $url         = urlServicios."consultadetalle/cd_clientexdemandado.php?".$params;
@@ -84,4 +81,5 @@ if($soportecURL == "N")
     $resultado = preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $resultado);
     $mjuzgado = json_decode($resultado, true);	        
 } 
+return $mjuzgado["juz_areasxjuzgado"]["Total"];
 ?>

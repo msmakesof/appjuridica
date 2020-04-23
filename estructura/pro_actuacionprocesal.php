@@ -22,15 +22,24 @@ class PRO_ACTUACIONPROCESAL
 	 // " LEFT JOIN usu_usuario ON usu_usuario.USU_IdUsuario = pro_actuacionprocesal.APR_IdUsuario ".            
      // 
 	 // " WHERE APR_IdProceso = ? AND APR_EstadoActProcesal = ? ".    $par2, $par3
-    public static function getAll($par3)
+	 
+    public static function getAll($par4, $par3)   // $par4 = IdUsuario = Abogado      IDEmpresa = Admin     0 = SA
     {
-        $consulta = "SELECT ".$GLOBALS['Llave'].", APR_IdProceso, 
+        $condiWhere = "";
+		if($par4 != 4)
+		{
+			$condiWhere = " JOIN usu_usuario U ON U.USU_IdUsuario = pro_actuacionprocesal.APR_IdUsuario ";
+		}
+		
+		$consulta = "SELECT ".$GLOBALS['Llave'].", APR_IdProceso, 
             APR_IdTipoActuacionProcesal, APR_FechaCreacion, APR_Observaciones, APR_IdUsuario, 
-            APR_FechaHabil, APR_EstadoActProcesal, TAP_Nombre           
+            APR_FechaHabil, APR_EstadoActProcesal, APR_Gasto, TAP_Nombre , PRO_NumeroProceso          
             FROM ".$GLOBALS['TABLA']. 
-			" LEFT JOIN pro_tipoactuacionprocesal ON TAP_IdTipoActuacionProcesal = APR_IdTipoActuacionProcesal ". 			
+			" LEFT JOIN pro_tipoactuacionprocesal ON TAP_IdTipoActuacionProcesal = APR_IdTipoActuacionProcesal ".
+			" JOIN pro_proceso ON PRO_IdProceso = APR_IdProceso " . $condiWhere .
             " WHERE APR_IdProceso = ? ".
-            " ORDER BY APR_IdProceso; ";
+            " ORDER BY APR_FechaCreacion ; ";
+			
         try {
             // Preparar sentencia
             $comando = Database::getInstance()->getDb()->prepare($consulta);
@@ -61,7 +70,8 @@ class PRO_ACTUACIONPROCESAL
 							APR_Observaciones, 
 							APR_IdUsuario, 
 							APR_FechaHabil, 
-							APR_EstadoActProcesal
+							APR_EstadoActProcesal,
+							APR_Gasto
                             FROM ".$GLOBALS['TABLA'].
                             " WHERE ".$GLOBALS['Llave']." = ? ; ";
 
@@ -127,7 +137,8 @@ class PRO_ACTUACIONPROCESAL
         $FechaEstado,
         $Observacion,
 		$Usuario,
-		$EstadoActPro
+		$EstadoActPro,
+		$Gasto
     )
     {
         // Sentencia INSERT
@@ -138,9 +149,10 @@ class PRO_ACTUACIONPROCESAL
             " APR_FechaHabil, " . 
             " APR_Observaciones, " .            
             " APR_IdUsuario, " .
-            " APR_EstadoActProcesal ".
+            " APR_EstadoActProcesal, ".
+			" APR_Gasto ".
             " )".     
-            " VALUES(?,?,?,?,?,?,?) ;";
+            " VALUES(?,?,?,?,?,?,?,?) ;";			
 
         // Preparar la sentencia
         $sentencia = Database::getInstance()->getDb()->prepare($comando);
@@ -153,7 +165,8 @@ class PRO_ACTUACIONPROCESAL
 				$FechaEstado,
 				$Observacion,
 				$Usuario,
-				$EstadoActPro
+				$EstadoActPro,
+				$Gasto
             )
         );
     }
@@ -173,21 +186,48 @@ class PRO_ACTUACIONPROCESAL
         $Actpro,
         $Fechaestado,
 		$Observaciones,
+		$Gasto,
         $Idtabla
     )
     {
         // Creando consulta UPDATE
         $consulta = "UPDATE ". $GLOBALS['TABLA'] .
-            " SET APR_FechaCreacion=?, APR_IdTipoActuacionProcesal=?, APR_FechaHabil=?, APR_Observaciones=? " .
+            " SET APR_FechaCreacion=?, APR_IdTipoActuacionProcesal=?, APR_FechaHabil=?, APR_Observaciones=?, APR_Gasto=? " .
             " WHERE ". $GLOBALS['Llave']. " =? ;";
 
         // Preparar la sentencia
         $cmd = Database::getInstance()->getDb()->prepare($consulta);
 
         // Relacionar y ejecutar la sentencia
-        $cmd->execute(array($Fechainicio, $Actpro, $Fechaestado, $Observaciones, $Idtabla ));
+        $cmd->execute(array($Fechainicio, $Actpro, $Fechaestado, $Observaciones, $Gasto, $Idtabla ));
 
         return $cmd;
+    }
+	
+	/**
+     * Obtiene informacion del email del abogado asignado al Proceso.
+     * determinado
+     * @param $IdTabla Identificador de la $IdTabla
+     * @return mixed
+     */
+    public static function MaxId($IdProceso)
+    {
+        // Consulta de la tabla Proceso
+        $consulta = "SELECT MAX(".$GLOBALS['Llave'].") AS MaxIdProceso FROM ". $GLOBALS['TABLA'] ;				
+        try {
+            // Preparar sentencia
+            $comando = Database::getInstance()->getDb()->prepare($consulta);
+            // Ejecutar sentencia preparada
+            $comando->execute(array($IdProceso));
+            // Capturar primera fila del resultado
+            $row = $comando->fetch(PDO::FETCH_ASSOC);
+            return $row;
+
+        } catch (PDOException $e) {
+            // Aquí puedes clasificar el error dependiendo de la excepción
+            // para presentarlo en la respuesta Json
+            return -1;
+        }
     }
 	
 	/**

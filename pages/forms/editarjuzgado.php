@@ -1,11 +1,14 @@
 <?php 
+include_once("../tables/header.inc.php");
+require_once ('../../Connections/DataConex.php'); //('../../Connections/cnn_kn.php');
+/*
 require_once('../../Connections/cnn_kn.php'); 
 require_once('../../Connections/config2.php');
 if(!isset($_SESSION)) 
 { 
     session_start(); 
 } 
-
+*/
 ?>
 <?php
 if (!function_exists("GetSQLValueString")) {
@@ -64,6 +67,7 @@ $Piso = $mjuzgado['juz_juzgado']['JUZ_Piso'];
 $TipoJuzgado = $mjuzgado['juz_juzgado']['JUZ_IdTipoJuzgado'];
 $NombreTipoJuzgado = $mjuzgado['juz_juzgado']['TJU_Nombre'];
 $Piso = $mjuzgado['juz_juzgado']['JUZ_Piso'];
+$Telefono = $mjuzgado['juz_juzgado']['JUZ_Telefono'];
 $Area = $mjuzgado['juz_juzgado']['JUZ_IdArea'];
 $Estado = $mjuzgado['juz_juzgado']['JUZ_Estado'];
 $EstadoUsuario = $mjuzgado['juz_juzgado']['EstadoTabla'];
@@ -115,7 +119,7 @@ $EstadoUsuario = $mjuzgado['juz_juzgado']['EstadoTabla'];
         <div class="container-fluid">
             <div class="block-header">
                 <h2>
-                    FORMULARIO: <?php echo $Tabla; ?>.
+                    FORMULARIO: <?php echo $Tabla ;?>.
                     <!--<small>Editar.</small>-->
                 </h2>
             </div>
@@ -249,7 +253,14 @@ $EstadoUsuario = $mjuzgado['juz_juzgado']['EstadoTabla'];
                                 <div class="form-group form-float" style="clear: both;">
                                     <label class="form-label">Direcci&oacute;n</label>
                                     <div class="form-line">
-                                        <input type="text" class="form-control" name="direccion" id="direccion" value="" required>                                       
+                                        <input type="text" class="form-control" name="direccion" id="direccion" value="<?php echo $Direccion; ?>" required>                                       
+                                    </div>
+                                </div>
+								
+								<div class="form-group form-float" style="clear: both;">
+                                    <label class="form-label">Tel&eacute;fono</label>
+                                    <div class="form-line">
+                                        <input type="text" class="form-control" name="telefono" id="telefono" value="<?php echo $Telefono; ?>"  maxlength="13" required>                                       
                                     </div>
                                 </div>
 
@@ -295,8 +306,7 @@ $EstadoUsuario = $mjuzgado['juz_juzgado']['EstadoTabla'];
 								
                                 <hr style="clear: both; margin-top:-5px;">
                                 <div class="form-group" style="clear: both; margin-top:20px; margin-bottom:20px;">                                                                  
-									<button class="btn btn-primary waves-effect" type="button" id="grabar">GRABAR</button>
-								   <!--  <button type="button" class="btn btn-danger waves-effect" id="borrar" onclick="borrarc(<?php echo $idtabla ; ?>);">BORRAR</button> -->
+									<button class="btn btn-primary waves-effect" type="button" id="grabar">GRABAR</button>								   
 									<button type="button" class="btn btn-danger waves-effect" id="borrar">BORRAR</button>
 								</div>
 								
@@ -381,6 +391,7 @@ $EstadoUsuario = $mjuzgado['juz_juzgado']['EstadoTabla'];
 	{			
 		$("#mensaje").hide();
         $("#ubicacion").numeric();
+		$("#telefono").numeric();
         $("#form_validation").show();
         $("#form_validation").click(function() {
 			$("#msj").html("");
@@ -429,6 +440,7 @@ $EstadoUsuario = $mjuzgado['juz_juzgado']['EstadoTabla'];
 			var ubicacion = $("#ubicacion").val();            
             var ciudad = $("#ciudad").val();
             var direccion = $("#direccion").val();
+			var telefono = $("#telefono").val();
             var piso = $("#piso").val();            
             var tipojuzgado = $("#tipojuzgado").val();
             var area = $("#area").val();
@@ -438,7 +450,7 @@ $EstadoUsuario = $mjuzgado['juz_juzgado']['EstadoTabla'];
 			var idtabla = "<?php echo $idTabla; ?>";
 			
 			$.ajax({
-				data : {"ubicacion": ubicacion, "ciudad": ciudad, "direccion": direccion, "piso": piso, "tipojuzgado": tipojuzgado, "area": area, "estado": estado, "edificio": edificio, "email": email, "idtabla": idtabla},
+				data : {"ubicacion": ubicacion, "ciudad": ciudad, "direccion": direccion, "telefono": telefono, "piso": piso, "tipojuzgado": tipojuzgado, "area": area, "estado": estado, "edificio": edificio, "email": email, "idtabla": idtabla},
 				type: "POST",
 				dataType: "html",
 				url : "editar_<?php echo strtolower($Tabla); ?>.php",
@@ -476,9 +488,9 @@ $EstadoUsuario = $mjuzgado['juz_juzgado']['EstadoTabla'];
 
 	
     $("#borrar").on('click', function() {   
-        var idtabla  = "<?php echo $idtabla; ?>";        
+        var idtabla  = "<?php echo $idTabla; ?>";
         var nomtabla = "<?php echo $Nombre; ?>";
-
+		//alert(idtabla);
         alertify.confirm( 'Desea borrar este registro?', function (e) {
             if (e) {
                 //after clicking OK

@@ -22,7 +22,7 @@ class JUZ_AREA
     {
         $consulta = "SELECT ".$GLOBALS['Llave'].", ARE_Nombre, ARE_Codigo, ".
             " CASE ARE_Estado WHEN 1 THEN 'Activo' ELSE 'Inactivo' END EstadoTabla, ".
-			" TJU_Nombre ".
+			" TJU_Nombre, TJU_Codigo ".
             " FROM ".$GLOBALS['TABLA'].
 			" LEFT JOIN juz_tipojuzgado ON juz_tipojuzgado.TJU_IdTipoJuzgado = ARE_IdTipoJuzgado ".
 			" ORDER BY ARE_Nombre; ";
@@ -231,16 +231,16 @@ class JUZ_AREA
      * @param $IdUsuario identificador de juz_area
      * @return bool Respuesta de la consulta
      */
-    public static function existetabla($Nombre,$Codigo,$TipoJuzgado)
+    public static function existetabla($Nombre,$Codigo,$TipoJuzgado,$par4)
     {
         $consulta = "SELECT count(". $GLOBALS['Llave']. ") existe, ARE_Nombre FROM ".$GLOBALS['TABLA'].
-        " WHERE ARE_Nombre = ? AND ARE_Codigo = ? AND ARE_IdTipoJuzgado = ?; ";
+        " WHERE ARE_Nombre = ? AND ARE_Codigo = ? AND ARE_IdTipoJuzgado = ? AND ". $GLOBALS['Llave']. " <> ? ; ";
 
         try {
             // Preparar sentencia
             $comando = Database::getInstance()->getDb()->prepare($consulta);
             // Ejecutar sentencia preparada
-            $comando->execute(array($Nombre,$Codigo,$TipoJuzgado));
+            $comando->execute(array($Nombre,$Codigo,$TipoJuzgado,$par4));
             // Capturar primera fila del resultado
             $row = $comando->fetch(PDO::FETCH_ASSOC);
             return $row;

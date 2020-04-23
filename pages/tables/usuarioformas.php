@@ -269,7 +269,7 @@ require_once('../../apis/general/tipousuario.php');
 
 <body class="theme-indigo">
     <?php require_once('secciones.html'); ?>  
-    <section class="content" style="margin-top:45px;">
+    <section class="content" style="margin-top:85px;">
         <div class="container-fluid">
             <div class="block-header">
                 <h2>

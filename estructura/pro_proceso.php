@@ -25,14 +25,18 @@ class PRO_PROCESO
         $condi = "";
 		$condijoin = "";
 		$condijoin2 = ""; 
-		if($parametrousu != "")
+		if($parametrousu != "")  //Administrador(1) o Abogado(2)
 		{
-			$condi = " AND PRO_IdUsuario = $parametrousu ";
+			if($parametrousu == 2)
+			{	
+				$condi = " AND PRO_IdUsuario = $parametrousu ";
+			}
 		}
 		if($parametroemp != "")
 		{
-			$condijoin = "  AND usu_usuario.USU_IdEmpresa = $parametroemp AND usu_usuario.USU_Estado = 1 ";
-			$condijoin2 = " JOIN emp_empresa E ON E.EMP_IdEmpresa = usu_usuario.USU_IdEmpresa AND E.EMP_IdEstado = 1 ";
+			//$condijoin = "  AND usu_usuario.USU_IdEmpresa = $parametroemp AND usu_usuario.USU_Estado = 1 ";
+			$condijoin2 = " JOIN emp_empresa ON emp_empresa.EMP_IdEmpresa = usu_usuario.USU_IdEmpresa AND emp_empresa.EMP_IdEstado = 1 AND emp_empresa.EMP_IdEmpresa = $parametroemp ";
+			//" JOIN emp_empresa E ON E.EMP_IdEmpresa = usu_usuario.USU_IdEmpresa AND E.EMP_IdEstado = 1 ";
 			$condi = "";
 		}
 		$consulta = "SELECT ".$GLOBALS['Llave'].", PRO_NumeroProceso, PRO_FechaInicio, 
@@ -41,15 +45,19 @@ class PRO_PROCESO
             PRO_IdClaseProceso, CPR_Nombre AS ClaseProceso,
             PRO_IdJuzgadoOrigen, JUZ_Ubicacion AS Juzgado, 
             PRO_EstadoProceso, PRO_EnviaEmail, PRO_RepresentanteDe ,
-            EPR_Nombre AS EstadoTabla 
+            EPR_Nombre AS EstadoTabla ,
+			concat_ws(' ',C.CLI_Nombre, C.CLI_PrimerApellido, C.CLI_SegundoApellido) AS NombreDemandante,
+			concat_ws(' ',D.CLI_Nombre, D.CLI_PrimerApellido, D.CLI_SegundoApellido) AS NombreDemandado
             FROM ".$GLOBALS['TABLA'].
-            " LEFT JOIN usu_usuario ON usu_usuario.USU_IdUsuario = PRO_IdUsuario ". $condijoin .
+            " LEFT JOIN usu_usuario ON usu_usuario.USU_IdUsuario = PRO_IdUsuario  AND usu_usuario.USU_Estado = 1 ". $condijoin .
             " JOIN pro_ubicacion ON pro_ubicacion.UBI_IdUbicacion = PRO_IdUbicacion ".
             " JOIN pro_claseproceso ON pro_claseproceso.CPR_IdClaseProceso = PRO_IdClaseProceso ".
             " LEFT JOIN juz_juzgado ON juz_juzgado.JUZ_IdJuzgado = PRO_IdJuzgadoOrigen ".
             " JOIN pro_estadoproceso ON pro_estadoproceso.EPR_IdEstado = PRO_EstadoProceso AND pro_estadoproceso.EPR_Estado = 1 ".
+			" JOIN cli_cliente C ON C.CLI_IdTipoCliente = 1 AND C.CLI_Estado = 1 AND C.CLI_IdCliente = ". $GLOBALS['TABLA'].".PRO_IdDemandante ".
+			" JOIN cli_cliente D ON D.CLI_IdTipoCliente = 2 AND D.CLI_Estado = 1 AND D.CLI_IdCliente = ". $GLOBALS['TABLA'].".PRO_IdDemandado ".
 			$condijoin2.
-            " WHERE PRO_NumeroProceso > '' AND PRO_EstadoProceso = ? ". $condi .
+            " WHERE PRO_NumeroProceso > '' AND PRO_EstadoProceso = $Estado ". $condi .
             " ORDER BY PRO_NumeroProceso; ";
 			//echo $consulta ;
         try {
@@ -524,6 +532,51 @@ class PRO_PROCESO
             $comando = Database::getInstance()->getDb()->prepare($consulta);
             // Ejecutar sentencia preparada
             $comando->execute(array($IdProceso));
+            // Capturar primera fila del resultado
+            $row = $comando->fetch(PDO::FETCH_ASSOC);
+            return $row;
+
+        } catch (PDOException $e) {
+            // Aquí puedes clasificar el error dependiendo de la excepción
+            // para presentarlo en la respuesta Json
+            return -1;
+        }
+    }
+	
+	/**
+     * Obtiene los campos para el encabezado de una Actuacion Procesal
+     * determinada.     
+     * @param $IdTabla Identificador de la $IdTabla
+     * @return mixed
+     */
+    public static function getHeadProceso($IdTabla)
+    {
+        // Consulta de la tabla Proceso
+        $consulta = "SELECT ".$GLOBALS['Llave'].",
+					PRO_IdDemandante,
+					PRO_IdDemandado,
+					PRO_IdUsuario,
+					PRO_NumeroProceso,
+					concat_ws(' ', U.USU_Nombre, U.USU_PrimerApellido, U.USU_SegundoApellido) AS NombreAbogado,
+					concat_ws(' ', C.CLI_Nombre, C.CLI_PrimerApellido, C.CLI_SegundoApellido) AS NombreDemandante,
+					C.CLI_Identificacion AS DocDemandante, C.CLI_Direccion as DirDemandante,
+					concat_ws(' ', D.CLI_Nombre, D.CLI_PrimerApellido, D.CLI_SegundoApellido) AS NombreDemandado,
+					D.CLI_Identificacion AS DocDemandado, D.CLI_Direccion as DirDemandado,
+					J.JUZ_Direccion AS DirJuzgado, J.JUZ_Piso, J.JUZ_Email, A.ARE_Nombre AS NombreArea 
+					FROM ".$GLOBALS['TABLA'].
+					" JOIN usu_usuario U ON U.USU_IdUsuario = PRO_IdUsuario AND U.USU_Estado = 1 ".
+					" JOIN cli_cliente C ON C.CLI_IdCliente = PRO_IdDemandante AND C.CLI_Estado = 1 ".
+					" JOIN cli_cliente D ON D.CLI_IdCliente = PRO_IdDemandado AND D.CLI_Estado = 1 ".
+					" JOIN juz_juzgado J ON J.JUZ_IdJuzgado = PRO_IdJuzgado AND J.JUZ_Estado = 1 ".
+					" JOIN juz_area A ON A.ARE_IdArea = J.JUZ_IdArea AND A.ARE_Estado = 1 ".
+					" WHERE ".$GLOBALS['Llave']." = ? ; ";
+			//echo $consulta;
+
+        try {
+            // Preparar sentencia
+            $comando = Database::getInstance()->getDb()->prepare($consulta);
+            // Ejecutar sentencia preparada
+            $comando->execute(array($IdTabla));
             // Capturar primera fila del resultado
             $row = $comando->fetch(PDO::FETCH_ASSOC);
             return $row;

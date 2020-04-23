@@ -1,4 +1,8 @@
-﻿<?php 
+<?php
+include_once("../tables/header.inc.php");
+require_once ('../../Connections/DataConex.php'); //('../../Connections/cnn_kn.php');
+require_once('../../Connections/config2.php'); 
+/*   
 if(!isset($_SESSION)) 
 { 
     session_start(); 
@@ -7,6 +11,7 @@ else
 {
     header('Location: ../../index.html');
 }
+*/
 $NombreTabla ="ESTADOPROCESO";
 ?>
 <!DOCTYPE html>
@@ -52,8 +57,8 @@ $NombreTabla ="ESTADOPROCESO";
 
 
  <!-- Jquery Core Js -->
-    <!-- <script src="../../plugins/jquery/jquery.min.js"></script> -->
-    <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+    <script src="../../plugins/jquery/jquery.min.js"></script>
+    <!-- <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script> -->
     
 
 

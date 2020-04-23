@@ -1,11 +1,16 @@
-﻿<?php 
+<?php
+include_once("../tables/header.inc.php");
+require_once ('../../Connections/DataConex.php'); //('../../Connections/cnn_kn.php');
+$LogoInterno = LogoInterno;
+require_once('../../Connections/config2.php'); 
+/*  
 require_once('../../Connections/cnn_kn.php'); 
 require_once('../../Connections/config2.php');
 if(!isset($_SESSION)) 
 { 
     session_start(); 
 } 
-
+*/
 ?>
 <?php
 if (!function_exists("GetSQLValueString")) {
@@ -131,7 +136,7 @@ $idtabla = $mnotificacion['pro_notificacion']['NOT_IdNotificacion'];
 								<div class="form-group form-float">								
 									<label class="form-label">D&iacute;as H&aacute;biles:</label>
                                     <div class="form-line" style="width: 20%">                                        
-										<input type="number" class="form-control" name="dias" id="dias" max="31" value="<?php echo $diashabiles ;?>" oninput="this.value = this.value.replace(/[^0-9.]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');" onKeyDown="if(this.value.length==2 && event.keyCode!=8) return false;" required />
+										<input type="number" class="form-control" name="dias" id="dias" min="0" max="31" value="<?php echo $diashabiles ;?>" oninput="this.value = this.value.replace(/[^0-9.]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');" onKeyDown="if(this.value.length==2 && event.keyCode!=8) return false;" required />
                                         
                                     </div>                                
 								</div><br>

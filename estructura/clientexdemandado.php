@@ -47,5 +47,30 @@ class CLIENTEXDEMANDADO
             return false;
         }
     }
+	
+	public static function getByDoc($Cliente, $Demandado)
+    {
+        // Consulta        
+        $consulta = "SELECT COUNT(CLI_Identificacion) tot, 
+				CASE 
+					WHEN COUNT(CLI_Identificacion) > 1 THEN 'Demandante y Demandado No puede serl el mismo.' 
+					WHEN COUNT(CLI_Identificacion) < 1 THEN 'ZZ' END AS Total
+				FROM cli_cliente WHERE CLI_IdCliente = $Cliente OR CLI_IdCliente = $Demandado AND CLI_Estado = 1
+				GROUP BY CLI_Identificacion ; ";
+			// echo $consulta;
+        try 
+        {
+            // Preparar sentencia
+            $comando = Database::getInstance()->getDb()->prepare($consulta);
+            // Ejecutar sentencia preparada            
+            $comando->execute(array($Cliente, $Demandado));            
+			$row = $comando->fetch(PDO::FETCH_ASSOC);
+            return $row;
+        } 
+        catch (PDOException $e) 
+        {
+            return $e;
+        }
+    }
 }
 ?>

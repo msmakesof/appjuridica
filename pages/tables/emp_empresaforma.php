@@ -129,7 +129,8 @@ require_once('../../apis/general/ciudad.php');
     var nombre ="";
     $(document).ready(function()
     {       
-        $("#msj").hide();
+        $('#activo').prop("checked", true);
+		$("#msj").hide();
         $("#numerodocumento").numeric();
         $("#celular").numeric();
         $("#telefonoFijo").numeric();
@@ -162,7 +163,7 @@ require_once('../../apis/general/ciudad.php');
             else 
             {                
                 swal({
-                  title: "Error:  La dirección de correo no es valida...",
+                  title: "Atención:  La dirección de correo no es valida...",
                   text: "un momento por favor.",
                   imageUrl: "../../js/sweet/3red.gif",
                   timer: 1500,
@@ -213,7 +214,7 @@ require_once('../../apis/general/ciudad.php');
             if( tipocliente == "" || tipodocumento == "" || numerodocumento =="" || direccion == "" || email == "" || celular == "" || estado == undefined || tipocliente == undefined || sitioweb == "" || ciudad == "")
             {               
                 swal({
-                  title: "Error:  Ingrese información en todos los campos...",
+                  title: "Atención:  Ingrese información en los campos Obligatorios, marcados con *",
                   text: "un momento por favor.",
                   imageUrl: "../../js/sweet/2.gif",
                   timer: 1500,
@@ -229,7 +230,7 @@ require_once('../../apis/general/ciudad.php');
 					{
 						graba = 0;
 						swal({
-							title: "Error:  Ingrese información en el campo Nombre.",
+							title: "Atención:  Ingrese información en el campo Nombre.",
 							text: "un momento por favor.",
 							imageUrl: "../../js/sweet/2.gif",
 							timer: 1500,
@@ -249,7 +250,7 @@ require_once('../../apis/general/ciudad.php');
 						
 						graba = 0;
 						swal({
-							title: "Error:  Ingrese información en los campos de Nombres y Apellidos",
+							title: "Atención:  Ingrese información en los campos de Nombres y Apellidos",
 							text: "un momento por favor.",
 							imageUrl: "../../js/sweet/2.gif",
 							timer: 1500,
@@ -325,7 +326,7 @@ require_once('../../apis/general/ciudad.php');
 
 <body class="theme-indigo">
     <?php require_once('secciones.html'); ?>
-     <section class="content" style="margin-top:45px;">
+     <section class="content" style="margin-top:85px;">
         <div class="container-fluid">
             <div class="block-header">
                 <h2>
@@ -356,7 +357,7 @@ require_once('../../apis/general/ciudad.php');
 									
 									<!-- <div style="float: left;">	-->									                                    
 									<div class="row">
-										<div class="col-md-4">										
+										<div class="col-md-4"><span style="color:red;">*</span> 										
 											<label class="form-label">
 												Tipo Persona
 											</label>
@@ -378,7 +379,7 @@ require_once('../../apis/general/ciudad.php');
 											</select>
 										</div>
 									
-										<div class="col-md-4">										
+										<div class="col-md-4"><span style="color:red;">*</span> 										
 											<label class="form-label">
 												Tipo Documento
 											</label>                                    
@@ -402,7 +403,7 @@ require_once('../../apis/general/ciudad.php');
 											</select>
 										</div>
 									
-										<div class="col-md-4">
+										<div class="col-md-4"><span style="color:red;">*</span> 
 											<label class="form-label">N&uacute;mero Documento</label>
 											<div class="form-line">
 											   <input type="text" class="form-control" name="numerodocumento" id="numerodocumento" value="" maxlength="13" required>
@@ -414,7 +415,7 @@ require_once('../../apis/general/ciudad.php');
 
                                 <div class="form-group form-float" id="pjur">
 									<div class="row">
-										<div class="col-md-12">
+										<div class="col-md-12"><span style="color:red;">*</span> 
 											<label class="form-label">Nombre Empresa o Cliente</label>
 											<div class="form-line">
 												<input type="text" class="form-control" name="nombre" id="nombre" value="" required>
@@ -426,7 +427,7 @@ require_once('../../apis/general/ciudad.php');
 								
 								<div class="form-group form-float" id="pnat">
 									<div class="row">
-										<div class="col-md-3">
+										<div class="col-md-3"><span style="color:red;">*</span> 
 											<label class="form-label">Primer Nombre</label>
 											<div class="form-line">
 												<input type="text" class="form-control" name="nombre1" id="nombre1" value="" required>											   
@@ -440,7 +441,7 @@ require_once('../../apis/general/ciudad.php');
 											</div>
 										</div>
 									
-										<div class="col-md-3">
+										<div class="col-md-3"><span style="color:red;">*</span> 
 											<label class="form-label">Primer Apellido</label>
 											<div class="form-line">
 												<input type="text" class="form-control" name="apellido1" id="apellido1" value="" required>											   
@@ -458,13 +459,13 @@ require_once('../../apis/general/ciudad.php');
                                 
                                 <div class="form-group form-float">
 									<div class="row">
-										<div class="col-md-8">
+										<div class="col-md-8"><span style="color:red;">*</span> 
 											<label class="form-label">Direcci&oacute;n</label>
 											<div class="form-line">
 												<input type="text" class="form-control" name="direccion" id="direccion" value="" maxlength="50" required>                                
 											</div>
 										</div>
-										<div class="col-md-4">										
+										<div class="col-md-4"><span style="color:red;">*</span> 										
 											<label class="form-label">Ciudad</label>                                    
 																			   
 											<select class="selectpicker show-tick" data-live-search="true" data-width="100%" name="ciudad" id="ciudad" required>
@@ -495,7 +496,7 @@ require_once('../../apis/general/ciudad.php');
 											   <input type="text" class="form-control" name="sitioweb" id="sitioweb" value="" maxlength="100" required>                                       
 											</div>
 										</div>
-										<div class="col-md-7">
+										<div class="col-md-7"><span style="color:red;">*</span> 
 											<label class="form-label">Email</label>
 											<div class="form-line">
 											   <input type="text" class="form-control" name="email" id="email" value="" maxlength="60" required>                                       
@@ -507,14 +508,14 @@ require_once('../../apis/general/ciudad.php');
 								
                                 <div class="form-group form-float">
 									<div class="row">
-										<div class="col-md-4">									
+										<div class="col-md-4"><span style="color:red;">*</span> 									
 											<label class="form-label">Teléfono Fijo</label>
 											<div class="form-line">
 												<input type="text" class="form-control" name="fijo" id="fijo" value="" maxlength="13" required>                                       
 											</div>
 										</div>
 										
-										<div class="col-md-4">
+										<div class="col-md-4"><span style="color:red;">*</span> 
 											<label class="form-label">Celular</label>
 											<div class="form-line">
 												<input type="text" class="form-control" name="celular" id="celular" value="" maxlength="13" required>                                       
@@ -536,7 +537,7 @@ require_once('../../apis/general/ciudad.php');
                                 
                                 <button class="btn btn-primary waves-effect" type="submit" id="grabar">GRABAR</button>
 								<button class="btn btn-danger waves-effect" type="submit" id="cerrar">SALIR</button>
-                                
+                                <div><span style="color:red;">* Campos Obligatorios.</span></div>
                             </form>                        
                     	</div>
                 	</div>    

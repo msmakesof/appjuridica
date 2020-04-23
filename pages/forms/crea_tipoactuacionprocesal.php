@@ -1,4 +1,8 @@
-<?php 
+<?php
+include_once("../tables/header.inc.php");
+require_once ('../../Connections/DataConex.php'); //('../../Connections/cnn_kn.php');
+require_once('../../Connections/config2.php');
+/*  
 require_once('../../Connections/cnn_kn.php'); 
 require_once('../../Connections/config2.php');
 if(!isset($_SESSION)) 
@@ -9,6 +13,7 @@ else
 {
     header('Location: ../../index.html');
 }
+*/
 ?>
 <?php
   if (!function_exists("GetSQLValueString")) {
@@ -55,12 +60,12 @@ if( isset($_POST['pestado']) )
 	  $pestado = trim($_POST['pestado']);
 }
 
-require_once('../../Connections/DataConex.php');
+//require_once('../../Connections/DataConex.php');
 //Verifico si existe una Tabla con las siguientes caracteristicas
 // Nombres iguales 
 if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
 {
-  $parameters = "ExisteTabla=1&Nombre=$pnombre";
+  $parameters = "ExisteTabla=1&Nombre=$pnombre&idtabla=0";
   $url = urlServicios."consultadetalle/consultadetalle_pro_tipoactuacionprocesal.php?".$parameters;
   $ch = curl_init();
   curl_setopt($ch, CURLOPT_VERBOSE, true);
@@ -90,7 +95,7 @@ if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
     $existe = $m['pro_tipoactuacionprocesal']['existe'];
     if($existe > 0)
     {
-      $sigue = "E-Existe un T ipo Actuacion Procesal registrado con el mismo Nombre.";
+      $sigue = "E-Existe un Tipo Actuacion Procesal registrado con el mismo Nombre.";
     }
     else
     {

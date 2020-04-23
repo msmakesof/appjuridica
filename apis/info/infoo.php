@@ -47,7 +47,7 @@ $url         = urlServicios."consultadetalle/consultadetalle_info.php?IdUsuario=
 $existe      = "";
 $usulocal    = "";
 $siguex      = "";
-echo("<script>console.log('PHP proceso infoo: ".$url."');</script>");
+echo "<script>console.log('PHP proceso infoo: ".$url."');</script>";
 if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
 {
     $ch = curl_init();

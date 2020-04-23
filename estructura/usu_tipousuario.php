@@ -75,7 +75,7 @@ class USU_TIPOUSUARIO
      *
      * @param $IdTabla Identificador de la $IdTabla
      * @return mixed
-     */
+     
     public static function getByJuridicos($IdJuridicos)
     {
         // Consulta de la tabla de tablas
@@ -96,6 +96,7 @@ class USU_TIPOUSUARIO
             return -1;
         }
     }
+	*/
 
     /**
      * Obtiene los campos de USU_TIPOUSUARIO diferente al administrador

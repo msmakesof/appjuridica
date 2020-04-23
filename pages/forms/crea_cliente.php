@@ -114,13 +114,79 @@ if(isset($_POST['uc'])){
   $usuariocrea = trim($_POST['uc']);
 }
 
+$tipodocumentorl ="";
+if(isset($_POST['tipodocumentorl'])){
+  $tipodocumentorl = trim($_POST['tipodocumentorl']);
+}
+
+$numerodocumentorl ="";
+if(isset($_POST['numerodocumentorl'])){
+  $numerodocumentorl = trim($_POST['numerodocumentorl']);
+}
+
+$nombrerl ="";
+if(isset($_POST['nombrerl'])){
+  $nombrerl = trim($_POST['nombrerl']);
+  $nombrerl = str_replace(" ","%20",$nombrerl);  
+}
+
+$apellido1rl ="";
+if(isset($_POST['apellido1rl'])){
+  $apellido1rl = trim($_POST['apellido1rl']);
+  $apellido1rl = str_replace(" ","%20",$apellido1rl);  
+}
+
+$emailrl ="";
+if(isset($_POST['emailrl'])){
+  $emailrl = trim($_POST['emailrl']);
+}
+
+$celularrl ="";
+if(isset($_POST['celularrl'])){
+  $celularrl = trim($_POST['celularrl']);
+}
+
+$tipodocumentorl2 ="";
+if(isset($_POST['tipodocumentorl2'])){
+  $tipodocumentorl2 = trim($_POST['tipodocumentorl2']);
+}
+
+$numerodocumentorl2 ="";
+if(isset($_POST['numerodocumentorl2'])){
+  $numerodocumentorl2 = trim($_POST['numerodocumentorl2']);
+}
+
+$nombrerl2 ="";
+if(isset($_POST['nombrerl2'])){
+  $nombrerl2 = trim($_POST['nombrerl2']);
+  $nombrerl2 = str_replace(" ","%20",$nombrerl2);  
+}
+
+$apellidosrl2 ="";
+if(isset($_POST['apellidosrl2'])){
+  $apellidosrl2 = trim($_POST['apellidosrl2']);
+  $apellidosrl2 = str_replace(" ","%20",$apellidosrl2);  
+}
+
+$emailrl2 ="";
+if(isset($_POST['emailrl2'])){
+  $emailrl2 = trim($_POST['emailrl2']);
+}
+
+$celularrl2 ="";
+if(isset($_POST['celularrl2'])){
+  $celularrl2 = trim($_POST['celularrl2']);
+}
+
+
 require_once('../../Connections/DataConex.php');
 //Verifico si existe un usuario con las siguientes caracteristicas
 // Nombres iguales o nro documento igual o email igual
 if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
 {
-  $parameters = "ExisteUsuario=1&Identificacion=$numerodocumento&PrimerApellido=$apellido1&SegundoApellido=$apellido2&Nombre=$nombre&Email=$email";
+  $parameters = "ExisteUsuario=1&Identificacion=$numerodocumento&PrimerApellido=$apellido1&SegundoApellido=$apellido2&Nombre=$nombre&Email=$email&TipoCliente=$tipocliente&IdCliente=0";
   $url = urlServicios."consultadetalle/consultadetalle_Cliente.php?".$parameters;
+  //echo "<script>console.log('existe CLI...'+$url);</script>";
   $ch = curl_init();
   curl_setopt($ch, CURLOPT_VERBOSE, true);
   curl_setopt($ch, CURLOPT_URL, $url);
@@ -149,7 +215,7 @@ if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
     $existe = $m['cli_cliente']['existe'];
     if($existe > 0)
     {
-      $sigue = "E-Existe un Cliente registrado con el mismo Nombre o Número de Identificación o Email.";
+      $sigue = "E-Existe un Cliente registrado con el mismo Nombre o Número de Identificación.";
     }
     else
     {
@@ -159,8 +225,7 @@ if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
       $local = rand(10000000,1234567890000);
       $clave = encryptor('encrypt',$clave);
 		
-      $parameters = "insert=insert&TipoDocumento=$tipodocumento&Identificacion=$numerodocumento&PrimerApellido=$apellido1&SegundoApellido=$apellido2&Nombre=$nombre&Email=$email&Direccion=$direccion&Celular=$celular&Usuario=$email&Clave=$clave&Estado=$estado&IdInterno=$interno&Local=$local&Verseguimiento=$verseguimiento&TipoCliente=$tipocliente&Empresa=$empresa&UsuarioCrea=$usuariocrea";
-           
+      $parameters = "insert=insert&TipoDocumento=$tipodocumento&Identificacion=$numerodocumento&PrimerApellido=$apellido1&SegundoApellido=$apellido2&Nombre=$nombre&Email=$email&Direccion=$direccion&Celular=$celular&Usuario=$email&Clave=$clave&Estado=$estado&IdInterno=$interno&Local=$local&Verseguimiento=$verseguimiento&TipoCliente=$tipocliente&Empresa=$empresa&UsuarioCrea=$usuariocrea&TipoDocumentorl=$tipodocumentorl&Identificacionrl=$numerodocumentorl&Nombrerl=$nombrerl&Apellido1rl=$apellido1rl&Emailrl=$emailrl&Celularrl=$celularrl&TipoDocumentorl2=$tipodocumentorl2&Identificacionrl2=$numerodocumentorl2&Nombrerl2=$nombrerl2&Apellidosrl2=$apellidosrl2&Emailrl2=$emailrl2&Celularrl2=$celularrl2";
       $soportecURL = "S";
       $url         = urlServicios."consultadetalle/consultadetalle_Cliente.php?".$parameters;
       $existe      = "";

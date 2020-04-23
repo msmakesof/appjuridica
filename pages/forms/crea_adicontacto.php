@@ -112,8 +112,9 @@ require_once('../../Connections/DataConex.php');
 // Nombres iguales o nro documento igual o email igual
 if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
 {
-  $parameters = "ExisteUsuario=1&Identificacion=$identificacion&Nombre1=$nombre1&Nombre2=$nombre2&Apellido1=$apellido1&Apellido2=$apellido2&Email=$email";
+  $parameters = "ExisteUsuario=1&Identificacion=$identificacion&Nombre1=$nombre1&Nombre2=$nombre2&Apellido1=$apellido1&Apellido2=$apellido2&Email=$email&TipoDocumento=$tipodocumento";
   $url = urlServicios."consultadetalle/consultadetalle_ContactoEmpresa.php?".$parameters;
+  //echo "<script> console.log('Existe Contacto...".$url."')</script>" ;
   $ch = curl_init();
   curl_setopt($ch, CURLOPT_VERBOSE, true);
   curl_setopt($ch, CURLOPT_URL, $url);

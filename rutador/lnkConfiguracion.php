@@ -20,7 +20,14 @@ if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
     
 	$m =  preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $resultado);    
 
-        $m = json_decode($m, true);
+	$m = json_decode($m, true);
+	
+	//
+	/*
+	echo "arreglo...";
+	echo json_encode($m['gen_configuracion'])."<br>";
+	*/
+	//
     
     $json_errors = array(
 	JSON_ERROR_NONE => 'No se ha producido ningún error',
@@ -45,6 +52,7 @@ if($soportecURL == "N")
 	$resultado = preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $resultado);
 	$m = json_decode($resultado, true);		
 }
+//echo "url...$url<br>";
 $titulo = $m['gen_configuracion']['CON_TituloApp'];
 $logo = $m['gen_configuracion']['CON_Logo'];	
 ?>

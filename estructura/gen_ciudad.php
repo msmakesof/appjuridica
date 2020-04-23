@@ -233,16 +233,16 @@ class GEN_CIUDAD
      * @param $IdUsuario identificador de la gen_departamento
      * @return bool Respuesta de la consulta
      */
-    public static function existetabla($Nombre,$Abreviatura, $Departamento)
+    public static function existetabla($Nombre,$Abreviatura, $Departamento, $par4)
     {
         $consulta = "SELECT count(". $GLOBALS['Llave']. ") existe, CIU_Nombre FROM ".$GLOBALS['TABLA'].
-        " WHERE CIU_Nombre = ? AND CIU_Abreviatura = ? AND CIU_IdDepartamento = ?; ";
+        " WHERE CIU_Nombre = ? AND CIU_Abreviatura = ? AND CIU_IdDepartamento = ? AND ". $GLOBALS['Llave']. " <> ? ; ";
 
         try {
             // Preparar sentencia
             $comando = Database::getInstance()->getDb()->prepare($consulta);
             // Ejecutar sentencia preparada
-            $comando->execute(array($Nombre,$Abreviatura, $Departamento));
+            $comando->execute(array($Nombre,$Abreviatura, $Departamento, $par4));
             // Capturar primera fila del resultado
             $row = $comando->fetch(PDO::FETCH_ASSOC);
             return $row;

@@ -1,17 +1,7 @@
 <?php
-ob_start();
-require_once('../../Connections/cnn_kn.php'); 
-require_once('../../Connections/config2.php');
-if(!isset($_SESSION)) 
-{ 
-    session_start(); 
-}
-if( !isset($_SESSION['IdUsuario']) && !isset($_SESSION['NombreUsuario']) )
-{
-	header("Location: ../../index.html");
-    exit;
-} 
-
+include_once("header.inc.php");
+require_once ('../../Connections/DataConex.php');
+$LogoInterno = LogoInterno; 
 ?>
 <?php
 if (!function_exists("GetSQLValueString")) 
@@ -46,7 +36,7 @@ if (!function_exists("GetSQLValueString"))
     }
 }
 $idTabla = 0;
-$empresa = "AppJuridica";
+$empresa = Company;
 if( isset($_POST['ƒ¤']) && !empty($_POST['ƒ¤']) )
 {    
     $clave = trim($_POST['ƒ¤']);
@@ -54,11 +44,11 @@ if( isset($_POST['ƒ¤']) && !empty($_POST['ƒ¤']) )
 else
 {
     $clave ="";
- }
- $nombre_lnk = "actuacionprocesal";
- $nombre = "";
- $email  = "";
- $usuario ="";
+}
+$nombre_lnk = "actuacionprocesal";
+$nombre = "";
+$email  = "";
+$usuario ="";
 if( isset($_POST['ƒ×'])  && !empty($_POST['ƒ×']) )
 {    
     $usuario = trim($_POST['ƒ×']);
@@ -84,6 +74,20 @@ else
 	$txtnroproceso = "<span class='label label-success'>Nro. Proceso: ". $nroproceso."</span>";
 	$condinroproceso = $nroproceso;
 }
+
+$TotalGastos = 0;
+require_once('../../apis/proceso/headproceso.php');
+$NombreAbogado = $mproceso['pro_proceso']['NombreAbogado'];
+$NombreDemandante = $mproceso['pro_proceso']['NombreDemandante'];
+$NombreDemandado = $mproceso['pro_proceso']['NombreDemandado'];
+$DocDemandante = $mproceso['pro_proceso']['DocDemandante'];
+$DocDemandado = $mproceso['pro_proceso']['DocDemandado'];
+$DirDemandante = $mproceso['pro_proceso']['DirDemandante'];
+$DirDemandado = $mproceso['pro_proceso']['DirDemandado'];
+$DirJuzgado = $mproceso['pro_proceso']['DirJuzgado'];
+$Piso = $mproceso['pro_proceso']['JUZ_Piso'];
+$Email = $mproceso['pro_proceso']['JUZ_Email'];
+$NombreArea = $mproceso['pro_proceso']['NombreArea'];
 
 $midtabla = 0;
 //echo $_POST["id"];
@@ -187,8 +191,8 @@ if( isset($_POST["id"]))  // Este es el id del Proceso la llave
             <div class="navbar-header">
                 <a href="javascript:void(0);" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse" aria-expanded="false"></a>
                 <a href="javascript:void(0);" class="bars"></a>
-                <a class="navbar-brand" href="../../index.html">
-                <img src="../../images/logomw.fw.png" style="margin-top: -10px;">
+                <a class="navbar-brand">
+                    <img src="<?php echo $LogoInterno; ?>" style="margin-top: -6px;">
                 </a>
 
             </div>
@@ -623,32 +627,90 @@ if( isset($_POST["id"]))  // Este es el id del Proceso la llave
     <section class="content">
         <div class="container-fluid">
             <div class="block-header">
-                <h2>
-                    INFORMACION DE: <?php echo strtoupper($nombre_lnk); ?> 
-					&nbsp;&nbsp;&nbsp;&nbsp;					
-                    <small>Opciones: <a href="#" target="_blank">consultar, crear, modificar.</a></small>
-                </h2>
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                    <h2>
+                        INFORMACION DE: <?php echo strtoupper($nombre_lnk); ?> 
+                        &nbsp;&nbsp;&nbsp;&nbsp;					
+                        <small>Opciones: <a href="#" target="_blank">consultar, crear, modificar.</a></small>
+                    </h2>
+                </div>    
+
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                        Abogado: <b><?php echo trim(strtoupper($NombreAbogado)); ?></b>
+                </div>
             </div>
             
-            <!-- Exportable Table -->
+            <!-- Exportable Table -->			
             <div class="row clearfix">
+				<div class="card col-lg-12 col-md-12 col-sm-12 col-xs-12">				
+										
+					<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+						<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">        
+							Juzgado: <b><?php echo $NombreArea; ?></b>
+						</div>
+						<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">        
+							Direcci&oacute;n: <b><?php echo $DirJuzgado; ?></b>
+						</div>								
+					</div>
+				
+					<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+						<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">        
+							Piso: <b><?php echo $Piso; ?></b>
+						</div>
+						<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">        
+							Email: <b><?php echo $Email; ?></b>
+						</div>
+					</div>
+			
+					<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+						<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+							Demandante: <b><?php echo trim(strtoupper($NombreDemandante)); ?></b>
+						</div>                            
+						<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+							Documento: <b><?php echo trim(strtoupper($DocDemandante)); ?></b>
+						</div>
+					</div>
+			
+					<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+						<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+							Direcci&oacute;n: <b><?php echo trim(strtoupper($DirDemandante)); ?></b>                            
+						</div>    
+					</div>					
+
+					<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+						<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+							Demandado: <b><?php echo trim(strtoupper($NombreDemandado)); ?></b>
+						</div>
+						<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+							Documento: <b><?php echo trim(strtoupper($DocDemandado)); ?></b>
+						</div>                             
+					</div>
+			
+					<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+						<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+							Direcci&oacute;n: <b><?php echo trim(strtoupper($DirDemandado)); ?></b>                            
+						</div>    
+					</div>
+											
+					
+				</div>						
+
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <div class="card">
-                        <div class="header">
+                        <div class="header">                            
                             <h2>
                                 Opciones para Exportar  <?php echo $txtnroproceso .' - ' . $midtabla; ?>
                             </h2>
-                            <ul class="header-dropdown m-r--1">
-                               								
+                            
+							<ul class="header-dropdown m-r--1">                                                                
 								<li class="dropdown">
-                                    <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                                        <i class="material-icons" style="font-size:24px;color:red">add_circle_outline</i>  										      
-                                    </a>
-                                     
-                                    
-                                    <ul class="dropdown-menu pull-right">
-                                       <li>
-                                       <!-- <a id="nuevo" class="btn btn-warning btn-xs waves-effect" data-toggle="modal" data-target="#defaultModal">Nuevo</a> -->
+									<a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+										<i class="material-icons" style="font-size:24px;color:red">add_circle_outline</i>  										      
+									</a>
+									
+									<ul class="dropdown-menu pull-right">
+									<li>
+									<!-- <a id="nuevo" class="btn btn-warning btn-xs waves-effect" data-toggle="modal" data-target="#defaultModal">Nuevo</a> -->
 
 										<a id="nuevo" href="javascript:void(0);" onclick="nuevo(<?php echo $midtabla; ?>)" class="btn btn-warning btn-xs waves-effect">
 											<i class="material-icons">add_circle</i>Nuevo
@@ -657,18 +719,19 @@ if( isset($_POST["id"]))  // Este es el id del Proceso la llave
 											<i class="material-icons">cancel</i>Salir
 										</a>
 
-                                      <!--  <button type="button" class="btn btn-default waves-effect m-r-20" data-toggle="modal" data-target="#defaultModal">Nuevo</button>-->
-                                        </li>
-                                        <!-- 
-                                        <li><a href="javascript:void(0);">Another action</a></li>
-                                        <li><a href="javascript:void(0);">Something else here</a>
-                                        </li>
-                                        -->
-                                    </ul>
-                                    
-                                </li>
-                            </ul>
+									<!--  <button type="button" class="btn btn-default waves-effect m-r-20" data-toggle="modal" data-target="#defaultModal">Nuevo</button>-->
+										</li>
+										<!-- 
+										<li><a href="javascript:void(0);">Another action</a></li>
+										<li><a href="javascript:void(0);">Something else here</a>
+										</li>
+										-->
+									</ul>
+									
+								</li>
+							</ul>
                         </div>
+
                         <div class="body table-responsive" id="zonaquery">
                         <form class='contact_form' ACTION='../forms/editarproceso.php' METHOD='POST' id='formulario'>
                          <table class="table table-bordered table-striped table-hover dataTable js-exportable" id="grid">
@@ -677,7 +740,8 @@ if( isset($_POST["id"]))  // Este es el id del Proceso la llave
 										<th>Fecha</th>
 										<th>Actuaci&oacuten Procesal</th>
 										<th>Fecha Estado</th>
-										<th>Observaci&oacute;n</th>   
+										<th>Observaci&oacute;n</th>
+										<th>Gasto</th>
                                     </tr>
                                 </thead>
                                 <tfoot>
@@ -685,19 +749,27 @@ if( isset($_POST["id"]))  // Este es el id del Proceso la llave
                                         <th>Fecha</th>
 										<th>Actuaci&oacuten Procesal</th>
 										<th>Fecha Estado</th>
-										<th>Observaci&oacute;n</th>                                           
+										<th>Observaci&oacute;n</th>
+										<th>Gasto</th>
                                     </tr>
                                 </tfoot>
                                 <tbody>
 <?php
-require_once('../../Connections/DataConex.php');
+//require_once('../../Connections/DataConex.php');
+/*
+if($_SESSION["TipoUsuario"] <= 2 ) {
+	$IdUsuario = $_SESSION['IdUsuario'];	
+	$empresa = $_SESSION['IdEmpresa'];	
+}
+*/
+$IdTipouser = $_SESSION["TipoUsuario"];
 		
 	$soportecURL = "S";
-	$url         = urlServicios."consultadetalle/consultadetalle_pro_actuacionprocesal.php?IdMostrar=0&E=1&Proceso=".$midtabla ;
+	$url         = urlServicios."consultadetalle/consultadetalle_pro_actuacionprocesal.php?IdMostrar=0&E=1&Proceso=".$midtabla."&IdTipouser=".$IdTipouser ;
 	$existe      = "";
 	$usulocal    = "";
 	$siguex      = "";
-	echo("<script>console.log('PHP proproceso: $url');</script>");
+	//echo("<script>console.log('PHP ConsultaProceso: $url');</script>");
 	if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
 	{
 		$ch = curl_init();
@@ -743,6 +815,7 @@ require_once('../../Connections/DataConex.php');
 	{
 		$nombre_Tabla = "";
 		$contar = count($mactuacionprocesal['pro_actuacionprocesal']);
+		
 		for($i=0; $i < $contar; $i++)
 		{
 			$idTablaap = $mactuacionprocesal['pro_actuacionprocesal'][$i]['APR_IdActuacionProcesal'];
@@ -752,27 +825,41 @@ require_once('../../Connections/DataConex.php');
 			$FechaHabil = $mactuacionprocesal['pro_actuacionprocesal'][$i]['APR_FechaHabil'];
 			$Observaciones = trim($mactuacionprocesal['pro_actuacionprocesal'][$i]['APR_Observaciones']);
 			$estadoTabla = trim($mactuacionprocesal['pro_actuacionprocesal'][$i]['APR_EstadoActProcesal']);
+			$Gasto = trim($mactuacionprocesal['pro_actuacionprocesal'][$i]['APR_Gasto']);
+			$TotalGastos += $Gasto;
 ?>
         <tr>            
 			<td href="javascript:void(0);" style="cursor: pointer;" onclick='actproupd("<?php echo $idTablaap; ?>","<?php echo $midtabla; ?>", "<?php echo $nroproceso; ?>")' ><?php echo $idTablaap; ?> - <?php echo $FechaCreacion; ?></td>
 			<td><?php echo $Nombre; ?></td>
 			<td><?php echo $FechaHabil; ?></td>            
-			<td><?php echo $Observaciones; ?></td>            
+			<td><?php echo $Observaciones; ?></td>
+			<td>$ <?php echo number_format($Gasto, 2, '.', ','); ?></td>            
 		</tr>
     <?php                          
     }
 }
 ?>
+<div class="form-group">
+<div style="float: right !important;" class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
+	<div class="row">	
+		<div style="margin-bottom:-15px; float: right">
+			<span class="btn btn-success">Total Gastos: $<?php echo  number_format($TotalGastos, 2, '.', ','); ?></span>
+		</div>
+	</div>
+</div>
+</div>
+
  </tbody>
 </table>
 </form>
                                
                         </div>
                     </div>
-                </div>
+                </div>				
             </div>
-            <!-- #END# Exportable Table -->
+            <!-- #END# Exportable Table -->			
         </div>
+		
     </section>
 
 	<!-- Default Editar -->
@@ -941,4 +1028,4 @@ function crear(nuevaurl)
 </script>
 </body>
 </html>
-<?php ob_end_flush(); ?>
+<?php // ob_end_flush(); ?>

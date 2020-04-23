@@ -1,5 +1,5 @@
 <?php
-/**
+/**ExisteTabla
  * Obtiene el detalle de una Tabla especificada por
  * su identificador "$ITabla"
  */
@@ -84,8 +84,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     {
         $par1 = $_GET['Nombre'];
         $par2 = $_GET['ClaseProceso'];
+		$par3 = $_GET['idtabla'];
 
-        $retorno = PRO_SUBCLASEPROCESO::existetabla($par1, $par2);
+        $retorno = PRO_SUBCLASEPROCESO::existetabla($par1, $par2, $par3);
         if ($retorno) 
         {
             $pro_subclaseproceso["estado"] = "1";

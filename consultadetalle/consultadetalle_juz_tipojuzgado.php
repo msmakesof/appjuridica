@@ -85,9 +85,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 
     elseif (isset($_GET['ExisteTabla']) )
     {
-        $par1 = $_GET['Nombre'];       
+        $par1 = $_GET['Nombre'];
+		$par2 = $_GET['idtabla'];
 
-        $retorno = JUZ_TIPOJUZGADO::existetabla($par1);
+        $retorno = JUZ_TIPOJUZGADO::existetabla($par1, $par2);
         if ($retorno) 
         {
             $juz_tipojuzgado["estado"] = "1";

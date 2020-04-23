@@ -1,13 +1,8 @@
 <?php
-ob_start();
-session_start();
-if( !isset($_SESSION['IdUsuario']) && !isset($_SESSION['NombreUsuario']) )
-{
-	header("Location: ../../index.html");
-    //exit;
-} 
-require_once('../../Connections/cnn_kn.php'); 
-require_once('../../Connections/config2.php');
+include_once("header.inc.php");
+require_once ('../../Connections/DataConex.php'); //rrequire_once('../../Connections/cnn_kn.php');
+$LogoInterno = LogoInterno; 
+//require_once('../../Connections/config2.php');
 ?>
 <?php
 if (!function_exists("GetSQLValueString")) 
@@ -42,7 +37,7 @@ if (!function_exists("GetSQLValueString"))
     }
 }
 $idTabla = 0;
-$empresa = "AppJuridica";
+$empresa = Company;
 if( isset($_POST['ƒ¤']) && !empty($_POST['ƒ¤']) )
 {    
     $clave = trim($_POST['ƒ¤']);
@@ -191,8 +186,8 @@ if($usuario == "")
             <div class="navbar-header">
                 <a href="javascript:void(0);" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse" aria-expanded="false"></a>
                 <a href="javascript:void(0);" class="bars"></a>
-                <a class="navbar-brand" href="../../index.html">
-                <img src="../../images/logomw.fw.png" style="margin-top: -10px;">
+                <a class="navbar-brand">
+                <img src="<?php echo $LogoInterno; ?>" style="margin-top: -6px;">
                 </a>
 
             </div>
@@ -462,7 +457,7 @@ if($usuario == "")
                             <li><a href="javascript:void(0);"><i class="material-icons">shopping_cart</i>Tareas</a></li>
                             <li><a href="javascript:void(0);"><i class="material-icons">book</i>Notificaciones</a></li>
                             <li role="seperator" class="divider"></li> -->
-                            <li><a href="../../"><i class="material-icons">input</i>Salir</a></li>
+                            <li><a href="./close.php"><i class="material-icons">input</i>Salir</a></li>
                         </ul>
                     </div>
                 </div>
@@ -677,23 +672,23 @@ if($usuario == "")
                                 <thead>
                                     <tr>
                                         <th>No. Proceso</th>
-										<th>Acciones</th>
-                                        <th>Apoderado(a)</th>
+                                        <th>Acciones</th>
+                                        <th>Demandante</th>
+                                        <th>Demandado</th>
                                         <th>Ubicaci&oacute;n</th>
-                                        <th>Clase Proceso</th>
                                         <th>Juzgado</th>
-                                        <th>Estado</th> 
+                                        <th>Apoderado(a)</th>                                        
                                     </tr>
                                 </thead>
                                 <tfoot>
                                     <tr>
                                         <th>No. Proceso</th>
-										<th>Acciones</th>
-                                        <th>Apoderado(a)</th>
-                                        <th>Ubicaci&oacute;n</th>
-                                        <th>Clase Proceso</th>
+                                        <th>Acciones</th>
+                                        <th>Demandante</th>
+                                        <th>Demandado</th>
+                                        <th>Ubicaci&oacute;n</th>                                        
                                         <th>Juzgado</th>
-                                        <th>Estado</th>                                        
+                                        <th>Apoderado(a)</th>
                                     </tr>
                                 </tfoot>
                                 <tbody>
@@ -702,19 +697,16 @@ $IdUsuario = 0;
 $empresa = "";
 // Administrador(1) o Abogado(2)
 if($_SESSION["TipoUsuario"] <= 2 ) {
-	$IdUsuario = $_SESSION['IdUsuario'];
-	//if($_SESSION["TipoUsuario"] == 2 ) 
-	//{
-		$empresa = $_SESSION['IdEmpresa'];
-	//}
+	$IdUsuario = $_SESSION['IdUsuario'];	
+	$empresa = $_SESSION['IdEmpresa'];	
 }
-require_once('../../Connections/DataConex.php');
+//require_once('../../Connections/DataConex.php');
 $soportecURL = "S";
 $url         = urlServicios."consultadetalle/consultadetalle_pro_proceso.php?IdMostrar=0&e=1&iu=$IdUsuario&em=$empresa";
 $existe      = "";
 $usulocal    = "";
 $siguex      = "";
-echo("<script>console.log('PHP proproceso: $url');</script>");
+//echo("<script>console.log('PHP Query Proceso: $url');</script>");
 if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
 {
     $ch = curl_init();
@@ -775,7 +767,9 @@ if( $mproceso['estado'] != 2)
 			$Ubicacion =$mproceso['pro_proceso'][$i]['Ubicacion'];
 			$ClaseProceso =$mproceso['pro_proceso'][$i]['ClaseProceso'];
 			$Juzgado =$mproceso['pro_proceso'][$i]['Juzgado'];
-			$estadoTabla = trim($mproceso['pro_proceso'][$i]['EstadoTabla']);       
+            $estadoTabla = trim($mproceso['pro_proceso'][$i]['EstadoTabla']);
+            $Demandante = trim(strtoupper($mproceso['pro_proceso'][$i]['NombreDemandante']));
+            $Demandado = trim(strtoupper($mproceso['pro_proceso'][$i]['NombreDemandado']));
     ?>
         <tr>
             <td>
@@ -801,6 +795,14 @@ if( $mproceso['estado'] != 2)
                     </div>
                     </a>
                 </div>
+
+                <div class="procesodiv" style="float: left; margin-left:20px">
+                    <a href="javascript:void(0);" id="imgasto" onclick='actprocesalgas("<?php echo $idTabla; ?>","<?php echo trim($NombreTabla); ?>")'>
+                    <div class="procesodiv2">                       
+						<i class="material-icons md-tooltip--left" data-md-tooltip="Gastos" style="color:#FF9900">shop</i>
+                    </div>
+                    </a>
+                </div>
 				
                 <div class="procesodiv"  style="float: left; margin-left:20px">
                     <a href="javascript:void(0);" onclick="docsxproceso(<?php echo $idTabla; ?>)">
@@ -809,12 +811,13 @@ if( $mproceso['estado'] != 2)
                     </div>
                     </a>
                 </div>
-			</td>
-            <td><?php echo $AsignadoA; ?></td>
+                
+            </td>
+            <td><?php echo $Demandante; ?></td>
+            <td><?php echo $Demandado; ?></td>
             <td><?php echo $Ubicacion .'-'. $_SESSION["TipoUsuario"] .'-'. $_SESSION['IdUsuario'] ;?></td>
-            <td><?php echo $ClaseProceso; ?></td>            
             <td><?php echo $Juzgado; ?></td>
-            <td><?php echo $estadoTabla; ?></td>
+            <td><?php echo $AsignadoA; ?></td>
         </tr>
     <?php                          
     }
@@ -959,6 +962,16 @@ function actprocesal(id, proceso)
     });
 }
 
+function actprocesalgas(id, proceso) 
+{   
+    $.post('editaractprocesalg.php', { 'id': id, 'proceso': proceso }, function (result) {
+        WinId = window.open('','_self');
+        WinId.document.open();
+        WinId.document.write(result);
+        WinId.document.close();
+    });
+}
+
 function xcambiar(nuevaurl) 
 { 
     var obj       = $('#carga');
@@ -981,4 +994,3 @@ function crear(nuevaurl)
 </script>
 </body>
 </html>
-<?php ob_end_flush(); ?>

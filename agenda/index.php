@@ -1,4 +1,5 @@
 <?php
+/*
 ob_start();
 if(!isset($_SESSION)) 
 { 
@@ -6,9 +7,12 @@ if(!isset($_SESSION))
 }
 if( !isset($_SESSION['IdUsuario']) && !isset($_SESSION['NombreUsuario']) )
 {
-	header("Location: ../index.html");
+	header("Location: ../index.php");
     exit;
 }
+*/
+include_once("../pages/tables/header.inc.php");
+
 date_default_timezone_set('America/Bogota');
 setlocale(LC_ALL,"es_ES");
 
@@ -73,7 +77,9 @@ echo "<script>
 		
 	}
 </script>";
-include('../Connections/cnn_kn.php'); 
+//require_once ('../Connections/DataConex.php'); //include('../Connections/cnn_kn.php'); 
+require_once ('../Connections/DataConex.php'); //('../../Connections/cnn_kn.php');
+$LogoInterno = LogoInterno; 
 include('../Connections/config2.php');
 ?>
 <?php
@@ -108,7 +114,7 @@ function GetSQLValueString($theValue, $theType, $theDefinedValue = "", $theNotDe
 }
 }
 
-$empresa = "AppJuridica";
+$empresa = Company;
 $arrayMeses = array('Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio','Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre');
 
 // incluimos el archivo de funciones
@@ -274,8 +280,8 @@ $email  = "";
             <div class="navbar-header">
                 <a href="javascript:void(0);" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse" aria-expanded="false"></a>
                 <a href="javascript:void(0);" class="bars"></a>
-                <a class="navbar-brand" href="../">
-                    <img src="../images/logoaj.png" style="margin-top: -10px;">
+                <a class="navbar-brand">
+                    <img src="../images/logoLitigant.gif" style="margin-top: -6px;">
                 </a>
             </div>
             <!--  Notificaciones

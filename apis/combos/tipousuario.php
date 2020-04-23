@@ -1,6 +1,6 @@
 <?php
-require_once('../../Connections/cnn_kn.php'); 
-require_once('../../Connections/config2.php');
+//require_once('../../Connections/cnn_kn.php'); 
+//require_once('../../Connections/config2.php');
 if (!function_exists("GetSQLValueString")) 
 {
   function GetSQLValueString($theValue, $theType, $theDefinedValue = "", $theNotDefinedValue = "") 
@@ -34,6 +34,7 @@ if (!function_exists("GetSQLValueString"))
     return $theValue;
   }
 }
+require_once('../../Connections/config2.php');
 require_once('../../Connections/DataConex.php');
 $soportecURL = "S";
 $params ="IdTabla=$idTabla&fn=$funcion";

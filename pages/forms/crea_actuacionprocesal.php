@@ -1,14 +1,6 @@
-<?php 
-require_once('../../Connections/cnn_kn.php'); 
-require_once('../../Connections/config2.php');
-if(!isset($_SESSION)) 
-{ 
-    session_start(); 
-}
-else
-{
-    header('Location: ../../index.html');
-}
+<?php
+include_once("../tables/header.inc.php");
+require_once ('../../Connections/DataConex.php');
 ?>
 <?php
   if (!function_exists("GetSQLValueString")) {
@@ -73,7 +65,17 @@ if( isset($_POST['observacion']) )
 	$pobservacion = str_replace(' ','%20', $pobservacion);
 }
 
-require_once('../../Connections/DataConex.php');
+$pgasto ="";
+if( isset($_POST['gasto']) )
+{
+    $pgasto = trim($_POST['gasto']);
+	if ($pgasto =="")
+	{
+		$pgasto = 0;
+	}
+}
+
+//require_once('../../Connections/DataConex.php');
 //Verifico si existe una Tabla con las siguientes caracteristicas
 // Nombres iguales 
 if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
@@ -114,7 +116,7 @@ if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
     {
       $idUsuario = $_SESSION['IdUsuario'];
 	  $estadoActPro = "1";
-      $parameters = "insert=insert&Proceso=$pproceso&Fechainicio=$pfechainicio&ActPro=$pactpro&FechaEstado=$pfechaestado&Observacion=$pobservacion&Usuario=$idUsuario&EstadoActPro=$estadoActPro";
+      $parameters = "insert=insert&Proceso=$pproceso&Fechainicio=$pfechainicio&ActPro=$pactpro&FechaEstado=$pfechaestado&Observacion=$pobservacion&Usuario=$idUsuario&EstadoActPro=$estadoActPro&Gasto=$pgasto";
       $soportecURL = "S";
       $url         = urlServicios."consultadetalle/consultadetalle_pro_actuacionprocesal.php?".$parameters;
       $existe      = "";

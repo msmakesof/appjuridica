@@ -328,17 +328,17 @@ class EMP_EMPRESA
      * @param $IdUsuario identificador de la usu_usuario
      * @return bool Respuesta de la consulta
      */
-    public static function existeusuario($Identificacion, $Nombre, $Email)
+    public static function existeusuario($Identificacion, $Nombre, $Email, $Ciudad, $IdEmpresa)
     {
-        $consulta = "SELECT count(". $GLOBALS['Llave']. ") existe, EMP_Identificacion, EMP_Nombre, EMP_Email ".        
+        $consulta = "SELECT count(". $GLOBALS['Llave']. ") existe ".        
         " FROM ".$GLOBALS['TABLA'].
-        " WHERE EMP_Identificacion = ? OR EMP_Nombre = ? OR EMP_Email = ? ";
+        " WHERE EMP_Identificacion = ? AND EMP_Nombre = ? AND EMP_Email = ? AND EMP_IdCiudad = ? AND EMP_IdEmpresa <> ? ;";
 
         try {
             // Preparar sentencia
             $comando = Database::getInstance()->getDb()->prepare($consulta);
             // Ejecutar sentencia preparada
-            $comando->execute(array($Identificacion, $Nombre));
+            $comando->execute(array($Identificacion, $Nombre, $Email, $Ciudad, $IdEmpresa));
             // Capturar primera fila del resultado
             $row = $comando->fetch(PDO::FETCH_ASSOC);
             return $row;

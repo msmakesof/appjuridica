@@ -1,9 +1,13 @@
 <?php
+/*
 if(!isset($_SESSION)) 
 { 
     session_start(); 
-} 
-require_once('../../Connections/cnn_kn.php'); 
+}
+*/ 
+include_once("../tables/header.inc.php");
+require_once ('../../Connections/DataConex.php'); //rrequire_once('../../Connections/cnn_kn.php');
+$LogoInterno = LogoInterno; 
 require_once('../../Connections/config2.php');
 ?>
 <?php
@@ -184,8 +188,8 @@ $FechaCreado = $mproceso['pro_proceso']['PRO_FechaCreado'];
             <div class="navbar-header">
                 <a href="javascript:void(0);" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse" aria-expanded="false"></a>
                 <a href="javascript:void(0);" class="bars"></a>
-                <a class="navbar-brand" href="../../index.html">
-                <img src="../../images/logomw.fw.png" style="margin-top: -10px;">
+                <a class="navbar-brand">
+                <img src="<?php echo $LogoInterno; ?>" style="margin-top: -6px;">
                 </a>
 
             </div>
@@ -617,7 +621,7 @@ $FechaCreado = $mproceso['pro_proceso']['PRO_FechaCreado'];
                                     <div class="form-group">
 										<div class="col-lg-6 col-md-6 col-sm-6">
 											<div class="row">
-												<div class="xcol-xs-10">                                                
+												<div class="xcol-xs-10"><span style="color:red;">*</span>                                              
 													<label class="form-label" style="font-size: 12;">C&oacute;digo DANE Departamento / Municipio:</label>
 													<div class="xform-line">
                                                         <?php                                                      
@@ -654,8 +658,8 @@ $FechaCreado = $mproceso['pro_proceso']['PRO_FechaCreado'];
 									<div class="form-group">			
                                         <div class="col-lg-6 col-md-6 col-sm-6">
                                             <div class="row">
-                                                <div class="xcol-xs-10">                
-													<label class="form-label">Corporaci&oacute;n:</label>
+                                                <div class="xcol-xs-10"><span style="color:red;">*</span>                 
+													<label class="form-label">Corporaci&oacute;n / Jurisdicci&oacute;n:</label>
                                                     <?php $corpoproceso = substr($NumeroProceso,5,2); ?>
 													<select class="selectpicker show-tick" data-live-search="true" data-width="95%" name="tipojuzgado" id="tipojuzgado" required  disabled="true">                                                       
 													    <option value="" >Seleccione Corporaci&oacute;n...</option>
@@ -685,7 +689,7 @@ $FechaCreado = $mproceso['pro_proceso']['PRO_FechaCreado'];
                                 <div class="form-group">                               
                                     <div class="col-lg-6 col-md-6 col-sm-6">
                                         <div class="row">
-                                            <div class="xcol-xs-6">                                                
+                                            <div class="xcol-xs-6"><span style="color:red;">*</span>                                                 
                                                 <label class="form-label">Especialidad o &Aacute;rea:</label>
 												<select id="area" name="area" class="selectpicker show-tick" data-live-search="true" data-width="95%" required  disabled="true">
 												<option value="">-- Seleccione Especializacion.... --</option>
@@ -787,7 +791,7 @@ $FechaCreado = $mproceso['pro_proceso']['PRO_FechaCreado'];
                                 <div class="form-group">
 									<div class="col-lg-6 col-md-6 col-sm-5">
                                         <div class="row">
-											<div class="xcol-sm-6">
+											<div class="xcol-sm-6"><span style="color:red;">*</span> 
 												<label class="form-label">C&oacute;digo &Uacute;nico del Proceso:</label>
 												<div class="form-line" style="width: 80%">
 													<input type="number" onkeypress="return isNumeric(event)" oninput="maxLengthCheck(this)" class="form-control" name="proceso" id="proceso" value="<?php echo $NumeroProceso; ?>" maxlength="23" required />                                                    
@@ -803,7 +807,7 @@ $FechaCreado = $mproceso['pro_proceso']['PRO_FechaCreado'];
                                 <div class="form-group">
                                     <div class="col-lg-4 col-md-4 col-sm-4">
                                         <div class="row">											
-                                            <div class="xcol-sm-6">
+                                            <div class="xcol-sm-6"><span style="color:red;">*</span> 
                                                 <label class="form-label">Fecha Inicio</label>												
                                                 <div class='input-group date form-line' name="fechainicio" id="fechainicio" required>
                                                     <input type='text' id="txtFecha" class="form-control" value="<?php echo $FechaInicio ;?>" readonly/>
@@ -819,7 +823,7 @@ $FechaCreado = $mproceso['pro_proceso']['PRO_FechaCreado'];
                                 <div class="form-group">
                                     <div class="col-lg-7 col-md-7 col-sm-7">
 										<div class="row">											
-											<div class="xcol-sm-8">
+											<div class="xcol-sm-8"><span style="color:red;">*</span> 
                                                 <label class="form-label">Apoderado(a):</label>
 												<select class="selectpicker show-tick" data-live-search="true" data-width="94%" name="usuario" id="usuario" required>
 												<option value="" >Seleccione Apoderado(a)...</option>
@@ -842,14 +846,14 @@ $FechaCreado = $mproceso['pro_proceso']['PRO_FechaCreado'];
 										</div>	
                                     </div> 
 									<div class="col-lg-5 col-md-5 col-sm-5">                                
-                                        <div class="row">
+                                        <div class="row"><span style="color:red;">*</span> 
                                             <div class="xcol-sm-8" style="margin-left:15px;">
 												<label class="form-label">Representante de: </label>
                                                 <div class="form-group">                                                    
-													<input type="radio" name="representa" id="acusador" class="with-gap" value="0" <?php if( $Representante == 0){?>checked="checked"<?php } ?>>
+													<input type="radio" name="representa" id="acusador" class="with-gap" value="1" <?php if( $Representante == 0){?>checked="checked"<?php } ?>>
 													<label for="acusador">Demandante</label>
 
-													<input type="radio" name="representa" id="acusado" class="with-gap" value="1"  <?php if( $Representante == 1){?>checked="checked"<?php } ?>>
+													<input type="radio" name="representa" id="acusado" class="with-gap" value="2"  <?php if( $Representante == 1){?>checked="checked"<?php } ?>>
 													<label for="acusado" class="m-l-20">Demandado</label>
 												</div>
                                             </div>
@@ -860,7 +864,7 @@ $FechaCreado = $mproceso['pro_proceso']['PRO_FechaCreado'];
                                 <div class="form-group">
                                     <div class="col-lg-6 col-md-6 col-sm-6">
                                         <div class="row">
-                                            <div class="xcol-sm-6">
+                                            <div class="xcol-sm-6"><span style="color:red;">*</span> 
                                                 <label class="form-label">Ubicación:</label>                                                                                   
                                                 <select class="selectpicker show-tick" data-live-search="true" data-width="94%" name="ubicacion" id="ubicacion" required>
                                                 <option value="" >Seleccione Ubicación...</option>
@@ -887,7 +891,7 @@ $FechaCreado = $mproceso['pro_proceso']['PRO_FechaCreado'];
                                 <div class="form-group">
                                     <div class="col-lg-6 col-md-6 col-sm-6">
                                         <div class="row">
-                                            <div class="xcol-sm-8">
+                                            <div class="xcol-sm-8"><span style="color:red;">*</span> 
                                                 <label class="form-label">Clase Proceso:</label>                                                
                                                     <select class="selectpicker show-tick" data-live-search="true" data-width="100%" name="claseproceso" id="claseproceso" required>
                                                     <option value="" >Seleccione Clase Proceso...</option>
@@ -914,7 +918,7 @@ $FechaCreado = $mproceso['pro_proceso']['PRO_FechaCreado'];
                                 <div class="form-group">
                                     <div class="col-lg-6 col-md-6 col-sm-6">
 										<div class="row">											
-											<div class="xcol-sm-8">
+											<div class="xcol-sm-8"><span style="color:red;">*</span> 
                                                 <label class="form-label">Demandante:</label>
 												<select class="selectpicker show-tick" data-live-search="true" data-width="94%" name="demandante" id="demandante" required>
 												<option value="" >Seleccione Cliente...</option>
@@ -941,7 +945,7 @@ $FechaCreado = $mproceso['pro_proceso']['PRO_FechaCreado'];
                                 <div class="form-group">
                                     <div class="col-lg-6 col-md-6 col-sm-6">
 										<div class="row">											
-											<div class="xcol-sm-8">
+											<div class="xcol-sm-8"><span style="color:red;">*</span> 
                                                 <label class="form-label">Demandado:</label>
 												<select class="selectpicker show-tick" data-live-search="true" data-width="94%" name="demandado" id="demandado" required>
 												<option value="" >Seleccione Demandado...</option>
@@ -1030,6 +1034,7 @@ $FechaCreado = $mproceso['pro_proceso']['PRO_FechaCreado'];
                                                 <!--  <button type="button" class="btn btn-danger waves-effect" id="borrar" onclick="borrarc(<?php echo $idtabla ; ?>);">BORRAR</button> -->
                                                 <button type="button" class="btn btn-info waves-effect" id="borrar">CERRAR PROCESO</button>
                                                 <button type="submit" class="btn btn-danger waves-effect" id="salir">SALIR</button>
+                                                <div><span style="color:red;">* Campos Obligatorios.</span></div>
                                             </div>
                                         </div>    
                                     </div>

@@ -18,48 +18,60 @@ class CLI_CLIENTE
      * @param $IdUsuario Identificador del registro
      * @return array Datos del registro
      */
-    public static function getAll($all, $iu)
+    public static function getAll($all, $par2, $par3, $par4)
     {
-        $condi = "";
-		//$condisel = "";
-		$condiwhere="";
-		if($all > 0)
-		{
-			$condi = " WHERE CLI_Empresa = ".$all;
-		}
-		if($iu > 0)
-		{
-			$condiwhere = " JOIN pro_proceso P ON P.PRO_IdUsuario = $iu AND (P.PRO_IdDemandante = CLI_IdCliente OR P.PRO_IdDemandado = CLI_IdCliente)";
-		}
+        $campos = "";
+		$condi = "";
+		$condiSel = "";
+		$condiWhere="";
+		$campos = "";
+		$Where = "";
+		if($par3 > 0)	
+		{	
+			if($par2 == 2 ) // Abogado
+			{
+				$campos = ", P.PRO_NumeroProceso ";
+				$condiSel .= " JOIN usu_usuario ON usu_usuario.USU_IdUsuario = $par3 AND usu_usuario.USU_Estado = 1 AND usu_usuario.USU_EsAbogado = 1 AND usu_usuario.USU_IdEmpresa = emp_empresa.EMP_IdEmpresa ";
+				$condiSel .= " JOIN pro_proceso P ON P.PRO_IdUsuario = usu_usuario.USU_IdUsuario AND (P.PRO_IdDemandante = CLI_IdCliente OR P.PRO_IdDemandado = CLI_IdCliente) ";
+			}
+			else // Admin
+			{
+				$condiWhere = " WHERE CLI_Empresa = ".$par3;
+			}
+		}		
+		
 		$consulta = "SELECT ".$GLOBALS['Llave']." ,
-        CLI_TipoDocumento,
-        CLI_Identificacion,
-        CLI_PrimerApellido,
-        CLI_SegundoApellido,
-        CLI_Nombre,
-        CLI_Email,
-        CLI_Celular,
-        CLI_Usuario,
-        CLI_Clave,
-		CLI_Direccion,
-        CLI_Estado,
-        CLI_FechaCreado,
-        CLI_UsuarioCrea,
-        CLI_FechaModificado,
-        CLI_UsuarioModifica,        
-        CLI_UsuarioEstado,
-        CLI_IdInterno,
-        CLI_Local ,
-		CLI_IdTipoCliente, 
-		CLI_Empresa,
-        CASE CLI_Estado WHEN 1 THEN 'Activo' ELSE 'Inactivo' END EstadoUsuario,
-        concat_WS(' ',CLI_Nombre, CLI_PrimerApellido, CLI_SegundoApellido) AS NombreUsuario, 
-		concat_WS(' ',EMP_Nombre, EMP_Nombre2, EMP_Apellido, EMP_Apellido2) AS NombreEmpresa
+			CLI_TipoDocumento,
+			CLI_Identificacion,
+			CLI_PrimerApellido,
+			CLI_SegundoApellido,
+			CLI_Nombre,
+			CLI_Email,
+			CLI_Celular,
+			CLI_Usuario,
+			CLI_Clave,
+			CLI_Direccion,
+			CLI_Estado,
+			CLI_FechaCreado,
+			CLI_UsuarioCrea,
+			CLI_FechaModificado,
+			CLI_UsuarioModifica,        
+			CLI_UsuarioEstado,
+			CLI_IdInterno,
+			CLI_Local ,
+			CLI_IdTipoCliente, 
+			CLI_Empresa,
+			CASE CLI_Estado WHEN 1 THEN 'Activo' ELSE 'Inactivo' END EstadoUsuario,
+			concat_WS(' ',CLI_Nombre, CLI_PrimerApellido, CLI_SegundoApellido) AS NombreUsuario, 
+			concat_WS(' ',EMP_Nombre, EMP_Nombre2, EMP_Apellido, EMP_Apellido2) AS NombreEmpresa
+			$campos
         FROM ".$GLOBALS['TABLA']."  
 		LEFT JOIN emp_empresa ON emp_empresa.EMP_IdEmpresa = CLI_Empresa AND emp_empresa.EMP_IdEstado = 1
-		$condiwhere
-		$condi ORDER BY CLI_Nombre; ";
-		
+		$condiSel
+		$condiWhere 
+		WHERE CLI_IdTipoCliente = $par4 	
+		ORDER BY CLI_Nombre; ";
+		//echo $consulta;
         try {
             // Preparar sentencia
             $comando = Database::getInstance()->getDb()->prepare($consulta);
@@ -104,8 +116,11 @@ class CLI_CLIENTE
                         CLI_Local ,
 						CLI_SeguimientoProceso,
 						CLI_IdTipoCliente,
-						CLI_Empresa, CLI_FechaCreado ".
-                        " FROM ".$GLOBALS['TABLA'].
+						CLI_Empresa, CLI_FechaCreado,
+						CLI_IdTipoDocumentoRepLegal, CLI_IdentificacionRepLegal, CLI_NombreRepLegal, CLI_APellidosRepLegal,
+						CLI_EmailRepLegal, CLI_CelularRepLegal, CLI_IdTipoDocumentoContacto, CLI_IdentificacionContacto,
+						CLI_NombreContacto, CLI_APellidosContacto, CLI_EmailContacto, CLI_CelularContacto
+						FROM ".$GLOBALS['TABLA'].
                         " WHERE ".$GLOBALS['Llave']." = ? ORDER BY CLI_Nombre; ";
 
         try {
@@ -233,20 +248,34 @@ class CLI_CLIENTE
 		$Verseguimiento,
 		$Empresa,
 		$UsuarioModifica,
+		$TipoDocumentorl, 
+		$Identificacionrl, 
+		$Nombrerl, 
+		$Apellido1rl, 
+		$Emailrl, 
+		$Celularrl ,
+		$TipoDocumentorl2, 
+		$Identificacionrl2, 
+		$Nombrerl2, 
+		$Apellidosrl2, 
+		$Emailrl2, 
+		$Celularrl2,
         $IdUsuario		
     )
     {
         // Creando consulta UPDATE
         $consulta = "UPDATE ". $GLOBALS['TABLA']. 
             " SET CLI_TipoDocumento=?, CLI_Identificacion=?, CLI_PrimerApellido=?, CLI_SegundoApellido=?, CLI_Nombre=?, CLI_Email=?, ".
-            " CLI_Direccion=?, CLI_Celular=?, CLI_Usuario=?, CLI_Clave=?, CLI_IdTipoCliente=? , CLI_Estado=?, CLI_SeguimientoProceso=?, CLI_Empresa=?, CLI_UsuarioModifica=? " .
+            " CLI_Direccion=?, CLI_Celular=?, CLI_Usuario=?, CLI_Clave=?, CLI_IdTipoCliente=? , CLI_Estado=?, CLI_SeguimientoProceso=?, CLI_Empresa=?, CLI_UsuarioModifica=?, " .
+			" CLI_IdTipoDocumentoRepLegal=?, CLI_IdentificacionRepLegal=?, CLI_NombreRepLegal=?, CLI_APellidosRepLegal=?, CLI_EmailRepLegal=?, CLI_CelularRepLegal=?, " .
+			" CLI_IdTipoDocumentoContacto=?, CLI_IdentificacionContacto=?,CLI_NombreContacto=?, CLI_APellidosContacto=?, CLI_EmailContacto=?, CLI_CelularContacto=? " .
             " WHERE ". $GLOBALS['Llave'] ."=? ;";
 
         // Preparar la sentencia
         $cmd = Database::getInstance()->getDb()->prepare($consulta);
 
         // Relacionar y ejecutar la sentencia
-        $cmd->execute(array($TipoDocumento, $Identificacion, $PrimerApellido, $SegundoApellido, $Nombre, $Email, $Direccion, $Celular, $Usuario, $Clave, $TipoCliente, $Estado, $Verseguimiento, $Empresa, $UsuarioModifica, $IdUsuario ));
+        $cmd->execute(array($TipoDocumento, $Identificacion, $PrimerApellido, $SegundoApellido, $Nombre, $Email, $Direccion, $Celular, $Usuario, $Clave, $TipoCliente, $Estado, $Verseguimiento, $Empresa, $UsuarioModifica	,$TipoDocumentorl, $Identificacionrl, $Nombrerl, $Apellido1rl, $Emailrl, $Celularrl ,$TipoDocumentorl2, $Identificacionrl2, $Nombrerl2, $Apellidosrl2, $Emailrl2, $Celularrl2, $IdUsuario ));
 
         return $cmd;
     }
@@ -280,8 +309,7 @@ class CLI_CLIENTE
      * @return PDOStatement
      */
 
-    public static function insert( $TipoDocumento, $Identificacion, $PrimerApellido, $SegundoApellido, $Nombre, $Email, $Direccion, $Celular, $Usuario,
-        $Clave, $TipoCliente, $Estado, $IdInterno, $Local, $Verseguimiento, $Empresa, $IdUsuarioCrea )
+    public static function insert( $TipoDocumento, $Identificacion, $PrimerApellido, $SegundoApellido, $Nombre, $Email, $Direccion, $Celular, $Usuario, $Clave, $TipoCliente, $Estado, $IdInterno, $Local, $Verseguimiento, $Empresa, $IdUsuarioCrea,$TipoDocumentorl, $Identificacionrl, $Nombrerl, $Apellido1rl, $Emailrl, $Celularrl ,$TipoDocumentorl2, $Identificacionrl2, $Nombrerl2, $Apellidosrl2, $Emailrl2, $Celularrl2)
     {
         // Sentencia INSERT
         $comando = "INSERT INTO ". $GLOBALS['TABLA'] ." ( " .            
@@ -297,13 +325,18 @@ class CLI_CLIENTE
             " CLI_Clave," . 
 			" CLI_IdTipoCliente," .
             " CLI_Estado, " .
-            " CLI_IdInterno, CLI_Local, CLI_SeguimientoProceso, CLI_Empresa, CLI_UsuarioCrea ) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);";
+            " CLI_IdInterno, CLI_Local, CLI_SeguimientoProceso, CLI_Empresa, CLI_UsuarioCrea ,
+			  CLI_IdTipoDocumentoRepLegal, CLI_IdentificacionRepLegal, CLI_NombreRepLegal, CLI_APellidosRepLegal,
+			  CLI_EmailRepLegal, CLI_CelularRepLegal, CLI_IdTipoDocumentoContacto, CLI_IdentificacionContacto,
+			  CLI_NombreContacto, CLI_APellidosContacto, CLI_EmailContacto, CLI_CelularContacto
+			) 
+			VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);";
+			//echo "sql insert cliente...".$comando;
         try {
             // Preparar la sentencia
             $sentencia = Database::getInstance()->getDb()->prepare($comando);
             return $sentencia->execute(
-                array($TipoDocumento, $Identificacion, $PrimerApellido, $SegundoApellido, $Nombre, $Email,
-                $Direccion, $Celular, $Usuario, $Clave, $TipoCliente, $Estado, $IdInterno, $Local, $Verseguimiento, $Empresa, $IdUsuarioCrea )    
+                array($TipoDocumento, $Identificacion, $PrimerApellido, $SegundoApellido, $Nombre, $Email, $Direccion, $Celular, $Usuario, $Clave, $TipoCliente, $Estado, $IdInterno, $Local, $Verseguimiento, $Empresa, $IdUsuarioCrea, $TipoDocumentorl, $Identificacionrl, $Nombrerl, $Apellido1rl, $Emailrl, $Celularrl , $TipoDocumentorl2, $Identificacionrl2, $Nombrerl2, $Apellidosrl2, $Emailrl2, $Celularrl2 )    
             );
            
         } catch (PDOException $e) {
@@ -336,20 +369,30 @@ class CLI_CLIENTE
      * @param $IdUsuario identificador de la usu_usuario
      * @return bool Respuesta de la consulta
      */
-    public static function existeusuario($Identificacion, $PrimerApellido, $SegundoApellido, $Nombre, $Email)
+    public static function existeusuario($Identificacion, $TipoCliente, $PrimerApellido, $SegundoApellido, $Nombre, $IdCliente)
     {
-        $consulta = "SELECT count(". $GLOBALS['Llave']. ") existe, CLI_Identificacion, CLI_PrimerApellido, CLI_SegundoApellido, CLI_Nombre, CLI_Email ".        
+		
+        //$consulta = "SELECT count(CLI_IdCliente) AS existe, CLI_Identificacion, CLI_IdTipoCliente, CLI_PrimerApellido, CLI_SegundoApellido, CLI_Nombre, CLI_Email, CLI_IdCliente  ".        
+		//" WHERE CLI_Identificacion = ? AND CLI_IdTipoCliente = ? AND CLI_PrimerApellido = ? AND CLI_SegundoApellido = ? AND CLI_Nombre = ? AND CLI_Email = ? AND CLI_IdCliente <> ?;";
+		$consulta = "SELECT count(CLI_IdCliente) AS existe ". 
+        " FROM cli_cliente ".
+        " WHERE CLI_Identificacion = ? AND CLI_IdTipoCliente = ? AND CLI_PrimerApellido = ? AND CLI_SegundoApellido = ? AND CLI_Nombre = ? AND CLI_IdCliente <> ?;";
+		
+		/*
+		$consulta = "SELECT count(". $GLOBALS['Llave']. ") AS existe ".        
         " FROM ".$GLOBALS['TABLA'].
-        " WHERE CLI_Identificacion = ? OR (CLI_PrimerApellido = ? AND CLI_SegundoApellido = ? AND CLI_Nombre = ?) OR CLI_Email = ?";
-
+        " WHERE CLI_Identificacion = $Identificacion AND CLI_IdTipoCliente = $TipoCliente AND CLI_PrimerApellido = '$PrimerApellido' AND CLI_SegundoApellido = '$SegundoApellido' AND CLI_Nombre = '$Nombre' AND CLI_Email = '$Email' AND CLI_IdCliente <> $IdCliente;";
+		*/
+		//echo "qry.....$consulta";
+		
         try {
             // Preparar sentencia
             $comando = Database::getInstance()->getDb()->prepare($consulta);
             // Ejecutar sentencia preparada
-            $comando->execute(array($Identificacion, $PrimerApellido, $SegundoApellido, $Nombre, $Email));
+            $comando->execute(array($Identificacion, $TipoCliente, $PrimerApellido, $SegundoApellido, $Nombre, $IdCliente));
             // Capturar primera fila del resultado
             $row = $comando->fetch(PDO::FETCH_ASSOC);
-            return $row;
+            return $row ;
 
         } catch (PDOException $e) {
             // Aquí puedes clasificar el error dependiendo de la excepción

@@ -1,11 +1,16 @@
-﻿<?php 
+<?php
+include_once("../tables/header.inc.php");
+require_once ('../../Connections/DataConex.php'); //('../../Connections/cnn_kn.php');
+$LogoInterno = LogoInterno;
+require_once('../../Connections/config2.php'); 
+/* 
 require_once('../../Connections/cnn_kn.php'); 
 require_once('../../Connections/config2.php');
 if(!isset($_SESSION)) 
 { 
     session_start(); 
 } 
-
+*/
 ?>
 <?php
 if (!function_exists("GetSQLValueString")) {
@@ -39,6 +44,7 @@ if (!function_exists("GetSQLValueString")) {
     }
 }
 $idTabla = 0;
+
 if( isset($_GET['f'])  && !empty($_GET['f']) )
 {    
     $idTabla = trim($_GET['f']);
@@ -47,13 +53,11 @@ if( isset($_GET['f'])  && !empty($_GET['f']) )
 $Tabla ="AREA";
 $idtabla = 0;
 require_once('../../apis/general/area.php');
-
 $Nombre = trim($marea['juz_area']['ARE_Nombre']);
 $estado = $marea['juz_area']['ARE_Estado'];
 $codigo = $marea['juz_area']['ARE_Codigo'];
 $tipojuzgado = $marea['juz_area']['ARE_IdTipoJuzgado'];
 $idtabla = $marea['juz_area']['ARE_IdArea'];
-
 //echo "tipojuzgado......$tipojuzgado";
 ?>
 <!DOCTYPE html>

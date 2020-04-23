@@ -1,4 +1,8 @@
-<?php 
+<?php
+include_once("../tables/header.inc.php");
+require_once ('../../Connections/DataConex.php');
+//require_once('../../Connections/config2.php');
+/* 
 require_once('../../Connections/cnn_kn.php'); 
 require_once('../../Connections/config2.php');
 if(!isset($_SESSION)) 
@@ -9,6 +13,7 @@ else
 {
     header('Location: ../../index.html');
 }
+*/
 ?>
 <?php
   if (!function_exists("GetSQLValueString")) {

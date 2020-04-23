@@ -1,10 +1,15 @@
 <?php
+include_once("../tables/header.inc.php");
+require_once ('../../Connections/DataConex.php');
+require_once('../../Connections/config2.php');
+/*
 require_once('../../Connections/cnn_kn.php'); 
 require_once('../../Connections/config2.php');
 if(!isset($_SESSION)) 
 { 
   session_start(); 
 } 
+*/
 ?>
 <?php
 if (!function_exists("GetSQLValueString")) 
@@ -58,14 +63,24 @@ else
 {
   $params ="IdUsuario=$idTabla";
 }
-require_once('../../Connections/DataConex.php');
+
+if($tipoCLiente == 1)
+{
+	$tipoCLi = 1 ;
+}
+if($tipoCLiente == 2)
+{
+	$tipoCLi = 2 ;
+}
+	
+//require_once('../../Connections/DataConex.php');
 
 $soportecURL = "S";
-$url         = urlServicios."consultadetalle/consultadetalle_Cliente.php?".$params;
+$url         = urlServicios."consultadetalle/consultadetalle_Cliente.php?".$params."&p2=0&p3=0&p4=".$tipoCLi;
 $existe      = "";
 $usulocal    = "";
 $siguex      = "";
-//echo("<script>console.log('PHP cliente: ".$url."');</script>");
+echo("<script>console.log('PHP cliente: ".$url."');</script>");
 if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
 {
     $ch = curl_init();

@@ -36,9 +36,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     elseif (isset($_GET['IdMostrar'])) 
 	{
         // Obtener parámetro IdMostrar de PRO_ACTUACIONPROCESAL
-        $par = $_GET['IdMostrar'];
+        $par  = $_GET['IdMostrar'];
 		$par2 = $_GET['E'];
-		$par3 = $_GET['Proceso'];		
+		$par3 = $_GET['Proceso'];
+		$par4 = $_GET['IdTipouser'];  // IdUsuario = Abogado      IDEmpresa = Admin
 		
         if($par == 0)
         {
@@ -46,7 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         }
 
         // Tratar retorno $par2, 
-        $retorno = PRO_ACTUACIONPROCESAL::getAll($par3);
+        $retorno = PRO_ACTUACIONPROCESAL::getAll($par4, $par3);
 
         if ($retorno) 
         {
@@ -128,8 +129,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         $par5 = $_GET['Observacion'];
 		$par6 = $_GET['Usuario'];
 		$par7 = $_GET['EstadoActPro'];
+		$par8 = $_GET['Gasto'];
 
-        $retorno = PRO_ACTUACIONPROCESAL::insert($par1, $par2, $par3, $par4, $par5, $par6, $par7);
+        $retorno = PRO_ACTUACIONPROCESAL::insert($par1, $par2, $par3, $par4, $par5, $par6, $par7, $par8);
         $msj = $retorno;
         if($retorno)
         {
@@ -145,7 +147,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             print json_encode(
                 array(
                     'estado' => '2',
-                    'mensaje' => 'No se obtuvo el registro al Crear'
+                    'mensaje' => 'No se obtuvo el registro al Crear',
+					'msj' => $msj
                 )
             );
         }
@@ -156,10 +159,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         $par1 = $_GET['fechainicio'];
 		$par2 = $_GET['actpro'];		
         $par3 = $_GET['fechaestado'];
-		$par4 = $_GET['observacion'];		
-        $par5 = $_GET['idtabla'];
+		$par4 = $_GET['observacion'];
+		$par5 = $_GET['gasto'];
+        $par6 = $_GET['idtabla'];
 
-        $retorno = PRO_ACTUACIONPROCESAL::update($par1, $par2, $par3, $par4, $par5);
+        $retorno = PRO_ACTUACIONPROCESAL::update($par1, $par2, $par3, $par4, $par5, $par6);
         $msj = $retorno;
         if($retorno)
         {

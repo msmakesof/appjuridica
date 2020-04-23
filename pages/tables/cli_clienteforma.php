@@ -1,14 +1,8 @@
 <?php
-ob_start(); 
-session_start();
-require_once('../../Connections/cnn_kn.php'); 
+include_once("header.inc.php");
+require_once ('../../Connections/DataConex.php'); //require_once('../../Connections/cnn_kn.php');
+$LogoInterno = LogoInterno;require_once('../../Connections/cnn_kn.php'); 
 require_once('../../Connections/config2.php');
-
-if( !isset($_SESSION['IdUsuario']) && !isset($_SESSION['NombreUsuario']) )
-{
-	header("Location: ../../index.html");
-    exit;
-}  
 ?>
 <?php
 if (!function_exists("GetSQLValueString")) 
@@ -45,6 +39,7 @@ if (!function_exists("GetSQLValueString"))
 }
 $NombreTabla ="CLIENTE";
 $idTabla = 0;
+$empresausuario = 0;
 require_once('../../apis/general/tipodocumento.php');
 require_once('../../apis/general/tipocliente.php');
 require_once('../../apis/empresa/Empresa.php');
@@ -130,18 +125,69 @@ require_once('../../apis/empresa/Empresa.php');
     <!-- <script src="../../js/alertify.min.js"></script> -->
     <script src="../../js/jquery.numeric.js"></script>
 	 
-	<!-- toggle botton --> 
+	<!-- toggle botton
 	<link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
-	<script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+	<script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script> --> 
+	
+	<link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/css/bootstrap4-toggle.min.css" rel="stylesheet">
+	<script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/js/bootstrap4-toggle.min.js"></script>
 
     <script type="text/javascript">
     var nombre ="";
     $(document).ready(function()
-    {       
-        $("#msj").hide();
+    {   		
+		$("#msj").hide();
         $("#numerodocumento").numeric();
+		$("#numerodocumentorp").numeric();
         $("#celular").numeric();
         $("#telefonoFijo").numeric();
+		$("#celularrl").numeric();
+		$("#celularrl2").numeric();
+		$("#pjur").hide();
+		$("#pnat").show();
+		$("#rl").hide();
+		$("#datopj").hide();
+		$("#datopj1").hide();
+		$('#activo').prop("checked", true);
+
+		$("#tipodocumento").change(function(){
+			var tipodocumento = $("#tipodocumento").val();			
+			if (tipodocumento == 2)
+			{
+				$("#pnat").hide();
+				$("#pjur").show();		
+				$("#rl").show();
+				$("#datopj").show();
+				$("#datopj1").show();
+			}
+			else
+			{
+				$("#pjur").hide();
+				$("#pnat").show();
+				$("#rl").hide();
+				$("#datopj").hide();
+				$("#datopj1").hide();
+			}
+		});
+		
+		if($('#verseguimiento').prop('checked') == false )
+		{
+			$( "#clave" ).prop( "disabled", true );
+			$("#clave").attr("placeholder", "No habilitado");
+		}
+		
+		$('#verseguimiento').on('change', function () {			
+			if($(this).prop('checked') == false )
+			{
+				$( "#clave" ).prop( "disabled", true );
+				$("#clave").attr("placeholder", "No habilitado");
+			}
+			else
+			{
+				$( "#clave" ).prop( "disabled", false );
+				$("#clave").attr("placeholder", "");
+			}
+		});		
 
         $('#email').on('blur', function() {
             // Expresion regular para validar el correo
@@ -154,7 +200,7 @@ require_once('../../apis/empresa/Empresa.php');
             else 
             {                
                 swal({
-                  title: "Error:  La dirección de correo no es valida...",
+                  title: "Atención:  La dirección de correo no es valida...",
                   text: "un momento por favor.",
                   imageUrl: "../../js/sweet/3red.gif",
                   timer: 1500,
@@ -187,6 +233,7 @@ require_once('../../apis/empresa/Empresa.php');
             var tipodocumento = $("#tipodocumento").val();
             var numerodocumento = $("#numerodocumento").val();
             var nombre = $("#nombre").val();
+			var nombren = $("#nombren").val();
             var apellido1 = $("#apellido1").val();
             var apellido2 = $("#apellido2").val();
             var clave = $("#clave").val();            
@@ -198,13 +245,51 @@ require_once('../../apis/empresa/Empresa.php');
 			var seguimiento = $('input:checkbox[name=verseguimiento]:checked').val();
 			var empresa = $("#empresa").val();
 			var uc = <?php echo $_SESSION['IdUsuario']; ?>
+			
+			var tipodocumentorl = "";
+			var numerodocumentorl = "";
+			var nombrerl = "";
+			var apellido1rl = "";
+			var celularrl= "";
+			var emailrl= "";
+			var tipodocumentorl2= "";
+			var numerodocumentorl2= ""; 
+			var nombrerl2 = "";
+			var apellidosrl2 = "";
+			var celularrl2= "";
+			var emailrl2= "";			
+			
+			tipodocumentorl = $("#tipodocumentorl").val();
+			numerodocumentorl = $("#numerodocumentorl").val();
+			nombrerl = $("#nombrerl").val();
+			apellido1rl = $("#apellido1rl").val();
+			celularrl = $("#celularrl").val();
+			emailrl = $("#emailrl").val();
+			tipodocumentorl2 = $("#tipodocumentorl2").val();
+			numerodocumentorl2 = $("#numerodocumentorl2").val();
+			nombrerl2 = $("#nombrerl2").val();
+			apellidosrl2 = $("#apellidosrl2").val();
+			celularrl2 = $("#celularrl2").val();
+			emailrl2 = $("#emailrl2").val();			
 	
             e.preventDefault();
-
-            if( tipodocumento == "" || numerodocumento =="" || nombre == "" || apellido1 == "" || clave =="" || direccion == "" || email == "" || celular == "" || estado == undefined || seguimiento == "" || tipocliente == undefined || tipocliente == "" || empresa == "")
-            {
-                swal({
-                  title: "Error:  Ingrese información en todos los campos...",
+			
+			if( tipodocumento != 2)
+			{
+				nombre = nombren;
+			}
+			if( tipodocumento == 2)
+			{
+				apellido1 = " ";
+				apellido2 = " ";
+			}
+			
+			/*
+            //if( tipodocumento == "" || numerodocumento == "" || numerodocumento == 0 ||nombre == "" || apellido1 == "" || direccion == "" || celular == "" || estado == undefined || seguimiento == "" || tipocliente == undefined || tipocliente == "" || empresa == "")
+			if( numerodocumento == "" || numerodocumento == 0 || nombre == "" || apellido1 == "" || empresa == "" )
+            {                
+				swal({
+                  title: "Error:  Ingrese información en todos los campos Obligatorios ...",
                   text: "un momento por favor.",
                   imageUrl: "../../js/sweet/2.gif",
                   timer: 1500,
@@ -212,61 +297,110 @@ require_once('../../apis/empresa/Empresa.php');
                 });
                 return false;
             }
-
             else
             {
-                $.ajax({
-                    data : {"tipodocumento": tipodocumento, "numerodocumento": numerodocumento, "nombre": nombre, "apellido1": apellido1, "apellido2": apellido2, "clave": clave, "direccion": direccion, "email": email, "celular": celular, "estado": estado, "verseguimiento": seguimiento, "tipocliente": tipocliente, "empresa": empresa, "uc": uc}, 
-                    type: "POST",
-                    dataType: "html",
-                    url : "../forms/crea_<?php echo strtolower($NombreTabla); ?>.php",
-                })  
-                .done(function( data, textStatus, jqXHR){                 
-                    var xrespstr = data.trim();
-                    var respstr = xrespstr.substr(0,1);
-                    var msj = xrespstr.substr(2);
-                    if(respstr == "E")
-                    {                       
-                       swal("Atención:", msj);
-                    }
-                    else
-                    {    
-                        if( respstr == "S" )
-                        {  
-							setTimeout(function () { 
+			}
+			*/		
+				if( tipodocumento == 2)
+				{
+					//if( nombre == "" || tipodocumentorl == "" || numerodocumentorl == "" || numerodocumentorl == 0 || nombrerl  == "" || apellido1rl == "" || celularrl == "" || emailrl== "")
+					if( tipodocumento == "" || tipodocumentorl == "" || numerodocumento == "" || numerodocumento == 0 || nombre == "" || direccion == "" || numerodocumentorl == "" || numerodocumentorl == 0 || nombrerl  == "" || apellido1rl == "" || empresa == "")
+					{
+						graba = 0;
+						swal({
+							title: "Atención:  Ingrese información en los campos Obligatorios, marcados con *.",
+							text: "un momento por favor.",
+							imageUrl: "../../js/sweet/2.gif",
+							timer: 3000,
+							showConfirmButton: false
+						});
+						return false;
+					}
+					else
+					{
+						graba = 1;
+					}
+				}
+				else				
+				{
+					if (tipodocumento == "" || numerodocumento == "" || numerodocumento == 0 || nombre == "" || apellido1 == "" || empresa == "")
+					{
+						
+						graba = 0;
+						swal({
+							title: "Atención:  Ingrese información en los campos Obligatorios, marcados con *.",
+							text: "un momento por favor.",
+							imageUrl: "../../js/sweet/2.gif",
+							timer: 3000,
+							showConfirmButton: false
+						});
+						return false;
+					}
+					else
+					{
+						graba = 1;
+					}
+				}
+				if(graba == 1)
+				{
+					$.ajax({
+						data : {"tipodocumento": tipodocumento, "numerodocumento": numerodocumento, "nombre": nombre, "apellido1": apellido1, "apellido2": apellido2, 
+								"clave": clave, "direccion": direccion, "email": email, "celular": celular, "estado": estado, "verseguimiento": seguimiento, 
+								"tipocliente": tipocliente, "empresa": empresa, "uc": uc ,
+								"tipodocumentorl": tipodocumentorl , "numerodocumentorl": numerodocumentorl , "nombrerl": nombrerl, "apellido1rl": apellido1rl, "celularrl": celularrl , "emailrl": emailrl, 
+								"tipodocumentorl2": tipodocumentorl2 , "numerodocumentorl2": numerodocumentorl2 , "nombrerl2": nombrerl2, "apellidosrl2": apellidosrl2, "celularrl2": celularrl2 , "emailrl2": emailrl2
+								}, 
+						type: "POST",
+						dataType: "html",
+						url : "../forms/crea_<?php echo strtolower($NombreTabla); ?>.php",
+					})  
+					.done(function( data, textStatus, jqXHR){                 
+						var xrespstr = data.trim();
+						var respstr = xrespstr.substr(0,1);
+						var msj = xrespstr.substr(2);
+						if(respstr == "E")
+						{                       
+						   swal("Atención:", msj);
+						}
+						else
+						{    
+							if( respstr == "S" )
+							{  
+								setTimeout(function () { 
+									swal({
+									  title: "Atención:",
+									  text: "Registro Grabado Correctamente.",
+									  type: "success",
+									  confirmButtonText: "OK"
+									},
+									function(isConfirm){
+										if (isConfirm) {
+											window.location.href = "cli_cliente.php";
+										}
+									}); 
+								}, 1000);
+								
+							}
+							else
+							{                            
 								swal({
-								  title: "Atención:",
-								  text: "Registro Grabado Correctamente.",
-								  type: "success",
-								  confirmButtonText: "OK"
-								},
-								function(isConfirm){
-									if (isConfirm) {
-										window.location.href = "cli_cliente.php";
-									}
-								}); 
-							}, 1000);
-                            
-                        }
-                        else
-                        {                            
-                            swal({
-                                title: "Atención: ",   
-                                text: msj,   
-                                type: "error" 
-                            });
-                            return false;                                 
-                        }                       
-                    }    
-                })
-                .fail(function( jqXHR, textStatus, errorThrown ) {
-                    if ( console && console.log ) 
-                    {
-                        console.log( "La solicitud a fallado: " +  textStatus);
-                        $("#msj").html("");
-                    }
-                });
-            }    
+									title: "Atención: ",   
+									text: msj,   
+									type: "error" 
+								});
+								return false;                                 
+							}                       
+						}    
+					})
+					.fail(function( jqXHR, textStatus, errorThrown ) {
+						if ( console && console.log ) 
+						{
+							console.log( "La solicitud a fallado: " +  textStatus);
+							$("#msj").html("");
+						}
+					});
+				}
+                
         });
     });    
     </script>    
@@ -274,7 +408,7 @@ require_once('../../apis/empresa/Empresa.php');
 
 <body class="theme-indigo">
     <?php require_once('secciones.html'); ?>  
-     <section class="content" style="margin-top:45px;">
+    <section class="content" style="margin-top:85px;">
         <div class="container-fluid">
             <div class="block-header">
                 <h2>
@@ -315,17 +449,19 @@ require_once('../../apis/empresa/Empresa.php');
 														$TCL_IdTipoCliente = $mtipocliente['cli_tipocliente'][$i]['TCL_IdTipoCliente'];                                                    
 														$TCL_Nombre = $mtipocliente['cli_tipocliente'][$i]['TCL_Nombre'];
 														$TCL_Estado = $mtipocliente['cli_tipocliente'][$i]['TCL_Estado'];
+														if($TCL_IdTipoCliente == 1) {
 												?>
-														<option value="<?php echo $TCL_IdTipoCliente; ?>" >
-															<?php echo $TCL_Nombre ; ?>                                                
-														</option>
+															<option value="<?php echo $TCL_IdTipoCliente; ?>" <?php echo "selected"; ?>>
+																<?php echo $TCL_Nombre ; ?>                                                
+															</option>
 												<?php
+														}
 													}
 												?>
 											</select>
 										</div>
 										<div class="col-md-4">
-											<label class="form-label">
+											<label class="form-label"><span style="color:red;">*</span> 
 												Tipo Documento
 											</label>                                    
                                                                                
@@ -349,115 +485,97 @@ require_once('../../apis/empresa/Empresa.php');
                                         </div>
                                     
 										<div class="col-md-4"> 
-											<label class="form-label">N&uacute;mero Documento..</label>
+											<label class="form-label"> <span style="color:red;">*</span> N&uacute;mero Documento</label>
 											<div class="form-line">
-											   <input type="text" class="form-control" name="numerodocumento" id="numerodocumento" value="" maxlength="13" required>
+											   <input type="text" class="form-control" name="numerodocumento" id="numerodocumento" value="" maxlength="13" required  placeholder="No digitar puntos ni guiones.">
 											</div>
 										</div>
 									</div>
                                 </div>
 
                                 <div class="form-group form-float">
-									<div class="row">
-										<div class="col-md-4">
-											<label class="form-label">Nombre Usuario</label>
-											<div class="form-line">
-												<input type="text" class="form-control" name="nombre" id="nombre" value="" required>											   
-											</div>
-										</div>
-										
-										<div class="col-md-4">
-											<label class="form-label">Primer Apellido</label>
-											<div class="form-line">
-												<input type="text" class="form-control" name="apellido1" id="apellido1" value="" required>											   
-											</div>
-										</div>                                
-
-										<div class="col-md-4">
-											<label class="form-label">Segundo Apellido</label>
-											<div class="form-line">
-												<input type="text" class="form-control" name="apellido2" id="apellido2" value="" required>											   
+									
+									<div class="form-group form-float" id="pjur">
+										<div class="row">
+											<div class="col-md-12">
+												<label class="form-label"><span style="color:red;">*</span> Nombre Empresa</label>
+												<div class="form-line">
+													<input type="text" class="form-control" name="nombre" id="nombre" value="" required>
+												   <!-- -->
+												</div>
 											</div>
 										</div>
 									</div>
+								
+									<div class="form-group form-float" id="pnat">
+										<div class="row">
+											<div class="col-md-4">
+												<label class="form-label"><span style="color:red;">*</span> Nombre</label>
+												<div class="form-line">
+													<input type="text" class="form-control" name="nombren" id="nombren" value="" required>											   
+												</div>
+											</div>
+											
+											<div class="col-md-4">
+												<label class="form-label"><span style="color:red;">*</span> Primer Apellido</label>
+												<div class="form-line">
+													<input type="text" class="form-control" name="apellido1" id="apellido1" value="" required>											   
+												</div>
+											</div>                                
+
+											<div class="col-md-4">
+												<label class="form-label">Segundo Apellido</label>
+												<div class="form-line">
+													<input type="text" class="form-control" name="apellido2" id="apellido2" value="" required>											   
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>	
 
                                 <div class="form-group form-float">
 									<div class="row">
-										<div class="col-md-8">
-											<label class="form-label">Direcci&oacute;n</label>
+										<div class="col-md-5">
+											<label class="form-label"> <span id="datopj" style="color:red;">*</span> Direcci&oacute;n</label>
 											<div class="form-line">
 												<input type="text" class="form-control" name="direccion" id="direccion" value="" maxlength="50" required>                                
 											</div>
 										</div>
 										
-										<div class="col-md-4">
-											<label class="form-label">Celular</label>
+										<div class="col-md-3">
+											<label class="form-label">N&uacute;mero Celular</label>
 											<div class="form-line">
 												<input type="text" class="form-control" name="celular" id="celular" value="" maxlength="13" required>                                       
 											</div>
 										</div>
-									</div>
-								</div>
-                                
-								<div class="form-group form-float">
-									<div class="row">
-										<div class="col-md-8">
+										
+										<div class="col-md-4">
 											<label class="form-label">Email</label>
 											<div class="form-line">
 											   <input type="text" class="form-control" name="email" id="email" value="" maxlength="60" required>                                       
 											</div>
 										</div>
-										
-										<div class="col-md-4">
-											<label class="form-label">Clave</label>
-											<div class="form-line">
-												<input type="password" class="form-control" name="clave" id="clave" value="" maxlength="30" required>                                       
-											</div>
-										</div>										
 									</div>
-								</div>
-
-								<div class="form-group">                                    							                                    
-									<div class="row">										
-										<div class="col-md-6">
-											<label class="form-label">
-												Empresa encargada del Proceso
-											</label>
-											<select class="selectpicker show-tick" data-live-search="true" data-width="100%" name="empresa" id="empresa" required>
-												<option value="" >Seleccione Opción...</option>
-												<?php
-													for($i=0; $i<count($mempresa['emp_empresa']); $i++)
-													{
-														$IdEmpresa = $mempresa['emp_empresa'][$i]['EMP_IdEmpresa'];                                                    
-														$Nombre = trim($mempresa['emp_empresa'][$i]['NombreEmpresa']);
-														$Estado = $mempresa['emp_empresa'][$i]['EMP_IdEstado'];
-												?>
-														<option value="<?php echo $IdEmpresa; ?>" >
-															<?php echo $Nombre ; ?>                                                
-														</option>
-												<?php
-													}
-												?>
-											</select>
-										</div>
-										
-										<div class="col-md-6">
-										
-										</div>
-									</div>
-								</div>
+								</div>								
 									
 								<div class="form-group form-float">
 									<div class="row">
 										
-										<div class="col-md-8">
-											<label class="form-label">Autoriza acceso a la herramienta para que el cliente pueda ver seguimiento de su proceso?
-											<input type="checkbox" name="verseguimiento" id="verseguimiento" data-toggle="toggle" data-size="mini" data-off="No" data-on="Si" checked  data-onstyle="success" data-offstyle="danger" >
+										<div class="col-md-3">
+											<label class="form-label">Autoriza acceso a la herramienta para que el cliente pueda ver seguimiento de su proceso?											
+												<input id="verseguimiento" type="checkbox" data-toggle="toggle" data-on="Aceptar" data-off="Cancelar" data-onstyle="success" data-offstyle="danger" data-size="sm">
 											</label>									
 											<hr style="margin-top:5px">
 										</div>
+										
+										<div class="col-md-3">
+											<label class="form-label">Clave</label>
+											<div class="form-line">
+												<input type="password" class="form-control" name="clave" id="clave" value="" maxlength="30" required>                                       
+											</div>
+										</div>
 									
-										<div class="col-md-4">
+										<div class="col-md-2">
 											<label class="form-label">Estado</label>
 											<input type="radio" name="estado" id="activo" class="with-gap" value="1">
 											<label for="activo">Activo</label>
@@ -465,11 +583,58 @@ require_once('../../apis/empresa/Empresa.php');
 											<input type="radio" name="estado" id="inactivo" class="with-gap" value="0">
 											<label for="inactivo" class="m-l-20">Inactivo</label>
 										</div>
+										
+										<div class="col-md-4">
+											<label class="form-label"><span style="color:red;">*</span>
+												Empresa encargada del Proceso
+											</label>
+											<select class="selectpicker show-tick" data-live-search="true" data-width="100%" name="empresa" id="empresa" required>
+												<option value="" >Seleccione Opción...</option>
+												<?php
+													
+													if($_SESSION["TipoUsuario"] <= 2)
+													{														
+														$empresausuario = $_SESSION['IdEmpresa'];
+														for($i=0; $i<count($mempresa['emp_empresa']); $i++)
+														{
+															$IdEmpresa = $mempresa['emp_empresa'][$i]['EMP_IdEmpresa'];                                                    
+															$Nombre = trim($mempresa['emp_empresa'][$i]['NombreEmpresa']);
+															$Estado = $mempresa['emp_empresa'][$i]['EMP_IdEstado'];
+														}
+												?>			
+														<option value="<?php echo $IdEmpresa; ?>" <?php if($IdEmpresa == $empresausuario) { echo 'selected';} ?> >
+															<?php echo $Nombre ; ?>                                                
+														</option>
+												<?php			
+													}
+													else
+													{
+														for($i=0; $i<count($mempresa['emp_empresa']); $i++)
+														{
+															$IdEmpresa = $mempresa['emp_empresa'][$i]['EMP_IdEmpresa'];                                                    
+															$Nombre = trim($mempresa['emp_empresa'][$i]['NombreEmpresa']);
+															$Estado = $mempresa['emp_empresa'][$i]['EMP_IdEstado'];															
+												?>														
+															<option value="<?php echo $IdEmpresa; ?>" <?php if($empresausuario > 0) { echo 'selected';} ?> >
+																<?php echo $Nombre ; ?>                                                
+															</option>
+												<?php
+														}
+													}
+												?>
+											</select>
+										</div>
+										
 									</div>	
                                 </div>
-                                
+								
+								<div class="form-group form-float" id="rl">
+									<?php include './cli_contactos.inc.php' ; ?>
+                                </div>
+								
                                 <button class="btn btn-primary waves-effect" type="submit" id="grabar">GRABAR</button>
 								<button class="btn btn-danger waves-effect" type="submit" id="cerrar">SALIR</button>
+								<div><span style="color:red;">* Campos Obligatorios.</span></div>
                             </form>                        
                     	</div>
                 	</div>    
@@ -503,4 +668,4 @@ require_once('../../apis/empresa/Empresa.php');
     </section>  
 </body>
 </html>
-<?php ob_end_flush(); ?>
+<?php //ob_end_flush(); ?>

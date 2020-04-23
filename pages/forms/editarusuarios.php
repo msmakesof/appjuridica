@@ -121,7 +121,7 @@ $TipoUsuario = $muser['usu_usuario']['USU_TipoUsuario'];
 
 <body class="theme-indigo">
     <?php require_once('../tables/secciones.html'); ?>  
-    <section class="content" style="margin-top:60px;">
+    <section class="content" style="margin-top:90px;">
         <div class="container-fluid">
             <div class="block-header">
                 <h2>

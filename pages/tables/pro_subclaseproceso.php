@@ -1,11 +1,8 @@
 <?php
-session_start();
-require_once('../../Connections/cnn_kn.php'); 
+include_once("header.inc.php");
+require_once ('../../Connections/DataConex.php'); //('../../Connections/cnn_kn.php');
+$LogoInterno = LogoInterno;
 require_once('../../Connections/config2.php');
-if(!isset($_SESSION)) 
-{ 
-     
-} 
 ?>
 <?php
 if (!function_exists("GetSQLValueString")) 
@@ -39,7 +36,7 @@ if (!function_exists("GetSQLValueString"))
     return $theValue;
     }
 }
-$empresa = "AppJuridica";
+$empresa = Company;
 if( isset($_POST['ƒ¤']) && !empty($_POST['ƒ¤']) )
 {    
     $clave = trim($_POST['ƒ¤']);
@@ -139,8 +136,8 @@ else
             <div class="navbar-header">
                 <a href="javascript:void(0);" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse" aria-expanded="false"></a>
                 <a href="javascript:void(0);" class="bars"></a>
-                <a class="navbar-brand" href="../../index.html">
-                <img src="../../images/logomw.fw.png" style="margin-top: -10px;">
+                <a class="navbar-brand">
+                <img src="<?php echo $LogoInterno; ?>" style="margin-top: -6px;">
                 </a>
 
             </div>
@@ -376,7 +373,7 @@ else
                             <li><a href="javascript:void(0);"><i class="material-icons">shopping_cart</i>Tareas</a></li>
                             <li><a href="javascript:void(0);"><i class="material-icons">book</i>Notificaciones</a></li>
                             <li role="seperator" class="divider"></li> -->
-                            <li><a href="../../"><i class="material-icons">input</i>Salir</a></li>
+                            <li><a href="./close.php"><i class="material-icons">input</i>Salir</a></li>
                         </ul>
                     </div>
                 </div>
@@ -585,14 +582,16 @@ else
                          <table class="table table-bordered table-striped table-hover dataTable js-exportable" id="grid">
                                 <thead>
                                     <tr>
-                                        <th>Nombre</th>
-                                        <th>Activo</th> 
+                                        <th>Nombre de Sub Proceso</th>
+										<th>Nombre Clase de Proceso</th>
+                                        <th>Estado</th> 
                                     </tr>
                                 </thead>
                                 <tfoot>
                                     <tr>
-                                        <th>Nombre</th>
-                                        <th>Activo</th>                                        
+                                        <th>Nombre de Sub Proceso</th>
+										<th>Nombre Clase de Proceso</th>
+                                        <th>Estado</th>                                        
                                     </tr>
                                 </tfoot>
                                 <tbody>
@@ -650,16 +649,19 @@ if( $msubclaseproceso['estado'] < 2)
     $nombre_Tabla="";
     for($i=0; $i<count($msubclaseproceso['pro_subclaseproceso']); $i++)
     {
-        $NombreTabla = trim($msubclaseproceso['pro_subclaseproceso'][$i]['SCP_Nombre']);        
+        $NombreTabla = trim($msubclaseproceso['pro_subclaseproceso'][$i]['SCP_Nombre']);
         $archivo = $NombreTabla.".php";
         $ClaseProceso = $msubclaseproceso['pro_subclaseproceso'][$i]['SCP_IdClaseProceso'];
         $idTabla = $msubclaseproceso['pro_subclaseproceso'][$i]['SCP_IdSubClaseProceso'];
         $estadoTabla = trim($msubclaseproceso['pro_subclaseproceso'][$i]['EstadoTabla']);
+		$NombreClaseProceso = trim($msubclaseproceso['pro_subclaseproceso'][$i]['CPR_Nombre']);
+		
     ?>
         <tr>
             <td>
                 <a href="javascript:void(0);" onclick="cambiar('../forms/editar<?php echo $nombre_lnk ;?>.php?f=<?php echo $idTabla; ?>')" class="nav nav-tabs nav-stacked" data-toggle="modal" data-target="#defaultModalEditar" style="text-decoration:none;"><?php echo $NombreTabla; ?></a>        	
             </td>
+			<td><?php echo $NombreClaseProceso; ?></td> 
             <td><?php echo $estadoTabla; ?></td>               
         </tr>
     <?php                          

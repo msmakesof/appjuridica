@@ -1,4 +1,4 @@
-﻿<?php 
+<?php 
 if(!isset($_SESSION)) 
 { 
     session_start(); 
@@ -52,8 +52,8 @@ $NombreTabla ="CLASEPROCESO";
 
 
  <!-- Jquery Core Js -->
-    <!-- <script src="../../plugins/jquery/jquery.min.js"></script> -->
-    <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+    <script src="../../plugins/jquery/jquery.min.js"></script>
+	<!-- <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script> -->
     
 
 
