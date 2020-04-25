@@ -25,7 +25,7 @@
  */
 $.fn.numeric = function(decimal, callback)
 {
-	decimal = (decimal === false) ? "" : decimal || ".";
+	decimal = (decimal === false) ? "" : decimal || "";
 	callback = typeof callback == "function" ? callback : function(){};
 	return this.data("numeric.decimal", decimal).data("numeric.callback", callback).keypress($.fn.numeric.keypress).blur($.fn.numeric.blur);
 }
@@ -56,61 +56,64 @@ $.fn.numeric.keypress = function(e)
 	if((e.ctrlKey && key == 118 /* firefox */) || (e.ctrlKey && key == 86) /* opera */
 	|| (e.shiftKey && key == 45)) return true;
 	// if a number was not pressed
-	if(key < 48 || key > 57)
+	if(key < 48 || key > 57 )
 	{
-		/* '-' only allowed at start */
-		if(key == 45 && this.value.length == 0) return true;
-		/* only one decimal separator allowed */
-		if(decimal && key == decimal.charCodeAt(0) && this.value.indexOf(decimal) != -1)
-		{
-			allow = false;
-		}
-		// check for other keys that have special purposes
-		if(
-			key != 8 /* backspace */ &&
-			key != 9 /* tab */ &&
-			key != 13 /* enter */ &&
-			key != 35 /* end */ &&
-			key != 36 /* home */ &&
-			key != 37 /* left */ &&
-			key != 39 /* right */ &&
-			key != 46 /* del */
-		)
-		{
-			allow = false;
-		}
-		else
-		{
-			// for detecting special keys (listed above)
-			// IE does not support 'charCode' and ignores them in keypress anyway
-			if(typeof e.charCode != "undefined")
-			{
-				// special keys have 'keyCode' and 'which' the same (e.g. backspace)
-				if(e.keyCode == e.which && e.which != 0)
-				{
-					allow = true;
-					// . and delete share the same code, don't allow . (will be set to true later if it is the decimal point)
-					if(e.which == 46) allow = false;
-				}
-				// or keyCode != 0 and 'charCode'/'which' = 0
-				else if(e.keyCode != 0 && e.charCode == 0 && e.which == 0)
-				{
-					allow = true;
-				}
-			}
-		}
-		// if key pressed is the decimal and it is not already in the field
-		if(decimal && key == decimal.charCodeAt(0))
-		{
-			if(this.value.indexOf(decimal) == -1)
-			{
-				allow = true;
-			}
-			else
+		if ( key != 45 && key != 46 ) // 20200424 este IS se hizo para evitar decimales y negativos	
+		{	
+			/* '-' only allowed at start */
+			if(key == 45 && this.value.length == 0) return true;
+			/* only one decimal separator allowed */
+			if(decimal && key == decimal.charCodeAt(0) && this.value.indexOf(decimal) != -1)
 			{
 				allow = false;
 			}
-		}
+			// check for other keys that have special purposes
+			if(
+				key != 8 /* backspace */ &&
+				key != 9 /* tab */ &&
+				key != 13 /* enter */ &&
+				key != 35 /* end */ &&
+				key != 36 /* home */ &&
+				key != 37 /* left */ &&
+				key != 39 /* right */ &&
+				key != 46 /* del */
+			)
+			{
+				allow = false;
+			}
+			else
+			{
+				// for detecting special keys (listed above)
+				// IE does not support 'charCode' and ignores them in keypress anyway
+				if(typeof e.charCode != "undefined")
+				{
+					// special keys have 'keyCode' and 'which' the same (e.g. backspace)
+					if(e.keyCode == e.which && e.which != 0)
+					{
+						allow = true;
+						// . and delete share the same code, don't allow . (will be set to true later if it is the decimal point)
+						if(e.which == 46) allow = false;
+					}
+					// or keyCode != 0 and 'charCode'/'which' = 0
+					else if(e.keyCode != 0 && e.charCode == 0 && e.which == 0)
+					{
+						allow = true;
+					}
+				}
+			}
+			// if key pressed is the decimal and it is not already in the field
+			if(decimal && key == decimal.charCodeAt(0))
+			{
+				if(this.value.indexOf(decimal) == -1)
+				{
+					allow = true;
+				}
+				else
+				{
+					allow = false;
+				}
+			}
+		}	
 	}
 	else
 	{
@@ -126,7 +129,7 @@ $.fn.numeric.blur = function()
 	var val = $(this).val();
 	if(val != "")
 	{
-		var re = new RegExp("^\\d+$|\\d*" + decimal + "\\d+");
+		var re = new RegExp("^\\d+$|\\d*" + decimal + "\\d+");		
 		if(!re.exec(val))
 		{
 			callback.apply(this);

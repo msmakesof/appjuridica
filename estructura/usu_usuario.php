@@ -264,8 +264,40 @@ class USU_USUARIO
         // Consulta de la usu_usuario
         $consulta = "SELECT Count(".$GLOBALS['Llave'].") AS TotalUsuario, Usu_IdInterno, USU_IdUsuario, USU_Local, USU_Estado ".
                     " FROM ". $GLOBALS['TABLA'].
-                    " WHERE USU_Usuario = ? AND USU_Clave = ?";
+                    " WHERE USU_Usuario = ? AND USU_Clave = ? ;";
 
+        //echo "$consulta / usu..$IdUsuario / cla..$IdClave";
+
+        try {
+            // Preparar sentencia
+            $comando = Database::getInstance()->getDb()->prepare($consulta);
+            // Ejecutar sentencia preparada
+            $comando->execute(array($IdUsuario,$IdClave));
+            // Capturar primera fila del resultado
+            $row = $comando->fetch(PDO::FETCH_ASSOC);
+            return $row;
+
+        } catch (PDOException $e) {
+            // Aquí puedes clasificar el error dependiendo de la excepción
+            // para presentarlo en la respuesta Json
+            return -1;
+        }
+    }
+	
+	 /**
+     * Obtiene los campos de una meta con un identificador
+     * determinado
+     *
+     * @param $IdUsuario Identificador de la $IdUsuario
+     * @return mixed
+     */
+    public static function getByIdApp($IdUsuario,$IdClave)
+    {
+        // Consulta de la tabla de usuario
+        $consulta = "SELECT USU_Email, USU_TipoUsuario,	concat_WS(' ',USU_Nombre, USU_PrimerApellido, USU_SegundoApellido) AS Nombre ".
+                " FROM ".$GLOBALS['TABLA'].						
+                " WHERE USU_Usuario = ? AND USU_Clave = ? ; ";
+				//echo "$consulta  / $IdUsuario / $IdClave";
         try {
             // Preparar sentencia
             $comando = Database::getInstance()->getDb()->prepare($consulta);
@@ -550,17 +582,20 @@ class USU_USUARIO
      * @param $IdUsuario identificador de la usu_usuario
      * @return bool Respuesta de la consulta
      */
-    public static function existeusuario($empresa, $Identificacion, $PrimerApellido, $SegundoApellido, $Nombre, $Email)
+    public static function Contar($empresa, $Identificacion, $PrimerApellido, $SegundoApellido, $Nombre, $IdUsuario)
     {
-        $consulta = "SELECT count(". $GLOBALS['Llave']. ") existe, USU_Identificacion, USU_PrimerApellido, USU_SegundoApellido, USU_Nombre, USU_Email ".        
+        $consulta = "SELECT count(". $GLOBALS['Llave']. ") existe ".        
         " FROM ".$GLOBALS['TABLA'].
-        " WHERE USU_IdEmpresa = ? AND USU_Identificacion = ? OR (USU_PrimerApellido = ? AND USU_SegundoApellido = ? AND USU_Nombre = ?) OR USU_Email = ?";
+        " WHERE USU_IdEmpresa = ? AND USU_Identificacion = ? AND (USU_PrimerApellido = ? AND USU_SegundoApellido = ? AND USU_Nombre = ?)  AND USU_IdUsuario <> ?;";
+		
+		echo $consulta ." / $empresa, $Identificacion, $PrimerApellido, $SegundoApellido, $Nombre, $IdUsuario";
+		
 
         try {
             // Preparar sentencia
             $comando = Database::getInstance()->getDb()->prepare($consulta);
             // Ejecutar sentencia preparada
-            $comando->execute(array($empresa, $Identificacion, $PrimerApellido, $SegundoApellido, $Nombre, $Email));
+            $comando->execute(array($empresa, $Identificacion, $PrimerApellido, $SegundoApellido, $Nombre, $IdUsuario));
             // Capturar primera fila del resultado
             $row = $comando->fetch(PDO::FETCH_ASSOC);
             return $row;

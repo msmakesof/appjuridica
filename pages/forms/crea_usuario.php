@@ -1,4 +1,6 @@
-<?php require_once('../../Connections/cnn_kn.php'); 
+<?php 
+include_once("../tables/header.inc.php");
+require_once ('../../Connections/DataConex.php');  
 require_once('../../Connections/config2.php');
 ?>
 <?php
@@ -102,13 +104,15 @@ if(isset($_POST['estado'])){
   $estado = trim($_POST['estado']);
 }
 
-require_once('../../Connections/DataConex.php');
+//require_once('../../Connections/DataConex.php');
 //Verifico si existe un usuario con las siguientes caracteristicas
 // Nombres iguales o nro documento igual o email igual
 if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
 {
-  $parameters = "ExisteUsuario=1&empresa=$empresa&Identificacion=$numerodocumento&PrimerApellido=$apellido1&SegundoApellido=$apellido2&Nombre=$nombre&Email=$email";
-  $url = urlServicios."consultadetalle/consultadetalle_Usuario.php?".$parameters;
+  //$parameters = "ExisteUsuario=1&empresa=$empresa&Identificacion=$numerodocumento&PrimerApellido=$apellido1&SegundoApellido=$apellido2&Nombre=$nombre&Email=$email&IdUsuario=0";
+  $parameters = "xExisteUsuario=1&empresa=$empresa&Identificacion=$numerodocumento&PrimerApellido=$apellido1&SegundoApellido=$apellido2&Nombre=$nombre&IdUsuario=0";
+  $url = urlServicios."consultadetalle/consultadetalle_xUsuario.php?".$parameters;
+  echo "<script>console.log('U.'+$url);</script>";
   $ch = curl_init();
   curl_setopt($ch, CURLOPT_VERBOSE, true);
   curl_setopt($ch, CURLOPT_URL, $url);
@@ -137,7 +141,7 @@ if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
     $existe = $m['usu_usuario']['existe'];
     if($existe > 0)
     {
-      $sigue = "E-Existe un usuario registrado con el mismo Nombre o Número de Identificación o Email.";
+      $sigue = "E-Existe un usuario registrado con el mismo Nombre o Número de Identificación.";
     }
     else
     {
@@ -147,9 +151,7 @@ if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
       $local = rand(10000000,1234567890000);
       $clave = encryptor('encrypt',$clave);
 
-      $parameters = "insert=insert&Empresa=$empresa&TipoDocumento=$tipodocumento&Identificacion=$numerodocumento&PrimerApellido=$apellido1&SegundoApellido=$apellido2&Nombre=$nombre&Email=$email&Direccion=$direccion&Celular=$celular&Usuario=$email&Clave=$clave&TipoUsuario=$tipousuario&Estado=$estado&IdInterno=$interno&Local=$local&Abogado=$abogado";
-      //$parameters = array("insert" => "insert", "TipoDocumento" => "$tipodocumento","Identificacion" => "$numerodocumento","PrimerApellido" => "$apellido1", "SegundoApellido" => "$apellido2","Nombre" => "$nombre","Email" => "$email", "Direccion" => "$direccion","Celular" => "$celular", "Usuario" => "$email", "Clave" => "$clave", "TipoUsuario" => "$tipousuario", "Estado" => "$estado", "IdInterno" => "$interno", "Local" => "$local");
-     
+      $parameters = "insert=insert&Empresa=$empresa&TipoDocumento=$tipodocumento&Identificacion=$numerodocumento&PrimerApellido=$apellido1&SegundoApellido=$apellido2&Nombre=$nombre&Email=$email&Direccion=$direccion&Celular=$celular&Usuario=$email&Clave=$clave&TipoUsuario=$tipousuario&Estado=$estado&IdInterno=$interno&Local=$local&Abogado=$abogado";           
       $soportecURL = "S";
       $url         = urlServicios."consultadetalle/consultadetalle_Usuario.php?".$parameters;
       $existe      = "";

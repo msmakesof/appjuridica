@@ -127,7 +127,7 @@ require_once('../../apis/general/tipousuario.php');
     var nombre ="";
     $(document).ready(function()
     {       
-        $('#estado').prop("checked", true);
+        $('#activo').prop("checked", true);
         $("#msj").hide();
         $("#numerodocumento").numeric();
         $("#celular").numeric();
@@ -200,10 +200,10 @@ require_once('../../apis/general/tipousuario.php');
             var estado = $('input:radio[name=estado]:checked').val();
             e.preventDefault();
 
-            if( empresa== "" || tipodocumento == "" || numerodocumento =="" || nombre == "" || apellido1 == "" ||  clave =="" || direccion == "" || email == "" || celular == "" || estado == undefined || tipousuario == "" || abogado == "" )
+            if( empresa== "" || tipodocumento == "" || numerodocumento =="" || nombre == "" || apellido1 == "" || direccion == "" || email == "" || celular == "" || estado == undefined || tipousuario == "" || abogado == "" || clave == "" )
             {
                 swal({
-					title: "Atención:  Ingrese información en todos los campos...",
+					title: "Atención:  Ingrese información en los campos Obligatorios, marcados con *",
 					text: "un momento por favor.",
 					imageUrl: "../../js/sweet/2.gif",
 					timer: 1500,
@@ -225,7 +225,6 @@ require_once('../../apis/general/tipousuario.php');
                     var msj = xrespstr.substr(2);
                     if(respstr == "E")
                     {                         
-                       //swal("Atencion:", "Usuario: " + nombre + " !Ya se encuentra registrado(a)...");
                        swal("Atencion:", msj);
                     }
                     else
@@ -233,8 +232,7 @@ require_once('../../apis/general/tipousuario.php');
                         if( respstr == "S" )
                         {                        
                             swal("Atencion: ", msj, "success");
-                            return false;
-                            //window.location="../alumnos.php";
+                            return false;                       
                         }
                         else
                         {                            
@@ -244,8 +242,7 @@ require_once('../../apis/general/tipousuario.php');
                                 type: "error" 
                             });
                             return false;                                 
-                        }
-                        //$('#form_validation')[0].reset();
+                        }                        
                     }    
                 })
                 .fail(function( jqXHR, textStatus, errorThrown ) {
@@ -396,7 +393,7 @@ require_once('../../apis/general/tipousuario.php');
 										<div class="col-md-4"><span style="color:red;">*</span>                                
 											<label class="form-label">Celular</label>
 											<div class="form-line">
-												<input type="text" class="form-control" name="celular" id="celular" value="" maxlength="13" required>                                       <!---->
+												<input type="text" class="form-control" name="celular" id="celular" value="" maxlength="13" required>
 											</div>
 										</div>
 									</div>
@@ -410,7 +407,7 @@ require_once('../../apis/general/tipousuario.php');
 												<input type="text" class="form-control" name="email" id="email" value="" maxlength="60" required>                                       
 											</div>
 										</div>
-										<div class="col-md-4">
+										<div class="col-md-4"><span style="color:red;">*</span>
 											<label class="form-label">Clave</label>
 											<div class="form-line">
 												<input type="password" class="form-control" name="clave" id="clave" value="" maxlength="30" required>										   

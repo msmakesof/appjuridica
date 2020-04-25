@@ -1,15 +1,6 @@
 <?php
 include_once("../tables/header.inc.php");
 require_once ('../../Connections/DataConex.php'); 
-/*
-session_start(); 
-require_once('../../Connections/cnn_kn.php'); 
-require_once('../../Connections/config2.php');
-if(!isset($_SESSION)) 
-{ 
-     
-} 
-*/
 ?>
 <?php
 if (!function_exists("GetSQLValueString")) 
@@ -487,7 +478,7 @@ $TipoUsuario = $muser['usu_usuario']['USU_TipoUsuario'];
             if( empresa == "" || tipodocumento == "" || numerodocumento =="" || nombre == "" || apellido1 == "" || clave =="" || direccion == "" || email == "" || celular == "" || estado == undefined  || tipousuario == "" || abogado == "" )
             {               
                 swal({
-                  title: "Error:  Ingrese información en todos los campos...",
+                  title: "Atención:  Ingrese información en los campos Obligatorios, marcados con *",
                   text: "un momento por favor.",
                   imageUrl: "../../js/sweet/2.gif",
                   timer: 1500,

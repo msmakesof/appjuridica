@@ -184,16 +184,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             );
         }    
     }
-    elseif (isset($_GET['ExisteUsuario']) )
+    elseif (isset($_GET['Cuenta']) )
     {
         $par1  = $_GET['empresa'];
 		$par2  = $_GET['Identificacion'];        
         $par3  = $_GET['PrimerApellido'];
         $par4  = $_GET['SegundoApellido'];
         $par5  = $_GET['Nombre'];
-        $par6  = $_GET['Email']; 
+        //$par6  = $_GET['Email'];   $par6,
+		$par8  = $_GET['IdUsuario'];		
         
-        $retorno = USU_USUARIO::existeusuario($par1,$par2,$par3,$par4,$par5,$par6);
+        $retorno = USU_USUARIO::cexisteusuario($par1,$par2,$par3,$par4,$par5,$par8);
         $msj =$retorno;
         if ($retorno) 
         {
@@ -209,7 +210,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             print json_encode(
                 array(
                     'estado' => '2',
-                    'mensaje' => 'No se obtuvo el registro',
+                    'mensaje' => 'Atención: No se obtuvo el registro.  '.msj,
                     'msj' => print_r($msj),
                     'msj2' => var_dump ($msj)
                 )

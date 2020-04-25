@@ -2,7 +2,7 @@
 include_once("../tables/header.inc.php");
 require_once ('../../Connections/DataConex.php'); 
 $LogoInterno = LogoInterno; 
-require_once('../../Connections/config2.php');
+//require_once('../../Connections/config2.php');
 ?>
 <?php
 if (!function_exists("GetSQLValueString")) 
@@ -163,7 +163,7 @@ $apellido2 = $mempresa['emp_empresa']['EMP_Apellido2'];
         $("#msj").hide();
         $("#numerodocumento").numeric();
         $("#celular").numeric();
-        $("#telefonoFijo").numeric();
+        $("#fijo").numeric();
 		
 		
 		if(<?php echo $idtipopersona ?> == 1)
@@ -251,10 +251,10 @@ $apellido2 = $mempresa['emp_empresa']['EMP_Apellido2'];
             var estado = $('input:radio[name=estado]:checked').val();			
             e.preventDefault();
 
-            if( tipocliente == "" || tipodocumento == "" || numerodocumento =="" || direccion == "" || email == "" || fijo == "" || celular == "" || estado == undefined || tipocliente == undefined || sitioweb == "" || ciudad == "")
+            if( tipocliente == "" || tipodocumento == "" || numerodocumento =="" || direccion == "" || email == "" || fijo == "" || celular == "" || estado == undefined || tipocliente == undefined || ciudad == "")
             {               
                 swal({
-                  title: "Atención:  Ingrese información en todos los campos...",
+                  title: "Atención:  Ingrese información en los campos Obligatorios, marcados con *",
                   text: "un momento por favor.",
                   imageUrl: "../../js/sweet/2.gif",
                   timer: 1500,
@@ -270,7 +270,7 @@ $apellido2 = $mempresa['emp_empresa']['EMP_Apellido2'];
 					{
 						graba = 0;
 						swal({
-							title: "Atención:  Ingrese información en el campo Nombre.",
+							title: "Atención:  Ingrese información en los campos Obligatorios, marcados con *",
 							text: "un momento por favor.",
 							imageUrl: "../../js/sweet/2.gif",
 							timer: 1500,
@@ -291,7 +291,7 @@ $apellido2 = $mempresa['emp_empresa']['EMP_Apellido2'];
 						
 						graba = 0;
 						swal({
-							title: "Atención:  Ingrese información en los campos de Nombres y Apellidos",
+							title: "Atención:  Ingrese información en los campos Obligatorios, marcados con *",
 							text: "un momento por favor.",
 							imageUrl: "../../js/sweet/2.gif",
 							timer: 1500,

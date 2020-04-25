@@ -228,6 +228,7 @@ if( isset($_POST['ƒ×'])  && !empty($_POST['ƒ×']) )
                                 <thead>
                                     <tr>
                                         <th>Nombre</th>
+										<th>Identificaci&oacute;n</th>
                                         <th>Email</th>
                                         <th>Empresa</th>
 										<th>Tipo Usuario</th>
@@ -236,7 +237,8 @@ if( isset($_POST['ƒ×'])  && !empty($_POST['ƒ×']) )
                                 </thead>
                                 <tfoot>
                                     <tr>
-                                        <th>Nombre</th>                                        
+                                        <th>Nombre</th>
+										<th>Identificaci&oacute;n</th>
                                         <th>Email</th>
                                         <th>Empresa</th>
 										<th>Tipo Usuario</th>
@@ -303,12 +305,13 @@ if( $muser['estado'] < 2)
 		$TUS_Nombre = trim($muser['usu_usuario'][$i]['TUS_Nombre']);        
 		$NombreEmpresa = trim(strtoupper($muser['usu_usuario'][$i]['NombreEmpresa']));
         $EstadoUsuario = $muser['usu_usuario'][$i]['EstadoUsuario'];
+		$Identificacion = $muser['usu_usuario'][$i]['USU_Identificacion'];
     ?>
         <tr>
-            <td>
-            <!-- <a href="javascript:void(0);" onclick="cambiar('../forms/editarusuario.php?f=<?php echo $idTabla; ?>')" class="nav nav-tabs nav-stacked" data-toggle="modal" data-target="#defaultModalEditar" style="text-decoration:none;"><?php echo $NombreUsuario; ?></a> -->
+            <td>            
 			<a href="javascript:void(0);" onclick="editar(<?php echo $idTabla; ?>)"><?php echo $NombreUsuario; ?></a>
-            </td>        
+            </td>
+			<td><?php echo $Identificacion; ?></td>
             <td><?php echo $Email; ?></td>
             <td><?php echo $NombreEmpresa; ?></td>
 			<td><?php echo $TUS_Nombre; ?></td>

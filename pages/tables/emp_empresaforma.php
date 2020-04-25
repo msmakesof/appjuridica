@@ -1,10 +1,14 @@
 <?php
+include_once("header.inc.php");
+require_once ('../../Connections/DataConex.php'); 
+/*
 session_start();
 require_once('../../Connections/cnn_kn.php'); 
 require_once('../../Connections/config2.php');
 if(!isset($_SESSION)) 
 {  
 } 
+*/
 ?>
 <?php
 if (!function_exists("GetSQLValueString")) 
@@ -133,7 +137,7 @@ require_once('../../apis/general/ciudad.php');
 		$("#msj").hide();
         $("#numerodocumento").numeric();
         $("#celular").numeric();
-        $("#telefonoFijo").numeric();
+        $("#fijo").numeric();
 		$("#pjur").show();
 		$("#pnat").hide();
 		
@@ -196,8 +200,9 @@ require_once('../../apis/general/ciudad.php');
         $("#grabar").on('click', function(e) {             
 			var tipocliente = $("#tipocliente").val();
             var tipodocumento = $("#tipodocumento").val();
-            var numerodocumento = $("#numerodocumento").val();			
-            var nombre = $("#nombre").val();			
+            var numerodocumento = $("#numerodocumento").val();
+            var nombre = $("#nombre").val();
+			var nombre1 = $("#nombre1").val();			
 			var nombre2 = $("#nombre2").val();
 			var apellido1 = $("#apellido1").val();
 			var apellido2 = $("#apellido2").val();			
@@ -211,7 +216,7 @@ require_once('../../apis/general/ciudad.php');
 			var graba = 0;
             e.preventDefault();
 
-            if( tipocliente == "" || tipodocumento == "" || numerodocumento =="" || direccion == "" || email == "" || celular == "" || estado == undefined || tipocliente == undefined || sitioweb == "" || ciudad == "")
+            if( tipocliente == "" || tipodocumento == "" || numerodocumento =="" || direccion == "" || email == "" || celular == "" || estado == undefined || tipocliente == undefined || ciudad == "")
             {               
                 swal({
                   title: "Atención:  Ingrese información en los campos Obligatorios, marcados con *",
@@ -230,7 +235,7 @@ require_once('../../apis/general/ciudad.php');
 					{
 						graba = 0;
 						swal({
-							title: "Atención:  Ingrese información en el campo Nombre.",
+							title: "Atención:  Ingrese información en los campos Obligatorios, marcados con *",
 							text: "un momento por favor.",
 							imageUrl: "../../js/sweet/2.gif",
 							timer: 1500,
@@ -245,12 +250,13 @@ require_once('../../apis/general/ciudad.php');
 				}
 				if( tipocliente == 1)
 				{
-					if (nombre1 == "" || apellido1 == "" )
+					nombre = nombre1;
+					if (nombre == "" || apellido1 == "" )
 					{
 						
 						graba = 0;
 						swal({
-							title: "Atención:  Ingrese información en los campos de Nombres y Apellidos",
+							title: "Atención:  Ingrese información en los campos Obligatorios, marcados con *",
 							text: "un momento por favor.",
 							imageUrl: "../../js/sweet/2.gif",
 							timer: 1500,

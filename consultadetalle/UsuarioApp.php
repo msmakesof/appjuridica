@@ -6,16 +6,16 @@
 header('Access-Control-Allow-Origin: *');
 require '../estructura/usu_usuario.php';
 $msj="";
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 
-    if (isset($_POST['idU']) && isset($_POST['idC'])) 
+    if (isset($_GET['idU']) && isset($_GET['idC'])) 
     {
         // Obtener parámetro idUsuario y idClave de usu_usuario
-        $parametro = trim($_POST['idU']);
-        $parametroC = trim($_POST['idC']);
+        $parametro = trim($_GET['idU']);
+        $parametroC = trim($_GET['idC']);
 
         // Tratar retorno
-        $retorno = USU_USUARIO::getByIdExiste($parametro,$parametroC);
+        $retorno = USU_USUARIO::getByIdApp($parametro,$parametroC);
         $msj = $retorno;
         if ($retorno) {
             $usu_usuario["estado"] = "1";
