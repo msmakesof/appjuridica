@@ -52,16 +52,10 @@
     $IdUsuario = $m['usu_usuario']['USU_IdUsuario'];      
     
     if($existe == 1 && $IdUsuario != "")
-    {   
-        //include ('datosacceso.php');
-        
-        //getRealIP($IdUsuario);
-        //echo("<script>console.log('PHP ip: ".getRealIP()."');</script>");
-        //$soportecURL = "S";
-        //$url   = urlServicios."consultadetalle/consultadetalle_acceso.php?IdUsuario=$IdUsuario";
+    {    
 		
 		$soportecURL = "S";
-        $url   = urlServicios."consultadetalle/consultadetalle_Usuario.php?IdUsuario=$IdUsuario";
+        $url   = urlServicios."consultadetalle/consultadetalle_Usuario.php?xParIdUsuario=$IdUsuario";
         //echo("<script>console.log('PHP usuario Existe: ".$url."');</script>");
 		if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
         {
@@ -114,10 +108,8 @@
 			$_SESSION['EsAbogado'] = $esabogado;
 			$_SESSION['IdEmpresa'] = $idempresa;
 			$_SESSION['NombreEmpresa'] = $nombreempresa ;
-			$_SESSION['Desarrollador'] = $desarrollador ;
+			$_SESSION['Desarrollador'] = $desarrollador ;			
 			
-			//$cookie_name = "_gus";
-			//$cookie_value = encryptor('encrypt', $usulocal);
 			$_SESSION['user_id'] = encryptor('encrypt', $usulocal);
 			$_SESSION['IdUsuario'] = $IdUsuario ;
 			$user_id = $_SESSION['user_id'] ;

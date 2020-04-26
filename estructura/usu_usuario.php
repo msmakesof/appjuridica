@@ -582,20 +582,19 @@ class USU_USUARIO
      * @param $IdUsuario identificador de la usu_usuario
      * @return bool Respuesta de la consulta
      */
-    public static function Contar($empresa, $Identificacion, $PrimerApellido, $SegundoApellido, $Nombre, $IdUsuario)
+    public static function buscausuario($Identificacion, $PrimerApellido, $SegundoApellido, $Nombre, $IdUsuario)
     {
-        $consulta = "SELECT count(". $GLOBALS['Llave']. ") existe ".        
-        " FROM ".$GLOBALS['TABLA'].
-        " WHERE USU_IdEmpresa = ? AND USU_Identificacion = ? AND (USU_PrimerApellido = ? AND USU_SegundoApellido = ? AND USU_Nombre = ?)  AND USU_IdUsuario <> ?;";
+        $consulta = "SELECT count(USU_IdUsuario) AS existe 
+        FROM usu_usuario
+        WHERE USU_Identificacion = ? OR (USU_PrimerApellido = ? AND USU_SegundoApellido = ? AND USU_Nombre = ?)  AND USU_IdUsuario <> ?;";
 		
-		echo $consulta ." / $empresa, $Identificacion, $PrimerApellido, $SegundoApellido, $Nombre, $IdUsuario";
-		
+		//echo $consulta ;//." /  $Identificacion, $PrimerApellido, $SegundoApellido, $Nombre, $IdUsuario";
 
         try {
             // Preparar sentencia
             $comando = Database::getInstance()->getDb()->prepare($consulta);
             // Ejecutar sentencia preparada
-            $comando->execute(array($empresa, $Identificacion, $PrimerApellido, $SegundoApellido, $Nombre, $IdUsuario));
+            $comando->execute(array($Identificacion, $PrimerApellido, $SegundoApellido, $Nombre, $IdUsuario));
             // Capturar primera fila del resultado
             $row = $comando->fetch(PDO::FETCH_ASSOC);
             return $row;
@@ -603,7 +602,68 @@ class USU_USUARIO
         } catch (PDOException $e) {
             // Aquí puedes clasificar el error dependiendo de la excepción
             // para presentarlo en la respuesta Json
-            return -1;
+            return $e;
+        }
+    }
+	
+	 /**
+     * Verifica si existe el usuario con el mismo número de cédula
+     *
+     * @param $IdUsuario identificador de la usu_usuario
+     * @return bool Respuesta de la consulta
+     */
+    public static function buscaiden($Identificacion, $IdUsuario)
+    {
+        $consulta = "SELECT count(USU_IdUsuario) AS existe 
+        FROM usu_usuario
+        WHERE USU_Identificacion = ? AND USU_IdUsuario <> ? ;";
+		
+		//echo $consulta ;//." /  $Identificacion, $PrimerApellido, $SegundoApellido, $Nombre, $IdUsuario";
+
+        try {
+            // Preparar sentencia
+            $comando = Database::getInstance()->getDb()->prepare($consulta);
+            // Ejecutar sentencia preparada
+            $comando->execute(array($Identificacion, $IdUsuario));
+            // Capturar primera fila del resultado
+            $row = $comando->fetch(PDO::FETCH_ASSOC);
+            return $row;
+
+        } catch (PDOException $e) {
+            // Aquí puedes clasificar el error dependiendo de la excepción
+            // para presentarlo en la respuesta Json
+            return $e;
+        }
+    }
+	
+	
+	 /**
+     * Verifica si existe el usuario con el mismo número de cédula
+     *
+     * @param $IdUsuario identificador de la usu_usuario
+     * @return bool Respuesta de la consulta
+     */
+    public static function buscanom($Nom, $Ape1, $Ape2, $Iden)
+    {
+        $consulta = "SELECT count(USU_IdUsuario) AS existe 
+        FROM usu_usuario
+        WHERE USU_Nombre = ? AND USU_PrimerApellido = ? AND USU_SegundoApellido = ? AND USU_Identificacion = ? ;";
+		
+		//echo $consulta ;//." /  $Identificacion, $PrimerApellido, $SegundoApellido, $Nombre, $IdUsuario";
+
+        try {
+            // Preparar sentencia
+            $comando = Database::getInstance()->getDb()->prepare($consulta);
+            // Ejecutar sentencia preparada
+            $comando->execute(array($Nom, $Ape1, $Ape2, $Iden));
+            // Capturar primera fila del resultado
+            $row = $comando->fetch(PDO::FETCH_ASSOC);
+            return $row;
+
+        } catch (PDOException $e) {
+            // Aquí puedes clasificar el error dependiendo de la excepción
+            // para presentarlo en la respuesta Json
+            return $e;
         }
     }
 	

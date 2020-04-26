@@ -8,12 +8,47 @@ require '../estructura/usu_usuario.php';
 $msj="";
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 
-    if (isset($_GET['IdUsuario'])) {
-
-        // Obtener parámetro IdUsuario
-        $parametro = $_GET['IdUsuario'];
+    
+    if (isset($_GET['IdMostrar'])) {
+        // Obtener parámetro IdMostrar de usu_usuario
+        $parametro = $_GET['IdMostrar'];
+        if($parametro == 0)
+        {
+            $parametro == "";
+        }
 
         // Tratar retorno
+        $retorno = USU_USUARIO::getAll($parametro);
+        $msj =$retorno;
+        if ($retorno) 
+        {
+            $usu_usuario["estado"] = "1";
+            $usu_usuario["usu_usuario"] = $retorno;
+            // Enviar objeto json de la usu_usuario
+            header('Content-Type: application/json');
+            echo json_encode($usu_usuario);
+        } 
+        else 
+        {
+            // Enviar respuesta de error general
+            print json_encode(
+                array(
+                    'estado' => '2',
+                    'mensaje' => 'Todos -No se obtuvo el registro',
+                    'msj' => print_r($msj),
+                    'msj2' => var_dump ($msj)
+                )
+            );
+        }
+    
+    }
+    elseif (isset($_GET['xParIdUsuario'])) {
+
+        // Obtener parámetro IdUsuario
+        $parametro = $_GET['xParIdUsuario'];
+
+        // Tratar retorno
+        //$retorno = USU_USUARIO::getById($parametro);
         $retorno = USU_USUARIO::getById($parametro);
         $msj =$retorno;
         if ($retorno) {
@@ -27,7 +62,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             print json_encode(
                 array(
                     'estado' => '2',
-                    'mensaje' => 'No se obtuvo el registro',
+                    'mensaje' => 'Por Id: No se obtuvo el registro',
                     'msj' => print_r($msj),
                     'msj2' => var_dump ($msj)
                 )
@@ -53,7 +88,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             print json_encode(
                 array(
                     'estado' => '2',
-                    'mensaje' => 'No se obtuvo el registro',
+                    'mensaje' => 'Por Id Abogdo. No se obtuvo el registro',
                     'msj' => print_r($msj),
                     'msj2' => var_dump ($msj)
                 )
@@ -79,46 +114,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             print json_encode(
                 array(
                     'estado' => '2',
-                    'mensaje' => 'No se obtuvo el registro',
+                    'mensaje' => 'Por Estado- No se obtuvo el registro',
                     'msj' => print_r($msj),
                     'msj2' => var_dump ($msj)
                 )
             );
         }
-    } 
-    elseif (isset($_GET['IdMostrar'])) {
-        // Obtener parámetro IdMostrar de usu_usuario
-        $parametro = $_GET['IdMostrar'];
-        if($parametro == 0)
-        {
-            $parametro == "";
-        }
-
-        // Tratar retorno
-        $retorno = USU_USUARIO::getAll($parametro);
-        $msj =$retorno;
-        if ($retorno) 
-        {
-            $usu_usuario["estado"] = "1";
-            $usu_usuario["usu_usuario"] = $retorno;
-            // Enviar objeto json de la usu_usuario
-            header('Content-Type: application/json');
-            echo json_encode($usu_usuario);
-        } 
-        else 
-        {
-            // Enviar respuesta de error general
-            print json_encode(
-                array(
-                    'estado' => '2',
-                    'mensaje' => 'No se obtuvo el registro',
-                    'msj' => print_r($msj),
-                    'msj2' => var_dump ($msj)
-                )
-            );
-        }
-    
-    }
+    }     
 	elseif (isset($_GET['IdMostrarSU'])) {
         // Obtener parámetro IdMostrar de usu_usuario solo los Super Administradores
         $parametro = $_GET['IdMostrarSU'];
@@ -144,7 +146,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             print json_encode(
                 array(
                     'estado' => '2',
-                    'mensaje' => 'No se obtuvo el registro',
+                    'mensaje' => ' Todos SU - No se obtuvo el registro',
                     'msj' => print_r($msj),
                     'msj2' => var_dump ($msj)
                 )
@@ -177,24 +179,27 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             print json_encode(
                 array(
                     'estado' => '2',
-                    'mensaje' => 'No se obtuvo el registro',
+                    'mensaje' => 'Responsable: No se obtuvo el registro',
                     'msj' => print_r($msj),
                     'msj2' => var_dump ($msj)
                 )
             );
         }    
     }
-    elseif (isset($_GET['Cuenta']) )
+    elseif (isset($_GET['BuscaUsuario']) )
     {
-        $par1  = $_GET['empresa'];
-		$par2  = $_GET['Identificacion'];        
-        $par3  = $_GET['PrimerApellido'];
-        $par4  = $_GET['SegundoApellido'];
-        $par5  = $_GET['Nombre'];
-        //$par6  = $_GET['Email'];   $par6,
-		$par8  = $_GET['IdUsuario'];		
+        //$par1  = $_GET['empresa'];
+        $par1  = $_GET['Identificacion'];        
+        $par5  = $_GET['IdUsuario'];
+        /*
+        $par2  = $_GET['PrimerApellido'];
+        $par3  = $_GET['SegundoApellido'];
+        $par4  = $_GET['Nombre'];
         
-        $retorno = USU_USUARIO::cexisteusuario($par1,$par2,$par3,$par4,$par5,$par8);
+        // ,$par2,$par3,$par4,$par5		
+        */
+        
+        $retorno = USU_USUARIO::buscausuario($par1, $par5);
         $msj =$retorno;
         if ($retorno) 
         {
@@ -210,7 +215,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             print json_encode(
                 array(
                     'estado' => '2',
-                    'mensaje' => 'Atención: No se obtuvo el registro.  '.msj,
+                    'mensaje' => 'BuscaUsuario: No se obtuvo el registro.  '.$msj,
                     'msj' => print_r($msj),
                     'msj2' => var_dump ($msj)
                 )
@@ -241,7 +246,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             print json_encode(
                 array(
                     'estado' => '2',
-                    'mensaje' => 'No se obtuvo el registro',
+                    'mensaje' => 'existeusuarioSU: No se obtuvo el registro',
                     'msj' => print_r($msj),
                     'msj2' => var_dump ($msj)
                 )
@@ -285,7 +290,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             print json_encode(
                 array(
                     'estado' => '2',
-                    'mensaje' => 'No se obtuvo el registro'
+                    'mensaje' => 'Insert - No se obtuvo el registro'
                 )
             );
         }
@@ -328,7 +333,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             print json_encode(
                 array(
                     'estado' => '2',
-                    'mensaje' => 'No se obtuvo el registro'
+                    'mensaje' => 'Crear SU -No se obtuvo el registro'
                 )
             );
         }
@@ -369,7 +374,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             print json_encode(
                 array(
                     'estado' => '2',
-                    'mensaje' => 'No se obtuvo el registro'
+                    'mensaje' => 'Update - No se obtuvo el registro'
                 )
             );
         }
@@ -410,7 +415,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             print json_encode(
                 array(
                     'estado' => '2',
-                    'mensaje' => 'No se obtuvo el registro'
+                    'mensaje' => 'Update SU - No se obtuvo el registro'
                 )
             );
         }
@@ -435,7 +440,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             print json_encode(
                 array(
                     'estado' => '2',
-                    'mensaje' => 'No se obtuvo el registro'
+                    'mensaje' => 'Del - No se obtuvo el registro'
                 )
             );
         }
@@ -461,7 +466,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             print json_encode(
                 array(
                     'estado' => '2',
-                    'mensaje' => 'No se obtuvo el registro',
+                    'mensaje' => 'Existe Usu y Cla - No se obtuvo el registro',
                     'msj' => print_r($msj),
                     'msj2' => var_dump ($msj)
                 )
@@ -487,7 +492,66 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             print json_encode(
                 array(
                     'estado' => '2',
-                    'mensaje' => 'No se obtuvo el registro'
+                    'mensaje' => 'Id Local - No se obtuvo el registro'
+                )
+            );
+        }
+    }
+
+    elseif (isset($_GET['BuscaIden']) )
+    {       
+        $par1  = $_GET['Identificacion'];
+        $par2  = $_GET['IdTabla'];
+
+        $retorno = USU_USUARIO::buscaiden($par1,$par2);
+        $msj =$retorno;
+        if ($retorno) 
+        {
+            $usu_usuario["estado"] = "1";
+            $usu_usuario["usu_usuario"] = $retorno;
+            // Enviar objeto json de la usu_usuario
+            header('Content-Type: application/json');
+            echo json_encode($usu_usuario);
+        } 
+        else 
+        {
+            // Enviar respuesta de error general
+            print json_encode(
+                array(
+                    'estado' => '2',
+                    'mensaje' => 'BuscaIden: No se obtuvo el registro.  '.$msj,
+                    'msj' => print_r($msj),
+                    'msj2' => var_dump ($msj)
+                )
+            );
+        }
+    }
+    elseif (isset($_GET['BuscaNombre']) )
+    {       
+        $par1  = $_GET['Nom'];
+        $par2  = $_GET['Ape1'];
+        $par3  = $_GET['Ape2'];
+        $par4  = $_GET['Iden'];
+
+        $retorno = USU_USUARIO::buscanom($par1,$par2,$par3,$par4);
+        $msj =$retorno;
+        if ($retorno) 
+        {
+            $usu_usuario["estado"] = "1";
+            $usu_usuario["usu_usuario"] = $retorno;
+            // Enviar objeto json de la usu_usuario
+            header('Content-Type: application/json');
+            echo json_encode($usu_usuario);
+        } 
+        else 
+        {
+            // Enviar respuesta de error general
+            print json_encode(
+                array(
+                    'estado' => '2',
+                    'mensaje' => 'BuscaNombre: No se obtuvo el registro.  '.$msj,
+                    'msj' => print_r($msj),
+                    'msj2' => var_dump ($msj)
                 )
             );
         }

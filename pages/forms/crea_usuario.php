@@ -1,7 +1,6 @@
 <?php 
 include_once("../tables/header.inc.php");
 require_once ('../../Connections/DataConex.php');  
-require_once('../../Connections/config2.php');
 ?>
 <?php
 if (!function_exists("GetSQLValueString")) {
@@ -35,19 +34,6 @@ function GetSQLValueString($theValue, $theType, $theDefinedValue = "", $theNotDe
 }
 }
 
-date_default_timezone_set('America/Bogota');
-$fechaCreado = date('Y-m-d g:ia');
-
-$empresa ="";
-if(isset($_POST['empresa'])){
-  $empresa = trim($_POST['empresa']);
-}
-
-$tipodocumento ="";
-if(isset($_POST['tipodocumento'])){
-  $tipodocumento = trim($_POST['tipodocumento']);
-}
-
 $numerodocumento ="";
 if(isset($_POST['numerodocumento'])){
   $numerodocumento = trim($_POST['numerodocumento']);
@@ -69,50 +55,14 @@ if(isset($_POST['apellido2'])){
   $apellido2 = trim($_POST['apellido2']);
 }
 
-$clave ="";
-if(isset($_POST['clave'])){
-  $clave = trim($_POST['clave']);
-}
-$direccion ="";
-if(isset($_POST['direccion'])){
-  $direccion = trim($_POST['direccion']);  
-  $direccion = str_replace(' ', '%20', $direccion);
-  $direccion = str_replace('#',"No.", $direccion);  
-}
 
-$email ="";
-if(isset($_POST['email'])){
-  $email = trim($_POST['email']);
-}
 
-$celular ="";
-if(isset($_POST['celular'])){
-  $celular = trim($_POST['celular']);
-}
-
-$tipousuario ="";
-if(isset($_POST['tipousuario'])){
-  $tipousuario = trim($_POST['tipousuario']);
-}
-
-$abogado = "";
-if(isset($_POST['abogado'])){
-  $abogado = trim($_POST['abogado']);
-}
-$estado ="";
-if(isset($_POST['estado'])){
-  $estado = trim($_POST['estado']);
-}
-
-//require_once('../../Connections/DataConex.php');
-//Verifico si existe un usuario con las siguientes caracteristicas
-// Nombres iguales o nro documento igual o email igual
+//Verifico si existe un usuario con las siguientes caracteristicas: Nombres iguales o nro documento igual
 if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
-{
-  //$parameters = "ExisteUsuario=1&empresa=$empresa&Identificacion=$numerodocumento&PrimerApellido=$apellido1&SegundoApellido=$apellido2&Nombre=$nombre&Email=$email&IdUsuario=0";
-  $parameters = "xExisteUsuario=1&empresa=$empresa&Identificacion=$numerodocumento&PrimerApellido=$apellido1&SegundoApellido=$apellido2&Nombre=$nombre&IdUsuario=0";
-  $url = urlServicios."consultadetalle/consultadetalle_xUsuario.php?".$parameters;
-  echo "<script>console.log('U.'+$url);</script>";
+{  
+  $parameters = "BuscaUsuario=1&Identificacion=$numerodocumento&PrimerApellido=$apellido1&SegundoApellido=$apellido2&Nombre=$nombre&IdUsuario=0";
+  $url = urlServicios."consultadetalle/consultadetalle_Usuario.php?".$parameters;
+  //echo "<script>console.log('U.'+$url);</script>";
   $ch = curl_init();
   curl_setopt($ch, CURLOPT_VERBOSE, true);
   curl_setopt($ch, CURLOPT_URL, $url);
@@ -133,25 +83,73 @@ if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
       $sigue = "N - Curl Error: " . $curl_errno;
   }
   else
-  {          
-    
+  {   
     $m = preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $resultado);    
     $m = json_decode($m, true);
     //print_r ($m);
     $existe = $m['usu_usuario']['existe'];
-    if($existe > 0)
+    //echo "<script>console.log('existe ....'+$existe);</script>";
+    if($existe > 0 )
     {
       $sigue = "E-Existe un usuario registrado con el mismo Nombre o Número de Identificación.";
     }
     else
     {
+      require_once('../../Connections/config2.php');
+
+      date_default_timezone_set('America/Bogota');
+      $fechaCreado = date('Y-m-d g:ia');
+
+      $empresa ="";
+      if(isset($_POST['empresa'])){
+        $empresa = trim($_POST['empresa']);
+      }
+
+      $tipodocumento ="";
+      if(isset($_POST['tipodocumento'])){
+        $tipodocumento = trim($_POST['tipodocumento']);
+      }
+      $clave ="";
+      if(isset($_POST['clave'])){
+        $clave = trim($_POST['clave']);
+      }
+      $direccion ="";
+      if(isset($_POST['direccion'])){
+        $direccion = trim($_POST['direccion']);  
+        $direccion = str_replace(' ', '%20', $direccion);
+        $direccion = str_replace('#',"No.", $direccion);  
+      }
+
+      $email ="";
+      if(isset($_POST['email'])){
+        $email = trim($_POST['email']);
+      }
+
+      $celular ="";
+      if(isset($_POST['celular'])){
+        $celular = trim($_POST['celular']);
+      }
+
+      $tipousuario ="";
+      if(isset($_POST['tipousuario'])){
+        $tipousuario = trim($_POST['tipousuario']);
+      }
+
+      $abogado = "";
+      if(isset($_POST['abogado'])){
+        $abogado = trim($_POST['abogado']);
+      }
+      $estado ="";
+      if(isset($_POST['estado'])){
+        $estado = trim($_POST['estado']);
+      }
       //
       $llave = $GLOBALS['secret_key'];
       $interno = rand(10000000,100000123456789);
       $local = rand(10000000,1234567890000);
       $clave = encryptor('encrypt',$clave);
 
-      $parameters = "insert=insert&Empresa=$empresa&TipoDocumento=$tipodocumento&Identificacion=$numerodocumento&PrimerApellido=$apellido1&SegundoApellido=$apellido2&Nombre=$nombre&Email=$email&Direccion=$direccion&Celular=$celular&Usuario=$email&Clave=$clave&TipoUsuario=$tipousuario&Estado=$estado&IdInterno=$interno&Local=$local&Abogado=$abogado";           
+      $parameters = "insert=insert&Empresa=$empresa&TipoDocumento=$tipodocumento&Identificacion=$numerodocumento&PrimerApellido=$apellido1&SegundoApellido=$apellido2&Nombre=$nombre&Email=$email&Direccion=$direccion&Celular=$celular&Usuario=$email&Clave=$clave&TipoUsuario=$tipousuario&Estado=$estado&IdInterno=$interno&Local=$local&Abogado=$abogado";
       $soportecURL = "S";
       $url         = urlServicios."consultadetalle/consultadetalle_Usuario.php?".$parameters;
       $existe      = "";

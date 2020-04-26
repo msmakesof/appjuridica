@@ -155,6 +155,55 @@ require_once('../../apis/general/tipousuario.php');
             }
         });
 
+        $("#numerodocumento").blur(function(){
+			
+			var iden = $(this).val();
+			var idtabla = 0;
+			$.ajax({
+				data: {"iden": iden, "idtabla": idtabla, "par": "i"},
+				type: 'POST',
+				dataType: "html",
+				url: "../forms/buscaiden.php",				
+				
+				beforeSend: function() {					
+					$("#carga").html('<img src="../../images/ajax-loader.gif">');					
+					$("#grabar").hide();
+					$("#borrar").hide();
+					
+					$("#nombre").prop('disabled', true);
+					$("#apellido1").prop('disabled', true);
+					$("#apellido2").prop('disabled', true);
+				},
+				success: function(data) {					
+					if( data == "N")
+					{
+						swal({
+							title: "Atención :  Existe un usuario registrado con ese Nro. de Identificación.",
+							text: "un momento por favor.",
+							imageUrl: "../../js/sweet/3red.gif",
+							timer: 2000,
+							showConfirmButton: false
+						});
+						return false;   
+						$("#numerodocumento").focus();
+					}
+					else{
+						$("#grabar").show();
+						$("#borrar").show();
+						$("#nombre").prop('disabled', false);
+						$("#apellido1").prop('disabled', false);
+						$("#apellido2").prop('disabled', false);
+					}
+				},
+				error: function(xhr) { // if error occured
+					alert("Error ha ocurrido.");
+				},
+				complete: function() {					
+					$("#carga").html('');
+				},				
+			});	
+		});
+
         function reset () {
             $("#toggleCSS").attr("href", "../../css/themes2/alertify.default.css");
             alertify.set({
@@ -225,19 +274,19 @@ require_once('../../apis/general/tipousuario.php');
                     var msj = xrespstr.substr(2);
                     if(respstr == "E")
                     {                         
-                       swal("Atencion:", msj);
+                       swal("Atención:", msj);
                     }
                     else
                     {    
                         if( respstr == "S" )
                         {                        
-                            swal("Atencion: ", msj, "success");
+                            swal("Atención: ", msj, "success");
                             return false;                       
                         }
                         else
                         {                            
                             swal({
-                                title: "Atencion: ",   
+                                title: "Atención: ",   
                                 text: msj,   
                                 type: "error" 
                             });
@@ -352,6 +401,7 @@ require_once('../../apis/general/tipousuario.php');
 											<label class="form-label">N&uacute;mero Documento</label>
 											<div class="form-line">
 											   <input type="text" class="form-control" name="numerodocumento" id="numerodocumento" value="" maxlength="13" required>
+                                               <div id="carga"></div>
 											</div>
 										</div> 
 									</div>

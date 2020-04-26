@@ -1,11 +1,7 @@
 <?php
-session_start();
-require_once('../../Connections/cnn_kn.php'); 
+include_once("../tables/header.inc.php");
+require_once ('../../Connections/DataConex.php'); 
 require_once('../../Connections/config2.php');
-if(!isset($_SESSION)) 
-{ 
-   
-} 
 ?>
 <?php
 if (!function_exists("GetSQLValueString")) {

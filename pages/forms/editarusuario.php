@@ -115,7 +115,7 @@ $TipoUsuario = $muser['usu_usuario']['USU_TipoUsuario'];
 </head>
 
 <body class="theme-indigo">
-    <?php require_once('../tables/secciones.html'); ?>  
+    <?php include '../tables/secciones.html' ; ?>  
     <section class="content" style="margin-top:85px;">
         <div class="container-fluid">
             <div class="block-header">
@@ -206,7 +206,8 @@ $TipoUsuario = $muser['usu_usuario']['USU_TipoUsuario'];
 											<label class="form-label">Número Documento</label>
 											<div class="form-line">
 												<input type="text" class="form-control" name="numerodocumento" id="numerodocumento" value="<?php echo $NumeroDocumento ;?>" maxlength="13" required>
-											</div>
+												<div id="carga"></div>
+											</div>											
 										</div>
 									</div>    
 								</div>
@@ -367,7 +368,54 @@ $TipoUsuario = $muser['usu_usuario']['USU_TipoUsuario'];
     <script src="../../js/alertify.min.js"></script>
     <script src="../../js/jquery.numeric.js"></script>
 
-    <script type="text/javascript">    
+    <script type="text/javascript">
+	
+	function validanom(nom, ape1, ape2)
+	{
+		//alert(nom + ' ' + ape1 + ' '+ ape2);
+		var iden = $("#numerodocumento").val();
+		$.ajax({
+			data: {"nom": nom, "ape1": ape1, "ape2": ape2, "iden":iden, "par": "n"},
+			type: 'POST',
+			dataType: "html",
+			url: "../forms/buscaiden.php",
+			
+			beforeSend: function() {					
+				$("#carga").html('<img src="../../images/ajax-loader.gif">');					
+				$("#grabar").hide();
+				$("#borrar").hide();
+				$("#numerodocumento").focus();
+				return false;
+			},
+			success: function(data) {					
+				if( data == "N")
+				{
+					swal({
+						title: "Atención :  Existe un usuario registrado con ese Nro. de Identificación.",
+						text: "un momento por favor.",
+						imageUrl: "../../js/sweet/3red.gif",
+						timer: 2000,
+						showConfirmButton: false
+					});					 
+					$("#numerodocumento").focus();
+					return false;  
+				}
+				else{
+					$("#grabar").show();
+					$("#borrar").show();
+				}
+			},
+			error: function(xhr) { // if error occured
+				alert("Error ha ocurrido.");
+			},
+			complete: function() {					
+				$("#carga").html('');
+				$("#numerodocumento").focus();
+				return false;
+			},				
+		});
+	}
+		
     $(document).ready(function()
 	{			
 		
@@ -396,6 +444,77 @@ $TipoUsuario = $muser['usu_usuario']['USU_TipoUsuario'];
                 $("#email").focus();
             }
         });
+		
+		$("#numerodocumento").blur(function(){
+			
+			var iden = $(this).val();
+			var idtabla = "<?php echo $idtabla; ?>";
+			$.ajax({
+				data: {"iden": iden, "idtabla": idtabla, "par": "i"},
+				type: 'POST',
+				dataType: "html",
+				url: "../forms/buscaiden.php",				
+				
+				beforeSend: function() {					
+					$("#carga").html('<img src="../../images/ajax-loader.gif">');					
+					$("#grabar").hide();
+					$("#borrar").hide();
+					
+					$("#nombre").prop('disabled', true);
+					$("#apellido1").prop('disabled', true);
+					$("#apellido2").prop('disabled', true);
+				},
+				success: function(data) {					
+					if( data == "N")
+					{
+						swal({
+							title: "Atención :  Existe un usuario registrado con ese Nro. de Identificación.",
+							text: "un momento por favor.",
+							imageUrl: "../../js/sweet/3red.gif",
+							timer: 2000,
+							showConfirmButton: false
+						});
+						return false;   
+						$("#numerodocumento").focus();
+					}
+					else{
+						$("#grabar").show();
+						$("#borrar").show();
+						$("#nombre").prop('disabled', false);
+						$("#apellido1").prop('disabled', false);
+						$("#apellido2").prop('disabled', false);
+					}
+				},
+				error: function(xhr) { // if error occured
+					alert("Error ha ocurrido.");
+				},
+				complete: function() {					
+					$("#carga").html('');
+				},				
+			});	
+		});
+		
+		$("#nombre").blur(function(){
+			var nom = $(this).val();
+			var ape1 = $("#apellido1").val();
+            var ape2 = $("#apellido2").val();
+			//validanom(nom, ape1, ape2);
+		});
+		
+		$("#apellido1").blur(function(){
+			var nom = $("#nombre").val();
+			var ape1 = $(this).val();
+            var ape2 = $("#apellido2").val();
+			//validanom(nom, ape1, ape2);
+		});
+		
+		$("#apellido2").blur(function(){
+			var nom = $("#nombre").val();			
+            var ape1 = $("#apellido1").val();
+			var ape2 = $(this).val();
+			//validanom(nom, ape1, ape2);
+		});		
+		
 		
 		$("#tipousuario").on("change", function(){
 			var tu = $("#tipousuario").val();			
@@ -499,13 +618,13 @@ $TipoUsuario = $muser['usu_usuario']['USU_TipoUsuario'];
                     var msj = xrespstr.substr(2);    				
     				if( respstr == "S" )
                     {
-                        swal("Atencion: ", msj, "success");
+                        swal("Atención: ", msj, "success");
                         return false;
                     }
     				else
     				{
                         swal({
-                            title: "Atencion: ",   
+                            title: "Atención: ",   
                             text: msj,   
                             type: "error" 
                         });
