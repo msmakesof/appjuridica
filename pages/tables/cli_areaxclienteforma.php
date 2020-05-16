@@ -159,6 +159,7 @@ else
 	-->
 	<script src="../../fc/js/bootstrap-datetimepicker.js"></script>
     <link rel="stylesheet" href="../../fc/css/bootstrap-datetimepicker.min.css" />
+
 	<script src="../../fc/js/bootstrap-datetimepicker.es.js"></script> 
    <style>
     object{
@@ -218,7 +219,7 @@ else
 						nom = zdata[i].ARE_Nombre;
 						name += "<input class='chk-box' type='checkbox' id='"+id+"' name='itemchk' value='"+id+"' /><label for='"+id+"'>" + nom + "</label><br>";
 					}
-					$("#lbltxt").html("Seleccione Area(s) o Especialidad(es):");
+					$("#lbltxt").html("<span style='color:red;'>*</span> Seleccione Area(s) o Especialidad(es):");
 					$("#mappend").append(name);
 				}
 				else
@@ -252,11 +253,17 @@ else
 					console.log(selected);
 					$.ajax({				
 						type: 'POST',
-						dataType: 'json', // importante para que 
-						data: "datos="+JSON.stringify(selected), // jQuery convierta el array a JSON
-						url: 'lnkareaxcliente.php',						
-						success: function(data) {						
-							alert(data);
+						dataType: 'json', 
+						data: "datos="+JSON.stringify(selected),
+						url: '../forms/cli_areaxcliente.php',						
+						success: function(data) {
+							if(data == 1)
+							{
+								setTimeout(function () {
+									swal("Atención:", "Grabado correctamente.", "success");
+								}, 2000);								
+								window.location = 'cli_areaxcliente.php';
+							}	
 						},
 						error: function(xhr, status, error) {
 							alert(status);
@@ -268,7 +275,7 @@ else
 			 else 
             {                
                 swal({
-                  title: "Atención:  Debe Seleccionar Empresa y/o Juridiscción ...",
+                  title: "Atención:  Debe Seleccionar Empresa y/o Corporación / Juridiscción ...",
                   text: "un momento por favor.",
                   imageUrl: "../../js/sweet/3red.gif",
                   timer: 2500,
@@ -277,8 +284,13 @@ else
                 return false;             
             }
 			
-        });	
-		
+        });
+
+		$("#cerrar").on('click', function(e) 
+		{				
+			e.preventDefault();
+			window.location = 'cli_areaxcliente.php';
+		});
     })
     </script>      
 </head>
@@ -625,7 +637,7 @@ else
 							$existe      = "";
 							$usulocal    = "";
 							$siguex      = "";
-
+							echo("<script>console.log('PHP: ".$url."');</script>");	
 							if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
 							{
 								$ch = curl_init();
@@ -672,6 +684,7 @@ else
 								$nombre_Tabla="";
 								for($i=0; $i<count($mareaxcliente['cli_areaxcliente']); $i++)
 								{
+									/*
 									$NombreTabla = trim($mareaxcliente['cli_areaxcliente'][$i]['PRO_NumeroProceso']);        
 									$archivo = $NombreTabla.".php";
 									$idTabla = $mareaxcliente['cli_areaxcliente'][$i]['PRO_IdProceso'];
@@ -680,6 +693,7 @@ else
 									$ClaseProceso =$mareaxcliente['cli_areaxcliente'][$i]['ClaseProceso'];
 									$Juzgado =$mareaxcliente['cli_areaxcliente'][$i]['Juzgado'];
 									$estadoTabla = trim($mareaxcliente['cli_areaxcliente'][$i]['EstadoTabla']);
+									*/
 								?>
 								   
 								<?php                          

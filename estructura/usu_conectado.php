@@ -16,35 +16,27 @@ class USU_CONECTADO
      * Insertar un nuevo Acceso de Usuario
      *         
      * @param $IdUsuario         identificador
-     * @param $IpInterna         nuevo IpInterna
-     * @param $FechaAcceso       nueva FechaAcceso
-     * @param $NombreHost        nueva NombreHost
-     * @param $Puerto            nueva Puerto
-     * @param $Servidor          nueva Servidor
-     * @param $Agente            nueva Agente
+     * @param 1			         nuevo Estado
+     * @param $AceptaCookie      AceptaCookie
      * @return PDOStatement
      */
 
      //  
-    public static function insert( $IdUsuario, $Estado )
+    public static function insert( $IdUsuario, $AceptaCookie, $Estado )
     {
         // Sentencia INSERT
         $comando = "INSERT INTO ". $GLOBALS['TABLA'] .
-                " ( CNN_IdUsuario, 
-                    CNN_Estado
-                  )
-                  VALUES(?,?);";
+                " ( CNN_IdUsuario, CNN_AceptaCookie, CNN_Estado )VALUES(?,?,?);";
         try {
             // Preparar la sentencia
             $sentencia = Database::getInstance()->getDb()->prepare($comando);
             return $sentencia->execute(
-                array($IdUsuario, $Estado)
+                array($IdUsuario, $AceptaCookie, $Estado)
             );
             // 
-			$comando = "INSERT INTO usu_conectado (CNN_IdUsuario, CNN_Estado) VALUES ($IdUsuario, '1'); ";
+			//$comando = "INSERT INTO usu_conectado (CNN_IdUsuario, CNN_AceptaCookie, CNN_Estado) VALUES ($IdUsuario, $AceptaCookie, '1'); ";
 			$sentencia = Database::getInstance()->getDb()->prepare($comando);
-			$consulta->execute();
-			
+			$consulta->execute();			
            
         } catch (PDOException $e) {
             // Aquí puedes clasificar el error dependiendo de la excepción
@@ -58,9 +50,7 @@ class USU_CONECTADO
      * en los nuevos valores relacionados con un identificador
      *
      * @param $IdTabla           identificador
-     * @param $Nombre            nuevo Nombre Tabla
-     * @param $Abreviatura       nueva Nombre Abreviatura
-     * @param $Departamento      nueva Nombre Departamento
+     * @param $Nombre            nuevo Nombre Tabla     
      * @param $IdEstadoTabla     nueva Estado       
      * 
      */

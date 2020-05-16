@@ -1,7 +1,6 @@
 <?php
 include_once("../tables/header.inc.php");
 require_once ('../../Connections/DataConex.php');
-//require_once('../../Connections/config2.php');
 ?>
 <?php
 if (!function_exists("GetSQLValueString")) 
@@ -41,7 +40,6 @@ if ( isset( $_POST["id"]))
 { 
     $idTabla = $_POST["id"];
 }
-//echo "post....".$idTabla;
 
 $Tabla ="ACTUACIONPROCESAL";
 $strowreg =0;
@@ -171,7 +169,6 @@ $IdUsuarioCierre = trim($mproceso['pro_proceso']['PRO_IdUsuarioCierre']);
                 <a class="navbar-brand" href="../../index.html">
                 <img src="../../images/logomw.fw.png" style="margin-top: -10px;">
                 </a>
-
             </div>
 
             <!-- Notificaciones -->
@@ -371,13 +368,11 @@ $IdUsuarioCierre = trim($mproceso['pro_proceso']['PRO_IdUsuarioCierre']);
                 </ul>
             </div>
            <!-- Fin notificaciones -->
-
         </div>
     </nav>
-    <!-- #Top Bar -->
-    <section>
+    <!-- #Top Bar -->   
 
-<section>
+	<section>
         <!-- Left Sidebar -->
         <aside id="leftsidebar" class="sidebar">
             <!-- User Info -->
@@ -390,11 +385,9 @@ $IdUsuarioCierre = trim($mproceso['pro_proceso']['PRO_IdUsuarioCierre']);
                         <span id="xNom"><?php echo $_SESSION['NombreUsuario']; ?></span>                   
                     </div>
 
-
                     <div class="email">                        
                         <span id="xMail"><?php echo $_SESSION['EmailUsuario']; ?></span>
                     </div>
-
 
                     <!-- <div class="name" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><?php echo trim($nombre); ?></div>
                     <div class="email"><?php echo trim($email); ?></div> -->
@@ -573,11 +566,11 @@ $IdUsuarioCierre = trim($mproceso['pro_proceso']['PRO_IdUsuarioCierre']);
         <!-- #END# Right Sidebar -->
     </section>
 
-     <section class="content" >
+    <section class="content" >
         <div class="container-fluid">
             <div class="block-header">
                 <h2>
-                    FORMULARIO: Edición <?php echo $Tabla;?>. <span class="badge badge-pill badge-info"><?php //echo $txtEstado; ?></span>
+                    FORMULARIO: Crear <?php echo $Tabla;?>. <span class="badge badge-pill badge-info"><?php //echo $txtEstado; ?></span>
                     <!--<small>Editar.</small>-->
                 </h2>
             </div>
@@ -679,10 +672,7 @@ $IdUsuarioCierre = trim($mproceso['pro_proceso']['PRO_IdUsuarioCierre']);
 											</div>											
 										</div>
 									</div>
-								</div>		
-
-
-											
+								</div>											
 								
                                <div class="form-group" style="clear: both; margin-top:-10px !important">
                                     <div class="col-lg-12 col-md-12 col-sm-12">                                
@@ -728,7 +718,6 @@ $IdUsuarioCierre = trim($mproceso['pro_proceso']['PRO_IdUsuarioCierre']);
     <!-- JQuery Steps Plugin Js -->
     <script src="../../plugins/jquery-steps/jquery.steps.js"></script>
 
-
     <!--  --> <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
     <!-- Sweet Alert Plugin Js -->
     <script src="../../js/sweet/functions.js"></script>
@@ -750,11 +739,6 @@ $IdUsuarioCierre = trim($mproceso['pro_proceso']['PRO_IdUsuarioCierre']);
     <script src="../../js/alertify.min.js"></script>
     <script src="../../js/jquery.numeric.js"></script>
 
-    <!-- DateTime picker 
-    
-    <script src="../../calendar/js/bootstrap-datetimepicker.min.js"></script>
-    <script src="../../calendar/js/bootstrap-datetimepicker.es.js"></script>  
-	-->
 	<script src="../../calendar/js/moment.min.js"></script>
 	<link rel="stylesheet" href="../../fc/css/bootstrap-datetimepicker.min.css" />
 	<script src="../../fc/js/bootstrap-datetimepicker.js"></script>    
@@ -807,15 +791,10 @@ $IdUsuarioCierre = trim($mproceso['pro_proceso']['PRO_IdUsuarioCierre']);
 			viewMode: 'days'		  
         });
 		
-		$('#fechaestado').datetimepicker({
-			language: 'es',											
-			daysOfWeekDisabled: [0, 6],
-			datesDisabled: exclude_dates,			
-			autoclose: true,
-			defaultDate: new Date(),
-			minDate: new Date(),
-			format: 'YYYY-MM-DD',
-			viewMode: 'days'		  
+		$('#fechaestado').datetimepicker({			
+			language: 'es',
+			daysOfWeekDisabled: [0, 6],			
+			format: 'YYYY-MM-DD',			
         });
 		
 		$('#observacion').keypress(function() {
@@ -885,7 +864,6 @@ $IdUsuarioCierre = trim($mproceso['pro_proceso']['PRO_IdUsuarioCierre']);
             }    
         });
 		
-		
         
         $("#borrar").on('click', function() {
             var idtabla  = "<?php echo $idtabla; ?>";
@@ -937,13 +915,6 @@ $IdUsuarioCierre = trim($mproceso['pro_proceso']['PRO_IdUsuarioCierre']);
             );
  
         });
-        
-		/*
-        $("#salir").on('click', function(e) {
-            e.preventDefault();
-            window.location = '../tables/pro_proceso.php';
-        });
-		*/
 
     });
     </script>    

@@ -73,6 +73,7 @@ $Clave = $muser['usu_usuario']['USU_Clave'];
 $EstadoEst = $muser['usu_usuario']['USU_Estado'];
 $EsAbogado = $muser['usu_usuario']['USU_EsAbogado'];
 $TipoUsuario = $muser['usu_usuario']['USU_TipoUsuario'];
+$TarjetaProfesional = $muser['usu_usuario']['USU_TarjetaProfesional'];
 ?>
 <!DOCTYPE html>
 <html>
@@ -99,6 +100,7 @@ $TipoUsuario = $muser['usu_usuario']['USU_TipoUsuario'];
 
     <!-- Sweet Alert Css -->
     <link href="../../plugins/sweetalert/sweetalert.css" rel="stylesheet" />
+		<link href="../../css/sweet/main.css" rel="stylesheet" />
 
     <!-- Bootstrap Select Css -->
     <link href="../../plugins/bootstrap-select/css/bootstrap-select.css" rel="stylesheet" />
@@ -111,24 +113,70 @@ $TipoUsuario = $muser['usu_usuario']['USU_TipoUsuario'];
 
     <link rel="stylesheet" href="../../css/themes2/alertify.core.css" />
     <link rel="stylesheet" href="../../css/themes2/alertify.default.css" id="toggleCSS" />
+	
+	
+	<!-- Jquery Core Js -->
+    <script src="../../plugins/jquery/jquery.min.js"></script>
+	
+    <!-- Sweet Alert Plugin Js -->
+	<script src="../../js/sweet/functions.js"></script>
+    <script src="../../js/sweet/sweetalert.min.js"></script>
+    <script src="../../plugins/sweetalert/sweetalert.min.js"></script>
+	
+
+    <!-- Bootstrap Core Js -->
+    <script src="../../plugins/bootstrap/js/bootstrap.js"></script>
+
+    <!-- Select Plugin Js -->
+    <script src="../../plugins/bootstrap-select/js/bootstrap-select.js"></script>
+
+    <!-- Slimscroll Plugin Js -->
+    <script src="../../plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
+
+    <!-- Jquery Validation Plugin Css -->
+    <script src="../../plugins/jquery-validation/jquery.validate.js"></script>
+
+    <!-- JQuery Steps Plugin Js -->
+    <script src="../../plugins/jquery-steps/jquery.steps.js"></script>
+
+    <!-- Waves Effect Plugin Js -->
+    <script src="../../plugins/node-waves/waves.js"></script>
+
+    <!-- Custom Js -->
+    <script src="../../js/admin.js"></script>
+    <script src="../../js/pages/forms/form-validation.js"></script>
+    <script src="../../plugins/jquery-validation/localization/messages_es.js"></script>
+
+    <script src="../../js/pages/ui/dialogs.js"></script>
+	
+    <!-- Demo Js -->
+    <script src="../../js/demo.js"></script>    
+
+    <script src="../../js/alertify.min.js"></script>
+    <script src="../../js/jquery.numeric.js"></script>
 
 </head>
 
 <body class="theme-indigo">
-    <?php include '../tables/secciones.html' ; ?>  
+    <?php 
+	//include '../tables/secciones.html' ; 
+	require_once('../tables/secciones.html');
+	?>
+	
     <section class="content" style="margin-top:85px;">
         <div class="container-fluid">
+			<!--
             <div class="block-header">
                 <h2>
                     FORMULARIO: Edición <?php echo $Tabla; ?>.
-                    <!--<small>Editar.</small>-->
+                    <small>Editar.</small>
                 </h2>
-            </div>
+            </div> -->
             <!-- Basic Validation -->
             <div class="row info-container">
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <div class="card">
-                        <!--<div class="header">
+                        <div class="header">
                             <h2>REGISTRO EDICION DE ESTUDIANTES.</h2>
                              <ul class="header-dropdown m-r--5">
                                <li class="dropdown">
@@ -137,7 +185,7 @@ $TipoUsuario = $muser['usu_usuario']['USU_TipoUsuario'];
                                     </a>                                    
                                 </li>
                             </ul>
-                        </div>-->
+                        </div>
                         <div class="body  table-responsive">
                             <form id="form_validation" method="POST">
 							
@@ -209,6 +257,15 @@ $TipoUsuario = $muser['usu_usuario']['USU_TipoUsuario'];
 												<div id="carga"></div>
 											</div>											
 										</div>
+										
+										<div class="col-md-4">
+											<label class="form-label">N&uacute;mero Tarjeta Profesional</label>
+											<div class="form-line">
+											   <input type="text" class="form-control" name="tp" id="tp" value="<?php echo $TarjetaProfesional ?>" maxlength="13" required>
+                                               <!-- <div id="carga"></div> -->
+											</div>
+										</div>
+										
 									</div>    
 								</div>
 
@@ -259,6 +316,7 @@ $TipoUsuario = $muser['usu_usuario']['USU_TipoUsuario'];
 											<div class="form-line">
 												<input type="text" class="form-control" name="email" id="email" value="<?php echo $Email ;?>" maxlength="60" required>                                      
 											</div>
+											<div id="ecarga"></div>
 										</div>
 										<div class="col-md-4"><span style="color:red;">*</span> 
 											<label class="form-label">Clave</label>
@@ -332,47 +390,9 @@ $TipoUsuario = $muser['usu_usuario']['USU_TipoUsuario'];
         </div>
     </section>
 
-        <!-- Jquery Core Js -->
-    <script src="../../plugins/jquery/jquery.min.js"></script>
-
-    <!-- Bootstrap Core Js -->
-    <script src="../../plugins/bootstrap/js/bootstrap.js"></script>
-
-    <!-- Select Plugin Js -->
-    <script src="../../plugins/bootstrap-select/js/bootstrap-select.js"></script>
-
-    <!-- Slimscroll Plugin Js -->
-    <script src="../../plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
-
-    <!-- Jquery Validation Plugin Css -->
-    <script src="../../plugins/jquery-validation/jquery.validate.js"></script>
-
-    <!-- JQuery Steps Plugin Js -->
-    <script src="../../plugins/jquery-steps/jquery.steps.js"></script>
-
-    <!-- Sweet Alert Plugin Js -->
-    <script src="../../plugins/sweetalert/sweetalert.min.js"></script>
-
-    <!-- Waves Effect Plugin Js -->
-    <script src="../../plugins/node-waves/waves.js"></script>
-
-    <!-- Custom Js -->
-    <script src="../../js/admin.js"></script>
-    <script src="../../js/pages/forms/form-validation.js"></script>
-    <script src="../../plugins/jquery-validation/localization/messages_es.js"></script>
-
-    <script src="../../js/pages/ui/dialogs.js"></script>
-    <!-- Demo Js -->
-    <script src="../../js/demo.js"></script>    
-
-    <script src="../../js/alertify.min.js"></script>
-    <script src="../../js/jquery.numeric.js"></script>
-
-    <script type="text/javascript">
-	
+    <script type="text/javascript">	
 	function validanom(nom, ape1, ape2)
-	{
-		//alert(nom + ' ' + ape1 + ' '+ ape2);
+	{		
 		var iden = $("#numerodocumento").val();
 		$.ajax({
 			data: {"nom": nom, "ape1": ape1, "ape2": ape2, "iden":iden, "par": "n"},
@@ -417,19 +437,58 @@ $TipoUsuario = $muser['usu_usuario']['USU_TipoUsuario'];
 	}
 		
     $(document).ready(function()
-	{			
-		
+	{		
         $("#mensaje").hide();
         $("#form_validation").show();
         $("#numerodocumento").numeric();
         $("#celular").numeric();
+		$("#tp").numeric();
+		
         $('#email').on('blur', function() {
             // Expresion regular para validar el correo
             var regex = /[\w-\.]{2,}@([\w-]{2,}\.)*([\w-]{2,}\.)[\w-]{2,4}/;
 
             // Se utiliza la funcion test() nativa de JavaScript
             if (regex.test($('#email').val().trim())) 
-            {                
+            {
+				var mail = $(this).val();
+				var idtabla = 0;
+				$.ajax({
+					data: {"mail": mail, "par": "e"},
+					type: 'POST',
+					dataType: "html",
+					url: "../forms/buscaiden.php",				
+					
+					beforeSend: function() {					
+						$("#ecarga").html(' <img src="../../images/ajax-loader.gif"><span class="label label-warning"> Verificando información... </span>');					
+						$("#grabar").hide();
+						$("#borrar").hide();						
+					},
+					success: function(data) {					
+						if( data == "N")
+						{
+							swal({
+								title: "Atención :  Existe un usuario registrado con ese mismo Email.",
+								text: "un momento por favor.",
+								imageUrl: "../../js/sweet/3red.gif",
+								timer: 2000,
+								showConfirmButton: false
+							});
+							return false;
+							$("#email").focus();
+						}
+						else{
+							$("#grabar").show();
+							$("#borrar").show();							
+						}
+					},
+					error: function(xhr) { // if error occured
+						alert("Error ha ocurrido.");
+					},
+					complete: function() {					
+						$("#ecarga").html('');
+					},				
+				});	
             } 
             else 
             {                
@@ -582,6 +641,7 @@ $TipoUsuario = $muser['usu_usuario']['USU_TipoUsuario'];
             var tipodocumento = $("#tipodocumento").val();
 			var empresa = $("#empresa").val();
             var numerodocumento = $("#numerodocumento").val();
+			var tp = $("#tp").val();
             var nombre = $("#nombre").val();
             var apellido1 = $("#apellido1").val();
             var apellido2 = $("#apellido2").val();
@@ -608,7 +668,7 @@ $TipoUsuario = $muser['usu_usuario']['USU_TipoUsuario'];
             else
             {
     			$.ajax({
-    				data : {"empresa": empresa, "tipodocumento": tipodocumento, "numerodocumento": numerodocumento, "nombre": nombre, "apellido1": apellido1, "apellido2": apellido2, "clave": clave, "direccion": direccion, "email": email, "celular": celular, "estado": estado, "tipousuario": tipousuario, "idtabla": idtabla, "OldClave": OldClave, "abogado": abogado },
+    				data : {"empresa": empresa, "tipodocumento": tipodocumento, "numerodocumento": numerodocumento, "nombre": nombre, "apellido1": apellido1, "apellido2": apellido2, "clave": clave, "direccion": direccion, "email": email, "celular": celular, "estado": estado, "tipousuario": tipousuario, "idtabla": idtabla, "OldClave": OldClave, "abogado": abogado, "tp": tp },
     				type: "POST",				
     				url : "../forms/editar_usuario.php",
                 })  

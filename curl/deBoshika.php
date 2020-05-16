@@ -1,0 +1,3 @@
+<?php
+$hosting = "* Test * ";
+?>

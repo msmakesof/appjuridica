@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 include_once("../tables/header.inc.php");
 require_once ('../../Connections/DataConex.php'); 
 
@@ -43,7 +43,7 @@ if(isset($_POST['iden'])){
   $iden = trim($_POST['iden']);
 }
 
-if ($par == "i")
+if ($par == "i") /* Busqueda por Identificacion */
 {
 	$idUsuario = "";
 	if(isset($_POST['idtabla'])){
@@ -51,7 +51,7 @@ if ($par == "i")
 	}
 }
 
-if ($par == "n")
+if ($par == "n") /* Busqueda por Nombres y Apellidos */
 {	
 	$nom = "";
 	if(isset($_POST['nom'])){
@@ -67,6 +67,14 @@ if ($par == "n")
 	if(isset($_POST['ape2'])){
 	  $ape2 = trim($_POST['ape2']);
 	}
+}
+
+if ($par == "e") /* Busqueda por Email */
+{
+	$mail = "";
+	if(isset($_POST['mail'])){
+	  $mail = trim($_POST['mail']);
+	}	
 }
 
 $existe = "";
@@ -86,7 +94,13 @@ if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
 		$parameters = "BuscaNombre=1&Nom=$nom&Ape1=$ape1&Ape2=$ape2&Iden=$iden";
 		$url = urlServicios."consultadetalle/consultadetalle_Usuario.php?".$parameters;
 	}
-	//echo "<script>console.log('A.'+$url);</script>";
+	
+	if ($par == "e")
+	{
+		$parameters = "BuscaEmail=1&Email=$mail";
+		$url = urlServicios."consultadetalle/consultadetalle_Usuario.php?".$parameters;
+	}
+	////echo "<script>console.log('A.'+$url);</script>";
 	$ch = curl_init();
 	curl_setopt($ch, CURLOPT_VERBOSE, true);
 	curl_setopt($ch, CURLOPT_URL, $url);

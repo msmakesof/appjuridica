@@ -3,18 +3,6 @@ include_once("../tables/header.inc.php");
 require_once ('../../Connections/DataConex.php'); 
 $LogoInterno = LogoInterno;
 require_once('../../Connections/config2.php'); 
-/*
-require_once('../../Connections/cnn_kn.php'); 
-require_once('../../Connections/config2.php');
-if(!isset($_SESSION)) 
-{ 
-    session_start(); 
-} 
-else
-{
-    header('Location: ../../index.html');
-}
-*/
 ?>
 <?php
 if (!function_exists("GetSQLValueString")) 
@@ -142,12 +130,26 @@ $NombreTabla ="NOTICIASJUDICIALES";
     <script src="../../calendar/js/moment.min.js"></script>
     <script src="../../calendar/js/bootstrap-datetimepicker.min.js"></script>
     <script src="../../calendar/js/bootstrap-datetimepicker.es.js"></script>  
-
+	<style>
+	#nombre {
+		text-transform: uppercase;
+	}
+	</style>
     <script type="text/javascript">
     var nombre ="";
     $(document).ready(function()
-    {                        
-        $("#msj").hide();
+    {    
+		var mcn = $("#nombre").prop('maxLength');        
+		$("#mcn").html( mcn);
+		
+		var mtn = $("#texto").prop('maxLength');        
+		$("#mtn").html( mtn);
+		
+		var mln = $("#lnk").prop('maxLength');        
+		$("#mln").html( mln);		
+		
+		$('#activo').prop("checked", true);
+		$("#msj").hide();
 
         function reset () {
             $("#toggleCSS").attr("href", "../../css/themes2/alertify.default.css");
@@ -160,12 +162,12 @@ $NombreTabla ="NOTICIASJUDICIALES";
                 buttonReverse : false,
                 buttonFocus   : "ok"
             });
-        }
-        
+        }        
 
         $("#grabar").on('click', function(e) {             
             var nombre = $("#nombre").val();            
             var texto = $("#texto").val();
+			var lnk = $("#lnk").val();
             var estado = $('input:radio[name=estado]:checked').val();
             e.preventDefault();
 
@@ -184,7 +186,7 @@ $NombreTabla ="NOTICIASJUDICIALES";
             else
             {
                 $.ajax({
-                    data : {"pnombre": nombre, "ptexto": texto, "pestado": estado},
+                    data : {"pnombre": nombre, "ptexto": texto, "plnk": lnk, "pestado": estado},
                     type: "POST",
                     dataType: "html",
                     url : "crea_<?php echo strtolower($NombreTabla); ?>.php",
@@ -225,6 +227,25 @@ $NombreTabla ="NOTICIASJUDICIALES";
                 });
             }    
         });
+		
+		$('#nombre').keyup(function() {
+			init_contador("#nombre","#cantchars");
+		});
+
+		$('#texto').keyup(function() {
+			init_contador("#texto","#canttchars");
+		});	
+
+		$('#lnk').keyup(function() {
+			init_contador("#lnk","#cantlchars");
+		});			
+		
+		function init_contador(idtextarea, idcontador)
+		{        
+			var contador = $(idcontador);
+			contador.html( $(idtextarea).val().length);
+		}		
+		
     });    
     </script>    
 </head>
@@ -262,8 +283,9 @@ $NombreTabla ="NOTICIASJUDICIALES";
                                     <div class="col-xs-12">
                                         <label class="form-label">Digite Titular</label>                                       
 										<div class="form-line">
-                                            <input type="text" class="form-control" name="nombre" id="nombre"  value="" required>                                       
-                                        </div>                                    
+                                            <input type="text" class="form-control" name="nombre" id="nombre" value="" maxlength="70" required placeholder="Digite un titular para la noticia">											
+                                        </div>
+										<span style="font-size:11px">Caracteres: <span id="cantchars">0</span> de <span id="mcn"></span></span>
                                     </div>                                    
                                 </div>
                                 
@@ -272,10 +294,22 @@ $NombreTabla ="NOTICIASJUDICIALES";
                                     <div class="col-xs-12">
                                         <label class="form-label">Digite Texto de la Noticia</label>
                                         <div class="form-line">
-                                            <input type="text" class="form-control" name="texto" id="texto"  value="" required>                                       
+                                            <textarea class="form-control" name="texto" id="texto" value="" required placeholder="Breve texto de la Noticia" rows="3" cols="60" maxlength="190"></textarea>                                    
                                         </div>
+										<span style="font-size:11px">Caracteres: <span id="canttchars">0</span> de <span id="mtn"></span></span>
                                     </div>    
-                                </div>                                
+                                </div> 
+
+								<div class="form-group row">
+                                    <div class="col-xs-12">
+                                        <label class="form-label">Digite Link de la Noticia</label>
+                                        <div class="form-line">
+                                            <textarea class="form-control" name="lnk" id="lnk" value="" required placeholder="link para dirigir al visitante" rows="3" cols="60" maxlength="150"></textarea>											
+                                        </div>
+										<span style="font-size:11px">Caracteres: <span id="cantlchars">0</span> de <span id="mln"></span></span>
+										<span style="color:red; font-size:11px">Por seguridad el link debe empezar por <b>https</b>, en caso contrario no se puede grabar la noticia.</span>
+                                    </div>    
+                                </div> 								
                                 
                                 <div class="form-group form-float" style="clear: both;">
                                     <label class="form-label">Estado</label>

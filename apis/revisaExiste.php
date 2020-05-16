@@ -101,7 +101,13 @@ switch ($tabla)
 		$parameters = "ExisteTabla=1&Nombre=$nombre&Texto=$texto&idtabla=$idtabla";
 		$url = urlServicios."consultadetalle/consultadetalle_gen_noticiasjudiciales.php?".$parameters;
 		$arreglo= "gen_$tabla";
-		break;	
+		break;
+		
+	case 'sitiofrecuente' :
+		$parameters = "ExisteTabla=1&Nombre=$nombre&Link=$lnk&idtabla=$idtabla";
+		$url = urlServicios."consultadetalle/gen_sitiofrecuente.php?".$parameters;
+		$arreglo= "gen_$tabla";
+		break;		
 	
 }	
 

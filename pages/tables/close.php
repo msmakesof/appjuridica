@@ -45,6 +45,18 @@ if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
 		$_SESSION['IdEmpresa'] = "";
 		$_SESSION['EsAbogado'] = "";
 		$_SESSION['Desarrollador'] = "";
+		
+		unset($_SESSION['Usuario']);
+		unset($_SESSION['NombreUsuario']);
+		unset($_SESSION['EmailUsuario']);
+		unset($_SESSION['user_id']);
+		unset($_SESSION['opcMenu']);
+		unset($_SESSION['TipoUsuario']);		
+		unset($_SESSION['IdUsuario']);
+		unset($_SESSION['IdEmpresa']);
+		unset($_SESSION['EsAbogado']);
+		unset($_SESSION['Desarrollador']);
+		session_destroy();
 		header("Location: ../../");
 		exit;		
 	}

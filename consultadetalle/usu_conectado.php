@@ -123,10 +123,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     {
         //Obtener Parametros
         $par1 = $_GET['IdUsuario'];
-		$par2 = 1;
-       
+		$par2 = $_GET['Ac'];
+		$par3 = 1;
 
-        $retorno = USU_CONECTADO ::insert($par1, $par2);
+        $retorno = USU_CONECTADO ::insert($par1, $par2, $par3);
         $msj = $retorno;
         if($retorno)
         {

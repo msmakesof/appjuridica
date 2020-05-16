@@ -116,5 +116,10 @@ if($OldClave != $clave)
   $clave = encryptor('encrypt',$clave);
 }
 
+$tp ="";
+if(isset($_POST['tp'])){
+	$tp = trim($_POST['tp']);
+}
+
 require_once('../../apis/usuario/infoUsuario.upd.php');
 ?>

@@ -1,0 +1,104 @@
+﻿<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+	<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">	
+	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+	
+<style>
+body {
+  padding-top: 50px;
+}
+
+#section-green,
+#section-blue,
+#section-red,
+#section-start,
+#section-stop {
+  height: 800px;
+  padding: 10px 20px;
+}
+
+#section-green { background: #9c6; color: #cf9; }
+#section-blue  { background: #69c; color: #9cf; }
+#section-red   { background: #c69; color: #f9c; }
+</style>
+<script>
+// **** AutoScroll + ScrollSpy ****
+var CORRECTION = 50;  // height of the navbar 
+// don't forget to setup the data-offset attribute of the <body> tag
+
+var DELAY_READING = 4000; // 4 seconds = 4000; 10 seconds = 10000
+var DELAY_SCROLLING = 1500;
+
+var links = [ '#section-start', '#section-green', '#section-blue', '#section-red', '#section-stop' ];
+var timerId = 0;
+
+delayLinks(0);
+
+$( '#section-stop a' ).click(function(event) { 
+  event.preventDefault();
+  clearTimeout(timerId); 
+});
+
+$( '#navbar-1 li a' ).click(function(event) {
+  event.preventDefault();
+  scrollToLink( $(this).attr('href') );
+});
+
+function delayLinks( i ) {
+  if( i >= links.length ) i = 0;
+  scrollToLink( links[i] );
+  
+  var next = ( i == links.length - 1 ? 0 : i + 1);
+  timerId = setTimeout(function() { delayLinks( next ) }, DELAY_READING ); 
+}
+
+function scrollToLink( link ) {
+  selectLink = $( link );
+  if ( selectLink.length ) {
+    var top = selectLink.offset().top - CORRECTION;
+    $('body,html').stop().animate({scrollTop: top}, DELAY_SCROLLING);
+  } else {
+    colnsole.log('The link is not found: ' + link);
+  }
+}
+</script>
+<body data-spy="scroll" data-target="#navbar-1" data-offset="50">
+  
+  <nav id="navbar-1" class="navbar navbar-default navbar-fixed-top">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse-1" aria-expanded="false">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="#">Brand</a>
+      </div>
+
+      <!-- Collect the nav links, forms, and other content for toggling -->
+      <div class="collapse navbar-collapse" id="navbar-collapse-1">
+        <ul class="nav navbar-nav">
+          <li class="active"><a href="#section-start">Start</a></li>
+          <li><a href="#section-green">Green</a></li>
+          <li><a href="#section-blue">Blue</a></li>
+          <li><a href="#section-red">Red</a></li>
+          <li><a href="#section-stop">Stop</a></li>
+        </ul>
+      </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+  </nav>
+
+  <div id="section-start"><h2>Please wait for a few seconds</h2></div>
+  <div id="section-green"><h2>Green</h2></div>
+  <div id="section-blue"><h2>Blue</h2></div>
+  <div id="section-red"><h2>Red</h2></div>
+  <div id="section-stop"><h2><a href="#">Press to stop the loop</a></h2></div>
+  
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+</body>
+</html>

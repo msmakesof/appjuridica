@@ -585,7 +585,8 @@ else
                                     <tr>
                                         <th>Titular</th>
 										<th>Texto</th>
-										<th>Feecha Publicación</th>
+										<th>Link</th>
+										<th>Fecha Publicación</th>
                                         <th>Estado</th> 
                                     </tr>
                                 </thead>
@@ -593,7 +594,8 @@ else
                                     <tr>
                                         <th>Titular</th>
 										<th>Texto</th>
-										<th>Feecha Publicación</th>
+										<th>Link</th>
+										<th>Fecha Publicación</th>
                                         <th>Estado</th>                                        
                                     </tr>
                                 </tfoot>
@@ -654,6 +656,7 @@ if( $mnoticiasjudiciales['estado'] < 2)
     {
         $NombreTabla = trim($mnoticiasjudiciales['gen_noticiasjudiciales'][$i]['NOJ_Titular']);
 		$Texto = trim($mnoticiasjudiciales['gen_noticiasjudiciales'][$i]['NOJ_Texto']);
+		$Link = trim($mnoticiasjudiciales['gen_noticiasjudiciales'][$i]['NOJ_Link']);
         $archivo = $NombreTabla.".php";
         $idTabla = $mnoticiasjudiciales['gen_noticiasjudiciales'][$i]['NOJ_IdNoticia'];
 		$FechaCreacion = $mnoticiasjudiciales['gen_noticiasjudiciales'][$i]['NOJ_FechaCreacion'];
@@ -664,6 +667,7 @@ if( $mnoticiasjudiciales['estado'] < 2)
                 <a href="javascript:void(0);" onclick="cambiar('../forms/editar<?php echo $nombre_lnk ;?>.php?f=<?php echo $idTabla; ?>')" class="nav nav-tabs nav-stacked" data-toggle="modal" data-target="#defaultModalEditar" style="text-decoration:none;"><?php echo $NombreTabla; ?></a>        	
             </td>
 			<td><?php echo $Texto; ?></td> 
+			<td><?php echo $Link; ?></td> 
 			<td><?php echo $FechaCreacion ; ?></td> 
             <td><?php echo $estadoTabla; ?></td>               
         </tr>
@@ -691,7 +695,7 @@ if( $mnoticiasjudiciales['estado'] < 2)
 				</div>
 				
 				<div class="modal-body">
-					<object type="text/html" data="../forms/editar<?php echo $nombre_lnk ;?>.php" id="carga"></object>                           
+					<object style="padding :0px; position: relative; height: 70vh; max-height:100vh; bottom:0; overflow: hidden; margin: 0px;" type="text/html" data="../forms/editar<?php echo $nombre_lnk ;?>.php" id="carga"></object>                           
 				</div>
 
 				<div class="modal-footer">
@@ -711,7 +715,7 @@ if( $mnoticiasjudiciales['estado'] < 2)
 				</div>
 				
 				<div class="modal-body">                         
-					<object type="text/html" data="../forms/form-validationBase<?php echo $nombre_lnk ;?>.php" id="crear"></object>
+					<object style="padding :0px; position: relative; height: 70vh; max-height:100vh; bottom:0; overflow: hidden; margin: 0px;" type="text/html" data="../forms/form-validationBase<?php echo $nombre_lnk ;?>.php" id="crear"></object>
 				</div>
 				<div class="modal-footer">
 					<!-- <button type="button" class="btn btn-link waves-effect">SAVE CHANGES</button> -->

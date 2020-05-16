@@ -20,7 +20,7 @@
        // tiene importancia en mi contexto pero no es obligatorio
 
         if (!$_GET) {
-            $datos="*POST: ".$_POST;
+            $datos= $_POST;
 
         } 
         else

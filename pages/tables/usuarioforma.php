@@ -121,7 +121,7 @@ require_once('../../apis/general/tipousuario.php');
     <script src="../../js/demo.js"></script>
 
     <!-- <script src="../../js/alertify.min.js"></script> -->
-     <script src="../../js/jquery.numeric.js"></script>
+    <script src="../../js/jquery.numeric.js"></script>
 
     <script type="text/javascript">
     var nombre ="";
@@ -131,6 +131,7 @@ require_once('../../apis/general/tipousuario.php');
         $("#msj").hide();
         $("#numerodocumento").numeric();
         $("#celular").numeric();
+		$("#tp").numeric();
         $("#telefonoFijo").numeric();
 
         $('#email').on('blur', function() {
@@ -139,7 +140,45 @@ require_once('../../apis/general/tipousuario.php');
 
             // Se utiliza la funcion test() nativa de JavaScript
             if (regex.test($('#email').val().trim())) 
-            {                
+            {  
+				var mail = $(this).val();
+				var idtabla = 0;
+				$.ajax({
+					data: {"mail": mail, "par": "e"},
+					type: 'POST',
+					dataType: "html",
+					url: "../forms/buscaiden.php",				
+					
+					beforeSend: function() {					
+						$("#ecarga").html(' <img src="../../images/ajax-loader.gif"><span class="label label-warning"> Verificando información... </span>');					
+						$("#grabar").hide();
+						$("#borrar").hide();
+					},
+					success: function(data) {					
+						if( data == "N")
+						{
+							swal({
+								title: "Atención :  Existe un usuario registrado con ese mismo Email.",
+								text: "un momento por favor.",
+								imageUrl: "../../js/sweet/3red.gif",
+								timer: 2000,
+								showConfirmButton: false
+							});
+							return false;
+							$("#email").focus();
+						}
+						else{
+							$("#grabar").show();
+							$("#borrar").show();
+						}
+					},
+					error: function(xhr) { // if error occured
+						alert("Error ha ocurrido.");
+					},
+					complete: function() {					
+						$("#ecarga").html('');
+					},				
+				});
             } 
             else 
             {                
@@ -166,7 +205,7 @@ require_once('../../apis/general/tipousuario.php');
 				url: "../forms/buscaiden.php",				
 				
 				beforeSend: function() {					
-					$("#carga").html('<img src="../../images/ajax-loader.gif">');					
+					$("#carga").html(' <img src="../../images/ajax-loader.gif"><span class="label label-warning"> Verificando información... </span>');					
 					$("#grabar").hide();
 					$("#borrar").hide();
 					
@@ -237,6 +276,7 @@ require_once('../../apis/general/tipousuario.php');
 			var empresa = $("#empresa").val();
             var tipodocumento = $("#tipodocumento").val();
             var numerodocumento = $("#numerodocumento").val();
+			var tp = $("#tp").val();
             var nombre = $("#nombre").val();
             var apellido1 = $("#apellido1").val();
             var apellido2 = $("#apellido2").val();
@@ -263,7 +303,7 @@ require_once('../../apis/general/tipousuario.php');
             else
             {
                 $.ajax({
-                    data : {"empresa": empresa, "tipodocumento": tipodocumento, "numerodocumento": numerodocumento, "nombre": nombre, "apellido1": apellido1, "apellido2": apellido2, "clave": clave, "direccion": direccion, "email": email, "celular": celular, "estado": estado, "tipousuario": tipousuario, "abogado": abogado}, 
+                    data : {"empresa": empresa, "tipodocumento": tipodocumento, "numerodocumento": numerodocumento, "nombre": nombre, "apellido1": apellido1, "apellido2": apellido2, "clave": clave, "direccion": direccion, "email": email, "celular": celular, "estado": estado, "tipousuario": tipousuario, "abogado": abogado, "tp": tp}, 
                     type: "POST",
                     dataType: "html",
                     url : "../forms/crea_usuario.php",
@@ -403,7 +443,16 @@ require_once('../../apis/general/tipousuario.php');
 											   <input type="text" class="form-control" name="numerodocumento" id="numerodocumento" value="" maxlength="13" required>
                                                <div id="carga"></div>
 											</div>
-										</div> 
+										</div>
+
+										<div class="col-md-4">
+											<label class="form-label">N&uacute;mero Tarjeta Profesional</label>
+											<div class="form-line">
+											   <input type="text" class="form-control" name="tp" id="tp" value="" maxlength="13" required>
+                                               <!-- <div id="carga"></div> -->
+											</div>
+										</div>
+										
 									</div>
                                 </div>
 
@@ -456,6 +505,7 @@ require_once('../../apis/general/tipousuario.php');
 											<div class="form-line">
 												<input type="text" class="form-control" name="email" id="email" value="" maxlength="60" required>                                       
 											</div>
+											<div id="ecarga"></div>
 										</div>
 										<div class="col-md-4"><span style="color:red;">*</span>
 											<label class="form-label">Clave</label>

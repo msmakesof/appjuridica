@@ -3,14 +3,6 @@ include_once("../../pages/tables/header.inc.php");
 require_once ('../../Connections/DataConex.php'); 
 $LogoInterno = LogoInterno;
 require_once('../../Connections/config2.php'); 
-/*  
-require_once('../../Connections/cnn_kn.php'); 
-require_once('../../Connections/config2.php');
-if(!isset($_SESSION)) 
-{ 
-  session_start(); 
-}
-*/ 
 ?>
 <?php
 if (!function_exists("GetSQLValueString")) 
@@ -58,13 +50,13 @@ if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
 	if($existeReg == "S")
 	{		
 		
-		$parameters = "update=update&nombre=$nombre&texto=$texto&estado=$estado&idtabla=$idtabla";
+		$parameters = "update=update&nombre=$nombre&texto=$texto&lnk=$lnk&estado=$estado&idtabla=$idtabla";
 		$soportecURL = "S";
 		$url         = urlServicios."consultadetalle/consultadetalle_gen_noticiasjudiciales.php?".$parameters;
 		$existe      = "";
 		$usulocal    = "";
 		$sigue      = "";
-		//echo("<script>console.log('PHP: ".$url."');</script>");
+		//echo("<script>console.log('PHP upd: ".$url."');</script>");
 		if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
 		{
 			$ch = curl_init();

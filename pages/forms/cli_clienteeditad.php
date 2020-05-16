@@ -39,6 +39,7 @@ if (!function_exists("GetSQLValueString"))
 $idTabla = 0;
 require_once('../../apis/general/tipodocumento.php');
 require_once('../../apis/general/tipocliente.php');
+require_once('../../apis/general/tipoinmueble.php');
 require_once('../../apis/empresa/Empresa.php');
 /*
 if( isset($_GET['f'])  && !empty($_GET['f']) )
@@ -105,6 +106,8 @@ $Nombrerl2 = trim($mcliente['cli_cliente']['CLI_NombreContacto']);
 $Apellido1rl2 = trim($mcliente['cli_cliente']['CLI_APellidosContacto']);
 $Emailrl2 = trim($mcliente['cli_cliente']['CLI_EmailContacto']);
 $Celularrl2 = trim($mcliente['cli_cliente']['CLI_CelularContacto']);
+$CasaApto = trim($mcliente['cli_cliente']['CLI_Casa_Apto']);
+$TipoInmueble = trim($mcliente['cli_cliente']['CLI_TipoInmueble']);
 ?>
 <!DOCTYPE html>
 <html>
@@ -322,22 +325,52 @@ $Celularrl2 = trim($mcliente['cli_cliente']['CLI_CelularContacto']);
 											</div>
 										</div>
 										
-										<div class="col-md-3">
+										<div class="col-md-2">
+											<label class="form">Tipo Inmueble</label>
+											<select class="selectpicker show-tick" data-live-search="true" data-width="100%" name="tipoinmueble" id="tipoinmueble" required>
+												<option value="" >Seleccione Opción...</option>
+                                                <?php
+                                                    for($i=0; $i<count($mtipoinmueble['gen_tipoinmueble']); $i++)
+                                                    {
+                                                        $IdTipoInmueble = $mtipoinmueble['gen_tipoinmueble'][$i]['TIN_IdTipoInmueble'];                                                        
+                                                        $Nombre = $mtipoinmueble['gen_tipoinmueble'][$i]['TIN_Nombre'];                                                        
+                                                ?>
+                                                        <option value="<?php echo $IdTipoInmueble; ?>" <?php if ($IdTipoInmueble == $TipoInmueble){ echo "selected";} else{ echo "";} ?>>
+                                                            <?php echo $Nombre ; ?>                                                
+                                                        </option>
+                                                <?php
+                                                    }
+                                                ?>
+                                            </select>
+										</div>
+										
+										<div class="col-md-2">
+											<label class="form-label">No. Casa/Apto/Local</label>
+											<div class="form-line">
+												<input type="text" class="form-control" name="casaapto" id="casaapto" value="<?php echo $CasaApto ;?>" maxlength="7" required>                                       
+											</div>
+										</div>
+										
+									</div>
+								</div>	
+
+								<div class="form-group form-float">
+									<div class="row">
+										<div class="col-md-2">
 											<label class="form-label">N&uacute;mero Celular</label>
 											<div class="form-line">
 												<input type="text" class="form-control" name="celular" id="celular" value="<?php echo $Celular ;?>" maxlength="13" required>                                      
 											</div>
 										</div>
 										
-										<div class="col-md-4">
+										<div class="col-md-3">
 											<label class="form-label"><span id="datopj1" style="color:red;">*</span> Email</label>
 											<div class="form-line">
 												<input type="text" class="form-control" name="email" id="email" value="<?php echo $Email ;?>" maxlength="60" required>                                       
 											</div>
 										</div>
-										
 									</div>
-								</div>						
+								</div>	
 
 								
 								<div class="form-group">                                    							                                    
@@ -437,13 +470,13 @@ $Celularrl2 = trim($mcliente['cli_cliente']['CLI_CelularContacto']);
     <script type="text/javascript">
 	var nombre ="";    
     $(document).ready(function()
-	{			
+	{		
 		$("#mensaje").hide();
         $("#form_validation").show();
         $("#numerodocumento").numeric();		
         $("#celular").numeric();
 		$("#celularrl").numeric();
-		$("#celularrl2").numeric();
+		$("#celularrl2").numeric();		
 		$("#datopj").hide();
 		$("#datopj1").hide();
 		
@@ -481,6 +514,17 @@ $Celularrl2 = trim($mcliente['cli_cliente']['CLI_CelularContacto']);
 				$("#rl").hide();
 				$("#datopj").hide();
 				$("#datopj1").hide();
+			}
+		});
+		
+		$('#chkcasaapto').on('change', function () {			
+			if($(this).prop('checked') == false )
+			{
+				tipoinmueble = "A";
+			}
+			else
+			{
+				tipoinmueble = "C";
 			}
 		});
 		
@@ -547,6 +591,8 @@ $Celularrl2 = trim($mcliente['cli_cliente']['CLI_CelularContacto']);
             var apellido2 = $("#apellido2").val();
             var clave = $("#clave").val();            
             var direccion = $("#direccion").val();
+			var tipoinmueble = $("#tipoinmueble").val();
+			var casaapto = $("#casaapto").val();
             var email = $("#email").val();
             var celular = $("#celular").val();            
             var tipocliente = $("#tipocliente").val();			
@@ -664,7 +710,7 @@ $Celularrl2 = trim($mcliente['cli_cliente']['CLI_CelularContacto']);
 				{
 				
 					$.ajax({
-						data : {"tipodocumento": tipodocumento, "numerodocumento": numerodocumento, "nombre": nombre, "apellido1": apellido1, "apellido2": apellido2,"clave": clave, "direccion": direccion, "email": email, "celular": celular, "estado": estado, "idtabla": idtabla, "OldClave": OldClave,"verseguimiento": seguimiento, "tipocliente": tipocliente, "empresa": empresa, "uc": uc, "tipodocumentorl": tipodocumentorl , "numerodocumentorl": numerodocumentorl , "nombrerl": nombrerl, "apellido1rl": apellido1rl, "celularrl": celularrl , "emailrl": emailrl, "tipodocumentorl2": tipodocumentorl2 , "numerodocumentorl2": numerodocumentorl2 , "nombrerl2": nombrerl2, "apellidosrl2": apellidosrl2, "celularrl2": celularrl2 , "emailrl2": emailrl2 },
+						data : {"tipodocumento": tipodocumento, "numerodocumento": numerodocumento, "nombre": nombre, "apellido1": apellido1, "apellido2": apellido2,"clave": clave, "direccion": direccion, "email": email, "celular": celular, "estado": estado, "idtabla": idtabla, "OldClave": OldClave,"verseguimiento": seguimiento, "tipocliente": tipocliente, "empresa": empresa, "uc": uc, "tipodocumentorl": tipodocumentorl , "numerodocumentorl": numerodocumentorl , "nombrerl": nombrerl, "apellido1rl": apellido1rl, "celularrl": celularrl , "emailrl": emailrl, "tipodocumentorl2": tipodocumentorl2 , "numerodocumentorl2": numerodocumentorl2 , "nombrerl2": nombrerl2, "apellidosrl2": apellidosrl2, "celularrl2": celularrl2 , "emailrl2": emailrl2, "casaapto": casaapto, "tipoinmueble": tipoinmueble },
 						type: "POST",				
 						url : "../forms/editar_<?php echo strtolower($Tabla); ?>.php",
 					})  

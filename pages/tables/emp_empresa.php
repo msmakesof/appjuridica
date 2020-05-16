@@ -92,7 +92,10 @@ if( isset($_POST['ƒ×'])  && !empty($_POST['ƒ×']) )
     <script src="../../plugins/jquery/jquery.min.js"></script>
 	
 	<script src="../../js/sweet/sweetalert.min.js"></script>
-    <script src="../../plugins/sweetalert/sweetalert.min.js"></script>
+    <script src="../../plugins/sweetalert/sweetalert.min.js"></script>	
+	
+	<script src = "https://unpkg.com/@popperjs/core@2"></script> 
+	<script src = "https://unpkg.com/tippy.js@6"></script> 
 
    <style>
     object{
@@ -349,8 +352,8 @@ if( $mempresa['estado'] < 2)
 				</a>
 				<span class="<?php echo $badge; ?>"><?php echo $TotalContactos; ?></span>				
 				<span style="margin-right:20px;"></span>
-				<a href="javascript:void(0);" onclick="verContacto(<?php echo $idTabla; ?>, '<?php echo trim($NombreUsuario); ?>', <?php echo $idTabla; ?>)">
-					<img src="../../images/agregar-usuario.png" width="25" height="25" style="margin-right;7px">
+				<a href="javascript:void(0);" onclick="verContacto(<?php echo $idTabla; ?>, '<?php echo trim($NombreUsuario); ?>', <?php echo $idTabla; ?>)">					
+					<img src="../../images/agregar-usuario.png" width="25" height="25" style="margin-right;7px" id="imgcont">
 				</a>
 			</td>
             <td><?php echo $TipoDocumento; ?></td>
@@ -457,6 +460,11 @@ if( $mempresa['estado'] < 2)
     	$("#cerrarModalC").click(function(){
     	 	 window.location="cli_<?php echo $nombre_lnk; ?>.php";
     	});
+		
+		tippy('#imgcont', {
+		  content: "Ver Contacto",
+		});
+		
     });
 
 	$("#nuevo").on("click", function(){        

@@ -61,6 +61,7 @@ class CLI_CLIENTE
 			CLI_Local ,
 			CLI_IdTipoCliente, 
 			CLI_Empresa,
+			CLI_Casa_Apto, CLI_TipoInmueble, 
 			CASE CLI_Estado WHEN 1 THEN 'Activo' ELSE 'Inactivo' END EstadoUsuario,
 			concat_WS(' ',CLI_Nombre, CLI_PrimerApellido, CLI_SegundoApellido) AS NombreUsuario, 
 			concat_WS(' ',EMP_Nombre, EMP_Nombre2, EMP_Apellido, EMP_Apellido2) AS NombreEmpresa
@@ -119,7 +120,7 @@ class CLI_CLIENTE
 						CLI_Empresa, CLI_FechaCreado,
 						CLI_IdTipoDocumentoRepLegal, CLI_IdentificacionRepLegal, CLI_NombreRepLegal, CLI_APellidosRepLegal,
 						CLI_EmailRepLegal, CLI_CelularRepLegal, CLI_IdTipoDocumentoContacto, CLI_IdentificacionContacto,
-						CLI_NombreContacto, CLI_APellidosContacto, CLI_EmailContacto, CLI_CelularContacto
+						CLI_NombreContacto, CLI_APellidosContacto, CLI_EmailContacto, CLI_CelularContacto, CLI_Casa_Apto, CLI_TipoInmueble
 						FROM ".$GLOBALS['TABLA'].
                         " WHERE ".$GLOBALS['Llave']." = ? ORDER BY CLI_Nombre; ";
 
@@ -260,6 +261,8 @@ class CLI_CLIENTE
 		$Apellidosrl2, 
 		$Emailrl2, 
 		$Celularrl2,
+		$CasaApto,
+		$TipoInmueble,
         $IdUsuario		
     )
     {
@@ -268,14 +271,14 @@ class CLI_CLIENTE
             " SET CLI_TipoDocumento=?, CLI_Identificacion=?, CLI_PrimerApellido=?, CLI_SegundoApellido=?, CLI_Nombre=?, CLI_Email=?, ".
             " CLI_Direccion=?, CLI_Celular=?, CLI_Usuario=?, CLI_Clave=?, CLI_IdTipoCliente=? , CLI_Estado=?, CLI_SeguimientoProceso=?, CLI_Empresa=?, CLI_UsuarioModifica=?, " .
 			" CLI_IdTipoDocumentoRepLegal=?, CLI_IdentificacionRepLegal=?, CLI_NombreRepLegal=?, CLI_APellidosRepLegal=?, CLI_EmailRepLegal=?, CLI_CelularRepLegal=?, " .
-			" CLI_IdTipoDocumentoContacto=?, CLI_IdentificacionContacto=?,CLI_NombreContacto=?, CLI_APellidosContacto=?, CLI_EmailContacto=?, CLI_CelularContacto=? " .
+			" CLI_IdTipoDocumentoContacto=?, CLI_IdentificacionContacto=?,CLI_NombreContacto=?, CLI_APellidosContacto=?, CLI_EmailContacto=?, CLI_CelularContacto=?, CLI_Casa_Apto=?, CLI_TipoInmueble=? " .
             " WHERE ". $GLOBALS['Llave'] ."=? ;";
 
         // Preparar la sentencia
         $cmd = Database::getInstance()->getDb()->prepare($consulta);
 
         // Relacionar y ejecutar la sentencia
-        $cmd->execute(array($TipoDocumento, $Identificacion, $PrimerApellido, $SegundoApellido, $Nombre, $Email, $Direccion, $Celular, $Usuario, $Clave, $TipoCliente, $Estado, $Verseguimiento, $Empresa, $UsuarioModifica	,$TipoDocumentorl, $Identificacionrl, $Nombrerl, $Apellido1rl, $Emailrl, $Celularrl ,$TipoDocumentorl2, $Identificacionrl2, $Nombrerl2, $Apellidosrl2, $Emailrl2, $Celularrl2, $IdUsuario ));
+        $cmd->execute(array($TipoDocumento, $Identificacion, $PrimerApellido, $SegundoApellido, $Nombre, $Email, $Direccion, $Celular, $Usuario, $Clave, $TipoCliente, $Estado, $Verseguimiento, $Empresa, $UsuarioModifica	,$TipoDocumentorl, $Identificacionrl, $Nombrerl, $Apellido1rl, $Emailrl, $Celularrl ,$TipoDocumentorl2, $Identificacionrl2, $Nombrerl2, $Apellidosrl2, $Emailrl2, $Celularrl2, $CasaApto, $TipoInmueble, $IdUsuario ));
 
         return $cmd;
     }
@@ -309,7 +312,7 @@ class CLI_CLIENTE
      * @return PDOStatement
      */
 
-    public static function insert( $TipoDocumento, $Identificacion, $PrimerApellido, $SegundoApellido, $Nombre, $Email, $Direccion, $Celular, $Usuario, $Clave, $TipoCliente, $Estado, $IdInterno, $Local, $Verseguimiento, $Empresa, $IdUsuarioCrea,$TipoDocumentorl, $Identificacionrl, $Nombrerl, $Apellido1rl, $Emailrl, $Celularrl ,$TipoDocumentorl2, $Identificacionrl2, $Nombrerl2, $Apellidosrl2, $Emailrl2, $Celularrl2)
+    public static function insert( $TipoDocumento, $Identificacion, $PrimerApellido, $SegundoApellido, $Nombre, $Email, $Direccion, $Celular, $Usuario, $Clave, $TipoCliente, $Estado, $IdInterno, $Local, $Verseguimiento, $Empresa, $IdUsuarioCrea,$TipoDocumentorl, $Identificacionrl, $Nombrerl, $Apellido1rl, $Emailrl, $Celularrl ,$TipoDocumentorl2, $Identificacionrl2, $Nombrerl2, $Apellidosrl2, $Emailrl2, $Celularrl2, $CasaApto, $TipoInmueble)
     {
         // Sentencia INSERT
         $comando = "INSERT INTO ". $GLOBALS['TABLA'] ." ( " .            
@@ -328,15 +331,15 @@ class CLI_CLIENTE
             " CLI_IdInterno, CLI_Local, CLI_SeguimientoProceso, CLI_Empresa, CLI_UsuarioCrea ,
 			  CLI_IdTipoDocumentoRepLegal, CLI_IdentificacionRepLegal, CLI_NombreRepLegal, CLI_APellidosRepLegal,
 			  CLI_EmailRepLegal, CLI_CelularRepLegal, CLI_IdTipoDocumentoContacto, CLI_IdentificacionContacto,
-			  CLI_NombreContacto, CLI_APellidosContacto, CLI_EmailContacto, CLI_CelularContacto
+			  CLI_NombreContacto, CLI_APellidosContacto, CLI_EmailContacto, CLI_CelularContacto, CLI_Casa_Apto, CLI_TipoInmueble
 			) 
-			VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);";
+			VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);";
 			//echo "sql insert cliente...".$comando;
         try {
             // Preparar la sentencia
             $sentencia = Database::getInstance()->getDb()->prepare($comando);
             return $sentencia->execute(
-                array($TipoDocumento, $Identificacion, $PrimerApellido, $SegundoApellido, $Nombre, $Email, $Direccion, $Celular, $Usuario, $Clave, $TipoCliente, $Estado, $IdInterno, $Local, $Verseguimiento, $Empresa, $IdUsuarioCrea, $TipoDocumentorl, $Identificacionrl, $Nombrerl, $Apellido1rl, $Emailrl, $Celularrl , $TipoDocumentorl2, $Identificacionrl2, $Nombrerl2, $Apellidosrl2, $Emailrl2, $Celularrl2 )    
+                array($TipoDocumento, $Identificacion, $PrimerApellido, $SegundoApellido, $Nombre, $Email, $Direccion, $Celular, $Usuario, $Clave, $TipoCliente, $Estado, $IdInterno, $Local, $Verseguimiento, $Empresa, $IdUsuarioCrea, $TipoDocumentorl, $Identificacionrl, $Nombrerl, $Apellido1rl, $Emailrl, $Celularrl , $TipoDocumentorl2, $Identificacionrl2, $Nombrerl2, $Apellidosrl2, $Emailrl2, $Celularrl2, $CasaApto, $TipoInmueble )
             );
            
         } catch (PDOException $e) {

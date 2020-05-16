@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+	<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">	
+<script>  
+function Iniciar(){
+
+	Noticias_principal.style.left = Contenido.offsetLeft + Lector_noticias.offsetLeft +4;
+	Noticias_principal.style.top = Contenido.offsetTop + Lector_noticias.offsetTop;
+	Noticias_principal.style.width = Contenido.offsetWidth -1;
+	Noticias_principal.style.height = Contenido.offsetHeight - 1;
+	S_noticias();
+}
+var Bloque;
+var T_inicio = 150;
+var mi_inicio = 0;
+var mi_fin = 0;
+var Top = T_inicio;
+var start = 1;
+function S_noticias()
+{
+	if (Top == 4)
+	{
+		mi_fin = mi_inicio;
+		mi_inicio >= (noticia.length-1) ? mi_inicio = 0 : mi_inicio++;
+		Top = T_inicio;
+		setTimeout("S_noticias()",2000);
+		start=0;
+		return false;
+    }
+	if (Top == (T_inicio-1)) 
+	{
+		noticia[mi_fin].style.top = T_inicio;
+	}
+	Top--;
+	noticia[mi_inicio].style.top = Top;
+	if (start==0)
+	{
+		noticia[mi_fin].style.top = Top-146;
+	}
+	setTimeout("S_noticias()",5);
+}
+</script>
+<style>
+.Bloque{
+	display: block; position: absolute;  top: 150; left: 0; font: 12 Arial; width:222; border: 1 solid black
+}
+
+.Cabecera
+{
+	color: #ffffff; background: #336600;
+}
+
+.Contenido
+{
+	width:220; font: 12 Courier New; background: #F3F3F3; padding: 2 2 2 2;
+}
+
+.Nuevo_bloque
+{
+	border: 1px solid black ; width: 232; height: 150;background: black; color: white; font: 14 Arial; text-align: center
+}
+
+.Nuevo_contenido
+{
+	height: 125; background: white
+}
+
+.Contenido_principal
+{
+	border: none; position: absolute; left: 0; top: 0; width: 100; height: 100; clip: rect(0,222,125,0 ); background: transparent
+}
+</style>
+</head>
+<body onload="Iniciar()">
+	<TABLE ID="Lector_noticias" CLASS="Nuevo_bloque" CELLPADDING=0 CELLSPACING=0 ALIGN="center">
+		<TR>
+			<TD bgcolor="#990000"><B> Noticias </B></TD>
+		</TR>
+		<TR>
+			<TD ID="Contenido" CLASS="Nuevo_contenido"> </TD>
+		</TR>
+	</TABLE>
+	
+	<DIV ID="Noticias_principal" CLASS="Contenido_principal">
+	
+		<TABLE CLASS="Bloque" ID="noticia" CELLSPACING=0 CELLPADDING=1 BORDER=0>
+			<TR CLASS="Cabecera">
+				<TD>Tutores.org</TD>
+			</TR>
+			<TR>
+				<TD CLASS="Contenido">Se estan agregando nuevos codigos constantemente<BR>web de webmasters<BR>para webmasters</TD>
+			</TR>
+		</TABLE>
+
+		<TABLE CLASS="Bloque" ID="noticia" CELLSPACING=0 CELLPADDING=1 BORDER=0>
+			<TR CLASS="Cabecera">
+				<TD>Foros de tutores.org</TD>
+			</TR>
+			<TR>
+				<TD CLASS="Contenido">No olvides postear mensaje<BR>en nuestros foros</TD>
+			</TR>
+		</TABLE>
+		
+		<TABLE CLASS="Bloque" ID="noticia" CELLSPACING=0 CELLPADDING=1 BORDER=0>
+			<TR CLASS="Cabecera">
+				<TD>Servicios online</TD>
+			</TR>
+			<TR>
+				<TD CLASS="Contenido">Si necesitas interaccion en tu web<BR><A HREF="http://www.tutores.org" TARGET="_blank">Tutores.org</A><BR>Saludos</TD>
+			</TR>
+		</TABLE>
+	</DIV>
+</body>
+</html>

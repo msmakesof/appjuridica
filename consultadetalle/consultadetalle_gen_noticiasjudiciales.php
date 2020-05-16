@@ -145,10 +145,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     {
         //Obtener Parametros
         $par1 = $_GET['Nombre'];
-        $par2 = $_GET['Texto'];         
-        $par3 = $_GET['Estado'];
+        $par2 = $_GET['Texto'];
+		$par3 = $_GET['Lnk'];
+        $par4 = $_GET['Estado'];
 
-        $retorno = GEN_NOTICIASJUDICIALES::insert($par1, $par2, $par3);
+        $retorno = GEN_NOTICIASJUDICIALES::insert($par1, $par2, $par3, $par4);
         $msj = $retorno;
         if($retorno)
         {
@@ -173,11 +174,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     {
         //Obtener Parametros
         $par1 = $_GET['nombre'];
-        $par2 = $_GET['texto']; 
-        $par3 = $_GET['estado'];
-        $par4 = $_GET['idtabla'];
+        $par2 = $_GET['texto'];
+		$par3 = $_GET['lnk'];
+        $par4 = $_GET['estado'];
+        $par5 = $_GET['idtabla'];
 
-        $retorno = GEN_NOTICIASJUDICIALES::update($par1, $par2, $par3, $par4);
+        $retorno = GEN_NOTICIASJUDICIALES::update($par1, $par2, $par3, $par4, $par5);
         $msj = $retorno;
         if($retorno)
         {

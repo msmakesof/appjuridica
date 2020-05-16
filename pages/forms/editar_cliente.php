@@ -194,5 +194,15 @@ if(isset($_POST['celularrl2'])){
   $celularrl2 = trim($_POST['celularrl2']);
 }
 
+$casaapto = "";
+if(isset($_POST['casaapto'])){
+  $casaapto = trim($_POST['casaapto']);
+}
+
+$tipoinmueble = "";
+if(isset($_POST['tipoinmueble'])){
+  $tipoinmueble = trim($_POST['tipoinmueble']);
+}
+
 require_once('../../apis/cliente/infoCliente.upd.php');
 ?>

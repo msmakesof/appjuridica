@@ -627,17 +627,25 @@ if( isset($_POST["id"]))  // Este es el id del Proceso la llave
     <section class="content">
         <div class="container-fluid">
             <div class="block-header">
-                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
-                    <h2>
-                        INFORMACION DE: <?php echo strtoupper($nombre_lnk); ?> 
-                        &nbsp;&nbsp;&nbsp;&nbsp;					
-                        <small>Opciones: <a href="#" target="_blank">consultar, crear, modificar.</a></small>
-                    </h2>
-                </div>    
+			
+				<div class="container form-group">                                    
+					<div class="row">
+				
+						<div class="col-lg-6 col-md-5 col-sm-5 col-xs-5">
+							<h2>
+								INFORMACION DE: <?php echo strtoupper($nombre_lnk); ?> 
+								&nbsp;&nbsp;&nbsp;&nbsp;					
+								<small>Opciones: <a href="#" target="_blank">consultar, crear, modificar.</a></small>
+							</h2>
+						</div>    
 
-                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
-                        Abogado: <b><?php echo trim(strtoupper($NombreAbogado)); ?></b>
-                </div>
+						<div class="col-lg-6 col-md-5 col-sm-5 col-xs-5">
+							<span class="alert alert-warning" role="alert">Abogado: <b><?php echo trim(strtoupper($NombreAbogado)); ?></b></span>
+						</div>
+					</div>
+				</div>
+				
+						
             </div>
             
             <!-- Exportable Table -->			
@@ -840,7 +848,7 @@ $IdTipouser = $_SESSION["TipoUsuario"];
 }
 ?>
 <div class="form-group">
-<div style="float: right !important;" class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
+<div style="float: right !important;" class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
 	<div class="row">	
 		<div style="margin-bottom:-15px; float: right">
 			<span class="btn btn-success">Total Gastos: $<?php echo  number_format($TotalGastos, 2, '.', ','); ?></span>

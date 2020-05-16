@@ -1,0 +1,95 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>News</title>
+    <!-- Bootstrap core CSS -->
+    <link href="assets/css/bootstrap.css" rel="stylesheet">
+    <!-- Custom styles for this template -->
+    <link href="assets/css/main.css" rel="stylesheet">
+    <link href="assets/css/font-awesome.min.css" rel="stylesheet">
+    <link href="assets/css/prism.css" rel="stylesheet" />
+    <link href="assets/css/jquery.mCustomScrollbar.css" rel="stylesheet" type="text/css" />
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>	
+	
+	<div class="green">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-7 centered">
+					<div id="nt-example1-container">
+						
+		                <ul id="nt-example1">
+		                    <li>Etiam imperdiet volutpat libero eu tristique. Aenean, rutrum felis in. <a href="#">Read more...</a></li>
+		                    <li>Curabitur porttitor ante eget hendrerit adipiscing. Maecenas at magna. <a href="#">Read more...</a></li>
+		                    <li>Praesent ornare nisl lorem, ut condimentum lectus gravida ut. <a href="#">Read more...</a></li>
+		                    <li>Nunc ultrices tortor eu massa placerat posuere. Vivamus viverra sagittis. <a href="#">Read more...</a></li>
+		                    <li>Morbi sodales tellus sit amet leo congue bibendum. Ut non mauris eu neque. <a href="#">Read more...</a></li>
+		                    <li>In pharetra suscipit orci sed viverra. Praesent at sollicitudin tortor, id. <a href="#">Read more...</a> </li>
+		                    <li>Maecenas nec ligula sed est suscipit aliquet sed eget ipsum, suspendisse. <a href="#">Read more...</a></li>
+		                    <li>Onec bibendum consectetur diam, nec euismod urna venenatis eget.. <a href="#">Read more...</a> </li>
+		                </ul>
+		                
+		            </div>
+				</div>
+
+			</div>
+		</div>
+	</div>
+	 <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+    <script src="assets/js/chart.js"></script>
+    <script src="assets/js/bootstrap.js"></script>
+    <script src="assets/js/prism.js"></script>
+    <script src="assets/js/jquery.mCustomScrollbar.min.js"></script>
+    <script src="assets/js/jquery.newsTicker.js"></script>
+    <script>
+    		$('a[href*=#]').click(function() {
+			    var href = $.attr(this, 'href');
+			    if (href != "#") {
+				    $('html, body').animate({
+				        scrollTop: $(href).offset().top - 81
+				    }, 500, function () {
+				        window.location.hash = href;
+				    });
+				}
+				else {
+					$('html, body').animate({
+				        scrollTop: 0
+				    }, 500, function () {
+				        window.location.hash = href;
+				    });
+				}
+			    return false;
+			});
+
+    		$(window).load(function(){
+	            $('code.language-javascript').mCustomScrollbar();
+	        });
+            var nt_title = $('#nt-title').newsTicker({
+                row_height: 40,
+                max_rows: 1,
+                duration: 3000,
+                pauseOnHover: 0
+            });
+            var nt_example1 = $('#nt-example1').newsTicker({
+                row_height: 80,
+                max_rows: 3,
+                duration: 4000,
+                prevButton: $('#nt-example1-prev'),
+                nextButton: $('#nt-example1-next')
+            });
+          
+            var state = 'stopped';
+            var speed;
+            var add;
+        </script>

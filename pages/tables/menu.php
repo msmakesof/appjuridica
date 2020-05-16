@@ -75,6 +75,7 @@ for($i=0; $i<count($mmenu['menu']); $i++)
 	$NombreTablaMenu = trim($mmenu['menu'][$i]['TAB_Nombre_Tabla']);
     array_push($os, $NombreTablaMenu);
 }
+
 ?>   
   
 <div class="menu">
@@ -223,17 +224,44 @@ for($i=0; $i<count($mmenu['menu']); $i++)
 					</li>
 				</ul>
 			</li>
-
+			
 			<li>
 				<a href="javascript:void(0);" class="menu-toggle">
-					<i class="material-icons">widgets</i>
-					<span>Siglo XXI</span>
+					<i class="material-icons">today</i>
+					<span>New AGENDA</span>
 				</a>
 				<ul class="ml-menu">
 					<li>
-						<a href="https://procesojudicial.ramajudicial.gov.co/Justicia21/Administracion/InicioAplicaciones/InicioJusticia21Web.aspx" class="menu-toggle" target="_blank">
-							<span>Rama Judicial TYBA</span>
-						</a>
+						<a href="../../fcal/default.php" class="menu-toggle">
+							<span>Agenda</span>
+						</a>  
+					</li>
+				</ul>
+			</li>
+
+			<li>
+				<a href="javascript:void(0);" class="menu-toggle">
+					<i class="material-icons">touch_app</i>
+					<span>Sitios Frecuentes</span>
+				</a>
+				<ul class="ml-menu">
+					<li>
+						<?php 
+							$idTabla = 0;
+							require_once('../../apis/general/sitiofrecuente.php');
+							
+							for($i=0; $i<count($msitiofrecuente['gen_sitiofrecuente']); $i++)
+							{
+								$IdSitio = $msitiofrecuente['gen_sitiofrecuente'][$i]['SIF_IdSitio'];
+								$Nombre = trim($msitiofrecuente['gen_sitiofrecuente'][$i]['SIF_Nombre']);
+								$Link = trim($msitiofrecuente['gen_sitiofrecuente'][$i]['SIF_Link']);							
+						?>
+							<a href="<?php echo $Link; ?>" class="menu-toggle" target="_blank">
+								<span><?php echo $Nombre; ?></span>
+							</a>
+						<?php
+							}
+						?>
 					</li>
 				</ul>
 			</li>        
@@ -378,11 +406,25 @@ for($i=0; $i<count($mmenu['menu']); $i++)
                 </li>
             </ul>
         </li>
+		
+		<li>
+				<a href="javascript:void(0);" class="menu-toggle">
+					<i class="material-icons">today</i>
+					<span>New AGENDA</span>
+				</a>
+				<ul class="ml-menu">
+					<li>
+						<a href="../../fcal/" class="menu-toggle">
+							<span>Agenda</span>
+						</a>  
+					</li>
+				</ul>
+			</li>
 
         <li>
             <a href="javascript:void(0);" class="menu-toggle">
-                <i class="material-icons">widgets</i>
-                <span>Siglo XXI</span>
+                <i class="material-icons">touch_app</i>
+                <span>Sitios Frecuentes</span>
             </a>
             <ul class="ml-menu">
                 <li>

@@ -1,16 +1,8 @@
 <?php
 include_once("../../pages/tables/header.inc.php");
 require_once ('../../Connections/DataConex.php'); 
-$LogoInterno = LogoInterno;
-require_once('../../Connections/config2.php'); 
-/* 
-require_once('../../Connections/cnn_kn.php'); 
-require_once('../../Connections/config2.php');
-if(!isset($_SESSION)) 
-{ 
-  session_start(); 
-}
-*/ 
+//$LogoInterno = LogoInterno;
+//require_once('../../Connections/config2.php'); 
 ?>
 <?php
 if (!function_exists("GetSQLValueString")) 
@@ -46,7 +38,6 @@ if (!function_exists("GetSQLValueString"))
     return $theValue;
   }
 }
-//require_once('../../Connections/DataConex.php');
 
 $params ="";
 if(isset($_GET["idTabla"])){
@@ -63,7 +54,7 @@ else
 
 $soportecURL = "S";
 $url         = urlServicios."consultadetalle/consultadetalle_gen_noticiasjudiciales.php?".$params;
-echo("<script>console.log('PHP: ".$url."');</script>");
+//echo("<script>console.log('PHP: ".$url."');</script>");
 if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
 {
     $ch = curl_init();

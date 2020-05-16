@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>jQuery Bootstrap News Box Plugin Demos</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap-theme.min.css">
+<!--  --><link href="css/site.css" rel="stylesheet" type="text/css" /> 
+<link href="http://www.jqueryscript.net/css/jquerysctipttop.css" rel="stylesheet" type="text/css">
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script src="scripts/jquery.bootstrap.newsbox.min.js" type="text/javascript"></script>
+</head>
+<script type="text/javascript">
+	/*
+	setTimeout(function() {		
+		$.post("i.php", function( data ) {
+			$( "#mks" ).html( data );
+		});
+	}, 1000);
+	*/
+	
+    $(function () {       
+		
+		$(".demo2").bootstrapNews({
+            newsPerPage: 4,
+            autoplay: true,
+			pauseOnHover: true,
+			navigation: false,
+            direction: 'up',
+            newsTickerInterval: 2500,
+            onToDo: function () {
+                console.log(this);
+            }			
+        });
+	/*		
+		setInterval(function() {		
+			$.post("i.php", function( data ) {
+				console.log(data);
+				$( "#mks" ).html( data );
+			});
+		}, 7000);	
+	*/	
+    });
+</script>
+<body>
+
+<div class="container">
+	<div class="row">
+
+		<div class="col-md-4">
+			<div class="panel panel-default">
+				<!-- <div class="panel-heading"> <span class="glyphicon glyphicon-list-alt"></span><b>News</b></div> -->
+				<div class="xpanel-body">
+					<div class="row">
+						<div class="col-xs-12">
+							<ul class="demo2" style="color:#000000">
+							<?php
+							/*
+								$idTabla = 0;
+								require_once("../apis/general/noticiasjudicialesnews.php");							
+								
+								//$x=''; //'<ul class="demo2">';
+								for($i=0; $i<count($mnoticiasjudiciales['gen_noticiasjudiciales']); $i++)
+								{
+									$NJ_IdNoticia = $mnoticiasjudiciales['gen_noticiasjudiciales'][$i]['NOJ_IdNoticia'];
+									$NJ_Titular = strtoupper(trim($mnoticiasjudiciales['gen_noticiasjudiciales'][$i]['NOJ_Titular']));
+									$NJ_Texto = trim($mnoticiasjudiciales['gen_noticiasjudiciales'][$i]['NOJ_Texto']);
+									$NJ_Lnk = trim($mnoticiasjudiciales['gen_noticiasjudiciales'][$i]['NOJ_Link']);
+									$x .= '<li class="news-item">'. $NJ_Titular. '<a href="#">Leer Más...</a></li>';
+							*/
+							?>		
+								<!-- <li class="news-item"><?php //echo $NJ_Titular; ?><a href="#">Leer Más...</a></li> -->
+							<?php
+								//}
+								//echo $x ; //.='</ul>';
+							?>
+							</ul>
+							
+							<!--
+							<ul class="demo2" style="color:#000000">
+								<li class="news-item">**** Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in venenatis enim... <a href="#">Read more...</a></li>
+								<li class="news-item">090807 ipsum dolor sit amet, consectetur adipiscing elit. Nullam in venenatis enim... <a href="#">Read more...</a></li>
+								<li class="news-item">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in venenatis enim... <a href="#">Read more...</a></li>
+								<li class="news-item">xxxxx Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in venenatis enim... <a href="#">Read more...</a></li>
+								<li class="news-item">123213 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in venenatis enim... <a href="#">Read more...</a></li>								
+								<li class="news-item">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in venenatis enim... <a href="#">Read more...</a></li>
+								<li class="news-item">696878 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in venenatis enim... <a href="#">Read more...</a></li>
+								<li class="news-item">aeiuo Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in venenatis enim... <a href="#">Read more...</a></li>
+								<li class="news-item">567676 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in venenatis enim... <a href="#">Read more...</a></li>
+							</ul>
+							
+							<ul class="demo2" style="color:#000000" >
+							<div id="mks"></div>
+							</ul>
+							 -->
+							
+							
+						</div>
+					</div>
+				</div>
+				<div class="panel-footer"> </div>
+			</div>
+		</div>
+
+	</div>
+</div>
+
+</body>
+</html>

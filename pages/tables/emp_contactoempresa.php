@@ -1,23 +1,8 @@
 <?php
 include_once("header.inc.php");
-require_once ('../../Connections/DataConex.php'); //require_once('../../Connections/cnn_kn.php');
+require_once ('../../Connections/DataConex.php');
 $LogoInterno = LogoInterno; 
 require_once('../../Connections/config2.php');
-
-/*
-ob_start();
-session_start();
-require_once('../../Connections/cnn_kn.php'); 
-require_once('../../Connections/config2.php');
-//if(!isset($_SESSION)) {}
-
-if( !isset($_SESSION['IdUsuario']) && !isset($_SESSION['NombreUsuario']) )
-{
-	header("Location: ../../index.html");
-    exit;
-} 
-//ob_start(); 
-*/
 ?>
 <?php
 if (!function_exists("GetSQLValueString")) {
@@ -219,7 +204,7 @@ if( isset($_POST['ie']) && !empty($_POST['ie']) )
         <div class="container-fluid">
             <div class="block-header">
                 <h2>
-                    INFORMACION CONTACTO <?php echo strtoupper($nombre_lnk); ?>: <?php echo strtoupper($pne); ?>
+                    INFORMACION CONTACTO <?php echo strtoupper($nombre_lnk); ?>: <span class="alert alert-warning" role="alert">Empresa - <?php echo strtoupper($pne); ?></span>
                     <small>Opciones: <a href="#" target="_blank">consultar, crear, modificar.</a></small>
                 </h2>
             </div>

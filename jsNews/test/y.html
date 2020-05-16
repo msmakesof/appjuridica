@@ -1,0 +1,49 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<link href="css/simpleTicker/jquery.simpleTicker.css" rel="stylesheet">
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script src="js/simpleTicker/jquery.simpleTicker.js"></script>
+<script>
+$(function(){
+$.simpleTicker($("#news-ticker-roll-demo"),{
+  delay : 2000,
+  effectType : 'roll'
+});
+  
+});
+</script>
+
+<style>
+div.ticker{
+  margin:10px auto;
+  background: linear-gradient(45deg, #5E005E, #306161);
+  color:#fff;
+  font-size:18px;
+}
+div.ticker ul{
+  margin:auto;
+}
+</style>
+
+</head>
+<body> 
+
+
+<h2>A demo of roll pattern</h2>
+<div id="news-ticker-roll-demo" class="ticker">
+<ul>
+<li>The new version of jQuery is going to release on ....</li>
+<li>Bootstrap has become the most popular framework</li>
+<li>New features are added in Bootstrap</li>
+<li>Stay tuned for PHP updates</li>
+<li>New features are added</li>
+</ul>
+</div><!--/#ticker -->
+
+
+
+
+</body>
+</html>
+

@@ -3,14 +3,6 @@ include_once("../tables/header.inc.php");
 require_once ('../../Connections/DataConex.php'); 
 $LogoInterno = LogoInterno;
 require_once('../../Connections/config2.php'); 
-/*  
-require_once('../../Connections/cnn_kn.php'); 
-require_once('../../Connections/config2.php');
-if(!isset($_SESSION)) 
-{ 
-    session_start(); 
-} 
-*/
 ?>
 <?php
 if (!function_exists("GetSQLValueString")) {
@@ -56,6 +48,7 @@ require_once('../../apis/general/noticiasjudiciales.php');
 
 $Nombre = trim($mnoticiasjudiciales['gen_noticiasjudiciales']['NOJ_Titular']);
 $Texto = trim($mnoticiasjudiciales['gen_noticiasjudiciales']['NOJ_Texto']);
+$Lnk = trim($mnoticiasjudiciales['gen_noticiasjudiciales']['NOJ_Link']);
 $estado = $mnoticiasjudiciales['gen_noticiasjudiciales']['NOJ_Estado'];
 $idtabla = $mnoticiasjudiciales['gen_noticiasjudiciales']['NOJ_IdNoticia'];
 
@@ -100,7 +93,12 @@ $idtabla = $mnoticiasjudiciales['gen_noticiasjudiciales']['NOJ_IdNoticia'];
 
     <link rel="stylesheet" href="../../css/themes2/alertify.core.css" />
     <link rel="stylesheet" href="../../css/themes2/alertify.default.css" id="toggleCSS" />
-
+	
+	    <!-- Jquery Core Js -->
+    <script src="../../plugins/jquery/jquery.min.js"></script>
+	 <!-- Bootstrap Core Js -->
+    <script src="../../plugins/bootstrap/js/bootstrap.js"></script>
+	
 </head>
 
 <body class="theme-indigo">
@@ -134,19 +132,32 @@ $idtabla = $mnoticiasjudiciales['gen_noticiasjudiciales']['NOJ_IdNoticia'];
                                     <div class="col-xs-12">
                                         <label class="form-label">Digite Titular</label>                                       
 										<div class="form-line">
-                                            <input type="text" class="form-control" name="nombre" id="nombre" value="<?php echo $Nombre; ?>" required>                                       
-                                        </div>                                    
-                                    </div>      
-                                </div>                                
-
-                                <div class="form-group row">
-                                    <div class="col-xs-12">
-                                        <label class="form-label">Digite Texto de la Noticia</label>
-                                        <div class="form-line">
-                                            <input type="text" class="form-control" name="texto" id="texto" value="<?php echo $Texto; ?>" required>                                       
+                                            <input type="text" class="form-control" name="nombre" id="nombre" value="<?php echo $Nombre; ?>" maxlength="70" required>
                                         </div>
-                                    </div>
-                                </div>               
+										<span style="font-size:11px">Caracteres: <span id="cantchars">0</span> de <span id="mcn"></span></span>	
+                                    </div>      
+                                </div>  
+
+								<div class="form-group">
+									<div class="col-xs-12">
+										<label for="comment">Digite Texto de la Noticia</label>
+										<div class="form-line">
+											<textarea class="form-control" id="texto" name="texto" rows="3" cols="60" required placeholder="Breve texto de la Noticia"  maxlength="190"><?php echo trim($Texto); ?></textarea>
+										</div>
+										<span style="font-size:11px">Caracteres: <span id="canttchars">0</span> de <span id="mtn"></span></span>
+									</div>
+								</div>
+								
+								<div class="form-group">
+									<div class="col-xs-12">
+										<label for="comment">Digite Link de la Noticia</label>
+										<div class="form-line">
+											<textarea class="form-control" id="lnk" name="lnk" rows="3" cols="60" required placeholder="link para dirigir al visitante"  maxlength="150"><?php echo trim($Lnk); ?></textarea>
+										</div>
+										<span style="font-size:11px">Caracteres: <span id="cantlchars">0</span> de <span id="mln"></span></span>
+										<span style="color:red; font-size:11px">Por seguridad el link debe empezar por <b>https</b>, en caso contrario no se puede grabar la noticia.</span>
+									</div>
+								</div>
                                 
                                 <div class="form-group" style="clear: both;">
                                     <input type="radio" name="estado" id="activo" class="with-gap" value="1" <?php if( $estado == 1){?>checked="checked"<?php } ?>>
@@ -176,12 +187,9 @@ $idtabla = $mnoticiasjudiciales['gen_noticiasjudiciales']['NOJ_IdNoticia'];
         </div>
     </section>
 
-        <!-- Jquery Core Js -->
-    <script src="../../plugins/jquery/jquery.min.js"></script>
+    
 
-    <!-- Bootstrap Core Js -->
-    <script src="../../plugins/bootstrap/js/bootstrap.js"></script>
-
+   
     <!-- Select Plugin Js -->
     <script src="../../plugins/bootstrap-select/js/bootstrap-select.js"></script>
 
@@ -215,11 +223,28 @@ $idtabla = $mnoticiasjudiciales['gen_noticiasjudiciales']['NOJ_IdNoticia'];
     <script src="../../calendar/js/moment.min.js"></script>
     <script src="../../calendar/js/bootstrap-datetimepicker.min.js"></script>
     <script src="../../calendar/js/bootstrap-datetimepicker.es.js"></script>
-
+	<style>
+	#nombre {
+		text-transform: uppercase;
+	}
+	</style>
     <script type="text/javascript">    
     $(document).ready(function()
-	{			
-		$("#mensaje").hide();        
+	{		
+		var mcn = $("#nombre").prop('maxLength');        
+		$("#mcn").html( mcn);
+		
+		var mtn = $("#texto").prop('maxLength');        
+		$("#mtn").html( mtn);
+		
+		var mln = $("#lnk").prop('maxLength');        
+		$("#mln").html( mln);		
+		
+		$("#cantchars").html( $('#nombre').val().length );
+		$("#canttchars").html( $('#texto').val().length );
+		$("#cantlchars").html( $('#lnk').val().length );
+		
+		$("#mensaje").hide();		
 
         $("#form_validation").show();
         $("#form_validation").click(function() {
@@ -228,13 +253,14 @@ $idtabla = $mnoticiasjudiciales['gen_noticiasjudiciales']['NOJ_IdNoticia'];
 		
 		$("#grabar").on('click', function(e) {
             $("#mensaje").hide();
-			var nombre = $("#nombre").val();            
-            var texto = $("#texto").val();		
+			var nombre = $("#nombre").val();
+            var texto = $("#texto").val();
+			var lnk = $("#lnk").val();
 			var estado = $('input:radio[name=estado]:checked').val();
 			var idtabla = "<?php echo $idtabla; ?>";
 			
 			$.ajax({
-				data : {"nombre": nombre, "texto": texto, "estado": estado, "idtabla": idtabla},
+				data : {"nombre": nombre, "texto": texto, "lnk": lnk, "estado": estado, "idtabla": idtabla},
 				type: "POST",
 				dataType: "html",
 				url : "editar_<?php echo strtolower($Tabla) ; ?>.php",
@@ -271,55 +297,72 @@ $idtabla = $mnoticiasjudiciales['gen_noticiasjudiciales']['NOJ_IdNoticia'];
 		});
 
 	
-    $("#borrar").on('click', function() {   
-        var idtabla  = "<?php echo $idtabla; ?>";        
-        var nomtabla = "<?php echo $Nombre; ?>";
+		$("#borrar").on('click', function() {   
+			var idtabla  = "<?php echo $idtabla; ?>";        
+			var nomtabla = "<?php echo $Nombre; ?>";
 
-        alertify.confirm( 'Desea borrar este registro?', function (e) {
-            if (e) {
-                //after clicking OK
-                $.ajax({
-                    data : {"pidtabla": idtabla},
-                    type: "POST",
-                    dataType: "html",
-                    url : "../forms/borrar_<?php echo strtolower($Tabla) ; ?>.php",
-                })  
-                .done(function( dataX, textStatus, jqXHR ){                       
-                    var xrespstr = dataX.trim();
-                    var respstr = xrespstr.substr(0,1);
-                    var msj = xrespstr.substr(2);        
-                    if( respstr == "S" )
-                    {            
-                       swal("Atención: ", msj, "success");                  
-                    }
-                    else
-                    {                    
-                        swal({
-                            title: "Atencion: ",   
-                            text: msj,   
-                            type: "error" 
-                        });                    
-                    }
-                })
-                .fail(function( jqXHR, textStatus, errorThrown ) {
-                    //e.stopPropagation();
-                    if ( console && console.log ) 
-                    {                       
-                        console.log( "La solicitud a fallado: " +  textStatus);
-                        $("#msj").html("");
-                    }
-                });
+			alertify.confirm( 'Desea borrar este registro?', function (e) {
+				if (e) {
+					//after clicking OK
+					$.ajax({
+						data : {"pidtabla": idtabla},
+						type: "POST",
+						dataType: "html",
+						url : "../forms/borrar_<?php echo strtolower($Tabla) ; ?>.php",
+					})  
+					.done(function( dataX, textStatus, jqXHR ){                       
+						var xrespstr = dataX.trim();
+						var respstr = xrespstr.substr(0,1);
+						var msj = xrespstr.substr(2);        
+						if( respstr == "S" )
+						{            
+						   swal("Atención: ", msj, "success");                  
+						}
+						else
+						{                    
+							swal({
+								title: "Atencion: ",   
+								text: msj,   
+								type: "error" 
+							});                    
+						}
+					})
+					.fail(function( jqXHR, textStatus, errorThrown ) {
+						//e.stopPropagation();
+						if ( console && console.log ) 
+						{                       
+							console.log( "La solicitud a fallado: " +  textStatus);
+							$("#msj").html("");
+						}
+					});
+				} 
+				else {
+					//after clicking Cancel
+				}
+			});
+		});
+		
+		
+		
+	 
+		$('#nombre').keyup(function() {
+			init_contador("#nombre","#cantchars");
+		});
 
+		$('#texto').keyup(function() {
+			init_contador("#texto","#canttchars");
+		});	
 
-            } 
-            else {
-                //after clicking Cancel
-            }
-        });        
-   
-     });
-
-});
+		$('#lnk').keyup(function() {
+			init_contador("#lnk","#cantlchars");
+		});			
+		
+		function init_contador(idtextarea, idcontador)
+		{        
+			var contador = $(idcontador);
+			contador.html( $(idtextarea).val().length);
+		}
+	});
 </script>
     
 </body>

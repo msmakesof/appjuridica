@@ -3,18 +3,6 @@ include_once("../tables/header.inc.php");
 require_once ('../../Connections/DataConex.php'); 
 $LogoInterno = LogoInterno;
 require_once('../../Connections/config2.php'); 
-/* 
-require_once('../../Connections/cnn_kn.php'); 
-require_once('../../Connections/config2.php');
-if(!isset($_SESSION)) 
-{ 
-    session_start(); 
-}
-else
-{
-    header('Location: ../../index.html');
-}
-*/
 ?>
 <?php
   if (!function_exists("GetSQLValueString")) {
@@ -61,7 +49,13 @@ if( isset($_POST['ptexto']) )
 	$ptexto = trim($_POST['ptexto']);
 	$ptexto = str_replace(' ','%20', $ptexto);
 }
-//echo "texto....$ptexto<br>";
+
+$plnk ="";
+if( isset($_POST['plnk']) )
+{
+	$plnk = trim($_POST['plnk']);
+	$plnk = str_replace(' ','%20', $plnk);
+}
 
 $pestado ="";
 if( isset($_POST['pestado']) )
@@ -69,7 +63,7 @@ if( isset($_POST['pestado']) )
 	  $pestado = trim($_POST['pestado']);
 }
 
-require_once('../../Connections/DataConex.php');
+//require_once('../../Connections/DataConex.php');
 //Verifico si existe una Tabla con las siguientes caracteristicas
 // Nombres iguales 
 if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
@@ -109,7 +103,7 @@ if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
     else
     {
       
-      $parameters = "insert=insert&Nombre=$pnombre&Texto=$ptexto&Estado=$pestado";
+      $parameters = "insert=insert&Nombre=$pnombre&Texto=$ptexto&Lnk=$plnk&Estado=$pestado";
       $soportecURL = "S";
       $url         = urlServicios."consultadetalle/consultadetalle_gen_noticiasjudiciales.php?".$parameters;
       $existe      = "";

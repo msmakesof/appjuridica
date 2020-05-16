@@ -1,16 +1,6 @@
 <?php
 include_once("../tables/header.inc.php");
 require_once ('../../Connections/DataConex.php'); 
-$LogoInterno = LogoInterno;
-require_once('../../Connections/config2.php'); 
-/*   
-require_once('../../Connections/cnn_kn.php'); 
-require_once('../../Connections/config2.php');
-if(!isset($_SESSION)) 
-{ 
-  session_start(); 
-} 
-*/
 ?>
 <?php
 if (!function_exists("GetSQLValueString")) {
@@ -46,7 +36,7 @@ function GetSQLValueString($theValue, $theType, $theDefinedValue = "", $theNotDe
 
 $nombre ="";
 if(isset($_POST['nombre'])){
-    $nombre = trim($_POST['nombre']);
+    $nombre = trim(strtoupper($_POST['nombre']));
     $nombre = str_replace(' ', '%20', $nombre);
 }
 
@@ -54,6 +44,12 @@ $texto ="";
 if(isset($_POST['texto'])){
 	$texto = trim($_POST['texto']);
 	$texto = str_replace(' ', '%20', $texto);  
+}
+
+$lnk ="";
+if(isset($_POST['lnk'])){
+	$lnk = trim($_POST['lnk']);
+	$lnk = str_replace(' ', '%20', $lnk);  
 }
 
 $estado ="";

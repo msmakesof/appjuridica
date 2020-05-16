@@ -1,25 +1,9 @@
 <?php
 ob_start();
 include_once("./header.inc.php");
-require_once ('../../Connections/DataConex.php'); //('../../Connections/cnn_kn.php');
+require_once ('../../Connections/DataConex.php');
 $LogoInterno = LogoInterno;
 require_once('../../Connections/config2.php');
-/*
-session_start();
-require_once('../../Connections/cnn_kn.php'); 
-require_once('../../Connections/config2.php');
-//if(!isset($_SESSION)) {}
-
-if( !isset($_SESSION['IdUsuario']) && !isset($_SESSION['NombreUsuario']) )
-{
-	header("Location: ../../index.php");
-    exit;
-} 
-
-//ob_start();
-include('../../Connections/DataConex.php');
-$LogoInterno = LogoInterno;
-*/
 ?>
 <?php
 if (!function_exists("GetSQLValueString")) {
@@ -52,7 +36,7 @@ function GetSQLValueString($theValue, $theType, $theDefinedValue = "", $theNotDe
   return $theValue;
 }
 }
-$empresa = "AppJuridica";
+$empresa = Company;
 
 if( isset($_POST['ƒ¤']) && !empty($_POST['ƒ¤']) )
 {    
@@ -112,6 +96,49 @@ if( isset($_POST['ƒ×'])  && !empty($_POST['ƒ×']) )
     object{
        width:100%;
        height:390px ;  
+	}
+	.mcontenedor {
+		width: 100%;
+		max-width:1000px;
+		/*margin:0 auto;*/
+		margin-top: -30px !important;
+		/*display:flex;*/
+		justify-content: center;		
+	}
+	
+	.caja {
+		border: 1px solid #19A96B;
+		padding: 15px;
+		/*height:80px ;*/
+		background-color: #FFF;
+		border-radius: 5px;
+		
+		text-align: center !important;
+		height: 130px !important; max-height:130px !important;
+		position: relative !important;
+	}
+	.info-item
+	{
+		padding:4px 4px;
+		margin-top:20px;	
+		border-bottom:1px dotted #555; 
+		color:#000 !important;
+		margin-left:7px ;
+		margin-right:7px ;
+	}
+	
+	.info-itemcaja
+	{
+		padding:4px 4px;
+		/*margin-top:10px;	*/
+		border-bottom:1px dotted #555; 
+		color:#000 !important;
+		margin-left:7px ;
+		margin-right:7px ;
+		/*
+		height: 130px !important; max-height:130px !important;
+		position: relative !important;
+		*/
 	}
    </style>     
 </head>
@@ -544,18 +571,18 @@ if( isset($_POST['ƒ×'])  && !empty($_POST['ƒ×']) )
                         <div class="body bg-cyan"> 
                             <div class="m-b--35 font-bold">
                                 <div class="icon">
-                                <i class="material-icons">description</i>
-                                Informaci&oacute;n Noticias Judiciales
-                                </div>
+									<i class="material-icons">description</i>
+									Informaci&oacute;n Noticias Judiciales
+                                </div>								
                             </div>
 
                             <ul class="dashboard-stat-list">
-                                <hr>
-                                <?php //do{ ?>
+                                <hr>                                
                                 <li>
-                                    <?php //echo trim($row_rs_niveles['NombreNivel']); ?>
-                                </li>
-                                <?php //} while($row_rs_niveles = mysqli_fetch_assoc($rs_niveles)); ?>                                        
+									<?php
+										include('../../mmscroll/index.html');
+									?>									
+                                </li>                                
                             </ul>                            
                         </div>
                     </div>
@@ -568,19 +595,27 @@ if( isset($_POST['ƒ×'])  && !empty($_POST['ƒ×']) )
                             <div class="font-bold m-b--35">
                                 <div class="icon">
                                     <i class="material-icons">library_books</i> 
-                                     Indicadores
+                                     Indicadores Econ&oacute;micos
                                 </div>        
                             </div>
 
                             <ul class="dashboard-stat-list">
-                                <hr>
-                                <?php //do{ ?>
-                                <li>
-                                    <?php //echo $row_rs_topicxnivel['NombreNivel'] ;?>
-                                    <span class="pull-right"><b><?php //echo $row_rs_topicxnivel['total'] ;?></b> <small></small></span>
-                                </li>
-                                <?php // } while ($row_rs_topicxnivel = mysqli_fetch_assoc($rs_topicxnivel)); ?>
-                            </ul>                            
+							<hr>
+								
+								<li class="caja"> 
+									<div class="xmcontenedor">
+										<div class="info-itemcaja">
+											<!-- <script src="https://www.dolar-colombia.com/widget.js?t=2&c=1"></script> -->
+											<!-- DolarWeb IndMin Start -->
+											<div id="IndicadoresMin">
+												<h2><a href="https://dolar.wilkinsonpc.com.co/">Dolar Hoy Colombia</a></h2>
+											</div>
+											<script type="text/javascript" src="https://dolar.wilkinsonpc.com.co/widgets/gratis/indicadores-economicos-min.js?ancho=205&alto=85&fondo=transparent&fsize=11&ffamily=verdana&fcolor=000000"></script><!-- DolarWeb IndMin End -->
+										</div>
+									</div>	
+								</li> 
+                            </ul>						
+							
                         </div>
                     </div>
                 </div>
@@ -756,7 +791,7 @@ if( isset($_POST['ƒ×'])  && !empty($_POST['ƒ×']) )
 	
 	<script type="text/javascript">
     $(document).ready(function () {		
-		$("#graficaalumno").hide();		
+		$("#graficaalumno").hide();
 	});
 	</script>	
 </body>

@@ -1,8 +1,7 @@
 <?php
 include_once("header.inc.php");
-require_once ('../../Connections/DataConex.php'); //rrequire_once('../../Connections/cnn_kn.php');
+require_once ('../../Connections/DataConex.php');
 $LogoInterno = LogoInterno; 
-//require_once('../../Connections/config2.php');
 ?>
 <?php
 if (!function_exists("GetSQLValueString")) 
@@ -76,9 +75,7 @@ if($usuario == "")
     <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&subset=latin,cyrillic-ext" rel="stylesheet" type="text/css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" type="text/css">
 	
-	<link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
-	
-	
+	<link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">	
 
     <!-- Bootstrap Core Css -->
     <link href="../../plugins/bootstrap/css/bootstrap.css" rel="stylesheet">
@@ -125,31 +122,59 @@ if($usuario == "")
     .txt{ 
         margin: auto; /* Important */ 
         text-align: center; 
-      }
+    }
 	  
-[data-md-tooltip] {
-  position: relative;
-}
-[data-md-tooltip]:before {
-    content: attr(data-md-tooltip);
-    position: absolute;
-    bottom: -35px;
-    left: 50%;
-    padding: 8px;
-    transform: translateX(-50%) scale(0);
-    transition: transform 0.3s ease-in-out;
-    transform-origin: top;
-    background: #616161e6;
-    color: white;
-    border-radius: 2px;
-    font-size: 12px;
-    font-family: Roboto,sans-serif;
-    font-weight: 400;
-}
-[data-md-tooltip]:hover:before {
-  transform: translateX(-50%) scale(1); 
-}
-
+	[data-md-tooltip] {
+	  position: relative;
+	}
+	[data-md-tooltip]:before {
+		content: attr(data-md-tooltip);
+		position: absolute;
+		bottom: -35px;
+		left: 50%;
+		padding: 8px;
+		transform: translateX(-50%) scale(0);
+		transition: transform 0.3s ease-in-out;
+		transform-origin: top;
+		background: #616161e6;
+		color: white;
+		border-radius: 2px;
+		font-size: 12px;
+		font-family: Roboto,sans-serif;
+		font-weight: 400;
+	}
+	[data-md-tooltip]:hover:before {
+	  transform: translateX(-50%) scale(1); 
+	}
+	
+	[data-md-tooltip].md-tooltip--right:before {
+	 left: auto;
+	 right: -10px;
+	 bottom: auto;
+	 top: 50%;
+	 transform: translate(100%, -50%) scale(0);
+	 transform-origin: left center;
+	}
+	[data-md-tooltip].md-tooltip--right:hover:before {
+	 transform: translate(100%, -50%) scale(1);
+	}
+	[data-md-tooltip].md-tooltip--left:before {
+	 left: -15px;
+	 right: auto;
+	 bottom: auto;
+	 top: 50%;
+	 transform: translate(-100%, -50%) scale(0);
+	 transform-origin: right center;
+	}
+	[data-md-tooltip].md-tooltip--left:hover:before {
+	 transform: translate(-100%, -50%) scale(1);
+	}
+	.md-tooltip--top:before {
+	 top: -35px;
+	 bottom: auto;
+	 transform: translateX(-50%) scale(0);
+	 transform-origin: bottom center;
+	}
    </style>     
 </head>
 
@@ -187,9 +212,8 @@ if($usuario == "")
                 <a href="javascript:void(0);" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse" aria-expanded="false"></a>
                 <a href="javascript:void(0);" class="bars"></a>
                 <a class="navbar-brand">
-                <img src="<?php echo $LogoInterno; ?>" style="margin-top: -6px;">
+					<img src="<?php echo $LogoInterno; ?>" style="margin-top: -6px;">
                 </a>
-
             </div>
 
             <!-- Notificaciones -->
@@ -415,13 +439,11 @@ if($usuario == "")
 								if ( isset( $_SESSION['NombreUsuario'] ) && !empty( $_SESSION['NombreUsuario'] ) ) 
 								{
 									// Variable definida y no vacia
-									echo $_SESSION['NombreUsuario'];
-									//header("Content-Type: text/html; charset=UTF-8");
+									echo $_SESSION['NombreUsuario'];									
 								} 
 								else 
 								{
-									// Variable no definida o vacia
-									//header("Content-Type: text/html; charset=UTF-8");
+									// Variable no definida o vacia									
 									header('Location: ../../');
 								}								 
 							?>
@@ -434,15 +456,13 @@ if($usuario == "")
 								if ( isset( $_SESSION['EmailUsuario'] ) && !empty( $_SESSION['EmailUsuario'] ) ) 
 								{
 									// Variable definida y no vacia
-									echo $_SESSION['EmailUsuario'];
-									//header("Content-Type: text/html; charset=UTF-8");
+									echo $_SESSION['EmailUsuario'];									
 								} 
 								else 
 								{
 									// Variable no definida o vacia
 									header('Location: ../../');
-								}							
-								//echo $_SESSION['EmailUsuario']; 
+								}								
 							?>
 						</span>
                     </div>
@@ -644,15 +664,13 @@ if($usuario == "")
                                 <li class="dropdown">
                                     <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                                         <i class="material-icons" style="font-size:24px;color:red">add_circle_outline</i>  										      
-                                    </a>
-                                     
+                                    </a>                                     
                                     
                                     <ul class="dropdown-menu pull-right">
                                        <li>
                                        <!-- <a id="nuevo" class="btn btn-warning btn-xs waves-effect" data-toggle="modal" data-target="#defaultModal">Nuevo</a> -->
 
                                        <a id="nuevo" class="btn btn-warning btn-xs waves-effect">Nuevo</a>
-
 
                                       <!--  <button type="button" class="btn btn-default waves-effect m-r-20" data-toggle="modal" data-target="#defaultModal">Nuevo</button>-->
                                         </li>
@@ -730,7 +748,7 @@ if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
         JSON_ERROR_DEPTH => 'Maxima profundidad de pila ha sido excedida',
         JSON_ERROR_CTRL_CHAR => 'Error de carácter de control, posiblemente codificado incorrectamente',
         JSON_ERROR_SYNTAX => 'Error de Sintaxis',
-        );
+    );
     //echo "Error : ", $json_errors[json_last_error()], PHP_EOL, PHP_EOL."<br>";        
 }
 else
@@ -876,7 +894,6 @@ if( $mproceso['estado'] != 2)
 		</div>
 	</div>
 
-
     <!-- Bootstrap Core Js -->
     <script src="../../plugins/bootstrap/js/bootstrap.js"></script>
 
@@ -924,26 +941,14 @@ var variableValue;
 	 	 window.location="pro_<?php echo $nombre_lnk; ?>.php";
 	});	
 
-    $("#nuevo").on("click", function(){
-        //window.location='../forms/form-validationBasepais.php';
+    $("#nuevo").on("click", function(){        
         window.location = 'pro_procesoforma.php';
     });
-
-    /*
-	$("#cambiar").on("click", function(id){
-        //alert(id);
-        <?php  $_SESSION["f"] = $idTabla;?>
-        //document.getElementById("formulario").submit();
-        
-        window.location = '../forms/editarproceso.php';
-    });
-	*/
 
  }); 
 
 function cambiar(id) 
-{
-    //alert(id);    	
+{    
     $.post('../forms/editarproceso.php', { 'id': id }, function (result) {
         WinId = window.open('','_self');
         WinId.document.open();

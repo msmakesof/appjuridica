@@ -20,7 +20,7 @@ class GEN_NOTICIASJUDICIALES
      */
     public static function getAll()
     {
-        $consulta = "SELECT ".$GLOBALS['Llave'].", NOJ_Titular, NOJ_Texto, NOJ_FechaCreacion, ".
+        $consulta = "SELECT ".$GLOBALS['Llave'].", NOJ_Titular, NOJ_Texto, NOJ_FechaCreacion, NOJ_Link, ".
             " CASE NOJ_Estado WHEN 1 THEN 'Activo' ELSE 'Inactivo' END EstadoTabla ".
             " FROM ".$GLOBALS['TABLA']." ORDER BY NOJ_FechaCreacion, NOJ_Titular; ";			
         try {
@@ -49,6 +49,7 @@ class GEN_NOTICIASJUDICIALES
         $consulta = "SELECT ".$GLOBALS['Llave'].",
                             NOJ_Titular,
                             NOJ_Texto,
+							NOJ_Link,
                             NOJ_Estado ".
                             " FROM ".$GLOBALS['TABLA'].
                             " WHERE ".$GLOBALS['Llave']." = ? ORDER BY NOJ_Titular; ";
@@ -81,7 +82,7 @@ class GEN_NOTICIASJUDICIALES
     public static function getByIdEstado($IdEstadoTabla)
     {
         // Consulta de la GEN_PAIS
-        $consulta = "SELECT ".$GLOBALS['Llave'].", NOJ_Titular, NOJ_Texto, NOJ_Estado".
+        $consulta = "SELECT ".$GLOBALS['Llave'].", NOJ_Titular, NOJ_Texto, NOJ_Link, NOJ_Estado".
                     " FROM ". $GLOBALS['TABLA'].
                     " WHERE NOJ_Estado = ? ORDER BY NOJ_Titular; ";
 
@@ -112,7 +113,7 @@ class GEN_NOTICIASJUDICIALES
     public static function getByIdExiste($IdEstadoTabla)
     {
         // Consulta de la gen_departamento
-        $consulta = "SELECT Count(".$GLOBALS['Llave'].") AS TotalTablas, NOJ_Titular, NOJ_Texto, NOJ_Estado ".
+        $consulta = "SELECT Count(".$GLOBALS['Llave'].") AS TotalTablas ".
                     " FROM ". $GLOBALS['TABLA'].
                     " WHERE ".$GLOBALS['Llave']." = ? ;";
 
@@ -146,20 +147,21 @@ class GEN_NOTICIASJUDICIALES
     public static function update(
         $nombre,
         $texto,
+		$lnk,
         $estado,
         $idtabla
     )
     {
         // Creando consulta UPDATE
         $consulta = "UPDATE ". $GLOBALS['TABLA']. 
-            " SET NOJ_Titular=?, NOJ_Texto=?, NOJ_Estado=? " .
+            " SET NOJ_Titular=?, NOJ_Texto=?, NOJ_Link=?, NOJ_Estado=? " .
             " WHERE ". $GLOBALS['Llave'] ." =? ;";
 
         // Preparar la sentencia
         $cmd = Database::getInstance()->getDb()->prepare($consulta);
 
         // Relacionar y ejecutar la sentencia
-        $cmd->execute(array($nombre, $texto, $estado, $idtabla ));
+        $cmd->execute(array($nombre, $texto, $lnk, $estado, $idtabla ));
 
         return $cmd;
     }
@@ -175,7 +177,8 @@ class GEN_NOTICIASJUDICIALES
      */
     public static function insert(        
         $Nombre,        
-        $Texto,       
+        $Texto,
+		$Lnk,
         $Estado
     )
     {
@@ -183,9 +186,10 @@ class GEN_NOTICIASJUDICIALES
         $comando = "INSERT INTO ". $GLOBALS['TABLA'] ." ( " .            
             " NOJ_Titular," . 
             " NOJ_Texto," .
+			" NOJ_Link,".
             " NOJ_Estado" . 
             " )".     
-            " VALUES(?,?,?) ;";
+            " VALUES(?,?,?,?) ;";
 
         // Preparar la sentencia
         $sentencia = Database::getInstance()->getDb()->prepare($comando);
@@ -193,7 +197,8 @@ class GEN_NOTICIASJUDICIALES
         return $sentencia->execute(
             array(                
                 $Nombre, 
-                $Texto,               
+                $Texto,
+				$Lnk,
                 $Estado
             )
         );

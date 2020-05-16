@@ -1,7 +1,8 @@
-<?php	
-	session_start(); 
-	require_once('Connections/cnn_kn.php');	
-	require_once('rutador/enlaceControl.php');
+<?php
+//include_once("pages/tables/header.inc.php");
+//require_once ('Connections/DataConex.php');
+//$LogoInterno = LogoInterno;
+//require_once('Connections/config2.php');
 ?>
 <?php
 if (!function_exists("GetSQLValueString")) 
@@ -54,6 +55,12 @@ $usaSP="";
 if(isset($_POST['sp']))
 {
 	$usaSP = $_POST['sp'];
+}
+
+$ac="";
+if(isset($_POST['ac']))
+{
+	$ac = $_POST['ac'];
 }
 
 $existe = 0;

@@ -1,12 +1,6 @@
 <?php
-/*
-if(!isset($_SESSION)) 
-{ 
-    session_start(); 
-}
-*/ 
-include_once("../tables/header.inc.php");
-require_once ('../../Connections/DataConex.php'); //rrequire_once('../../Connections/cnn_kn.php');
+require_once("../tables/header.inc.php");
+require_once ('../../Connections/DataConex.php');
 $LogoInterno = LogoInterno; 
 require_once('../../Connections/config2.php');
 ?>
@@ -43,18 +37,14 @@ if (!function_exists("GetSQLValueString"))
     }
 }
 
-
 require_once('../../apis/general/ciudadesxdepto.php');
-
 //echo $_REQUEST['hf'];
 $idTabla = ""; 
 if ( isset( $_POST["id"]))
 { 
     $idTabla = $_POST["id"];
 }
-
 //echo "post....".$idTabla;
-
 $Tabla ="PROCESO";
 $strowreg =0;
 $idtabla = 0;
@@ -92,7 +82,6 @@ $IdUsuarioCierre = trim($mproceso['pro_proceso']['PRO_IdUsuarioCierre']);
 $EnviaEmail = $mproceso['pro_proceso']['PRO_EnviaEmail'];
 $Representante = $mproceso['pro_proceso']['PRO_RepresentanteDe'];
 $FechaCreado = $mproceso['pro_proceso']['PRO_FechaCreado'];
-
 //echo "IdJuzgado....$IdJuzgado";
 //GLOBAL $deptoproceso ;GLOBAL $ciudadproceso ;
 ?>
@@ -137,6 +126,9 @@ $FechaCreado = $mproceso['pro_proceso']['PRO_FechaCreado'];
 
     <link rel="stylesheet" href="../../css/themes2/alertify.core.css" />
     <link rel="stylesheet" href="../../css/themes2/alertify.default.css" id="toggleCSS" />
+	
+	    <!-- Jquery Core Js -->
+    <script src="../../plugins/jquery/jquery.min.js"></script> 	
     <style>
         .caja
         {
@@ -1054,8 +1046,7 @@ $FechaCreado = $mproceso['pro_proceso']['PRO_FechaCreado'];
         </div>
     </section>
 
-    <!-- Jquery Core Js -->
-    <script src="../../plugins/jquery/jquery.min.js"></script> 	
+
 
     <!-- Bootstrap Core Js -->
     <script src="../../plugins/bootstrap/js/bootstrap.js"></script>

@@ -1,10 +1,6 @@
 <?php
-session_start();
-require_once('../../Connections/cnn_kn.php'); 
-require_once('../../Connections/config2.php');
-if(!isset($_SESSION)) 
-{  
-} 
+include_once("header.inc.php");
+require_once ('../../Connections/DataConex.php'); 
 ?>
 <?php
 if (!function_exists("GetSQLValueString")) 
@@ -153,7 +149,8 @@ require_once('../../apis/general/ciudad.php');
 	
     $(document).ready(function()
     {       
-        $("#msj").hide();
+        $('#activo').prop("checked", true);
+		$("#msj").hide();
         $("#numerodocumento").numeric();
         $("#celular").numeric();
         $("#fijo").numeric();
@@ -294,7 +291,7 @@ require_once('../../apis/general/ciudad.php');
         <div class="container-fluid">
             <div class="block-header">
                 <h2>
-                    FORMULARIO CONTACTO EMPRESA: <?php echo $NombreTabla; ?> - <?php echo strtoupper($pne); ?>.
+                    FORMULARIO CONTACTO EMPRESA: <span class="alert alert-warning" role="alert"><?php echo $NombreTabla; ?> - <?php echo strtoupper($pne); ?>.</span>
                     <small>acción: Crear.</small>
                 </h2>
             </div>
@@ -320,7 +317,7 @@ require_once('../../apis/general/ciudad.php');
 									<div class="row">
 									
 										<div class="col-md-4">										
-											<label class="form-label">
+											<label class="form-label"><span style="color:red;">*</span> 
 												Tipo Documento
 											</label>                                    
 																			   
@@ -344,6 +341,7 @@ require_once('../../apis/general/ciudad.php');
 										</div>
 									
 										<div class="col-md-4">
+											<span style="color:red;">*</span> 
 											<label class="form-label">N&uacute;mero Documento</label>
 											<div class="form-line">
 											   <input type="text" class="form-control" name="numerodocumento" id="numerodocumento" value="" maxlength="13" required>
@@ -356,6 +354,7 @@ require_once('../../apis/general/ciudad.php');
 								<div class="form-group form-float" id="pnat">
 									<div class="row">
 										<div class="col-md-3">
+											<span style="color:red;">*</span> 
 											<label class="form-label">Primer Nombre</label>
 											<div class="form-line">
 												<input type="text" class="form-control" name="nombre1" id="nombre1" value="" required>											   
@@ -370,6 +369,7 @@ require_once('../../apis/general/ciudad.php');
 										</div>
 									
 										<div class="col-md-3">
+											<span style="color:red;">*</span> 
 											<label class="form-label">Primer Apellido</label>
 											<div class="form-line">
 												<input type="text" class="form-control" name="apellido1" id="apellido1" value="" required>											   
@@ -388,15 +388,16 @@ require_once('../../apis/general/ciudad.php');
                                 <div class="form-group form-float">
 									<div class="row">
 										<div class="col-md-7">
+											<span style="color:red;">*</span> 
 											<label class="form-label">Email</label>
 											<div class="form-line">
 											   <input type="text" class="form-control" name="email" id="email" value="" maxlength="60" required>                                       
 											</div>
 										</div>
 										
-										<div class="col-md-4">										
-											<label class="form-label">Ciudad</label>                                    
-																			   
+										<div class="col-md-4">
+											<span style="color:red;">*</span> 										
+											<label class="form-label">Ciudad</label>
 											<select class="selectpicker show-tick" data-live-search="true" data-width="100%" name="ciudad" id="ciudad" required>
 											 <option value="" >Seleccione Opción...</option>
 												<?php
@@ -427,6 +428,7 @@ require_once('../../apis/general/ciudad.php');
 										</div>
 										
 										<div class="col-md-4">
+											<span style="color:red;">*</span> 
 											<label class="form-label">Celular</label>
 											<div class="form-line">
 												<input type="text" class="form-control" name="celular" id="celular" value="" maxlength="13" required>                                       
@@ -446,7 +448,7 @@ require_once('../../apis/general/ciudad.php');
                                 
                                 <button class="btn btn-primary waves-effect" type="submit" id="grabar">GRABAR</button>
 								<button class="btn btn-danger waves-effect" onClick="cerrar(<?php echo $pid; ?>, '<?php echo $pne; ?>', <?php echo $pie; ?>)">SALIR</button>
-								<!-- <button class="btn btn-danger waves-effect" id="bcerrar">SALIR</button> -->
+								<div><span style="color:red;">* Campos Obligatorios.</span></div>
                                 
                             </form>                        
                     	</div>

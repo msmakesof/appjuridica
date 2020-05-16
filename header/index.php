@@ -1,4 +1,5 @@
 <?php
+/*
 ob_start();
 if(!isset($_SESSION)) 
 { 
@@ -13,6 +14,9 @@ if( !isset($_SESSION['IdUsuario']) && !isset($_SESSION['NombreUsuario']) )
 
 include('../Connections/cnn_kn.php'); 
 include('../Connections/config2.php'); 
+*/
+require_once ('../Connections/DataConex.php');
+
 include('js.php');
 //echo "<br><br><br><br><br><div style='margin-left:280px;'>En MWXxxxXMMMMMXMMXMMxxxXWWWwwm.....".$_SESSION['IdUsuario'].' - '.$_SESSION['NombreUsuario']." - ".$clavelocal." - ms: ". $ms." - abog: ".$usuesAbogado." - sa: ".$essuperadmin."</div>";
 //include('info.php');
@@ -53,7 +57,8 @@ if (!function_exists("GetSQLValueString"))
 	}
 }
 
-$empresa = "Litigantes.";
+//$empresa = "Litigantes.";
+$Company = Company;
 //$arrayMeses = array('Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio','Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre');
 
 date_default_timezone_set('America/Bogota');
@@ -66,7 +71,7 @@ $script_tz = date_default_timezone_get();
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=Edge">
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-    <title>Bienvenido a | <?php echo $empresa; ?> Administrador</title>
+    <title>Bienvenido a | <?php echo $Company; ?> Administrador</title>
     <!-- Favicon-->
     <link rel="icon" href="../images/favicon.ico" type="image/x-icon">
 
@@ -778,4 +783,4 @@ $script_tz = date_default_timezone_get();
 	
 </body>
 </html>
-<?php ob_end_flush();?>
+<?php //ob_end_flush();?>

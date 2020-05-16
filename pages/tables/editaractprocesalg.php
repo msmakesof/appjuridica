@@ -635,7 +635,7 @@ if( isset($_POST["id"]))  // Este es el id del Proceso la llave
                 </div>    
 
                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
-                        Abogado: <b><?php echo trim(strtoupper($NombreAbogado)); ?></b>
+                    <span class="alert alert-warning" role="alert">Abogado: <b><?php echo trim(strtoupper($NombreAbogado)); ?></b></span>
                 </div>
             </div>
             

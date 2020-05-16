@@ -1,10 +1,7 @@
-<?php 
-require_once('../../Connections/cnn_kn.php'); 
+<?php
+include_once("../tables/header.inc.php");
+require_once ('../../Connections/DataConex.php');  
 require_once('../../Connections/config2.php');
-if(!isset($_SESSION)) 
-{ 
-    session_start(); 
-} 
 ?>
 <?php
 if (!function_exists("GetSQLValueString")) 
@@ -304,11 +301,11 @@ $Estado = $emp_contactoempresa['emp_contactoempresa']['COE_Estado'];
 </head>
 <body class="theme-indigo">
     <?php require_once('../tables/secciones.html'); ?>
-    <section class="content" style="margin-top:45px;">
+    <section class="content" style="margin-top:85px;">
         <div class="container-fluid">
             <div class="block-header">
                 <h2>
-                    FORMULARIO CONTACTO: <?php echo $NombreTabla; ?> - <?php echo $pne; ?>.
+                    FORMULARIO CONTACTO: <span class="alert alert-warning" role="alert"><?php echo $NombreTabla; ?> - <?php echo $pne; ?>.</span>
                     <small>acción: Editar.</small>
                 </h2>
             </div>
@@ -333,7 +330,8 @@ $Estado = $emp_contactoempresa['emp_contactoempresa']['COE_Estado'];
 								<div class="form-group form-float"> 
 									<div class="row">
 									
-										<div class="col-md-4">										
+										<div class="col-md-4">
+											<span style="color:red;">*</span>	
 											<label class="form-label">
 												Tipo Documento
 											</label>                                    
@@ -358,6 +356,7 @@ $Estado = $emp_contactoempresa['emp_contactoempresa']['COE_Estado'];
 										</div>
 									
 										<div class="col-md-4">
+											<span style="color:red;">*</span>
 											<label class="form-label">N&uacute;mero Documento</label>
 											<div class="form-line">
 											   <input type="text" class="form-control" name="numerodocumento" id="numerodocumento" value="<?php echo $Identificacion; ?>" maxlength="13" required>
@@ -370,6 +369,7 @@ $Estado = $emp_contactoempresa['emp_contactoempresa']['COE_Estado'];
 								<div class="form-group form-float" id="pnat">
 									<div class="row">
 										<div class="col-md-3">
+											<span style="color:red;">*</span>
 											<label class="form-label">Primer Nombre</label>
 											<div class="form-line">
 												<input type="text" class="form-control" name="nombre1" id="nombre1" value="<?php echo $Nombre1; ?>" required>											   
@@ -384,6 +384,7 @@ $Estado = $emp_contactoempresa['emp_contactoempresa']['COE_Estado'];
 										</div>
 									
 										<div class="col-md-3">
+											<span style="color:red;">*</span>
 											<label class="form-label">Primer Apellido</label>
 											<div class="form-line">
 												<input type="text" class="form-control" name="apellido1" id="apellido1" value="<?php echo $Apellido1; ?>" required>											   
@@ -402,15 +403,16 @@ $Estado = $emp_contactoempresa['emp_contactoempresa']['COE_Estado'];
                                 <div class="form-group form-float">
 									<div class="row">
 										<div class="col-md-7">
+											<span style="color:red;">*</span>
 											<label class="form-label">Email</label>
 											<div class="form-line">
 											   <input type="text" class="form-control" name="email" id="email" value="<?php echo $Email; ?>" maxlength="60" required>                                       
 											</div>
 										</div>
 										
-										<div class="col-md-4">										
-											<label class="form-label">Ciudad</label>                                    
-																			   
+										<div class="col-md-4">
+											<span style="color:red;">*</span>	
+											<label class="form-label">Ciudad</label>
 											<select class="selectpicker show-tick" data-live-search="true" data-width="100%" name="ciudad" id="ciudad" required>
 											 <option value="" >Seleccione Opción...</option>
 												<?php
@@ -441,6 +443,7 @@ $Estado = $emp_contactoempresa['emp_contactoempresa']['COE_Estado'];
 										</div>
 										
 										<div class="col-md-4">
+											<span style="color:red;">*</span>
 											<label class="form-label">Celular</label>
 											<div class="form-line">
 												<input type="text" class="form-control" name="celular" id="celular" value="<?php echo $Celular; ?>" maxlength="13" required>                                       
@@ -458,9 +461,9 @@ $Estado = $emp_contactoempresa['emp_contactoempresa']['COE_Estado'];
                                     <label for="inactivo" class="m-l-20">Inactivo</label>
                                 </div>
                                 
-                                <button class="btn btn-primary waves-effect" type="submit" id="grabar">GRABAR</button>
-								
+                                <button class="btn btn-primary waves-effect" type="submit" id="grabar">GRABAR</button>								
 								<button class="btn btn-danger waves-effect" onclick="cerrar(<?php echo $idTabla; ?>, <?php echo $pie; ?>, '<?php echo $pne; ?>')">SALIR</button>
+								<div><span style="color:red;">* Campos Obligatorios.</span></div>
                                 
                             </form>                        
                     	</div>
@@ -492,7 +495,6 @@ $Estado = $emp_contactoempresa['emp_contactoempresa']['COE_Estado'];
                 </div>
              </div>
         </div>
-    </section>
-    
+    </section>    
 </body>
 </html>

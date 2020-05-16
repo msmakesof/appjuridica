@@ -191,9 +191,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 		$par26 = $_GET['Nombrerl2'];
 		$par27 = $_GET['Apellidosrl2'];
 		$par28 = $_GET['Emailrl2'];
-		$par29 = $_GET['Celularrl2'];		
+		$par29 = $_GET['Celularrl2'];
+		$par30 = $_GET['CasaApto'];
+		$par31 = $_GET['TipoInmueble'];
         
-        $retorno = CLI_CLIENTE::insert($par1,$par2,$par3,$par4,$par5,$par6,$par7,$par8,$par9,$par10,$par11,$par12,$par13,$par14,$par15,$par16,$par17,$par18,$par19,$par20,$par21,$par22,$par23,$par24,$par25,$par26,$par27,$par28,$par29);        
+        $retorno = CLI_CLIENTE::insert($par1,$par2,$par3,$par4,$par5,$par6,$par7,$par8,$par9,$par10,$par11,$par12,$par13,$par14,$par15,$par16,$par17,$par18,$par19,$par20,$par21,$par22,$par23,$par24,$par25,$par26,$par27,$par28,$par29,$par30,$par31);
         $msj =$retorno;
         if ($retorno) 
         {
@@ -248,10 +250,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 		$par27 = $_GET['apellidosrl2'];
 		$par28 = $_GET['emailrl2'];
 		$par29 = $_GET['celularrl2'];
+		$par30 = $_GET['casaapto'];
+		$par31 = $_GET['tipoinmueble'];
 		
         $par0  = $_GET['idtabla'];    
 
-        $retorno = CLI_CLIENTE::update($par1,$par2,$par3,$par4,$par5,$par6,$par7,$par8,$par9,$par10,$par11,$par12,$par13,$par14,$par15,$par18,$par19,$par20,$par21,$par22,$par23,$par24,$par25,$par26,$par27,$par28,$par29,$par0);
+        $retorno = CLI_CLIENTE::update($par1,$par2,$par3,$par4,$par5,$par6,$par7,$par8,$par9,$par10,$par11,$par12,$par13,$par14,$par15,$par18,$par19,$par20,$par21,$par22,$par23,$par24,$par25,$par26,$par27,$par28,$par29,$par30,$par31,$par0);
         $msj =$retorno;
         if ($retorno) 
         {

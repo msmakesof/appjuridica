@@ -79,7 +79,7 @@ if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
 		else
 		{
 
-			$parameters = "update=update&tipodocumento=$tipodocumento&numerodocumento=$numerodocumento&apellido1=$apellido1&apellido2=$apellido2&nombre=$nombre&email=$email&direccion=$direccion&celular=$celular&usuario=$email&clave=$clave&estado=$estado&verseguimiento=$verseguimiento&tipocliente=$tipocliente&empresa=$empresa&usuariomodifica=$usuariomodifica&tipodocumentorl=$tipodocumentorl&identificacionrl=$numerodocumentorl&nombrerl=$nombrerl&apellido1rl=$apellido1rl&emailrl=$emailrl&celularrl=$celularrl&tipodocumentorl2=$tipodocumentorl2&identificacionrl2=$numerodocumentorl2&nombrerl2=$nombrerl2&apellidosrl2=$apellidosrl2&emailrl2=$emailrl2&celularrl2=$celularrl2&idtabla=$idUsuario";
+			$parameters = "update=update&tipodocumento=$tipodocumento&numerodocumento=$numerodocumento&apellido1=$apellido1&apellido2=$apellido2&nombre=$nombre&email=$email&direccion=$direccion&celular=$celular&usuario=$email&clave=$clave&estado=$estado&verseguimiento=$verseguimiento&tipocliente=$tipocliente&empresa=$empresa&usuariomodifica=$usuariomodifica&tipodocumentorl=$tipodocumentorl&identificacionrl=$numerodocumentorl&nombrerl=$nombrerl&apellido1rl=$apellido1rl&emailrl=$emailrl&celularrl=$celularrl&tipodocumentorl2=$tipodocumentorl2&identificacionrl2=$numerodocumentorl2&nombrerl2=$nombrerl2&apellidosrl2=$apellidosrl2&emailrl2=$emailrl2&celularrl2=$celularrl2&casaapto=$casaapto&tipoinmueble=$tipoinmueble&idtabla=$idUsuario";
 			$soportecURL = "S";
 			$url         = urlServicios."consultadetalle/consultadetalle_Cliente.php?".$parameters;
 			$existe      = "";

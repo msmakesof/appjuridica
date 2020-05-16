@@ -140,14 +140,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         }
     
     }
-    elseif(isset($_GET['insert']) )
+    elseif(isset($_GET['Insert']) )
     {
         //Obtener Parametros
-        $par1 = $_GET['Nombre'];
-        $par2 = $_GET['Direccion'];
-        $par3 = $_GET['Estado'];
+        $par1 = $_GET['Items'];        
 
-        $retorno = CLI_AREAXCLIENTE::insert($par1, $par2, $par3);
+        $retorno = CLI_AREAXCLIENTE::insert($par1);
         $msj = $retorno;
         if($retorno)
         {

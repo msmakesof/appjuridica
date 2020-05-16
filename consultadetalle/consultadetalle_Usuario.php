@@ -273,8 +273,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         $par13 = $_GET['IdInterno'];
         $par14 = $_GET['Local'];
 		$par15 = $_GET['Abogado'];
+		$par16 = $_GET['TP'];
         
-        $retorno = USU_USUARIO::insert($par0,$par1,$par2,$par3,$par4,$par5,$par6,$par7,$par8,$par9,$par10,$par11,$par12,$par13,$par14,$par15);        
+        $retorno = USU_USUARIO::insert($par0,$par1,$par2,$par3,$par4,$par5,$par6,$par7,$par8,$par9,$par10,$par11,$par12,$par13,$par14,$par15,$par16);
         $msj =$retorno;
         if ($retorno) 
         {
@@ -355,10 +356,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         $par10 = $_GET['clave'];
         $par11 = $_GET['tipousuario'];
         $par12 = $_GET['estado'];
-		$par13 = $_GET['abogado'];        
+		$par13 = $_GET['abogado'];
+        $par14 = $_GET['tp'];
 		$par0  = $_GET['idtabla'];		
 
-        $retorno = USU_USUARIO::update($par14,$par1,$par2,$par3,$par4,$par5,$par6,$par7,$par8,$par9,$par10,$par11,$par12,$par13,$par0);
+        $retorno = USU_USUARIO::update($par14,$par1,$par2,$par3,$par4,$par5,$par6,$par7,$par8,$par9,$par10,$par11,$par12,$par13,$par14,$par0);
         $msj =$retorno;
         if ($retorno) 
         {
@@ -421,6 +423,34 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         }
     }
 
+    elseif(isset($_GET['updatepass']) )
+    {
+        // Obtener parámetros
+        $par1  = $_GET['clave'];
+        $par0 = $_GET['mail'];
+
+        $retorno = USU_USUARIO::updatepass($par1, $par0);
+        $msj =$retorno;
+        if ($retorno) 
+        {
+            $usu_usuario["estado"] = "1";
+            $usu_usuario["usu_usuario"] = $retorno;
+            // Enviar objeto json de la usu_usuario
+            header('Content-Type: application/json');
+            echo json_encode($usu_usuario);
+        } 
+        else 
+        {
+            // Enviar respuesta de error general
+            print json_encode(
+                array(
+                    'estado' => '2',
+                    'mensaje' => 'Update - No se obtuvo el registro'
+                )
+            );
+        }
+    }
+
     elseif(isset($_GET['delete']) )
     {
         $par0  = $_GET['pidtabla'];
@@ -460,7 +490,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             $usu_usuario["usu_usuario"] = $retorno;
             // Enviar objeto json de la usu_usuario
             header('Content-Type: application/json');
-            echo json_encode($usu_usuario);
+            echo json_encode($usu_usuario, JSON_PRETTY_PRINT);
         } else {
             // Enviar respuesta de error general
             print json_encode(
@@ -534,6 +564,33 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         $par4  = $_GET['Iden'];
 
         $retorno = USU_USUARIO::buscanom($par1,$par2,$par3,$par4);
+        $msj =$retorno;
+        if ($retorno) 
+        {
+            $usu_usuario["estado"] = "1";
+            $usu_usuario["usu_usuario"] = $retorno;
+            // Enviar objeto json de la usu_usuario
+            header('Content-Type: application/json');
+            echo json_encode($usu_usuario);
+        } 
+        else 
+        {
+            // Enviar respuesta de error general
+            print json_encode(
+                array(
+                    'estado' => '2',
+                    'mensaje' => 'BuscaNombre: No se obtuvo el registro.  '.$msj,
+                    'msj' => print_r($msj),
+                    'msj2' => var_dump ($msj)
+                )
+            );
+        }
+    }
+    elseif (isset($_GET['BuscaEmail']) )
+    {       
+        $par1  = $_GET['Email'];        
+
+        $retorno = USU_USUARIO::buscaemail($par1);
         $msj =$retorno;
         if ($retorno) 
         {

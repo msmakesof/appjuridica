@@ -1,9 +1,6 @@
 <?php
-	session_start(); 
-	
-	//require_once('../Connections/cnn_kn.php');	
-/* */
-        //grabo datos del acceso
+include_once("./tables/header.inc.php");
+	//session_start();         
         /**         
          * Obtener y guardar la IP de un visitante en PHP         
          * @author parzibyte
@@ -18,52 +15,7 @@
         $servidor = $_SERVER['SERVER_NAME'];
         $puerto = $_SERVER['REMOTE_PORT'];
         $agente = $_SERVER['HTTP_USER_AGENT'];
-        
-		/*
-		$parameters = "insert=insert&IdUsuario=$IdUsuario&IpInterna=$ipInterna&FechaAcceso=$fechaHoraIngreso&NombreHost=$nombreHost&Puerto=$puerto&Servidor=$servidor&Agente=$agente";        
-        $url   = urlServicios."consultadetalle/consultadetalle_usu_acceso.php?".$parameters;
-        //echo "<script>console.log(".$url.");</script>";
 
-        if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
-        {
-            $ch = curl_init();
-            curl_setopt($ch, CURLOPT_VERBOSE, true);
-            curl_setopt($ch, CURLOPT_URL, $url);
-            curl_setopt($ch, CURLOPT_TIMEOUT, 30);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-            curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
-            curl_setopt($ch, CURLOPT_POST, 0);
-            $resultado = curl_exec ($ch);
-            curl_close($ch);
-
-            $m =  preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $resultado);    
-            $m = json_decode($m, true);
-
-            $json_errors = array(
-                JSON_ERROR_NONE => 'No se ha producido ning�n error',
-                JSON_ERROR_DEPTH => 'Maxima profundidad de pila ha sido excedida',
-                JSON_ERROR_CTRL_CHAR => 'Error de car�cter de control, posiblemente codificado incorrectamente',
-                JSON_ERROR_SYNTAX => 'Error de Sintaxis',
-            );
-            
-            //echo $m['$usu_acceso']['estado'];  //[$usu_acceso["estado"];
-        }
-		 else
-        {
-            $soportecURL = "N";
-            echo "No hay soporte para cURL";
-        } 
-        
-        if($soportecURL == "N")
-        {
-            require_once('./unirest/vendor/autoload.php');
-            $response = Unirest\Request::get($url, array("X-Mashape-Key" => "MY SECRET KEY"));
-            $resultado = $response->raw_body;
-            $resultado = preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $resultado);
-            $m = json_decode($resultado, true);	        
-        }    
-        */ 
 ?>
 <!DOCTYPE html>
 <html>
@@ -114,8 +66,7 @@
 				longitud: lat_lon[1]
 			};
 			latitud = coords.latitud;
-			longitud = coords.longitud;		
-			//organizacion = response.org;
+			longitud = coords.longitud;
 			codigopostal = response.postal;
 			
 			IdUsuario = "<?php echo $IdUsuario; ?>";
@@ -134,7 +85,7 @@
 			
 				beforeSend: function () 
 				{ 
-					$("#precargamsj").html('<div><img src="../../loading/carga.gif"/></div>');                
+					$("#precargamsj").html('<div><img src="../images/load.gif"/></div>');
 				},
 				success: function( dataX, textStatus, jqXHR )
 				{
@@ -154,8 +105,6 @@
 				}	
 			});		
 		}).fail(function(d) {
-			//console.log("error");
-			//console.log(url);
 
 			IdUsuario = "<?php echo $IdUsuario; ?>";
 			ipInterna = "<?php echo $ipInterna; ?>";
@@ -172,7 +121,7 @@
 				url : "forms/crea_usuacceso.php",
 				beforeSend: function () 
 				{ 
-					$("#precargamsj").html('<div><img src="../../loading/carga.gif"/></div>');                
+					$("#precargamsj").html('<div><img src="../images/load.gif"/></div>');                
 				},
 				success: function( dataX, textStatus, jqXHR )
 				{

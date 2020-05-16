@@ -42,6 +42,7 @@ $idTabla = 0;
 $empresausuario = 0;
 require_once('../../apis/general/tipodocumento.php');
 require_once('../../apis/general/tipocliente.php');
+require_once('../../apis/general/tipoinmueble.php');
 require_once('../../apis/empresa/Empresa.php');
 ?>
 <!DOCTYPE html>
@@ -67,8 +68,7 @@ require_once('../../apis/empresa/Empresa.php');
     <!-- Preloader Css -->
     <link href="../../plugins/material-design-preloader/md-preloader.css" rel="stylesheet" />
 
-    <!-- Sweet Alert Css -->
-    <!-- <link href="../../plugins/sweetalert/sweetalert.css" rel="stylesheet" /> -->
+    <!-- Sweet Alert Css -->   
     <link href="../../css/sweet/sweetalert.css" rel="stylesheet" />
     <link href="../../css/sweet/main.css" rel="stylesheet" />
 
@@ -81,9 +81,6 @@ require_once('../../apis/empresa/Empresa.php');
     <!-- AdminBSB Themes. You can choose a theme from css/themes instead of get all themes -->
     <link href="../../css/themes/all-themes.css" rel="stylesheet" />
 
-    <!-- mks 20170128
-    <link rel="stylesheet" href="../../css/themes2/alertify.core.css" />
-    <link rel="stylesheet" href="../../css/themes2/alertify.default.css" id="toggleCSS" /> -->
     <!-- Jquery Core Js -->
     <script src="../../plugins/jquery/jquery.min.js"></script>
 
@@ -125,10 +122,6 @@ require_once('../../apis/empresa/Empresa.php');
     <!-- <script src="../../js/alertify.min.js"></script> -->
     <script src="../../js/jquery.numeric.js"></script>
 	 
-	<!-- toggle botton
-	<link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
-	<script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script> --> 
-	
 	<link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/css/bootstrap4-toggle.min.css" rel="stylesheet">
 	<script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/js/bootstrap4-toggle.min.js"></script>
 
@@ -136,6 +129,8 @@ require_once('../../apis/empresa/Empresa.php');
     var nombre ="";
     $(document).ready(function()
     {   		
+		$("#tipoinmueble").val('4');
+		$("#tipoinmueble").selectpicker("refresh");		
 		$("#msj").hide();
         $("#numerodocumento").numeric();
 		$("#numerodocumentorp").numeric();
@@ -143,6 +138,7 @@ require_once('../../apis/empresa/Empresa.php');
         $("#telefonoFijo").numeric();
 		$("#celularrl").numeric();
 		$("#celularrl2").numeric();
+		//$("#casaapto").numeric();
 		$("#pjur").hide();
 		$("#pnat").show();
 		$("#rl").hide();
@@ -187,7 +183,9 @@ require_once('../../apis/empresa/Empresa.php');
 				$( "#clave" ).prop( "disabled", false );
 				$("#clave").attr("placeholder", "");
 			}
-		});		
+		});	
+
+				
 
         $('#email').on('blur', function() {
             // Expresion regular para validar el correo
@@ -238,6 +236,8 @@ require_once('../../apis/empresa/Empresa.php');
             var apellido2 = $("#apellido2").val();
             var clave = $("#clave").val();            
             var direccion = $("#direccion").val();
+			var tipoinmueble = $("#tipoinmueble").val();
+			var casaapto = $("#casaapto").val();
             var email = $("#email").val();
             var celular = $("#celular").val();
             var tipocliente = $("#tipocliente").val();
@@ -346,7 +346,8 @@ require_once('../../apis/empresa/Empresa.php');
 								"clave": clave, "direccion": direccion, "email": email, "celular": celular, "estado": estado, "verseguimiento": seguimiento, 
 								"tipocliente": tipocliente, "empresa": empresa, "uc": uc ,
 								"tipodocumentorl": tipodocumentorl , "numerodocumentorl": numerodocumentorl , "nombrerl": nombrerl, "apellido1rl": apellido1rl, "celularrl": celularrl , "emailrl": emailrl, 
-								"tipodocumentorl2": tipodocumentorl2 , "numerodocumentorl2": numerodocumentorl2 , "nombrerl2": nombrerl2, "apellidosrl2": apellidosrl2, "celularrl2": celularrl2 , "emailrl2": emailrl2
+								"tipodocumentorl2": tipodocumentorl2 , "numerodocumentorl2": numerodocumentorl2 , "nombrerl2": nombrerl2, "apellidosrl2": apellidosrl2, "celularrl2": celularrl2 , 
+								"emailrl2": emailrl2, "casaapto": casaapto, "tipoinmueble": tipoinmueble
 								}, 
 						type: "POST",
 						dataType: "html",
@@ -534,28 +535,62 @@ require_once('../../apis/empresa/Empresa.php');
 
                                 <div class="form-group form-float">
 									<div class="row">
-										<div class="col-md-5">
+										<div class="col-md-6">
 											<label class="form-label"><span id="datopj" style="color:red;">*</span> Direcci&oacute;n</label>
 											<div class="form-line">
-												<input type="text" class="form-control" name="direccion" id="direccion" value="" maxlength="50" required>                                
+												<input type="text" class="form-control" name="direccion" id="direccion" value="" maxlength="50" required>
 											</div>
 										</div>
 										
+										<div class="col-md-2">
+											<label class="form">Tipo Inmueble</label>
+											<select class="selectpicker show-tick" data-live-search="true" data-width="100%" name="tipoinmueble" id="tipoinmueble" required>
+												<option value="" >Seleccione Opción...</option>
+                                                <?php
+                                                    for($i=0; $i<count($mtipoinmueble['gen_tipoinmueble']); $i++)
+                                                    {
+                                                        $IdTipoInmueble = $mtipoinmueble['gen_tipoinmueble'][$i]['TIN_IdTipoInmueble'];                                                        
+                                                        $Nombre = $mtipoinmueble['gen_tipoinmueble'][$i]['TIN_Nombre'];
+                                                        //$Estado = $m['gen_tipoinmueble'][$i]['TIN_Estado'];
+                                                ?>
+                                                        <option value="<?php echo $IdTipoInmueble; ?>" >
+                                                            <?php echo $Nombre ; ?>                                                
+                                                        </option>
+                                                <?php
+                                                    }
+                                                ?>
+                                            </select>
+										</div>
+										
+										<div class="col-md-2">
+											<label class="form-label">No. Casa/Apto/Local</label>
+											<div class="form-line">
+												<input type="text" class="form-control" name="casaapto" id="casaapto" value="" maxlength="7" required>
+											</div>
+										</div>										
+									</div>
+								</div>
+								
+								 <div class="form-group form-float">
+									<div class="row">										
 										<div class="col-md-3">
 											<label class="form-label">N&uacute;mero Celular</label>
 											<div class="form-line">
-												<input type="text" class="form-control" name="celular" id="celular" value="" maxlength="13" required>                                       
+												<input type="text" class="form-control" name="celular" id="celular" value="" maxlength="13" required>
 											</div>
 										</div>
 										
 										<div class="col-md-4">
 											<label class="form-label"><span id="datopj1" style="color:red;">*</span> Email</label>
 											<div class="form-line">
-											   <input type="text" class="form-control" name="email" id="email" value="" maxlength="60" required>                                       
+											   <input type="text" class="form-control" name="email" id="email" value="" maxlength="60" required>
 											</div>
 										</div>
 									</div>
-								</div>								
+								</div>
+
+
+								
 									
 								<div class="form-group form-float">
 									<div class="row">

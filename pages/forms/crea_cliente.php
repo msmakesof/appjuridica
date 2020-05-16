@@ -178,6 +178,16 @@ if(isset($_POST['celularrl2'])){
   $celularrl2 = trim($_POST['celularrl2']);
 }
 
+$casaapto = "";
+if(isset($_POST['casaapto'])){
+  $casaapto = trim($_POST['casaapto']);
+}
+
+$tipoinmueble = "";
+if(isset($_POST['tipoinmueble'])){
+  $tipoinmueble = trim($_POST['tipoinmueble']);
+}
+
 
 require_once('../../Connections/DataConex.php');
 //Verifico si existe un usuario con las siguientes caracteristicas
@@ -225,7 +235,7 @@ if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
       $local = rand(10000000,1234567890000);
       $clave = encryptor('encrypt',$clave);
 		
-      $parameters = "insert=insert&TipoDocumento=$tipodocumento&Identificacion=$numerodocumento&PrimerApellido=$apellido1&SegundoApellido=$apellido2&Nombre=$nombre&Email=$email&Direccion=$direccion&Celular=$celular&Usuario=$email&Clave=$clave&Estado=$estado&IdInterno=$interno&Local=$local&Verseguimiento=$verseguimiento&TipoCliente=$tipocliente&Empresa=$empresa&UsuarioCrea=$usuariocrea&TipoDocumentorl=$tipodocumentorl&Identificacionrl=$numerodocumentorl&Nombrerl=$nombrerl&Apellido1rl=$apellido1rl&Emailrl=$emailrl&Celularrl=$celularrl&TipoDocumentorl2=$tipodocumentorl2&Identificacionrl2=$numerodocumentorl2&Nombrerl2=$nombrerl2&Apellidosrl2=$apellidosrl2&Emailrl2=$emailrl2&Celularrl2=$celularrl2";
+      $parameters = "insert=insert&TipoDocumento=$tipodocumento&Identificacion=$numerodocumento&PrimerApellido=$apellido1&SegundoApellido=$apellido2&Nombre=$nombre&Email=$email&Direccion=$direccion&Celular=$celular&Usuario=$email&Clave=$clave&Estado=$estado&IdInterno=$interno&Local=$local&Verseguimiento=$verseguimiento&TipoCliente=$tipocliente&Empresa=$empresa&UsuarioCrea=$usuariocrea&TipoDocumentorl=$tipodocumentorl&Identificacionrl=$numerodocumentorl&Nombrerl=$nombrerl&Apellido1rl=$apellido1rl&Emailrl=$emailrl&Celularrl=$celularrl&TipoDocumentorl2=$tipodocumentorl2&Identificacionrl2=$numerodocumentorl2&Nombrerl2=$nombrerl2&Apellidosrl2=$apellidosrl2&Emailrl2=$emailrl2&Celularrl2=$celularrl2&CasaApto=$casaapto&TipoInmueble=$tipoinmueble";
       $soportecURL = "S";
       $url         = urlServicios."consultadetalle/consultadetalle_Cliente.php?".$parameters;
       $existe      = "";

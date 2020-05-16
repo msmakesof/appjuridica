@@ -139,17 +139,24 @@ if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
       if(isset($_POST['abogado'])){
         $abogado = trim($_POST['abogado']);
       }
-      $estado ="";
+      
+	  $estado ="";
       if(isset($_POST['estado'])){
         $estado = trim($_POST['estado']);
       }
+	  
+	  $tp ="";
+      if(isset($_POST['tp'])){
+        $tp = trim($_POST['tp']);
+      }
+	  
       //
       $llave = $GLOBALS['secret_key'];
       $interno = rand(10000000,100000123456789);
       $local = rand(10000000,1234567890000);
       $clave = encryptor('encrypt',$clave);
 
-      $parameters = "insert=insert&Empresa=$empresa&TipoDocumento=$tipodocumento&Identificacion=$numerodocumento&PrimerApellido=$apellido1&SegundoApellido=$apellido2&Nombre=$nombre&Email=$email&Direccion=$direccion&Celular=$celular&Usuario=$email&Clave=$clave&TipoUsuario=$tipousuario&Estado=$estado&IdInterno=$interno&Local=$local&Abogado=$abogado";
+      $parameters = "insert=insert&Empresa=$empresa&TipoDocumento=$tipodocumento&Identificacion=$numerodocumento&PrimerApellido=$apellido1&SegundoApellido=$apellido2&Nombre=$nombre&Email=$email&Direccion=$direccion&Celular=$celular&Usuario=$email&Clave=$clave&TipoUsuario=$tipousuario&Estado=$estado&IdInterno=$interno&Local=$local&Abogado=$abogado&TP=$tp";
       $soportecURL = "S";
       $url         = urlServicios."consultadetalle/consultadetalle_Usuario.php?".$parameters;
       $existe      = "";

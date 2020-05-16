@@ -1,9 +1,13 @@
+<?php
+include 'Connections/DataConex.php';
+$Company = Company;
+?>
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-    <title>.:: Litigantes  |  Principal ::.</title>
+    <title>.:: <?php echo  $Company; ?>  |  Principal ::.</title>
     <!-- Favicon-->
     <link rel="icon" href="images/favicon.ico" type="image/x-icon">
 
@@ -34,24 +38,22 @@
             background-color: #f9f9f9;
         }
 		
-#div-cookies {
-    position: fixed;
-    bottom: 0px;
-    left: 0px;
-    width: 100%;
-    background-color: white;
-    box-shadow: 0px -5px 15px gray;
-    padding: 7px;
-    text-align: center;
-}
-        </style>
+		#div-cookies {
+			position: fixed;
+			bottom: 0px;
+			left: 0px;
+			width: 100%;
+			background-color: white;
+			box-shadow: 0px -5px 15px gray;
+			padding: 7px;
+			text-align: center;
+		}
+    </style>
 </head>
 
 <body class="login-page">
     <div class="login-box">
-        <div class="logo">
-            
-        </div>
+        <div class="logo"></div>
         <div class="card">
             <div class="body">
                 <form id="sign_in" method="post">
@@ -86,64 +88,110 @@
                             <button class="btn btn-block bg-pink waves-effect" type="submit" id="ingresar" name="ingresar">INGRESAR</button>
                         </div>
                     </div>
-					<!--
-					<div class="row m-t-15 m-b--20">
-						<div class="col-xs-12">                            
-							<div id="msj"></div>
-                        </div>
-					</div>
-					-->
 					<hr>
                     <div class="row m-t-15 m-b--20">                    	                  
                         <div class="col-xs-5 align-right">
-                            <a href="#">Olvid&eacute; mi Clave?</a>
+                            <a href="login/"> Olvid&eacute; mi Clave</a>
                         </div>
 						<div class="col-xs-7 align-right">
-                            <a href="#">Trato de Datos Personales</a>
+                            <a href="#" style="font-size:11px; color: gray">Trato de Datos Personales.</a>
+                        </div>
+                    </div>
+					
+					<div class="row m-t-15 m-b--20">                    	                  
+                        <div class="col-xs-5 align-left">
+                            <a hreflang="pp" href="#" style="font-size:11px; color: gray">Política de Privacidad.</a>
+                        </div>
+						<div class="col-xs-7 align-right">
+                            <a hreflang="tc" href="#" style="font-size:11px; color:gray">Términos y Condiciones de Uso.</a>
                         </div>
                     </div>
 
                      <!-- Modal -->
                     <div class="modal fade" id="myModal" role="dialog">
-                        <div class="modal-dialog">                        
-                            <!-- Modal content-->
+                        <div class="modal-dialog">                            
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                                     <h4 class="modal-title">ATENCI&Oacute;N:</h4>
                                 </div>
                                 <div class="modal-body">
-                                    <p>
-                                        <img src="images/noexiste.jpg">
-                                    </p>
-                                    <p>No existe Información para el Usuario digitado.</p>
+                                    <div class="col text-center">
+                                        <img src="images/datoerrado.gif">
+                                    </div>                                    
                                 </div>
                                 <div class="modal-footer">
+                                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+                                </div>
+                            </div>                        
+                        </div>
+                    </div>
+					
+					 <!-- Modal -->
+                    <div class="modal fade" id="Modalrc" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-center">                            
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    <h4 class="modal-title">ATENCI&Oacute;N:</h4>
+                                </div>
+                                <div class="modal-body">
+									<hr>
+									
+									<div class="row">
+										<div class="col-xs-12 col-md-12" p-t-5>
+											<div class="col text-center">
+												<label>Digite su Correo Electrn&oacute;nico o usuario para enviar un link donde podrá cambiar su clave:</label>
+											</div>
+										</div>
+									</div>
+									
+									<div class="row">
+										<div class="col-xs-8 col-md-8" p-t-3>
+											<div class="col text-center">												
+												<input type="email" class="form-control" name="email" id="email" item-label-path="Digite su Email" placeholder="Digite su Email" required autofocus>										
+											</div>
+										</div>
+									</div>
+										
+									<div class="row">
+										<div class="g-recaptcha" data-sitekey="6LfPF-8UAAAAAKQmQHsE6XSOaJmb8Kw_DjUbZxiP"></div>										
+									</div>
+										
+									<div class="row">
+										<div class="col-xs-9 col-md-9" p-t-3>
+											<div class="col text-center" id="carga">
+											</div>
+										</div>										
+									</div>
+									
+									<div class="row">
+										<div class="col-xs-4 col-md-4" p-t-3>
+											<div id="msjx">
+												<h5><span class="badge badge-pill label-danger">Debe digitar un email / Digito una direccón de email No Válida.</span></h5>
+											</div>
+										</div>
+									</div>                                    
+									
+                                </div>
+                                <div class="modal-footer">
+									<button type="button" class="btn btn-info" id="enviar" name="enviar">Enviar</button>
                                     <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
                                 </div>
                             </div>
                         
                         </div>
                     </div>
+					
                 </form>
             </div>
-        </div>
-
-        <div id="ip"></div>
-<div id="address"></div>
-<!--
-Respuesta completa: 
-<pre id="details"></pre>
--->
-		
+		</div>
+		        
 		<div id="div-cookies" style="display: none;">
-			Necesitamos usar cookies para que funcione todo, si permanece aquí acepta su uso, más información en
-			<a hreflang="es" href="/info/aviso-legal">Aviso Legal</a>
-			y la
-			<a hreflang="es" href="/info/politica-de-privacidad">Política de Privacidad</a> y/o
-			<a hreflang="es" href="/info/politica-de-privacidad">Términos y Condiciones de Uso</a>.
+			Este portal web utiliza cookies para mejorar tu experiencia en nuestro portal. Si no cambias esta
+            configuración en tu navegador, entenderemos que aceptas el uso de las mismas.<br>
 			<button type="button" class="btn btn-sm btn-primary" id="acceptCookies">
-				Acepto el uso de cookies
+				Acepto.
 			</button>
 		</div>
 	
@@ -165,11 +213,14 @@ Respuesta completa:
     <script src="js/admin.js"></script>
     <script src="js/pages/examples/sign-in.js"></script>
     <script src="js/jsRelocate.js"></script>
-  
+	
     <script type="text/javascript">
     $(document).ready(function()
-	{   		
-        $.ajax({
+	{           
+		var ac = 0;
+		$("#msjx").hide();
+		$('#div-cookies').show();
+		$.ajax({
             type: "POST",
             dataType: "html",
             url : "encabezado.php",
@@ -199,8 +250,8 @@ Respuesta completa:
 		});	
 
 		$("#ingresar").click( function(e) 
-		{			 
-            $("#msj").html("");
+		{            
+			$("#msj").html("");
             var usuario = $("#username").val();
 			var clave = $("#password").val();				 
 			var entra = "N";
@@ -224,7 +275,7 @@ Respuesta completa:
             {                
 				e.preventDefault();
                 $.ajax({
-					data : {"pusuario": usuario, "pclave": clave, "sp":"N"},
+					data : {"pusuario": usuario, "pclave": clave, "sp":"N", "ac": ac},
 					type: "POST",
 					dataType: "html",
 					url : "valida_usuarioK2.php",
@@ -232,8 +283,7 @@ Respuesta completa:
 				.done(function( dataX, textStatus, jqXHR ){	                   				
 					var respstr = dataX.trim();                   
                     if( respstr.substr(0,1) == "1" )
-                    {   						
-                        //relocate("pages/tables/");
+                    {                           
                         relocate("pages/indice.php");
                     }
                     else
@@ -250,45 +300,100 @@ Respuesta completa:
 			}	 
 	    });
 		
-		function checkAcceptCookies() {
-			if (localStorage.acceptCookies == 'true') 
-            {
-                alert(7);
+		var sendmai = false;		
+		$("#email").blur( function(e) 
+		{
+			var regex = /[\w-\.]{2,}@([\w-]{2,}\.)*([\w-]{2,}\.)[\w-]{2,4}/;
+			if (regex.test($('#email').val().trim())) {				
+				$("#msjx").hide();
+				sendmai = true;
 			} 
-            else 
-            {
-				$('#div-cookies').show();
+			else 
+			{
+				$("#msjx").show();
+				sendmai = false;
+				$("#email").val('');
+				setTimeout(function()
+				{
+					$("#msjx").hide();
+				},2500);
 			}
-		}
-		function acceptCookies() {
-			localStorage.acceptCookies = 'true';
-			$('#div-cookies').hide();
-            
-		}
-		//$(document).ready(function() {
-		checkAcceptCookies();
-		//});
-	});
-    /*
-    var ip="";
-    $.get("https://ipinfo.io", function (response) {    
-        $("#ip").html("IP: " + response.ip);
-        ip = response.ip;        
-        $("#address").html("Ubicaci&#243;n: " + response.city + ", " + response.region);
-        $("#details").html(JSON.stringify(response, null, 4));    
-    }, "jsonp");
-    */
-    </script>
-    <!-- <div id="resultado"></div> -->
-    <?php
-    /*
-        $ipPublica = "";
-        $ipPublica = "<script> document.writeln(ip); </script>";        
-        $dataArray = json_decode(file_get_contents("http://www.geoplugin.net/json.gp?ip=".$ipPublica));        
-        var_dump($dataArray);
-        //ipinterna=$ipInterna&fechaHoraIngreso=$fechaHoraIngreso&nombreHost=$nombreHost&servidor=$servidor&puerto=$puerto&agente=$agente&ippublica=$ipPublica
-    */
-    ?>
-</body>
+		});
+		
+		//	$("#rrc").click( function() {});
+		
+		$("#cenviar").click( function(e) 
+		{
+			$("#msjx").hide();
+			var email = $("#email").val();
+			
+			if ( email == "" )
+			{
+				$("#msjx").show();
+				setTimeout(function()
+				{
+					$("#msjx").hide();
+				},2000);	
+			}
+			else
+			{
+				if(sendmai)
+				{	
+					$("#msjx").hide();					
+					/**/
+					$.ajax({
+						data: {"rc": email},
+						type: 'POST',
+						dataType: "html",
+						url: "enviaclave.php",				
+						
+						beforeSend: function() {					
+							$("#carga").html('<img src="images/ajax-loader.gif"> Enviando Información... Un momento por favor.');							
+						},
+						success: function(data) {
+							
+							alert(data);
+							//if (data == "S")
+							$("#email").val('');
+							/*
+							if( data == "N")
+							{
+								swal({
+									title: "Atención :  Existe un usuario registrado con ese Nro. de Identificación.",
+									text: "un momento por favor.",
+									imageUrl: "../../js/sweet/3red.gif",
+									timer: 2000,
+									showConfirmButton: false
+								});
+								return false;
+							}
+							else{								
+							}
+							*/
+						},
+						error: function(xhr) { // if error occured
+							alert("Error ha ocurrido.");
+						},
+						complete: function() {					
+							$("#carga").html('');
+						},				
+					});	
+					/**/
+				}
+				else
+				{
+					$("#email").val('');
+				}				
+			}			
+		});
 
+		$("#acceptCookies").click( function(e) 
+		{			
+			localStorage.acceptCookies = 'true';
+			ac = 1;
+			$('#div-cookies').hide();
+		});		
+	});
+    </script>    
+</body>
 </html>

@@ -20,12 +20,16 @@ class CLI_AREAXCLIENTE
      */
     public static function getAll()
     {
-        $consulta = "SELECT ".$GLOBALS['Llave'].", ARC_IdCliente, ARC_IdTipoJuzgado, ARC_IdArea,			
-			CASE E.EMP_IdTipoPersona WHEN 1 THEN E.EMP_Nombre ELSE concat_ws(' ',E.EMP_Nombre,E.EMP_Nombre2,E.EMP_Apellido,E.EMP_Apellido) END NombreEmpresa
-			, TJU_Nombre AS NombreCorporacion ".
+        $consulta = "SELECT ".$GLOBALS['Llave'].", ARC_IdEmpresa, ARC_IdTipoJuzgado, ARC_IdArea,			
+			  CONCAT_WS(' ',E.EMP_Nombre,E.EMP_Nombre2,E.EMP_Apellido,E.EMP_Apellido2) AS NombreEmpresa 
+			, TJU_Nombre AS NombreCorporacion, JA.ARE_Nombre AS NombreArea ".
             " FROM ".$GLOBALS['TABLA'].
-			" JOIN ON emp_empresa E ON E.EMP_IdEmpresa = ".$GLOBALS['TABLA']. ".ARC_IdCliente ".
-			" JOIN ON juz_tipojuzgado TJ ON TJ.TJU_IdTipoJuzgado = ".$GLOBALS['TABLA']. ".ARC_IdTipoJuzgado; ";
+			" JOIN emp_empresa E ON E.EMP_IdEmpresa = ".$GLOBALS['TABLA']. ".ARC_IdEmpresa ".
+			" JOIN juz_tipojuzgado TJ ON TJ.TJU_IdTipoJuzgado = ".$GLOBALS['TABLA']. ".ARC_IdTipoJuzgado ".
+			" JOIN juz_area JA ON JA.ARE_IdArea = cli_areaxcliente.ARC_IdArea AND JA.ARE_Estado = 1 ".
+			" WHERE cli_areaxcliente.ARC_Estado = 1 ORDER BY NombreEmpresa ;";
+			
+			//echo $consulta;
         try {
             // Preparar sentencia
             $comando = Database::getInstance()->getDb()->prepare($consulta);
@@ -166,35 +170,39 @@ class CLI_AREAXCLIENTE
     /**
      * Insertar un nuevo Edificio
      *         
-     * @param $IdTabla            identificador
-     * @param $Nombre             nuevo Nombre
-	 * @param $Direccion          nueva Direccion	 
-     * @param $Estado             Estado   
+     * @param $Items            Array
      * @return PDOStatement
      */
-    public static function insert(        
-        $Nombre,
-		$Direccion,	
-        $Estado
-    )
+    public static function insert( $Items )	
     {
-        // Sentencia INSERT
-        $comando = "INSERT INTO ". $GLOBALS['TABLA'] ." ( " .            
-            " EDI_Nombre," . 
-			" EDI_Direccion," . 
-            " EDI_Estado" . 
-            " )".     
-            " VALUES(?,?,?) ;";
+        $Items =  str_replace("[","", $Items);
+		$Items =  str_replace("]","", $Items);
+		$AItems = explode(",", $Items);		
+		
+		$IdEmpresa = $AItems[0]; 	  // IdEmpresa
+		$IdTipojuzgado = $AItems[1];  // IdTipojuzgado => Corporación / Jurisdicción		
+		unset($AItems[0],$AItems[1]);
+		
+		$consulta = "UPDATE ". $GLOBALS['TABLA']. " SET ARC_Estado = 0 WHERE ARC_IdEmpresa = $IdEmpresa AND ARC_IdTipoJuzgado = $IdTipojuzgado; ";
+		 // Preparar la sentencia
+        $cmd = Database::getInstance()->getDb()->prepare($consulta);
+		$cmd->execute(); 
+		
+		$opc = array_slice($AItems, 0);
+		
+		for($i=0; $i<count($opc); $i++)
+		{		
+			$IdArea = $opc[$i];			
+			$datoUnico[] = '('.$IdEmpresa.', '.$IdTipojuzgado.', '.$IdArea.', 1)'; 
+			// Sentencia INSERT
+			$comando = "INSERT INTO cli_areaxcliente ( ARC_IdEmpresa, ARC_IdTipoJuzgado, ARC_IdArea, ARC_Estado ) VALUES ". implode(', ', $datoUnico);
+		}				
 
         // Preparar la sentencia
         $sentencia = Database::getInstance()->getDb()->prepare($comando);
 
         return $sentencia->execute(
-            array(                
-                $Nombre,
-				$Direccion, 
-                $Estado
-            )
+            array( $Items )
         );
     }
 
@@ -238,7 +246,7 @@ class CLI_AREAXCLIENTE
         } catch (PDOException $e) {
             // Aquí puedes clasificar el error dependiendo de la excepción
             // para presentarlo en la respuesta Json
-            return -1;
+            return $e;
         }
     }
 }

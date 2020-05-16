@@ -42,7 +42,7 @@ class USU_USUARIO
         USU_IdInterno,
         USU_Local ,
 		USU_EsAbogado ,
-		USU_Desarrollador,
+		USU_Desarrollador, USU_TarjetaProfesional,
         CASE USU_Estado WHEN 1 THEN 'Activo' ELSE 'Inactivo' END EstadoUsuario,
         concat_WS(' ',USU_Nombre, USU_PrimerApellido, USU_SegundoApellido) AS NombreUsuario ,
 		CASE USU_TipoUsuario WHEN 1 THEN CONCAT(TUS_Nombre,'- ABOGADO') ELSE TUS_Nombre END TUS_Nombre, 
@@ -95,7 +95,7 @@ class USU_USUARIO
         USU_IdInterno,
         USU_Local ,
 		USU_EsAbogado ,
-		USU_Desarrollador,
+		USU_Desarrollador, USU_TarjetaProfesional, 
         CASE USU_Estado WHEN 1 THEN 'Activo' ELSE 'Inactivo' END EstadoUsuario,
         concat_WS(' ',USU_Nombre, USU_PrimerApellido, USU_SegundoApellido) AS NombreUsuario ,
 		CASE USU_EsAbogado WHEN 1 THEN CONCAT(TUS_Nombre,'- ABOGADO') ELSE TUS_Nombre END TUS_Nombre
@@ -144,7 +144,7 @@ class USU_USUARIO
         USU_UsuarioEstado,
         USU_IdInterno,
         USU_Local ,
-		USU_Desarrollador,
+		USU_Desarrollador, USU_TarjetaProfesional, 
         CASE USU_Estado WHEN 1 THEN 'Activo' ELSE 'Inactivo' END EstadoUsuario, 
         concat_WS(' ',USU_Nombre, USU_PrimerApellido, USU_SegundoApellido) AS NombreUsuario
         FROM ".$GLOBALS['TABLA'].		
@@ -196,7 +196,7 @@ class USU_USUARIO
                         USU_IdInterno,
                         USU_Local,
 						USU_EsAbogado ,
-						USU_Desarrollador,
+						USU_Desarrollador, USU_TarjetaProfesional,
 						concat_WS(' ',emp_empresa.EMP_Nombre, emp_empresa.EMP_Nombre2, emp_empresa.EMP_Apellido, emp_empresa.EMP_Apellido2) AS NombreEmpresa ".
                         " FROM ".$GLOBALS['TABLA'].
 						" LEFT JOIN emp_empresa ON emp_empresa.EMP_IdEmpresa = USU_IdEmpresa ".
@@ -357,21 +357,22 @@ class USU_USUARIO
         $Clave,
         $TipoUsuario,
         $Estado,
-		$EsAbogado,		
+		$EsAbogado,
+		$TP,	
         $IdUsuario
     )
     {
         // Creando consulta UPDATE
         $consulta = "UPDATE ". $GLOBALS['TABLA']. 
             " SET USU_IdEmpresa =?, USU_TipoDocumento=?, USU_Identificacion=?, USU_PrimerApellido=?, USU_SegundoApellido=?, USU_Nombre=?, USU_Email=?, ".
-            " USU_Direccion=?, USU_Celular=?, USU_Usuario=?, USU_Clave=?, USU_TipoUsuario=?, USU_Estado=?, USU_EsAbogado =? " .
+            " USU_Direccion=?, USU_Celular=?, USU_Usuario=?, USU_Clave=?, USU_TipoUsuario=?, USU_Estado=?, USU_EsAbogado =?, USU_TarjetaProfesional = ? " .
             " WHERE ". $GLOBALS['Llave'] ."=? ;";
 
         // Preparar la sentencia
         $cmd = Database::getInstance()->getDb()->prepare($consulta);
 
         // Relacionar y ejecutar la sentencia
-        $cmd->execute(array($Empresa, $TipoDocumento, $Identificacion, $PrimerApellido, $SegundoApellido, $Nombre, $Email, $Direccion, $Celular, $Usuario, $Clave, $TipoUsuario, $Estado, $EsAbogado, $IdUsuario ));
+        $cmd->execute(array($Empresa, $TipoDocumento, $Identificacion, $PrimerApellido, $SegundoApellido, $Nombre, $Email, $Direccion, $Celular, $Usuario, $Clave, $TipoUsuario, $Estado, $EsAbogado, $TP, $IdUsuario ));
 
         return $cmd;
     }
@@ -418,24 +419,50 @@ class USU_USUARIO
         $Clave,
         $TipoUsuario,
         $Estado,
-		$EsAbogado,		
+		$EsAbogado,
+		$TP,
         $IdUsuario
     )
     {
         // Creando consulta UPDATE
         $consulta = "UPDATE ". $GLOBALS['TABLA']. 
             " SET USU_IdEmpresa =?, USU_TipoDocumento=?, USU_Identificacion=?, USU_PrimerApellido=?, USU_SegundoApellido=?, USU_Nombre=?, USU_Email=?, ".
-            " USU_Direccion=?, USU_Celular=?, USU_Usuario=?, USU_Clave=?, USU_TipoUsuario=?, USU_Estado=?, USU_EsAbogado =? " .
+            " USU_Direccion=?, USU_Celular=?, USU_Usuario=?, USU_Clave=?, USU_TipoUsuario=?, USU_Estado=?, USU_EsAbogado =?, USU_TarjetaProfesional =? " .
             " WHERE ". $GLOBALS['Llave'] ."=?  AND USU_EsSuperAdmin = 1;";
 
         // Preparar la sentencia
         $cmd = Database::getInstance()->getDb()->prepare($consulta);
 
         // Relacionar y ejecutar la sentencia
-        $cmd->execute(array($Empresa, $TipoDocumento, $Identificacion, $PrimerApellido, $SegundoApellido, $Nombre, $Email, $Direccion, $Celular, $Usuario, $Clave, $TipoUsuario, $Estado, $EsAbogado, $IdUsuario ));
+        $cmd->execute(array($Empresa, $TipoDocumento, $Identificacion, $PrimerApellido, $SegundoApellido, $Nombre, $Email, $Direccion, $Celular, $Usuario, $Clave, $TipoUsuario, $Estado, $EsAbogado, $TP, $IdUsuario ));
 
         return $cmd;
     }
+
+    /**
+     * Actualiza un registro de la bases de datos basado
+     * en los nuevos valores relacionados con un identificador
+     *
+     * @param $clave       Email
+     * @param $clave       nueva clave
+     * 
+     */
+    public static function updatepass($clave, $mail )
+    {
+        // Creando consulta UPDATE
+        $consulta = "UPDATE ". $GLOBALS['TABLA']. 
+            " SET USU_Clave = ? " .
+            " WHERE USU_Email = ? AND USU_Estado = 1;";
+
+        // Preparar la sentencia
+        $cmd = Database::getInstance()->getDb()->prepare($consulta);
+
+        // Relacionar y ejecutar la sentencia
+        $cmd->execute(array($clave, $mail  ));
+
+        return $cmd;
+    }
+
 
     /**
      * Insertar un nuevo Usuario
@@ -465,7 +492,7 @@ class USU_USUARIO
      */
 
     public static function insert( $Empresa, $TipoDocumento, $Identificacion, $PrimerApellido, $SegundoApellido, $Nombre, $Email, $Direccion, $Celular, $Usuario,
-        $Clave, $TipoUsuario,$Estado, $IdInterno, $Local, $Abogado )
+        $Clave, $TipoUsuario,$Estado, $IdInterno, $Local, $Abogado, $TP )
     {
         // Sentencia INSERT
         $comando = "INSERT INTO ". $GLOBALS['TABLA'] ." ( " . 
@@ -482,13 +509,13 @@ class USU_USUARIO
             " USU_Clave," .
             " USU_TipoUsuario," .
             " USU_Estado, " .
-            " USU_IdInterno, USU_Local, USU_EsAbogado ) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);";
+            " USU_IdInterno, USU_Local, USU_EsAbogado, USU_TarjetaProfesional ) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);";
         try {
             // Preparar la sentencia
             $sentencia = Database::getInstance()->getDb()->prepare($comando);
             return $sentencia->execute(
                 array($Empresa, $TipoDocumento, $Identificacion,$PrimerApellido, $SegundoApellido, $Nombre,$Email,
-                $Direccion, $Celular, $Usuario,$Clave,$TipoUsuario,$Estado, $IdInterno, $Local, $Abogado )    
+                $Direccion, $Celular, $Usuario,$Clave,$TipoUsuario,$Estado, $IdInterno, $Local, $Abogado, $TP )    
             );
            
         } catch (PDOException $e) {
@@ -606,7 +633,7 @@ class USU_USUARIO
         }
     }
 	
-	 /**
+	/**
      * Verifica si existe el usuario con el mismo número de cédula
      *
      * @param $IdUsuario identificador de la usu_usuario
@@ -656,6 +683,36 @@ class USU_USUARIO
             $comando = Database::getInstance()->getDb()->prepare($consulta);
             // Ejecutar sentencia preparada
             $comando->execute(array($Nom, $Ape1, $Ape2, $Iden));
+            // Capturar primera fila del resultado
+            $row = $comando->fetch(PDO::FETCH_ASSOC);
+            return $row;
+
+        } catch (PDOException $e) {
+            // Aquí puedes clasificar el error dependiendo de la excepción
+            // para presentarlo en la respuesta Json
+            return $e;
+        }
+    }
+
+     /**
+     * Verifica si existe el usuario con el mismo email
+     *
+     * @param $Email identificador de la usu_usuario
+     * @return bool Respuesta de la consulta
+     */
+    public static function buscaemail($Email)
+    {
+        $consulta = "SELECT count(USU_IdUsuario) AS existe 
+        FROM ".$GLOBALS['TABLA']. "
+        WHERE USU_Email = ? AND USU_Estado = 1 ;";
+		
+		//echo $consulta ;
+
+        try {
+            // Preparar sentencia
+            $comando = Database::getInstance()->getDb()->prepare($consulta);
+            // Ejecutar sentencia preparada
+            $comando->execute(array($Email));
             // Capturar primera fila del resultado
             $row = $comando->fetch(PDO::FETCH_ASSOC);
             return $row;
