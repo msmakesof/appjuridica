@@ -232,7 +232,7 @@ for($i=0; $i<count($mmenu['menu']); $i++)
 				</a>
 				<ul class="ml-menu">
 					<li>
-						<a href="../../fcal/default.php" class="menu-toggle">
+						<a href="../../fcx/default.php" class="menu-toggle">
 							<span>Agenda</span>
 						</a>  
 					</li>

@@ -156,29 +156,6 @@ switch($monthNum)
 	<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=yes" name="viewport">
 	
     <title>Calendario</title>
-
-	<!-- Google Fonts 	-->
-    <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&subset=latin,cyrillic-ext" rel="stylesheet" type="text/css">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" type="text/css">	
-
-
-
-    <!-- Bootstrap Core CSS index
-    <link href="../plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet"> -->
-    <!-- Waves Effect Css -->
-    <link href="../plugins/node-waves/waves.css" rel="stylesheet" />
-    <!-- Animation Css -->
-    <link href="../plugins/animate-css/animate.css" rel="stylesheet" />
-    <!-- Preloader Css -->
-    <link href="../plugins/material-design-preloader/md-preloader.css" rel="stylesheet" />	
-	<link href="../css/sweet/sweetalert.css" rel="stylesheet" />
-    <!-- Custom Css -->
-    <link href="../css/style.css" rel="stylesheet">
-    <!-- AdminBSB Themes. You can choose a theme from css/themes instead of get all themes -->
-    <link href="../css/themes/all-themes.css" rel="stylesheet" />	
-
-
-
     <link rel="stylesheet" type="text/css" href="<?=$base_url?>css/bootstrap.min.css">
     <link rel="stylesheet" href="<?=$base_url?>css/calendar.css">
     <link href="<?=$base_url?>css/font-awesome.min.css" rel="stylesheet">
@@ -192,8 +169,6 @@ switch($monthNum)
 </head>
 
 <body style="background: white;">
-
-    <!-- inicio calendario -->
     <div class="container">
         <div class="row">
             <div class="page-header"><h4><?php echo $monthNameSpanish .' '. $yy ;?></h4></div>
@@ -415,22 +390,5 @@ switch($monthNum)
             </div>
         </div>
     </div>
-    <!-- Fin CAlendario --> 
-
-
-    <!-- jQuery Version 1.11.1
-    <script src="../plugins/jquery/jquery.js"></script>  -->
-    <!-- Bootstrap Core JavaScript 
-    <script src="../plugins/bootstrap/js/bootstrap.min.js"></script> -->
-	<!-- Slimscroll Plugin Js -->
-    <script src="../plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
-    <!-- Waves Effect Plugin Js -->
-    <script src="../plugins/node-waves/waves.js"></script>	<!-- Custom Js -->
-    <script src="../js/admin.js"></script>
-    <!-- Demo Js -->
-    <script src="../js/demo.js"></script>
-
-
-
 </body>
 </html>
