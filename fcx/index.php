@@ -42,23 +42,25 @@ if (isset($_POST['from']))
     {
 
         // Recibimos el fecha de inicio y la fecha final desde el form
-        $Datein                    = date('d/m/Y H:i:s', strtotime($_POST['from']));
-        $Datefi                    = date('d/m/Y H:i:s', strtotime($_POST['to']));
+        $Datein = date('d/m/Y H:i:s', strtotime($_POST['from']));
+        $Datefi = date('d/m/Y H:i:s', strtotime($_POST['to']));
         $inicio = _formatear($Datein);
         // y la formateamos con la funcion _formatear
-
         $final  = _formatear($Datefi);
-
         // Recibimos el fecha de inicio y la fecha final desde el form
-        $orderDate                      = date('d/m/Y H:i:s', strtotime($_POST['from']));
+
+
+        ////$orderDate = date('d/m/Y H:i:s', strtotime($_POST['from']));
+        $orderDate = date('Y/m/d H:i:s', strtotime($_POST['from']));
         $inicio_normal = $orderDate;
 
         // y la formateamos con la funcion _formatear
-        $orderDate2                      = date('d/m/Y H:i:s', strtotime($_POST['to']));
+        ////$orderDate2 = date('d/m/Y H:i:s', strtotime($_POST['to']));
+        $orderDate2 = date('Y/m/d H:i:s', strtotime($_POST['to']));
         $final_normal  = $orderDate2;
 
         // Recibimos los demas datos desde el form
-        $titulo = evaluar($_POST['title']);
+        $titulo = evaluar(strtoupper($_POST['title']));
 
         // y con la funcion evaluar
         $body   = evaluar($_POST['event']);
@@ -170,6 +172,9 @@ switch($monthNum)
 
     <!-- Bootstrap Core CSS index
     <link href="../plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet"> -->
+
+    <!-- Bootstrap Select Css -->
+    <link href="../plugins/bootstrap-select/css/bootstrap-select.css" rel="stylesheet" />
     <!-- Waves Effect Css -->
     <link href="../plugins/node-waves/waves.css" rel="stylesheet" />
     <!-- Animation Css -->
@@ -298,7 +303,7 @@ switch($monthNum)
     <!-- inicio calendario -->
     <div class="container">
         <div class="row">
-            <div class="page-header"><h4><?php echo $monthNameSpanish .' '. $yy ;?></h4></div>
+            <div class="page-header"><h3><?php echo $monthNameSpanish .' '. $yy ;?></h3></div>
             <div class="pull-left form-inline"><br>
                 <div class="btn-group">
                     <button class="btn btn-primary" data-calendar-nav="prev"><i class="fa fa-arrow-left"></i>  </button>
@@ -451,29 +456,72 @@ switch($monthNum)
         <div class="modal fade" id="add_evento" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
             <div class="modal-dialog">
                 <div class="modal-content">
-                    <div class="modal-header">
-                        <h4 class="modal-title" id="myModalLabel">Agregar nuevo evento</h4>
+                    <div class="modal-header">                        
+                        <h4 class="modal-title" id="myModalLabel">
+                            <span class="glyphicon glyphicon-list-alt"></span> Agregar Evento
+                        </h4>
+                        <hr style="margin-top:-0.5px; border: 0.5px solid red;">
                     </div>
                 <!-- </div> -->
                 
                 <div class="modal-body">
                     <form action="" method="post">
-                        <label for="from">Inicio</label>
-                        <div class='input-group date' id='from'>
-                            <input type='text' id="from" name="from" class="form-control" readonly />
-                            <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span>
+
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <label for="from">Fecha Inicio</label>
+                                    <div class='input-group date' id='from'>
+                                        <input type='text' id="from" name="from" class="form-control" readonly />
+                                        <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span>
+                                    </div>
+                                </div>
+                                    <!-- <br> -->
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <label for="to">Fecha Final</label>
+                                    <div class='input-group date' id='to'>
+                                        <input type='text' name="to" id="to" class="form-control" readonly />
+                                        <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span>
+                                    </div>
+                                </div>    
+
+                            </div>
                         </div>
 
-                        <br>
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-lg-5 col-md-5 col-sm-5 col-xs-12">                                            
+                                    <label for="tipo">Tipo Usuario</label>                                                
+                                    <select class="selectpicker show-tick" data-live-search="true" data-width="95%" name="tipousuario" id="tipousuario" required>    
+                                        <option value="">Seleccione ...</option>
+                                        <?php 
+                                        $idTabla = 1;                                                
+                                        require_once('../apis/general/tipousuarioEvento.php');												
+                                        for($i=0; $i<count($mtipousuario['usu_tipousuario']); $i++)
+                                        {
+                                            $TUS_IdTipoUsuario = $mtipousuario['usu_tipousuario'][$i]['TUS_ID_TipoUsuario'];                                                    
+                                            $TUS_Nombre = $mtipousuario['usu_tipousuario'][$i]['TUS_Nombre'];
+                                            $TUS_Estado = $mtipousuario['usu_tipousuario'][$i]['TUS_Estado'];
+                                        ?>
+                                            <option value="<?php echo $TUS_IdTipoUsuario; ?>"><?php echo $TUS_Nombre; ?></option>                                                    
+                                        <?php
+                                        }
+                                        ?>
+                                    </select>
+                                </div>
+                            
+                                <div class="col-lg-7 col-md-7 col-sm-7 col-xs-12">                                            
+                                    <label for="tipo">Asignar a</label>                                                
+                                    <select class="selectpicker show-tick" data-live-search="true" data-width="95%" name="responsable" id="responsable" required>    
+                                        <option value="">Seleccione a quien se Asigna la Agenda</option>                                               
+                                    </select>
+                                </div>
+                            </div>	
+                        </div>	
 
-                        <label for="to">Final</label>
-                        <div class='input-group date' id='to'>
-                            <input type='text' name="to" id="to" class="form-control" readonly />
-                            <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span>
-                        </div>
 
-                        <br>
 
+                        <!-- <br> -->
                         <label for="tipo">Tipo de evento</label>
                         <select class="form-control" name="class" id="tipo">
                             <option value="event-info">Informacion</option>
@@ -485,13 +533,29 @@ switch($monthNum)
 
                         <br>
 
-                        <label for="title">Título</label>
-                        <input type="text" required autocomplete="off" name="title" class="form-control" id="title" placeholder="Introduce un título">
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <label for="title">Título o Asunto</label>
+                                    <div class="form-line">
+                                        <input type="text" required autocomplete="off" name="title" class="form-control" id="title" placeholder="Introduce un título">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
-                        <br>
+                        <!-- <br> -->
 
-                        <label for="body">Evento</label>
-                        <textarea id="body" name="event" required class="form-control" rows="3"></textarea>
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <label for="body">Descripci&oacute;n del Evento</label>
+                                    <div class="form-line">
+                                        <textarea id="body" name="event" required class="form-control" rows="3" placeholder="Digite descripción del evento"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
                         <script type="text/javascript">
                             $(function () {
@@ -524,7 +588,9 @@ switch($monthNum)
     <script src="../plugins/jquery/jquery.js"></script>  -->
     <!-- Bootstrap Core JavaScript 
     <script src="../plugins/bootstrap/js/bootstrap.min.js"></script> -->
-	<!-- Slimscroll Plugin Js -->
+    <!-- Select Plugin Js -->
+    <script src="../plugins/bootstrap-select/js/bootstrap-select.js"></script>
+    <!-- Slimscroll Plugin Js -->    
     <script src="../plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
     <!-- Waves Effect Plugin Js -->
     <script src="../plugins/node-waves/waves.js"></script>	<!-- Custom Js -->

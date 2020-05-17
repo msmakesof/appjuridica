@@ -56,7 +56,7 @@ else
 //echo("<script>console.log('PHP idTabla: ".$idTabla."');</script>");
 if($idTabla == 1)
 {
-  $params = "IdJuridicos=1";
+  $params = "IdJuridicos=2,3";
 }
 else
 {
@@ -68,7 +68,7 @@ $url         = urlServicios."consultadetalle/consultadetalle_usu_tipousuario.php
 $existe      = "";
 $usulocal    = "";
 $siguex      = "";
-echo("<script>console.log('PHP: ".$url."');</script>");
+echo("<script>console.log('PHP tipousu: ".$url."');</script>");
 if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
 {
     $ch = curl_init();

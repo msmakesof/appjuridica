@@ -32,11 +32,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             );
         }
     }
-	/*
+	
 	elseif (isset($_GET['IdJuridicos'])) {
 
         // Obtener parámetro IdTabla
-        $parametro = $_GET['IdJuridicos'];
+        $parametro = trim($_GET['IdJuridicos']);
 
         // Tratar retorno
         $retorno = USU_TIPOUSUARIO::getByJuridicos($parametro);
@@ -57,7 +57,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             );
         }
     }
-	*/
+	
     elseif (isset($_GET['IdEstado'])) {
         // Obtener parámetro idEstado de USU_TIPOUSUARIO
         $parametro = $_GET['IdEstado'];

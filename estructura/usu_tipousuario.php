@@ -69,19 +69,19 @@ class USU_TIPOUSUARIO
         }
     }
 
-/**
+	/*
      * Obtiene los campos de una tabla con un identificador
      * determinado para mostrar menos el Tipo Administrador
      *
      * @param $IdTabla Identificador de la $IdTabla
      * @return mixed
-     
+     */
     public static function getByJuridicos($IdJuridicos)
     {
         // Consulta de la tabla de tablas
         $consulta = "SELECT ".$GLOBALS['Llave'].",TUS_Nombre, TUS_Estado ".
 					" FROM ".$GLOBALS['TABLA'].
-					" WHERE TUS_ID_TipoUsuario <> ? ORDER BY TUS_Nombre; ";
+					" WHERE TUS_ID_TipoUsuario IN (2,3) ORDER BY TUS_Nombre; ";			
         try {
             // Preparar sentencia
             $comando = Database::getInstance()->getDb()->prepare($consulta);
@@ -96,7 +96,7 @@ class USU_TIPOUSUARIO
             return -1;
         }
     }
-	*/
+	
 
     /**
      * Obtiene los campos de USU_TIPOUSUARIO diferente al administrador
