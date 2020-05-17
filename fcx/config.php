@@ -26,7 +26,6 @@ $usuario='root';
 $pass='';
 $bd='eventos';
 */
-
 include('../Connections/DataConex.php');
 
 // Nos conectamos a la base de datos
@@ -43,7 +42,8 @@ if ($conexion->connect_errno) {
 }
 
 // Url donde estara el proyecto, debe terminar con un "/" al final
-////$base_url="http://localhost/calendario/";
-$base_url="http://192.168.0.3/appjuridica/fcx/"; // OK
+//$base_url="http://localhost/calendario/";
+/////$base_url="http://192.168.0.10/appjuridica/fcx/"; // OK
+$base_url="./"; // OK
 
 ?>

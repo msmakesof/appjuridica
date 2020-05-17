@@ -198,6 +198,7 @@ switch($monthNum)
     <script src="<?=$base_url?>js/bootstrap.min.js"></script>
     <script src="<?=$base_url?>js/bootstrap-datetimepicker.js"></script>
     <link rel="stylesheet" href="<?=$base_url?>css/bootstrap-datetimepicker.min.css" />
+
     
     <!-- Custom CSS -->
     <style>
@@ -346,7 +347,8 @@ switch($monthNum)
         <script src="<?=$base_url?>js/underscore-min.js"></script>
         <script src="<?=$base_url?>js/calendar.js"></script>
         <script type="text/javascript">
-        (function($){
+        //(function($){
+        $(document).ready(function(){ 
                 //creamos la fecha actual
                 var date = new Date();
                 var yyyy = date.getFullYear().toString();
@@ -450,7 +452,83 @@ switch($monthNum)
                     calendar.setOptions({first_day: value});
                     calendar.view();
                 });
-            }(jQuery));
+
+                //$("#tipousuario").on('change', function(){
+                $('#tipousuario').change(function()
+                {                   
+                    $.getJSON('../pages/tables/urlink.php', {funcion: "ru", origen: $('#tipousuario').val()}, function (data) {
+                        var zdata= data.usu_usuariotipousu;
+                        var selectedOption = '0';
+                        var newOptions = zdata;
+                        var select = $('#responsable');
+                        if(select.prop) 
+                        {
+                            var options = select.prop('options');
+                        }
+                        else 
+                        {
+                            var options = select.attr('options');
+                        }
+                        $('option', select).remove();
+                        
+                        if(newOptions != 'undefined')
+                        {
+                            options[options.length] = new Option("", "Seleccione ");
+                            $.each(newOptions, function(val, text) {
+                                options[options.length] = new Option(text.NombreCompleto, text.USU_IdUsuario);
+                            });
+                        }
+                        
+                        select.val(selectedOption);
+                        $('#responsable').selectpicker('refresh');
+                        _responsable = $('#responsable').val();
+                    });
+                });
+
+                $("#responsable").on('change', function()
+                {                   
+                    var idresponsable = $("#responsable").val();
+                    //alert(idresponsable);											
+                    $.ajax({
+                        data: {"id": idresponsable },
+                        url: 'fc/procesosxapoderado.php',
+                        type: 'GET',                            
+                        dataType: 'json',												
+                        success: function( data, textStatus, jQxhr ){													
+                            var zdata = unescape(data);
+                            zdata = data.pro_proceso;
+                            var selectedOption = '0';
+                            var newOptions = zdata;
+                            var select = $('#proceso');
+                            if(select.prop) 
+                            {
+                                var options = select.prop('options');
+                            }
+                            else 
+                            {
+                                var options = select.attr('options');
+                            }
+                            $('option', select).remove();
+                            
+                            if(newOptions != 'undefined')
+                            {
+                                $.each(newOptions, function(val, text) {
+                                    options[options.length] = new Option(text.NP, text.PRO_IdProceso);
+                                });
+                            }
+                            
+                            select.val(selectedOption);
+                            $('#proceso').selectpicker('refresh');
+                            _proceso = $('#proceso').val();
+
+                        },
+                        error: function( jqXhr, textStatus, errorThrown ){
+                            console.log( errorThrown );
+                        }														
+                    });											
+                });	
+            });
+            //}(jQuery));
         </script>
 
         <div class="modal fade" id="add_evento" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
@@ -492,7 +570,7 @@ switch($monthNum)
                             <div class="row">
                                 <div class="col-lg-5 col-md-5 col-sm-5 col-xs-12">                                            
                                     <label for="tipo">Tipo Usuario</label>                                                
-                                    <select class="selectpicker show-tick" data-live-search="true" data-width="95%" name="tipousuario" id="tipousuario" required>    
+                                    <select class="selectpicker show-tick" data-live-search="true" data-width="95%" name="tipousuario" id="tipousuario" required style=" -webkit-padding-start: 20px !important;">    
                                         <option value="">Seleccione ...</option>
                                         <?php 
                                         $idTabla = 1;                                                
@@ -515,6 +593,28 @@ switch($monthNum)
                                     <select class="selectpicker show-tick" data-live-search="true" data-width="95%" name="responsable" id="responsable" required>    
                                         <option value="">Seleccione a quien se Asigna la Agenda</option>                                               
                                     </select>
+                                </div>
+                            </div>	
+                        </div>
+
+                        <div class="form-group">
+                            <div class="row">                
+                                <div class="col-md-6">                                            
+                                    <label for="tipo">N&uacute;mero de Proceso</label>                                                
+                                    <select class="selectpicker show-tick" data-live-search="true" data-width="95%" name="proceso" id="proceso" required>    
+                                        <option value="">Seleccione Proceso</option>                                                    
+                                    </select>                                            
+                                </div>
+                        
+                                <div class="col-md-6">                                           
+                                    <label for="tipo">Tipo de Actividad</label>                                                
+                                    <select class="selectpicker show-tick" data-live-search="true" data-width="95%" name="tipo" id="tipo" required>    
+                                        <option value="event-info">Informaci&oacute;n Proceso</option>
+                                        <option value="event-success">Cita en Juzgado</option>
+                                        <option value="event-important">Cita con Cliente</option>
+                                        <option value="event-warning">Visita a Juzgado</option>
+                                        <option value="event-special">Documentos Adjuntos</option>
+                                    </select>                                            
                                 </div>
                             </div>	
                         </div>	
