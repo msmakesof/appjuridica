@@ -34,7 +34,7 @@ if (!function_exists("GetSQLValueString"))
 }
 
 
-$origen = "";
+//$origen = "";
 $accion = "";
 if(isset($_POST["origen"]))
 {
@@ -338,7 +338,80 @@ if( isset($_POST['Emailcliente']) )
 	$EmailCliente = trim($_POST['Emailcliente']);	
 }
 
+//Create a new PHPMailer instance
+	require '../../PHPMailer/src/Exception.php';
+	require '../../PHPMailer/src/PHPMailer.php';
+	require '../../PHPMailer/src/SMTP.php';
 
+
+//Especificamos los datos y configuración del servidor
+	$mail = new  PHPMailer() ;
+	try 
+	{
+		//$mail->SMTPDebug = SMTP::DEBUG_SERVER;                    // Enable verbose debug outpu
+		//$mail->SMTPDebug = 2;
+		$mail->isSMTP();                                            // Send using SMTP
+		$mail->Host       = "$Servidor";              			 	// Set the SMTP server to send through
+		$mail->SMTPAuth   = true;                                   // Enable SMTP authentication
+		$mail->Username   = "$Usuario";     						// SMTP username
+		$mail->Password   = "$Clave";                          		// SMTP password
+		//$mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;       // Enable TLS encryption; Puerto 587 OK
+		$mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;            // Enable TLS encryption; Puerto 465 OK
+		$mail->Port       = $Puerto;
+
+		//el valor por defecto 10 de Timeout es un poco escaso dado que voy a usar 
+		//una cuenta gratuita, por tanto lo pongo a 30  
+		$mail->Timeout = $TiempoEspera;
+		 
+		//Agregamos la información que el correo requiere  
+		$mail->setFrom($Usuario, $TextoCuentaOrigen);
+		
+		////$mail->FromName = "$TextoCuentaOrigen";
+		// destinatario o el asignadoa con la si
+		$mail->AddAddress($user_email);
+		$mail->AddAddress("msmakesof@gmail.com", "Usuario msmakesof");
+
+		$mail->Subject = $subject;
+		$mail->AltBody = "";
+		$mail->MsgHTML($mensaje);	
+
+		$mail->AddAttachment("");
+
+		$mail->isHTML(true);
+
+		//se envia el mensaje, si no ha habido problemas 
+		//la variable $exito tendra el valor true
+		
+		$exito = $mail->Send();
+
+		$intentos = 1; 
+		while ((!$exito) && ($intentos < 5)) {
+			sleep(5);	
+			$exito = $mail->Send();
+			$intentos = $intentos+1;	
+		}	
+		
+		//Enviamos el correo electrónico : $mail->Send();
+		if(!$exito)	
+		{
+			echo "N"; //"N - EMail Error: {$mail->ErrorInfo}" ;	
+		}
+		else
+		{
+			echo "S";			
+		} 
+		/**/		
+		//include '../../login/cambia_pass.php';
+	}
+	catch (Exception $e) 
+	{
+		echo "N";  //"N - Email Error: {$mail->ErrorInfo}";
+	}
+
+
+
+/*  Inicio antinguo envio de email */
+/*
 require("../mailer_v204/class.phpmailer.php");
 require("../mailer_v204/class.smtp.php");
 
@@ -399,4 +472,6 @@ else
 	echo "S";
 }
 //fin send email
+ /// Fin antiguo envio de email
+*/
 ?>

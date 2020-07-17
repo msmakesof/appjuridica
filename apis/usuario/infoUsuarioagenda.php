@@ -59,7 +59,9 @@ if($idTabla == 0)
 }
 else
 {
-  $params ="IdUsuario=$idTabla";
+  //$params ="IdUsuario=$idTabla";
+  $params ="xParIdUsuarioA=$idTabla";
+  
 }
 $soportecURL = "S";
 $url         = urlServicios."consultadetalle/consultadetalle_Usuario.php?".$params;

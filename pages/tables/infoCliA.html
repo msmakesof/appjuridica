@@ -1,0 +1,30 @@
+<div id="cliact">	
+	<div id="divca" class="number count-to" data-from="0" data-to="0" data-speed="1000" data-fresh-interval="20"></div>
+</div> 
+<script>
+function sendRequestCA()
+{
+	var miCA = 0;
+	$.ajax({			
+		url: '../../apis/info/infoMisClientes.php',
+		type: 'POST',                            
+		dataType: 'html',												
+		success: function( data, textStatus, jQxhr ){
+			miCA = data.split("\n").join("");
+			$("#cliact").html('<div id="divca" class="number count-to" data-from="0" data-to="' + miCA + '" data-speed="1000" data-fresh-interval="20">' + miCA + '</div>');
+		},
+		complete: function() { 
+			setTimeout(function(){
+				sendRequestCA();
+			}, 12000);
+		},
+		error: function( jqXhr, textStatus, errorThrown ){
+			console.log( errorThrown );
+		}	
+	});
+}
+
+$(function() {
+	sendRequestCA();
+});
+</script>

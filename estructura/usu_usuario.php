@@ -217,6 +217,46 @@ class USU_USUARIO
             return -1;
         }
     }
+	
+	/**
+     * Obtiene los campos de una meta con un identificador
+     * determinado
+     *
+     * @param $IdUsuario Identificador de la $IdUsuario
+     * @return mixed
+     */
+    public static function getByIdAgenda($xParIdUsuario)
+    {
+        // Consulta de la tabla de usuario
+        $consulta = "SELECT ".$GLOBALS['Llave'].",
+				USU_IdEmpresa,
+				USU_TipoDocumento,
+				USU_Identificacion,
+				USU_PrimerApellido,
+				USU_SegundoApellido,
+				USU_Nombre,
+				USU_Email,
+				concat_WS(' ',USU_Nombre, USU_PrimerApellido, USU_SegundoApellido) AS Nombre, 	
+				concat_WS(' ',emp_empresa.EMP_Nombre, emp_empresa.EMP_Nombre2, emp_empresa.EMP_Apellido, emp_empresa.EMP_Apellido2) AS NombreEmpresa ".
+				" FROM ".$GLOBALS['TABLA'].
+				" LEFT JOIN emp_empresa ON emp_empresa.EMP_IdEmpresa = USU_IdEmpresa ".
+				" WHERE ".$GLOBALS['Llave']." = ? ORDER BY USU_Nombre; ";
+
+        try {
+            // Preparar sentencia
+            $comando = Database::getInstance()->getDb()->prepare($consulta);
+            // Ejecutar sentencia preparada
+            $comando->execute(array($xParIdUsuario));
+            // Capturar primera fila del resultado
+            $row = $comando->fetch(PDO::FETCH_ASSOC);
+            return $row;
+
+        } catch (PDOException $e) {
+            // Aquí puedes clasificar el error dependiendo de la excepción
+            // para presentarlo en la respuesta Json
+            return -1;
+        }
+    }
 
 
     /**

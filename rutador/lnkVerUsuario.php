@@ -92,7 +92,8 @@ if($existe == 1 && $IdUsuario != "")
 		$nombreempresa = trim($m['usu_usuario']['NombreEmpresa']);
 		$desarrollador = $m['usu_usuario']['USU_Desarrollador'];
 		
-		
+		set_time_limit(120);
+		$_SESSION['tiempo'] = 120; 
 		$_SESSION['Usuario'] = "";
 		$_SESSION['NombreUsuario'] = "" ;
 		$_SESSION['EmailUsuario'] = "" ;

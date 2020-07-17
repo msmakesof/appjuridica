@@ -569,9 +569,9 @@ else
 												<a  id="nuevo" class="btn btn-warning btn-xs waves-effect waves-effect m-r-20" data-toggle="modal" data-target="#defaultModal">Nuevo</a>                                        
 												<button type="button" class="btn btn-default waves-effect m-r-20" data-toggle="modal" data-target="#defaultModal">Nuevo</button>
 											-->
-                                        </li>
-                                        <!-- 
-                                        <li><a href="javascript:void(0);">Another action</a></li>
+                                        </li>                                         
+                                        <li><a id="consulta" href="javascript:void(0);">Consultar</a></li>
+										<!--
                                         <li><a href="javascript:void(0);">Something else here</a>
                                         </li>
                                         -->
@@ -706,12 +706,14 @@ else
 										
 										<tr>
 											<td>
+												<!--
 												<a href="javascript:void(0);" 
 													onclick="cambiar('../forms/editar<?php echo $nombre_lnk ;?>.php?f=<?php echo $idTabla; ?>')" 
 													class="nav nav-tabs nav-stacked" data-toggle="modal" data-target="#defaultModalEditar" 
 													style="text-decoration:none;">
 													<?php echo $NombreTabla; ?>
 												</a>
+												--><?php echo $NombreTabla; ?>
 											</td>											
 											<td>
 												<?php echo $NombreCorporacion; ?>       	
@@ -817,6 +819,9 @@ else
 
 	$("#nuevo").on("click", function(){
         window.location = 'cli_areaxclienteforma.php';
+    });
+	$("#consulta").on("click", function(){
+        window.location = 'cli_areaxclienteformaupd.php';
     });
  }); 
 

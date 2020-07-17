@@ -1,0 +1,30 @@
+<div id="proc">	
+	<div id="divpr" class="number count-to" data-from="0" data-to="0" data-speed="1000" data-fresh-interval="20"></div>
+</div> 
+<script>
+function sendRequestP()
+{
+	var miP = 0;
+	$.ajax({			
+		url: '../../apis/info/infoo.php',
+		type: 'POST',                            
+		dataType: 'html',												
+		success: function( data, textStatus, jQxhr ){
+			miP = data.split("\n").join("");
+			$("#proc").html('<div id="divpr" class="number count-to" data-from="0" data-to="' + miP + '" data-speed="1000" data-fresh-interval="20">' + miP + '</div>');
+		},
+		complete: function() { 
+			setTimeout(function(){
+				sendRequestP();
+			}, 12000);
+		},
+		error: function( jqXhr, textStatus, errorThrown ){
+			console.log( errorThrown );
+		}	
+	});
+}
+
+$(function() {
+	sendRequestP();
+});
+</script>

@@ -63,6 +63,7 @@ if($usuario == "")
 }
 
 $NombreArchivo = basename($_SERVER['PHP_SELF'],".php");
+$ruta = '../pages/tables/';
 $cad = substr($NombreArchivo,0,3);
 $cad2 = substr($NombreArchivo,4);
 $archivo = "";
@@ -84,8 +85,8 @@ for($i=0; $i<count($mmenu['menu']); $i++)
 		<!-- SA  --> 
 		<?php		
 		if($_SESSION["TipoUsuario"] == 4) {
-		?>
-			<li <?php if($NombreArchivo == "index") { echo "class='active'"; }?>>            
+		?>		
+			<li <?php if($ruta.$NombreArchivo == $ruta."index") { echo "class='active'"; }?>>
 				<a href="./">
 					<i class="material-icons">home</i>
 					<span>Inicio</span>
@@ -209,26 +210,12 @@ for($i=0; $i<count($mmenu['menu']); $i++)
 						</a>					
 					</li>
 				</ul>
-			</li>        
-
-			<li>
+			</li>
+			
+			<li <?php if($_SERVER['PHP_SELF'] == "/appjuridica/fcx/index.php") { echo "class='active'"; }?>>
 				<a href="javascript:void(0);" class="menu-toggle">
 					<i class="material-icons">today</i>
 					<span>AGENDA</span>
-				</a>
-				<ul class="ml-menu">
-					<li>
-						<a href="../../agenda/inde.php" class="menu-toggle">
-							<span>Agenda</span>
-						</a>  
-					</li>
-				</ul>
-			</li>
-			
-			<li>
-				<a href="javascript:void(0);" class="menu-toggle">
-					<i class="material-icons">today</i>
-					<span>New AGENDA</span>
 				</a>
 				<ul class="ml-menu">
 					<li>
@@ -392,7 +379,7 @@ for($i=0; $i<count($mmenu['menu']); $i++)
 				</li>
 			</ul>
 		</li>
-
+		<!--
         <li>
             <a href="javascript:void(0);" class="menu-toggle">
                 <i class="material-icons">today</i>
@@ -406,15 +393,15 @@ for($i=0; $i<count($mmenu['menu']); $i++)
                 </li>
             </ul>
         </li>
-		
+		-->
 		<li>
 				<a href="javascript:void(0);" class="menu-toggle">
 					<i class="material-icons">today</i>
-					<span>New AGENDA</span>
+					<span>AGENDA</span>
 				</a>
 				<ul class="ml-menu">
 					<li>
-						<a href="../../fcal/" class="menu-toggle">
+						<a href="../../fcx/default.php" class="menu-toggle">
 							<span>Agenda</span>
 						</a>  
 					</li>

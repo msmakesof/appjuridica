@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**
  * Representa el la estructura de las $IdUsuario
  * almacenadas en la base de datos
@@ -18,16 +18,36 @@ class PRO_PROCESO
      * @param $IdUsuario identificador de la tabla: pro_proceso
      * @return bool Respuesta de la consulta
      */
-    public static function infoUsuario($IdUsuario)
+    public static function infoUsuario($IdUsuario, $TipoUsuario, $Empresa)
     {
-        $consulta = "SELECT COUNT(P.PRO_IdProceso) MisProcesos FROM pro_proceso P JOIN usu_usuario U ON U.USU_IdUsuario = P.PRO_IdUsuario AND U.USU_TipoUsuario = 1
-		WHERE P.PRO_IdUsuario = ? AND P.PRO_EstadoProceso = 1 ; ";
+        $idempresa = $Empresa;
+		
+		$condiFrom = ""; // Super Admin
+		$condiWhere = "";
+		if ($TipoUsuario == 1)  // Empresa
+		{
+			$condiFrom=" JOIN emp_empresa E ON E.EMP_IdEmpresa = $idempresa AND E.EMP_IdEstado = 1 JOIN usu_usuario U ON U.USU_IdEmpresa = E.EMP_IdEmpresa AND U.USU_IdUsuario = P.PRO_IdUsuario ";			
+		}
+		
+		if ($TipoUsuario == 2)  // Abogado
+		{		
+			$condiFrom = " JOIN usu_usuario U ON U.USU_IdUsuario = P.PRO_IdUsuario AND U.USU_TipoUsuario = 1 ";
+			$condiWhere = " AND P.PRO_IdUsuario = $IdUsuario ";
+		}
+		
+		if ($TipoUsuario == 3)  // Dependiente Judicial
+		{
+			
+		}
+		
+		$consulta = "SELECT COUNT(P.PRO_IdProceso) MisProcesos FROM pro_proceso P $condiFrom 
+		WHERE P.PRO_EstadoProceso = 1 $condiWhere ; ";		
 
         try {
             // Preparar sentencia
             $comando = Database::getInstance()->getDb()->prepare($consulta);
             // Ejecutar sentencia preparada
-            $comando->execute(array($IdUsuario));
+            $comando->execute(array($IdUsuario, $TipoUsuario, $Empresa));
             // Capturar primera fila del resultado
             $row = $comando->fetch(PDO::FETCH_ASSOC);
             return $row;
@@ -46,16 +66,35 @@ class PRO_PROCESO
      * @param $IdUsuario identificador de la tabla: pro_proceso
      * @return bool Respuesta de la consulta
      */
-    public static function clientesxUsuario($IdUsuario)
+    public static function clientesxUsuario($IdUsuario, $TipoUsuario, $Empresa)
     {
-        $consulta = "SELECT COUNT(P.PRO_IdProceso) MisClientes FROM pro_proceso P JOIN usu_usuario U ON U.USU_IdUsuario = P.PRO_IdUsuario AND U.USU_TipoUsuario = 1
-		WHERE P.PRO_IdUsuario = ? AND P.PRO_EstadoProceso = 1 ; ";
+        $idempresa = $Empresa;
+		
+		$condiFrom = ""; // Super Admin
+		$condiWhere = "";
+		if ($TipoUsuario == 1)  // Empresa
+		{
+			$condiFrom = " JOIN emp_empresa F ON F.EMP_IdEmpresa = $idempresa AND F.EMP_IdEmpresa = C.CLI_Empresa ";			
+		}
+		
+		if ($TipoUsuario == 2)  // Abogado
+		{		
+			$condiFrom = " JOIN emp_empresa E ON E.EMP_IdEmpresa = C.CLI_Empresa AND E.EMP_IdEstado = 1 JOIN usu_usuario U ON U.USU_IdEmpresa = E.EMP_IdEmpresa AND U.USU_Estado = 1 AND U.USU_IdUsuario = $IdUsuario ";
+			$condiWhere = " AND C.cli_empresa = $idempresa ";
+		}
+		
+		if ($TipoUsuario == 3)  // Dependiente Judicial
+		{
+			
+		}
+		
+		$consulta = "SELECT COUNT(C.CLI_IdCliente) MisClientes FROM cli_cliente C $condiFrom WHERE C.CLI_Estado = 1 $condiWhere ; ";		
 
         try {
             // Preparar sentencia
             $comando = Database::getInstance()->getDb()->prepare($consulta);
             // Ejecutar sentencia preparada
-            $comando->execute(array($IdUsuario));
+            $comando->execute(array($IdUsuario, $TipoUsuario, $Empresa));
             // Capturar primera fila del resultado
             $row = $comando->fetch(PDO::FETCH_ASSOC);
             return $row;
@@ -73,16 +112,35 @@ class PRO_PROCESO
      * @param $IdUsuario identificador de la tabla: pro_proceso
      * @return bool Respuesta de la consulta
      */
-    public static function miAgenda($IdUsuario)
+    public static function miAgenda($IdUsuario, $TipoUsuario, $Empresa)
     {
-        $consulta = "SELECT COUNT(E.IdUsuario) MiAgenda FROM eve_evento E JOIN pro_proceso P ON P.PRO_IdProceso = E.IdProceso AND P.PRO_EstadoProceso = 1
-		WHERE E.IdUsuario = ? ; ";
+        $idempresa = $Empresa;
+		
+		$condiFrom = ""; // Super Admin
+		$condiWhere = "";
+		if ($TipoUsuario == 1)  // Empresa
+		{
+			$condiFrom = " JOIN emp_empresa F ON F.EMP_IdEmpresa = $idempresa JOIN usu_usuario U ON U.USU_IdEmpresa = F.EMP_IdEmpresa AND U.USU_Estado = 1  AND U.USU_IdUsuario = E.IdAsignado ";
+		}
+		
+		if ($TipoUsuario == 2)  // Abogado
+		{		
+			$condiWhere = " AND E.IdUsuario = $IdUsuario ";
+		}
+		
+		if ($TipoUsuario == 3)  // Dependiente Judicial
+		{
+			
+		}
+		
+		$consulta = "SELECT COUNT(E.IdAsignado) MiAgenda FROM agenda E JOIN pro_proceso P ON P.PRO_IdProceso = E.IdProceso AND P.PRO_EstadoProceso = 1
+		$condiFrom WHERE DATE_FORMAT(E.inicio_normal, '%Y-%m-%d') = CURDATE() $condiWhere ; ";
 
         try {
             // Preparar sentencia
             $comando = Database::getInstance()->getDb()->prepare($consulta);
             // Ejecutar sentencia preparada
-            $comando->execute(array($IdUsuario));
+            $comando->execute(array($IdUsuario, $TipoUsuario, $Empresa));
             // Capturar primera fila del resultado
             $row = $comando->fetch(PDO::FETCH_ASSOC);
             return $row;
@@ -100,16 +158,34 @@ class PRO_PROCESO
      * @param $IdUsuario identificador de la tabla: pro_proceso
      * @return bool Respuesta de la consulta
      */
-    public static function infoProcesoJudicial($IdUsuario)
+    public static function infoProcesoJudicial($IdUsuario, $TipoUsuario, $Empresa)
     {
-        $consulta = "SELECT COUNT(P.PRO_IdUsuario) MiProcesoJudicial FROM pro_proceso P JOIN pro_actuacionprocesal A ON P.PRO_IdProceso = A.APR_IdProceso AND A.APR_EstadoActProcesal = 1
-			WHERE P.PRO_IdUsuario = ? AND P.PRO_EstadoProceso = 1; ";
+        $idempresa = $Empresa;		
+		$condiFrom = ""; // Super Admin
+		$condiWhere = "";
+		if ($TipoUsuario == 1)  // Empresa
+		{
+			$condiFrom = " JOIN usu_usuario U ON U.USU_IdUsuario = $IdUsuario AND U.USU_IdEmpresa = $idempresa AND USU_Estado = 1 JOIN  emp_empresa F ON F.EMP_IdEmpresa = $idempresa ";
+		}
+		
+		if ($TipoUsuario == 2)  // Abogado
+		{		
+			$condiWhere = " AND P.PRO_IdUsuario = $IdUsuario ";
+		}
+		
+		if ($TipoUsuario == 3)  // Dependiente Judicial
+		{
+			
+		}
+		
+		$consulta = "SELECT COUNT(P.PRO_IdUsuario) MiProcesoJudicial FROM pro_proceso P JOIN pro_actuacionprocesal A ON A.APR_IdProceso = P.PRO_IdProceso AND A.APR_EstadoActProcesal = 1 $condiFrom 
+		WHERE P.PRO_EstadoProceso = 1 $condiWhere ; ";		
 
         try {
             // Preparar sentencia
             $comando = Database::getInstance()->getDb()->prepare($consulta);
             // Ejecutar sentencia preparada
-            $comando->execute(array($IdUsuario));
+            $comando->execute(array($IdUsuario, $TipoUsuario, $Empresa));
             // Capturar primera fila del resultado
             $row = $comando->fetch(PDO::FETCH_ASSOC);
             return $row;

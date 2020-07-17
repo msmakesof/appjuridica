@@ -794,7 +794,8 @@ $IdUsuarioCierre = trim($mproceso['pro_proceso']['PRO_IdUsuarioCierre']);
 		$('#fechaestado').datetimepicker({			
 			language: 'es',
 			daysOfWeekDisabled: [0, 6],			
-			format: 'YYYY-MM-DD',			
+			format: 'YYYY-MM-DD',
+			autoclose: true			
         });
 		
 		$('#observacion').keypress(function() {

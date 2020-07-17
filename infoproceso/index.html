@@ -1,0 +1,8 @@
+<div id="infoproceso"></div>
+<script>
+setTimeout(() => {		
+	$.post("../../infoproceso/procesos.php", function( data ) {
+		$( "#infoproceso" ).html( data );
+	});
+}, 500);
+</script>

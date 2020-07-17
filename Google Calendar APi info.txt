@@ -1,0 +1,5 @@
+Cliente ID
+743872588744-de4j673biiu8ec3jihjmu762gvvvqicq.apps.googleusercontent.com
+
+Cliente Secret
+6mGxIGI8unZCETzv8xZqf9Hd

@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**
  * Obtiene el detalle de una Tabla especificada por
  * su identificador "$ITabla"
@@ -12,9 +12,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 
         // Obtener parámetro IdUsuario
         $parametro = $_GET['IdUsuario'];
+		$tipousuario = $_GET['tu'];
+		$empresa = $_GET['em'];
 
         // Tratar retorno
-        $retorno = PRO_PROCESO::infoUsuario($parametro);
+        $retorno = PRO_PROCESO::infoUsuario($parametro, $tipousuario, $empresa);
 
         if ($retorno) {
             $pro_proceso["estado"] = "1";
@@ -36,9 +38,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 
         // Obtener parámetro ClientesxUsuario
         $parametro = $_GET['ClientesxUsuario'];
-
+		$tipousuario = $_GET['tu'];
+		$empresa = $_GET['em'];
+		
         // Tratar retorno
-        $retorno = PRO_PROCESO::clientesxUsuario($parametro);
+        $retorno = PRO_PROCESO::clientesxUsuario($parametro, $tipousuario, $empresa);
 
         if ($retorno) {
             $pro_proceso["estado"] = "1";
@@ -61,9 +65,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 
         // Obtener parámetro MiAgenda
         $parametro = $_GET['MiAgenda'];
+		$tipousuario = $_GET['tu'];
+		$empresa = $_GET['em'];
 
         // Tratar retorno
-        $retorno = PRO_PROCESO::miAgenda($parametro);
+        $retorno = PRO_PROCESO::miAgenda($parametro, $tipousuario, $empresa);
 
         if ($retorno) {
             $pro_proceso["estado"] = "1";
@@ -85,9 +91,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 
         // Obtener parámetro infoProcesoJudicial
         $parametro = $_GET['infoProcesoJudicial'];
+		$tipousuario = $_GET['tu'];
+		$empresa = $_GET['em'];
 
         // Tratar retorno
-        $retorno = PRO_PROCESO::infoProcesoJudicial($parametro);
+        $retorno = PRO_PROCESO::infoProcesoJudicial($parametro, $tipousuario, $empresa);
 
         if ($retorno) {
             $pro_proceso["estado"] = "1";

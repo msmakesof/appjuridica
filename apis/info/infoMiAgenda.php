@@ -1,10 +1,11 @@
 <?php
-require_once('../../Connections/cnn_kn.php');  // para index.php cambiado desde el header a pages/tables se agrega ../
+include_once("../../pages/tables/header.inc.php");
+require_once('../../Connections/DataConex.php');  // para index.php cambiado desde el header a pages/tables se agrega ../
 require_once('../../Connections/config2.php'); // para index.php cambiado desde el header a pages/tables se agrega ../
-if(!isset($_SESSION)) 
-{ 
-  session_start(); 
-} 
+
+$id = $_SESSION['IdUsuario'];
+$tu = $_SESSION['TipoUsuario'];
+$em = $_SESSION['IdEmpresa'];
 ?>
 <?php
 if (!function_exists("GetSQLValueString")) 
@@ -40,14 +41,13 @@ if (!function_exists("GetSQLValueString"))
     return $theValue;
   }
 }
-require_once('../../Connections/DataConex.php');  // para index.php cambiado desde el header a pages/tables se agrega ../
 
 $soportecURL = "S";
-$url         = urlServicios."consultadetalle/consultadetalle_info.php?MiAgenda=".$_SESSION['IdUsuario'];
+$url = urlServicios."consultadetalle/consultadetalle_info.php?MiAgenda=". $id ."&tu=". $tu."&em=".$em;
 $existe      = "";
 $usulocal    = "";
 $siguex      = "";
-//echo("<script>console.log('PHP proceso: ".$url."');</script>");
+//echo("<script>console.log('PHP MIAgenda: ".$url."');</script>");
 if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
 {
     $ch = curl_init();
@@ -88,4 +88,5 @@ if($soportecURL == "N")
     $resultado = preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $resultado);
     $mproceso = json_decode($resultado, true);	        
 }
+echo $mproceso['pro_proceso']['MiAgenda'];   //$miAgenda;
 ?>

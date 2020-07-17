@@ -119,6 +119,61 @@ class PRO_PROCESO
         }
     }
 	
+	
+	/**
+     * Obtiene los campos de una tabla con un identificador
+     * determinado
+     *
+     * @param $IdTabla Identificador de la $IdTabla
+     * @return mixed
+     */
+    public static function getByIdHoy($IdTabla)
+    {
+        // Consulta de la tabla Proceso
+        $consulta = "SELECT pp.PRO_IdProceso, pp.PRO_NumeroProceso, pp.PRO_FechaInicio, concat_ws(' ', uu.USU_Nombre, uu.USU_PrimerApellido , uu.USU_SegundoApellido ) AS Apoderado, ac.FC , ac.APR_Observaciones, ac.TAP_Nombre FROM pro_proceso pp JOIN usu_usuario uu ON uu.USU_IdUsuario = pp.PRO_IdUsuario AND uu.USU_Estado = 1 JOIN (SELECT APR_IdProceso, max(APR_FechaCreacion) AS FC, APR_Observaciones, TAP_Nombre FROM pro_actuacionprocesal join pro_tipoactuacionprocesal on pro_tipoactuacionprocesal.TAP_IdTipoActuacionProcesal = pro_actuacionprocesal.APR_IdTipoActuacionProcesal GROUP BY APR_IdProceso) ac ON ac.APR_IdProceso = pp.PRO_IdProceso WHERE pp.PRO_EstadoProceso =1 ORDER BY pp.PRO_IdProceso ; ";
+
+        try {
+            // Preparar sentencia
+            $comando = Database::getInstance()->getDb()->prepare($consulta);
+            // Ejecutar sentencia preparada
+            $comando->execute(array($IdTabla));
+
+            return $comando->fetchAll(PDO::FETCH_ASSOC);
+
+        } catch (PDOException $e) {
+            // Aquí puedes clasificar el error dependiendo de la excepción
+            // para presentarlo en la respuesta Json
+            return -1;
+        }
+    }
+	
+		/**
+     * Obtiene los campos de una tabla con un identificador
+     * determinado
+     *
+     * @param $IdTabla Identificador de la $IdTabla
+     * @return mixed
+     */
+    public static function getByIdEstadoHoy($IdTabla)
+    {
+        // Consulta de la tabla Proceso
+        $consulta = "SELECT pp.PRO_IdProceso, pp.PRO_NumeroProceso, pp.PRO_FechaInicio, concat_ws(' ', uu.USU_Nombre, uu.USU_PrimerApellido , uu.USU_SegundoApellido ) AS Apoderado, ac.FC , ac.APR_Observaciones, ac.TAP_Nombre FROM pro_proceso pp JOIN usu_usuario uu ON uu.USU_IdUsuario = pp.PRO_IdUsuario AND uu.USU_Estado = 1 JOIN (SELECT APR_IdProceso, max(APR_FechaCreacion) AS FC, APR_Observaciones, TAP_Nombre FROM pro_actuacionprocesal join pro_tipoactuacionprocesal on pro_tipoactuacionprocesal.TAP_IdTipoActuacionProcesal = pro_actuacionprocesal.APR_IdTipoActuacionProcesal GROUP BY APR_IdProceso) ac ON ac.APR_IdProceso = pp.PRO_IdProceso WHERE pp.PRO_EstadoProceso =1 ORDER BY pp.PRO_IdProceso LIMIT 5; ";
+		//echo $consulta;
+        try {
+            // Preparar sentencia
+            $comando = Database::getInstance()->getDb()->prepare($consulta);
+            // Ejecutar sentencia preparada
+            $comando->execute(array($IdTabla));
+
+            return $comando->fetchAll(PDO::FETCH_ASSOC);
+
+        } catch (PDOException $e) {
+            // Aquí puedes clasificar el error dependiendo de la excepción
+            // para presentarlo en la respuesta Json
+            return -1;
+        }
+    }
+	
 	/**
      * Obtiene los campos de todos los procesos activos que tiene
      * asignado un abogado

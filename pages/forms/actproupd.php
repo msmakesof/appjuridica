@@ -812,10 +812,10 @@ $Gasto = $mactuacionprocesal['pro_actuacionprocesal']['APR_Gasto'];
 			daysOfWeekDisabled: [0, 6],
 			datesDisabled: exclude_dates,			
 			autoclose: true,
-			defaultDate: new Date(),
-			minDate: new Date(),
-			format: 'YYYY-MM-DD',
-			viewMode: 'days'		  
+			//defaultDate: new Date(),
+			//minDate: new Date(),
+			format: 'YYYY-MM-DD'
+			//viewMode: 'days'		  
         });
 		
 		$('#observacion').keypress(function() {

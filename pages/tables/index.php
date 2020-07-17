@@ -54,6 +54,8 @@ if( isset($_POST['ƒ×'])  && !empty($_POST['ƒ×']) )
 {    
      $usuario = trim($_POST['ƒ×']);   
 }
+
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -446,7 +448,10 @@ if( isset($_POST['ƒ×'])  && !empty($_POST['ƒ×']) )
             </div>
 			<?php 
 			include('js.php');
-			include('info.php');
+			//$id = $_SESSION['IdUsuario'];
+			//$tu = $_SESSION['TipoUsuario'];
+			//$em = $_SESSION['IdEmpresa'];
+			//include('infoAge.php');
 			?>
             <!-- Widgets -->
             <div class="row clearfix">
@@ -457,7 +462,11 @@ if( isset($_POST['ƒ×'])  && !empty($_POST['ƒ×']) )
                         </div>
                         <div class="content">
                             <div class="text">Procesos Abiertos: </div>
-                            <div class="number count-to" data-from="0" data-to="<?php echo $misProcesos; ?>" data-speed="1000" data-fresh-interval="20"></div>
+							<?php
+							include('js.php');
+							include('infoProc.html');
+							?>
+                            <!-- <div class="number count-to" data-from="0" data-to="<?php echo $misProcesos; ?>" data-speed="1000" data-fresh-interval="20"></div> -->
                         </div>
                     </div>
                 </div>
@@ -467,8 +476,11 @@ if( isset($_POST['ƒ×'])  && !empty($_POST['ƒ×']) )
                             <i class="material-icons">group</i>
                         </div>
                         <div class="content">
-                            <div class="text">Clientes Activos:</div>
-                            <div class="number count-to" data-from="0" data-to="<?php echo $misClientes; ?>" data-speed="1000" data-fresh-interval="20"></div>
+                            <div class="text">Clientes Activos:</div>                            
+							<?php
+							include('js.php');
+							include('infoCliA.html');
+							?>
                         </div>
                     </div>
                 </div>
@@ -479,7 +491,10 @@ if( isset($_POST['ƒ×'])  && !empty($_POST['ƒ×']) )
                         </div>
                         <div class="content">
                             <div class="text">Seguimiento Judicial:</div>
-                            <div class="number count-to" data-from="0" data-to="<?php echo $miProcesoJudicial; ?>" data-speed="1000" data-fresh-interval="20"></div>
+							<?php
+							include('js.php');
+							include('infoProJ.html');
+							?>
                         </div>
                     </div>
                 </div>
@@ -489,8 +504,11 @@ if( isset($_POST['ƒ×'])  && !empty($_POST['ƒ×']) )
                             <i class="material-icons">web</i>
                         </div>
                         <div class="content">
-                            <div class="text">Eventos Agenda:</div>
-                            <div class="number count-to" data-from="0" data-to="<?php echo $miAgenda ; ?>" data-speed="1000" data-fresh-interval="20"></div>							
+                            <div class="text">Eventos Agenda Hoy:</div>							
+							<?php 
+							include('js.php');						
+							include('infoAge.html');
+							?>
                         </div>
                     </div>
                 </div>
@@ -628,7 +646,7 @@ if( isset($_POST['ƒ×'])  && !empty($_POST['ƒ×']) )
                     <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
                         <div class="card">
                             <div class="header">
-                                <h2>INFORMACION DE ACTIVIDADES</h2>
+                                <h2>INFORMACIÓN DE LOS 5 ÚLTIMOS PROCESOS CON ACTUACIÓN PROCESAL</h2>
                                 <ul class="header-dropdown m-r--5">
                                     <li class="dropdown">
                                         <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
@@ -636,86 +654,15 @@ if( isset($_POST['ƒ×'])  && !empty($_POST['ƒ×']) )
                                         </a>
                                         <ul class="dropdown-menu pull-right">
                                             <li><a href="javascript:void(0);">Acción</a></li>
-                                            <li><a href="javascript:void(0);">Otra acción</a></li>
-                                            <li><a href="javascript:void(0);">SOtras</a></li>
+                                            <!-- <li><a href="javascript:void(0);">Otra acción</a></li>
+                                            <li><a href="javascript:void(0);">S Otras</a></li> -->
                                         </ul>
                                     </li>
                                 </ul>
-                            </div>
-                            <div class="body">
-                                <div class="table-responsive">
-                                    <table class="table table-hover dashboard-task-infos">
-                                        <thead>
-                                            <tr>
-                                                <th>#</th>
-                                                <th>Actividad</th>
-                                                <th>Estado</th>
-                                                <th>Encargado</th>
-                                                <th>Avance</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td>1</td>
-                                                <td>Proceso A</td>
-                                                <td><span class="label bg-green">en Proceso</span></td>
-                                                <td>John Diaz</td>
-                                                <td>
-                                                    <div class="progress">
-                                                        <div class="progress-bar bg-green" role="progressbar" aria-valuenow="62" aria-valuemin="0" aria-valuemax="100" style="width: 62%"></div>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>2</td>
-                                                <td>Proceso B</td>
-                                                <td><span class="label bg-blue">Para Hacer</span></td>
-                                                <td>Maria Perez</td>
-                                                <td>
-                                                    <div class="progress">
-                                                        <div class="progress-bar bg-blue" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%"></div>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>3</td>
-                                                <td>Proceso C</td>
-                                                <td><span class="label bg-light-blue">en Espera</span></td>
-                                                <td>Carlos López</td>
-                                                <td>
-                                                    <div class="progress">
-                                                        <div class="progress-bar bg-light-blue" role="progressbar" aria-valuenow="72" aria-valuemin="0" aria-valuemax="100" style="width: 72%"></div>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>4</td>
-                                                <td>Proceso D</td>
-                                                <td><span class="label bg-orange">Pend Aprobación</span></td>
-                                                <td>Martha Arias</td>
-                                                <td>
-                                                    <div class="progress">
-                                                        <div class="progress-bar bg-orange" role="progressbar" aria-valuenow="95" aria-valuemin="0" aria-valuemax="100" style="width: 95%"></div>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>5</td>
-                                                <td>Proceso E</td>
-                                                <td>
-                                                    <span class="label bg-red">Suspendida</span>
-                                                </td>
-                                                <td>Luis Jiménez</td>
-                                                <td>
-                                                    <div class="progress">
-                                                        <div class="progress-bar bg-red" role="progressbar" aria-valuenow="87" aria-valuemin="0" aria-valuemax="100" style="width: 87%"></div>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
+                            </div>							
+							<?php
+								include('../../infoproceso/index.html');
+							?>
                         </div>
                     </div>
                     <!-- #END# Task Info -->

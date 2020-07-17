@@ -39,7 +39,7 @@ require_once('../../Connections/DataConex.php');
 $soportecURL = "S";
 $params ="IdTabla=$idTabla&fn=$funcion";
 $url         = urlServicios."consultadetalle/cd_tipousuario.php?".$params;
-//echo "<script>console.log('PHP: ".$url."');</script>";
+//echo "<script>console.log('PHP cd_tu.: ".$url."');</script>";
 if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
 {
     $ch = curl_init();

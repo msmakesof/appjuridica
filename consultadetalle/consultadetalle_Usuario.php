@@ -48,8 +48,34 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         $parametro = $_GET['xParIdUsuario'];
 
         // Tratar retorno
+        $retorno = USU_USUARIO::getById($parametro);        
+        $msj =$retorno;
+        if ($retorno) {
+            $usu_usuario["estado"] = "1";
+            $usu_usuario["usu_usuario"] = $retorno;
+            // Enviar objeto json de la meta
+            header('Content-Type: application/json');
+            echo json_encode($usu_usuario);
+        } else {
+            // Enviar respuesta de error general
+            print json_encode(
+                array(
+                    'estado' => '2',
+                    'mensaje' => 'Por Id: No se obtuvo el registro',
+                    'msj' => print_r($msj),
+                    'msj2' => var_dump ($msj)
+                )
+            );
+        }
+    }
+    elseif (isset($_GET['xParIdUsuarioA'])) {
+
+        // Obtener parámetro IdUsuario
+        $parametro = $_GET['xParIdUsuarioA'];
+
+        // Tratar retorno
         //$retorno = USU_USUARIO::getById($parametro);
-        $retorno = USU_USUARIO::getById($parametro);
+        $retorno = USU_USUARIO::getByIdAgenda($parametro);
         $msj =$retorno;
         if ($retorno) {
             $usu_usuario["estado"] = "1";

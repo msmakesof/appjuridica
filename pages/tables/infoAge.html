@@ -1,0 +1,30 @@
+<div id="agenda">
+	<div id="divage" class="number count-to" data-from="0" data-to="0" data-speed="1000" data-fresh-interval="20"></div>
+</div> 
+<script>
+function sendRequest()
+{
+	var miAgenda = 0;
+	$.ajax({			
+		url: '../../apis/info/infoMiAgenda.php',
+		type: 'POST',                            
+		dataType: 'html',												
+		success: function( data, textStatus, jQxhr ){
+			miAgenda = data.split("\n").join("");
+			$("#agenda").html('<div id="divage" class="number count-to" data-from="0" data-to="' + miAgenda + '" data-speed="1000" data-fresh-interval="20">' + miAgenda + '</div>');
+		},
+		complete: function() { 
+			setTimeout(function(){
+				sendRequest();
+			}, 13000);
+		},
+		error: function( jqXhr, textStatus, errorThrown ){
+			console.log( errorThrown );
+		}	
+	});
+}
+
+$(function() {
+	sendRequest();
+});
+</script>

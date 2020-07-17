@@ -1,5 +1,4 @@
 <?php
-
 /**
 **
 **  BY iCODEART
@@ -27,7 +26,6 @@ $sql="SELECT * FROM agenda";
 // Verificamos si existe un dato
 if ($conexion->query($sql)->num_rows)
 { 
-
     // creamos un array
     $datos = array(); 
 
@@ -45,19 +43,17 @@ if ($conexion->query($sql)->num_rows)
     }
 
     // Transformamos los datos encontrado en la BD al formato JSON
-        echo json_encode(
-                array(
-                    "success" => 1,
-                    "result" => $datos
-                )
-            );
+	echo json_encode(
+		array(
+			"success" => 1,
+			"result" => $datos
+		)
+	);
 
-    }
-    else
-    {
-        // Si no existen agenda mostramos este mensaje.
-        echo "No hay datos"; 
-    }
-
-
+}
+else
+{
+	// Si no existen agenda mostramos este mensaje.
+	echo "No hay datos"; 
+}
 ?>

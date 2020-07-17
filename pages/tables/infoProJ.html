@@ -1,0 +1,30 @@
+<div id="projud">	
+	<div id="divpj" class="number count-to" data-from="0" data-to="0" data-speed="1000" data-fresh-interval="20"></div>
+</div> 
+<script>
+function sendRequestPJ()
+{
+	var miPJ = 0;
+	$.ajax({			
+		url: '../../apis/info/infoProcesoJudicial.php',
+		type: 'POST',                            
+		dataType: 'html',												
+		success: function( data, textStatus, jQxhr ){
+			miPJ = data.split("\n").join("");
+			$("#projud").html('<div id="divpj" class="number count-to" data-from="0" data-to="' + miPJ + '" data-speed="1000" data-fresh-interval="20">' + miPJ + '</div>');
+		},
+		complete: function() { 
+			setTimeout(function(){
+				sendRequestPJ();
+			}, 12000);
+		},
+		error: function( jqXhr, textStatus, errorThrown ){
+			console.log( errorThrown );
+		}	
+	});
+}
+
+$(function() {
+	sendRequestPJ();
+});
+</script>
