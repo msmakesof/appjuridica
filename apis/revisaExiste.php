@@ -114,6 +114,12 @@ switch ($tabla)
 		$url = urlServicios."consultadetalle/consultadetalle_gen_periodo.php?".$parameters;		
 		$arreglo= "gen_$tabla";
 		break;
+
+	case 'origenactprocesal' :
+			$parameters = "ExisteTabla=1&Nombre=$nombre&idtabla=$idtabla";
+			$url = urlServicios."consultadetalle/consultadetalle_pro_origenactprocesal.php?".$parameters;
+			$arreglo= "pro_$tabla";
+			break;			
 	
 }	
 
