@@ -4,10 +4,10 @@
  * Mysql.
  */
  
-$hostname_cnn_kn = "localhost";
+$hostname_cnn_kn = "192.168.0.27";
 $database_cnn_kn = "appjudicial";
-$username_cnn_kn = "root";
-$password_cnn_kn = "";
+$username_cnn_kn = "usrremoto";
+$password_cnn_kn = "Vialibre90$";
 $dominio="appjuridica";
 $Company="Litigantes";
 /*
