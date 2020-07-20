@@ -83,10 +83,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     elseif (isset($_GET['ExisteTabla']) )
     {
         $par1 = $_GET['Nombre'];
-		$par2 = $_GET['idtabla'];
-        
+        $par2 = $_GET['Dias'];
+        $par3 = $_GET['Origen'];
+		$par4 = $_GET['idtabla'];        
 
-        $retorno = PRO_TIPOACTUACIONPROCESAL::existetabla($par1,$par2);
+        $retorno = PRO_TIPOACTUACIONPROCESAL::existetabla($par1,$par2,$par3,$par4);
         if ($retorno) 
         {
             $pro_tipoactuacionprocesal["estado"] = "1";
@@ -142,9 +143,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     {
         //Obtener Parametros
         $par1 = $_GET['Nombre'];        
-        $par3 = $_GET['Estado'];
+        $par2 = $_GET['Dias'];
+        $par3 = $_GET['Origen'];
+        $par4 = $_GET['Estado'];
 
-        $retorno = PRO_TIPOACTUACIONPROCESAL::insert($par1, $par3);
+        $retorno = PRO_TIPOACTUACIONPROCESAL::insert($par1, $par2, $par3, $par4);
         $msj = $retorno;
         if($retorno)
         {
@@ -169,10 +172,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     {
         //Obtener Parametros
         $par1 = $_GET['nombre'];        
-        $par3 = $_GET['estado'];
-        $par4 = $_GET['idtabla'];
+        $par2 = $_GET['dias'];
+        $par3 = $_GET['origen'];
+        $par4 = $_GET['estado'];
+        $par5 = $_GET['idtabla'];
 
-        $retorno = PRO_TIPOACTUACIONPROCESAL::update($par1, $par3, $par4);
+        $retorno = PRO_TIPOACTUACIONPROCESAL::update($par1, $par2, $par3, $par4, $par5);
         $msj = $retorno;
         if($retorno)
         {

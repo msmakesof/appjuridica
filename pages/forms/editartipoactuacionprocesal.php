@@ -1,16 +1,8 @@
 <?php
 include_once("../tables/header.inc.php");
-require_once ('../../Connections/DataConex.php'); //('../../Connections/cnn_kn.php');
+require_once ('../../Connections/DataConex.php'); 
 $LogoInterno = LogoInterno;
 require_once('../../Connections/config2.php'); 
-/*  
-require_once('../../Connections/cnn_kn.php'); 
-require_once('../../Connections/config2.php');
-if(!isset($_SESSION)) 
-{ 
-    session_start(); 
-} 
-*/
 ?>
 <?php
 if (!function_exists("GetSQLValueString")) {
@@ -44,6 +36,7 @@ if (!function_exists("GetSQLValueString")) {
     }
 }
 $idTabla = 0;
+//require_once('../../apis/proceso/origenactprocesal.php');
 if( isset($_GET['f'])  && !empty($_GET['f']) )
 {    
     $idTabla = trim($_GET['f']);
@@ -54,6 +47,8 @@ $idtabla = 0;
 
 require_once('../../apis/proceso/tipoactuacionprocesal.php');
 $Nombre = trim($mtipoactuacionprocesal['pro_tipoactuacionprocesal']['TAP_Nombre']);
+$diashabiles = $mtipoactuacionprocesal['pro_tipoactuacionprocesal']['TAP_DiasHabiles'];
+$origen = $mtipoactuacionprocesal['pro_tipoactuacionprocesal']['TAP_IdOrigen'];
 $estado = $mtipoactuacionprocesal['pro_tipoactuacionprocesal']['TAP_Estado'];
 $idtabla = $mtipoactuacionprocesal['pro_tipoactuacionprocesal']['TAP_IdTipoActuacionProcesal'];
 ?>
@@ -76,6 +71,9 @@ $idtabla = $mtipoactuacionprocesal['pro_tipoactuacionprocesal']['TAP_IdTipoActua
 
     <!-- Animation Css -->
     <link href="../../plugins/animate-css/animate.css" rel="stylesheet" />
+
+     <!-- Bootstrap Select Css -->
+     <link href="../../plugins/bootstrap-select/css/bootstrap-select.css" rel="stylesheet" />
 
     <!-- Preloader Css -->
     <link href="../../plugins/material-design-preloader/md-preloader.css" rel="stylesheet" />
@@ -130,8 +128,45 @@ $idtabla = $mtipoactuacionprocesal['pro_tipoactuacionprocesal']['TAP_IdTipoActua
                                        <!-- -->
                                     </div>
                                 </div>
+
+                                <div class="form-group form-float">                                 
+                                    <label class="form-label">D&iacute;as</label>                                    
+                                    <div class="form-line">                                        
+                                        <input type="text" class="form-control" name="dias" id="dias" value="<?php echo $diashabiles ;?>" required maxlength="2">                                                                               
+                                    </div>
+                                    <div style="font-size:10px">m&aacute;ximo: 30</div>
+                                </div>
+
+                                <p></p>
+
+                                <div class="form-group form-float" style="clear: both;">
+                                    <div style="float: left;">                                     
+                                        <label class="form-labelx" style="color:#000;font-family: 'Roboto', Arial, Tahoma, sans-serif;font-weight: bold;">Origen / Autor:</label>                                    
+                                        <div class="col-sm-5">                                       
+                                            <select class="selectpicker show-tick" data-live-search="true" data-width="100%" name="origen" id="origen" required>
+                                             <option value="" >Seleccione Opción...</option>
+                                                <?php
+                                                    $idTabla = 0;
+                                                    require_once('../../apis/proceso/origenactprocesal.php');
+                                                   for($i=0; $i<count($morigenactprocesal['pro_origenactprocesal']); $i++)
+                                                   {
+                                                       $IdOrigen = $morigenactprocesal['pro_origenactprocesal'][$i]['OAP_IdOrigen'];
+                                                       $Nombre = $morigenactprocesal['pro_origenactprocesal'][$i]['OAP_Nombre'];
+                                                       $Estado = $morigenactprocesal['pro_origenactprocesal'][$i]['OAP_Estado']; 
+                                                ?>
+                                                        <option value="<?php echo $IdOrigen; ?>"  <?php if ($IdOrigen == $origen){ echo "selected";} else{ echo "";} ?> >
+                                                        <?php echo $Nombre ; ?>                                                
+                                                    </option>
+                                                <?php
+                                                    }
+                                                ?>
+                                            </select>
+                                        </div>
+                                    </div>                                        
+                                </div>
+
                                 
-                                <div class="form-group">
+                                <div class="form-group" style="clear: both;">
                                     <input type="radio" name="estado" id="activo" class="with-gap" value="1" <?php if( $estado == 1){?>checked="checked"<?php } ?>>
                                     <label for="activo">Activo</label>
 
@@ -193,8 +228,8 @@ $idtabla = $mtipoactuacionprocesal['pro_tipoactuacionprocesal']['TAP_IdTipoActua
 
     <script src="../../js/pages/ui/dialogs.js"></script>
     <!-- Demo Js -->
-    <script src="../../js/demo.js"></script>
-    
+    <script src="../../js/demo.js"></script> 
+    <script src="../../js/jquery.numeric.js"></script>   
 
     <script src="../../js/alertify.min.js"></script>
 
@@ -202,53 +237,75 @@ $idtabla = $mtipoactuacionprocesal['pro_tipoactuacionprocesal']['TAP_IdTipoActua
     $(document).ready(function()
 	{			
 		$("#mensaje").hide();
+        $("#dias").numeric();
         $("#form_validation").show();
         $("#form_validation").click(function() {
 			$("#msj").html("");
 		})
+
+        $("#dias").on('change', function(e){
+            var dias = $("#dias").val();
+            if(dias > 30)
+            {
+                swal("Atencion:", "No puede digitar un valor mayor a 30");
+                e.stopPropagation();
+                $("#dias").val('');
+                return false; 
+            }
+        }) 
 		
 		$("#grabar").on('click', function(e) {
             $("#mensaje").hide();
 			var nombre = $("#nombre").val();
             nombre = nombre.toUpperCase();
+            var dias = $("#dias").val();
+            var origen = $("#origen").val();
 			var estado = $('input:radio[name=estado]:checked').val();
 			var idtabla = "<?php echo $idtabla; ?>";
-			
-			$.ajax({
-				data : {"nombre": nombre, "estado": estado, "idtabla": idtabla},
-				type: "POST",
-				dataType: "html",
-				url : "editar_<?php echo strtolower($Tabla); ?>.php",
-            })  
-			.done(function( dataX, textStatus, jqXHR ){	
-			    // 				
-				var xrespstr = dataX.trim();
-                var respstr = xrespstr.substr(0,1);
-                var msj = xrespstr.substr(2); 
-				
-				if( respstr == "S" )
-                {
-                    swal("Atención: ", msj, "success");
-                    return false;                                    
-                }
-				else
-				{					
-                    swal({
-                        title: "Atención: ",   
-                        text: msj,   
-                        type: "error" 
-                    });
-                    return false;                    
-				}
-			})
-			.fail(function( jqXHR, textStatus, errorThrown ) {
-			 	//e.stopPropagation();
-				if ( console && console.log ) 
-				{						
-					console.log( "La solicitud a fallado: " +  textStatus);
-					$("#msj").html("");
-			 	}
-			});
+
+            if( estado == undefined || nombre == "" || dias == "" || dias > 30  || origen == "" )
+            {                 
+                swal("Atencion:", "Debe digitar un Nombre y/o seleccionar un Estado y/o digitar dias hablies y/o Origen.");
+                e.stopPropagation();
+                return false;
+            }
+			else{
+                $.ajax({
+                    data : {"nombre": nombre, "dias": dias, "origen": origen, "estado": estado, "idtabla": idtabla},
+                    type: "POST",
+                    dataType: "html",
+                    url : "editar_<?php echo strtolower($Tabla); ?>.php",
+                })  
+                .done(function( dataX, textStatus, jqXHR ){	
+                    // 				
+                    var xrespstr = dataX.trim();
+                    var respstr = xrespstr.substr(0,1);
+                    var msj = xrespstr.substr(2); 
+                    
+                    if( respstr == "S" )
+                    {
+                        swal("Atención: ", msj, "success");
+                        return false;                                    
+                    }
+                    else
+                    {					
+                        swal({
+                            title: "Atención: ",   
+                            text: msj,   
+                            type: "error" 
+                        });
+                        return false;                    
+                    }
+                })
+                .fail(function( jqXHR, textStatus, errorThrown ) {
+                    //e.stopPropagation();
+                    if ( console && console.log ) 
+                    {						
+                        console.log( "La solicitud a fallado: " +  textStatus);
+                        $("#msj").html("");
+                    }
+                });
+            }    
 		});
 
 	

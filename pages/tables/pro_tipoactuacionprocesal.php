@@ -102,7 +102,7 @@ if ($usuario == "")
    <style>
     object{
        width:100%;
-       height:390px ;  
+       height:450px ;  
 	}
    </style>     
 </head>
@@ -587,18 +587,22 @@ if ($usuario == "")
                                 <thead>
                                     <tr>
                                         <th>Nombre</th>
+                                        <th>D&iacute;as H&aacute;biles</th>
+                                        <th>Origen / Autor</th> 
                                         <th>Estado</th> 
                                     </tr>
                                 </thead>
                                 <tfoot>
                                     <tr>
                                         <th>Nombre</th>
+                                        <th>D&iacute;as H&aacute;biles</th>
+                                        <th>Origen / Autor</th>
                                         <th>Estado</th>                                        
                                     </tr>
                                 </tfoot>
                                 <tbody>
 <?php
-require_once('../../Connections/DataConex.php');
+//require_once('../../Connections/DataConex.php');
 $soportecURL = "S";
 $url         = urlServicios."consultadetalle/consultadetalle_pro_tipoactuacionprocesal.php?IdMostrar=0";
 $existe      = "";
@@ -654,12 +658,16 @@ if( $mtipoactuacionprocesal['estado'] < 2)
         $NombreTabla = trim($mtipoactuacionprocesal['pro_tipoactuacionprocesal'][$i]['TAP_Nombre']);        
         $archivo = $NombreTabla.".php";
         $idTabla = $mtipoactuacionprocesal['pro_tipoactuacionprocesal'][$i]['TAP_IdTipoActuacionProcesal'];
+        $DiasHabiles = trim($mtipoactuacionprocesal['pro_tipoactuacionprocesal'][$i]['TAP_DiasHabiles']);
+        $Origen = trim($mtipoactuacionprocesal['pro_tipoactuacionprocesal'][$i]['Origen']);
         $estadoTabla = trim($mtipoactuacionprocesal['pro_tipoactuacionprocesal'][$i]['EstadoTabla']);
     ?>
         <tr>
             <td>
                 <a href="javascript:void(0);" onclick="cambiar('../forms/editar<?php echo $nombre_lnk ;?>.php?f=<?php echo $idTabla; ?>')" class="nav nav-tabs nav-stacked" data-toggle="modal" data-target="#defaultModalEditar" style="text-decoration:none;"><?php echo $NombreTabla; ?></a>        	
             </td>
+            <td><?php echo $DiasHabiles; ?></td>
+            <td><?php echo $Origen; ?></td>
             <td><?php echo $estadoTabla; ?></td>               
         </tr>
     <?php                          

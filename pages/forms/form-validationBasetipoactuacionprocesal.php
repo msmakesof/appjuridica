@@ -7,6 +7,8 @@ else
 {
     header('Location: ../../index.php');
 }
+$idTabla = 0;
+require_once('../../apis/proceso/origenactprocesal.php');
 $NombreTabla ="TIPOACTUACIONPROCESAL";
 ?>
 <!DOCTYPE html>
@@ -27,6 +29,9 @@ $NombreTabla ="TIPOACTUACIONPROCESAL";
 
     <!-- Animation Css -->
     <link href="../../plugins/animate-css/animate.css" rel="stylesheet" />
+
+    <!-- Bootstrap Select Css -->
+    <link href="../../plugins/bootstrap-select/css/bootstrap-select.css" rel="stylesheet" />
 
     <!-- Preloader Css -->
     <link href="../../plugins/material-design-preloader/md-preloader.css" rel="stylesheet" />
@@ -90,6 +95,7 @@ $NombreTabla ="TIPOACTUACIONPROCESAL";
 
     <!-- Demo Js -->
     <script src="../../js/demo.js"></script>
+    <script src="../../js/jquery.numeric.js"></script>
 
     <!--  <script src="../../js/alertify.min.js"></script> -->
 
@@ -97,7 +103,7 @@ $NombreTabla ="TIPOACTUACIONPROCESAL";
     var nombre ="";
     $(document).ready(function()
     {           
-       
+        $("#dias").numeric();
         $("#msj").hide();
         function reset () {
             $("#toggleCSS").attr("href", "../../css/themes2/alertify.default.css");
@@ -110,7 +116,18 @@ $NombreTabla ="TIPOACTUACIONPROCESAL";
                 buttonReverse : false,
                 buttonFocus   : "ok"
             });
-        }       
+        }
+
+        $("#dias").on('change', function(e){
+            var dias = $("#dias").val();
+            if(dias > 30)
+            {
+                swal("Atencion:", "No puede digitar un valor mayor a 30");
+                e.stopPropagation();
+                $("#dias").val('');
+                return false; 
+            }
+        })       
 
         
         $("#grabar").on('click', function(e) { 
@@ -118,11 +135,13 @@ $NombreTabla ="TIPOACTUACIONPROCESAL";
             //var nombremostrar = $("#nombremostrar").val();
             var nombre = $("#nombre").val();
             nombre = nombre.toUpperCase();
+            var dias = $("#dias").val();
+            var origen = $("#origen").val();
             var estado = $('input:radio[name=estado]:checked').val();
             e.preventDefault();
-            if( estado == undefined || nombre == "" )
+            if( estado == undefined || nombre == "" || dias == "" || dias > 30  || origen == "" )
             {                 
-                swal("Atencion:", "Debe digitar un Nombre y/o seleccionar un Estado.");
+                swal("Atencion:", "Debe digitar un Nombre y/o seleccionar un Estado y/o digitar dias hablies y/o Origen.");
                 e.stopPropagation();
                 return false;
             }
@@ -130,7 +149,7 @@ $NombreTabla ="TIPOACTUACIONPROCESAL";
             else
             {
                 $.ajax({
-                    data : {"pnombre": nombre, "pestado": estado},
+                    data : {"pnombre": nombre, "pestado": estado, "pdias": dias, "porigen": origen},
                     type: "POST",
                     dataType: "html",
                     url : "crea_<?php echo strtolower($NombreTabla); ?>.php",
@@ -211,18 +230,47 @@ $NombreTabla ="TIPOACTUACIONPROCESAL";
                                 <div class="form-group form-float">
                                     <label class="form-label">&nbsp;</label>
                                     <div class="form-line">
-                                        <input type="text" class="form-control" name="nombre"id="nombre" required>
+                                        <input type="text" class="form-control" name="nombre" id="nombre" required>
                                         <label class="form-label">Nombre:</label>
                                     </div>
-                                </div>      
-                                <!-- <div class="form-group form-float">
-                                    <div class="form-line">
-                                        <input type="text" class="form-control" name="nombremostrar"id="nombremostrar" required>
-                                        <label class="form-label">Nombre a Mostrar:</label>
+                                </div>
+
+                                 <div class="form-group form-float">                                 
+                                    <label class="form-label">&nbsp;</label>                                    
+                                    <div class="form-line">                                        
+                                        <input type="text" class="form-control" name="dias" id="dias" required maxlength="2">                                        
+                                        <label class="form-label">D&iacute;as:</label>                                       
                                     </div>
-                                </div>                                -->
+                                    <div style="font-size:10px">m&aacute;ximo: 30</div>
+                                </div>
+
+                                <p></p>
+
+                                <div class="form-group form-float" style="clear: both;">
+                                    <div style="float: left;">                                     
+                                        <label class="form-labelx" style="color:#A4A4A4;font-family: 'Roboto', Arial, Tahoma, sans-serif;font-weight: normal;">Origen / Autor:</label>                                    
+                                        <div class="col-sm-4">                                       
+                                            <select class="selectpicker show-tick" data-live-search="true" data-width="100%" name="origen" id="origen" required>
+                                             <option value="" >Seleccione Opción...</option>
+                                                <?php
+                                                   for($i=0; $i<count($morigenactprocesal['pro_origenactprocesal']); $i++)
+                                                   {
+                                                       $IdOrgien = $morigenactprocesal['pro_origenactprocesal'][$i]['OAP_IdOrigen'];
+                                                       $Nombre = $morigenactprocesal['pro_origenactprocesal'][$i]['OAP_Nombre'];
+                                                       $Estado = $morigenactprocesal['pro_origenactprocesal'][$i]['OAP_Estado']; 
+                                                ?>
+                                                        <option value="<?php echo $IdOrgien; ?>" >
+                                                        <?php echo $Nombre ; ?>                                                
+                                                    </option>
+                                                <?php
+                                                    }
+                                                ?>
+                                            </select>
+                                        </div>
+                                    </div>                                        
+                                </div>
                                 
-                                <div class="form-group">
+                                <div class="form-group"  style="clear: both;">
                                     <input type="radio" name="estado" id="activo" class="with-gap" value="1">
                                     <label for="activo">Activo</label>
 

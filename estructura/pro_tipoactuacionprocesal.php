@@ -20,9 +20,11 @@ class PRO_TIPOACTUACIONPROCESAL
      */
     public static function getAll()
     {
-        $consulta = "SELECT ".$GLOBALS['Llave'].", TAP_Nombre,  
-            CASE TAP_Estado WHEN 1 THEN 'Activo' ELSE 'Inactivo' END EstadoTabla
-            FROM ".$GLOBALS['TABLA']." ORDER BY TAP_Nombre; ";
+        $consulta = "SELECT ".$GLOBALS['Llave'].", TAP_Nombre, TAP_DiasHabiles, OAP_Nombre AS Origen,  
+            CASE TAP_Estado WHEN 1 THEN 'Activo' ELSE 'Inactivo' END EstadoTabla            
+            FROM ".$GLOBALS['TABLA']." 
+            LEFT JOIN pro_origenactprocesal ON OAP_IdOrigen = TAP_IdOrigen AND OAP_Estado = 1
+            ORDER BY TAP_Nombre; ";
         try {
             // Preparar sentencia
             $comando = Database::getInstance()->getDb()->prepare($consulta);
@@ -47,8 +49,7 @@ class PRO_TIPOACTUACIONPROCESAL
     {
         // Consulta de la tabla de tablas
         $consulta = "SELECT ".$GLOBALS['Llave'].",
-                            TAP_Nombre,
-                            TAP_Estado
+                            TAP_Nombre, TAP_DiasHabiles, TAP_IdOrigen, TAP_Estado
                             FROM ".$GLOBALS['TABLA'].
                             " WHERE ".$GLOBALS['Llave']." = ? ORDER BY TAP_Nombre; ";
 
@@ -79,7 +80,7 @@ class PRO_TIPOACTUACIONPROCESAL
     public static function getByIdEstado($IdEstadoTabla)
     {
         // Consulta de la PRO_TIPOACTUACIONPROCESAL
-        $consulta = "SELECT ".$GLOBALS['Llave'].", TAP_Nombre, TAP_Estado ".
+        $consulta = "SELECT ".$GLOBALS['Llave'].", TAP_Nombre, TAP_DiasHabiles, TAP_IdOrigen, TAP_Estado ".
                     " FROM ". $GLOBALS['TABLA'].
                     " WHERE TAP_Estado = ? ORDER BY TAP_Nombre; ";
 
@@ -136,26 +137,30 @@ class PRO_TIPOACTUACIONPROCESAL
      * en los nuevos valores relacionados con un identificador
      *
      * @param $IdTabla            identificador
-     * @param $Nombre_Tabla        nuevo Nombre Tabla     
+     * @param $Nombre_Tabla        nuevo Nombre Tabla 
+     * @param $Dias                nuevo Dias
+     * @param $Origen              nuevo Origen
      * @param $IdEstadoTabla       nueva Estado       
      * 
      */
     public static function update(
-        $NombreTabla,        
+        $NombreTabla,
+        $Dias,
+        $Origen,        
         $IdEstadoTabla,
         $IdTabla
     )
     {
         // Creando consulta UPDATE
         $consulta = "UPDATE ". $GLOBALS['TABLA']. 
-            " SET TAP_Nombre=?, TAP_Estado=? " .
+            " SET TAP_Nombre=?, TAP_DiasHabiles =?, TAP_IdOrigen =?, TAP_Estado=? " .
             " WHERE ". $GLOBALS['Llave'] ." =? ;";
 
         // Preparar la sentencia
         $cmd = Database::getInstance()->getDb()->prepare($consulta);
 
         // Relacionar y ejecutar la sentencia
-        $cmd->execute(array($NombreTabla, $IdEstadoTabla, $IdTabla ));
+        $cmd->execute(array($NombreTabla, $Dias, $Origen, $IdEstadoTabla, $IdTabla ));
 
         return $cmd;
     }
@@ -164,28 +169,36 @@ class PRO_TIPOACTUACIONPROCESAL
      * Insertar un nueva Tabla
      *         
      * @param $IdTabla            identificador
-     * @param $Nombre             nuevo Nombre Tabla     
-     * @param $Estado             Estado   
+     * @param $Nombre             nuevo Nombre      
+     * @param $Dias               Dias
+     * @param $Origen             Origen
+     * @param $Estado             Estado      
      * @return PDOStatement
      */
     public static function insert(        
-        $Nombre,        
+        $Nombre,
+        $Dias,
+        $Origen,        
         $Estado
     )
     {
         // Sentencia INSERT
         $comando = "INSERT INTO ". $GLOBALS['TABLA'] ." ( " . 
-            " TAP_Nombre," .            
+            " TAP_Nombre," .
+            " TAP_DiasHabiles," .
+            " TAP_IdOrigen," .            
             " TAP_Estado" . 
             " )".     
-            " VALUES(?,?) ;";
+            " VALUES(?,?,?,?) ;";
 
         // Preparar la sentencia
         $sentencia = Database::getInstance()->getDb()->prepare($comando);
 
         return $sentencia->execute(
             array(                
-                $Nombre,                
+                $Nombre,
+                $Dias,
+                $Origen,                
                 $Estado
             )
         );
@@ -214,16 +227,16 @@ class PRO_TIPOACTUACIONPROCESAL
      * @param $IdUsuario identificador de la PRO_TIPOACTUACIONPROCESAL
      * @return bool Respuesta de la consulta
      */
-    public static function existetabla($Nombre, $par2)
+    public static function existetabla($Nombre, $Dias, $Origen, $par2)
     {
         $consulta = "SELECT count(". $GLOBALS['Llave']. ") existe, TAP_Nombre FROM ".$GLOBALS['TABLA'].
-        " WHERE TAP_Nombre = ? AND ". $GLOBALS['Llave']. " <> ?; ";
+        " WHERE TAP_Nombre = ? AND TAP_DiasHabiles =? AND TAP_IdOrigen = ? AND ". $GLOBALS['Llave']. " <> ?; ";
 
         try {
             // Preparar sentencia
             $comando = Database::getInstance()->getDb()->prepare($consulta);
             // Ejecutar sentencia preparada
-            $comando->execute(array($Nombre, $par2));
+            $comando->execute(array($Nombre, $Dias, $Origen, $par2));
             // Capturar primera fila del resultado
             $row = $comando->fetch(PDO::FETCH_ASSOC);
             return $row;

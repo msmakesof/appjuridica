@@ -1,15 +1,7 @@
 <?php
 include_once("../../pages/tables/header.inc.php");
-require_once ('../../Connections/DataConex.php'); //('../../Connections/cnn_kn.php');
+require_once ('../../Connections/DataConex.php');
 require_once('../../Connections/config2.php');
-/*
-require_once('../../Connections/cnn_kn.php'); 
-require_once('../../Connections/config2.php');
-if(!isset($_SESSION)) 
-{ 
-  session_start(); 
-}
-*/ 
 ?>
 <?php
 if (!function_exists("GetSQLValueString")) 
@@ -55,7 +47,7 @@ if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
 	include $_SERVER['DOCUMENT_ROOT']."/$dominio/apis/revisaExiste.php" ;
 	if($existeReg == "S")
 	{
-		$parameters = "update=update&nombre=$nombre&estado=$estado&idtabla=$idtabla";
+		$parameters = "update=update&nombre=$nombre&dias=$dias&origen=$origen&estado=$estado&idtabla=$idtabla";
 		$soportecURL = "S";
 		$url         = urlServicios."consultadetalle/consultadetalle_pro_tipoactuacionprocesal.php?".$parameters;
 		$existe      = "";

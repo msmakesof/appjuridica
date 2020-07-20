@@ -1,15 +1,7 @@
 <?php
 include_once("../tables/header.inc.php");
-require_once ('../../Connections/DataConex.php'); //('../../Connections/cnn_kn.php');
+require_once ('../../Connections/DataConex.php'); 
 require_once('../../Connections/config2.php');
-/*  
-require_once('../../Connections/cnn_kn.php'); 
-require_once('../../Connections/config2.php');
-if(!isset($_SESSION)) 
-{ 
-  session_start(); 
-}
-*/ 
 ?>
 <?php
 if (!function_exists("GetSQLValueString")) {
@@ -47,6 +39,16 @@ $nombre ="";
 if(isset($_POST['nombre'])){
     $nombre = trim($_POST['nombre']);
     $nombre = str_replace(' ', '%20', $nombre);
+}
+
+$dias ="";
+if(isset($_POST['dias'])){
+	$dias = trim($_POST['dias']);
+}
+
+$origen ="";
+if(isset($_POST['origen'])){
+	$origen = trim($_POST['origen']);
 }
 
 $estado ="";
