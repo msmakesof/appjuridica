@@ -694,7 +694,7 @@ if( $mtipoactuacionprocesal['estado'] < 2)
 				</div>
 				
 				<div class="modal-body">
-					<object type="text/html" data="../forms/editar<?php echo $nombre_lnk ;?>.php" id="carga"></object>                           
+					<object type="text/html" data="../forms/editar<?php echo $nombre_lnk ;?>.php" id="carga" style="width:100%; height:550px ; "></object>                           
 				</div>
 
 				<div class="modal-footer">

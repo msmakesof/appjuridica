@@ -1,11 +1,8 @@
 <?php
 include_once("header.inc.php"); 
-require_once ('../../Connections/DataConex.php'); //('../../Connections/cnn_kn.php');
+require_once ('../../Connections/DataConex.php');
 $LogoInterno = LogoInterno; 
 require_once('../../Connections/config2.php');
-//if(!isset($_SESSION)) 
-//{ 
-//} 
 ?>
 <?php
 if (!function_exists("GetSQLValueString")) 
@@ -101,7 +98,7 @@ else
    <style>
     object{
        width:100%;
-       height:390px ;  
+       height:450px ;  
 	}
    </style>     
 </head>
@@ -695,7 +692,7 @@ if( $marea['estado'] < 2)
                 </div>
                 
                 <div class="modal-body">                                
-                    <object style="padding :0px; position: relative; height: 75vh; max-height:100vh; bottom:0; overflow: hidden; margin: 0px;" 
+                    <object style="padding :0px; position: relative; bottom:0; overflow: hidden; margin: 0px;" 
                     type="text/html" data="../forms/editar<?php echo $nombre_lnk ;?>.php" id="carga"></object>                           
                 </div>
 
@@ -714,7 +711,7 @@ if( $marea['estado'] < 2)
                 </div>
                 
                 <div class="modal-body">                         
-                    <object style="padding :0px; position: relative; height: 70vh; max-height:100vh; bottom:0; overflow: hidden; margin: 0px;" 
+                    <object style="padding :0px; position: relative; bottom:0; overflow: hidden; margin: 0px;" 
                     type="text/html" data="../forms/form-validationBase<?php echo $nombre_lnk ;?>.php" id="crear">                            
                     </object>
                 </div>

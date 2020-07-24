@@ -20,7 +20,8 @@ class PRO_TIPOACTUACIONPROCESAL
      */
     public static function getAll()
     {
-        $consulta = "SELECT ".$GLOBALS['Llave'].", TAP_Nombre, TAP_DiasHabiles, OAP_Nombre AS Origen,  
+        $consulta = "SELECT ".$GLOBALS['Llave'].", TAP_Nombre, TAP_DiasHabiles, OAP_Nombre AS Origen,
+            TAP_Notifica, TAP_IdPeriodo, TAP_IdArea,    
             CASE TAP_Estado WHEN 1 THEN 'Activo' ELSE 'Inactivo' END EstadoTabla            
             FROM ".$GLOBALS['TABLA']." 
             LEFT JOIN pro_origenactprocesal ON OAP_IdOrigen = TAP_IdOrigen AND OAP_Estado = 1
@@ -49,7 +50,8 @@ class PRO_TIPOACTUACIONPROCESAL
     {
         // Consulta de la tabla de tablas
         $consulta = "SELECT ".$GLOBALS['Llave'].",
-                            TAP_Nombre, TAP_DiasHabiles, TAP_IdOrigen, TAP_Estado
+                            TAP_Nombre, TAP_DiasHabiles, TAP_IdOrigen, TAP_Estado,
+                            TAP_Notifica, TAP_IdPeriodo, TAP_IdArea,
                             FROM ".$GLOBALS['TABLA'].
                             " WHERE ".$GLOBALS['Llave']." = ? ORDER BY TAP_Nombre; ";
 
@@ -80,7 +82,7 @@ class PRO_TIPOACTUACIONPROCESAL
     public static function getByIdEstado($IdEstadoTabla)
     {
         // Consulta de la PRO_TIPOACTUACIONPROCESAL
-        $consulta = "SELECT ".$GLOBALS['Llave'].", TAP_Nombre, TAP_DiasHabiles, TAP_IdOrigen, TAP_Estado ".
+        $consulta = "SELECT ".$GLOBALS['Llave'].", TAP_Nombre, TAP_DiasHabiles, TAP_IdOrigen, TAP_Notifica, TAP_IdPeriodo, TAP_IdArea, TAP_Estado ".
                     " FROM ". $GLOBALS['TABLA'].
                     " WHERE TAP_Estado = ? ORDER BY TAP_Nombre; ";
 

@@ -50,6 +50,9 @@ $Nombre = trim($mtipoactuacionprocesal['pro_tipoactuacionprocesal']['TAP_Nombre'
 $diashabiles = $mtipoactuacionprocesal['pro_tipoactuacionprocesal']['TAP_DiasHabiles'];
 $origen = $mtipoactuacionprocesal['pro_tipoactuacionprocesal']['TAP_IdOrigen'];
 $estado = $mtipoactuacionprocesal['pro_tipoactuacionprocesal']['TAP_Estado'];
+$notifica = $mtipoactuacionprocesal['pro_tipoactuacionprocesal']['TAP_Notifica'];
+$Periodo = $mtipoactuacionprocesal['pro_tipoactuacionprocesal']['TAP_IdPeriodo'];
+$Area = $mtipoactuacionprocesal['pro_tipoactuacionprocesal']['TAP_IdArea'];
 $idtabla = $mtipoactuacionprocesal['pro_tipoactuacionprocesal']['TAP_IdTipoActuacionProcesal'];
 ?>
 <!DOCTYPE html>
@@ -121,52 +124,149 @@ $idtabla = $mtipoactuacionprocesal['pro_tipoactuacionprocesal']['TAP_IdTipoActua
                         </div>
                         <div class="body  table-responsive">
                             <form id="form_validation" method="POST">
+                                
                                 <div class="form-group form-float">
-                                    <label class="form-label">Nombre</label>
-                                    <div class="form-line">
-                                        <input type="text" class="form-control" name="nombre" id="nombre" value="<?php echo $Nombre ;?>" required>
-                                       <!-- -->
+                                    <div class="col-lg-3 col-md-3 col-sm-3">
+                                        <div class="row">
+                                            <label class="form-label">Nombre</label>
+                                            <div class="form-line">
+                                                <input type="text" class="form-control" name="nombre" id="nombre" value="<?php echo $Nombre ;?>" required>
+                                            <!-- -->
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-
-                                <div class="form-group form-float">                                 
-                                    <label class="form-label">D&iacute;as</label>                                    
-                                    <div class="form-line">                                        
-                                        <input type="text" class="form-control" name="dias" id="dias" value="<?php echo $diashabiles ;?>" required maxlength="2">                                                                               
+                               
+                                <div class="form-group" style="clear: both;">
+                                    <div style="float: left;">
+                                        <div class="col-lg-2 col-md-2 col-sm-2">                                    
+                                            <div class="row">
+                                                <label class="form-label">D&iacute;as: </label>
+                                                <div class="form-line">
+                                                    <input type="text" class="form-control" name="dias" id="dias" value="<?php echo $diashabiles ;?>" required maxlength="2">                                                
+                                                </div>
+                                                <div style="font-size:10px">m&aacute;ximo: 30</div>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div style="font-size:10px">m&aacute;ximo: 30</div>
-                                </div>
 
-                                <p></p>
+                                    <div style="float: left;">
+                                        <div class="col-lg-1 col-md-1 col-sm-1">                                    
+                                            <div class="row">&nbsp;</div>
+                                        </div>
+                                    </div>
 
-                                <div class="form-group form-float" style="clear: both;">
-                                    <div style="float: left;">                                     
-                                        <label class="form-labelx" style="color:#000;font-family: 'Roboto', Arial, Tahoma, sans-serif;font-weight: bold;">Origen / Autor:</label>                                    
-                                        <div class="col-sm-5">                                       
-                                            <select class="selectpicker show-tick" data-live-search="true" data-width="100%" name="origen" id="origen" required>
-                                             <option value="" >Seleccione Opción...</option>
-                                                <?php
+                                    <div style="float: left;">    
+                                        <div class="col-lg-5 col-md-5 col-sm-5">                                    
+                                            <div class="row">
+                                                <label class="form-labelx" style="color:#626060;font-family: 'Roboto', Arial, Tahoma, sans-serif;font-weight: bold;">
+                                                    Origen / Autor:
+                                                </label>                                                
+                                                <select class="selectpicker show-tick" data-live-search="true" data-width="100%" name="origen" id="origen" required>
+                                                    <option value="" >Seleccione Opción...</option>
+                                                    <?php
                                                     $idTabla = 0;
                                                     require_once('../../apis/proceso/origenactprocesal.php');
-                                                   for($i=0; $i<count($morigenactprocesal['pro_origenactprocesal']); $i++)
-                                                   {
-                                                       $IdOrigen = $morigenactprocesal['pro_origenactprocesal'][$i]['OAP_IdOrigen'];
-                                                       $Nombre = $morigenactprocesal['pro_origenactprocesal'][$i]['OAP_Nombre'];
-                                                       $Estado = $morigenactprocesal['pro_origenactprocesal'][$i]['OAP_Estado']; 
+                                                    for($i=0; $i<count($morigenactprocesal['pro_origenactprocesal']); $i++)
+                                                    {
+                                                        $IdOrigen = $morigenactprocesal['pro_origenactprocesal'][$i]['OAP_IdOrigen'];
+                                                        $Nombre = $morigenactprocesal['pro_origenactprocesal'][$i]['OAP_Nombre'];
+                                                        $Estado = $morigenactprocesal['pro_origenactprocesal'][$i]['OAP_Estado']; 
+                                                    ?>
+                                                        <option value="<?php echo $IdOrigen; ?>" <?php if ($IdOrigen == $origen){ echo "selected";} else{ echo "";} ?> >
+                                                            <?php echo $Nombre ; ?>                                                
+                                                        </option>
+                                                    <?php
+                                                    }
+                                                    ?>
+                                                </select>                                                
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group form-float" style="clear: both;">
+                                    <div style="float: left;">
+                                        <label class="form-labelx" style="color:#626060;font-family: 'Roboto', Arial, Tahoma, sans-serif;font-weight: bold;">
+                                            Area - Especialidad - Sala :
+                                        </label>
+                                        <div class="col-sm-5">                                       
+                                            <select class="selectpicker show-tick" data-live-search="true" data-width="100%" name="area" id="area" required>
+                                                <option value="" >Seleccione Opción...</option>
+                                                <?php
+                                                $idTabla = 0;
+                                                require_once('../../apis/general/area.php');
+                                                for($i=0; $i<count($marea['juz_area']); $i++)
+                                                {
+                                                    $IdArea = $marea['juz_area'][$i]['ARE_IdArea'];
+                                                    $Nombre = $marea['juz_area'][$i]['ARE_Nombre'];
+                                                    $Estado = $marea['juz_area'][$i]['ARE_Estado']; 
                                                 ?>
-                                                        <option value="<?php echo $IdOrigen; ?>"  <?php if ($IdOrigen == $origen){ echo "selected";} else{ echo "";} ?> >
+                                                    <option value="<?php echo $IdArea; ?>" <?php if ($IdArea == $Area){ echo "selected";} else{ echo "";} ?> >
                                                         <?php echo $Nombre ; ?>                                                
                                                     </option>
                                                 <?php
-                                                    }
+                                                }
                                                 ?>
                                             </select>
                                         </div>
                                     </div>                                        
                                 </div>
 
+                                <div class="form-group" style="clear: both;">
+                                    <div style="float: left;">
+                                        <div class="col-lg-4 col-md-4 col-sm-4">                                    
+                                            <div class="row">
+                                                <label class="form-label">Notifica: </label>
+                                                <input type="radio" name="notifica" id="no" class="with-gap" value="1" <?php if( $notifica == 2){?>checked="checked"<?php } ?>>                                                
+                                                <label for="activo">No</label>
+                                                    
+                                                <input type="radio" name="notifica" id="si" class="with-gap" value="2"<?php if( $notifica == 1){?>checked="checked"<?php } ?>>
+                                                <label for="inactivo" class="m-l-20">Si</label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div style="float: left;">
+                                        <div class="col-lg-1 col-md-1 col-sm-1">                                    
+                                            <div class="row">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div style="float: left;">
+                                        <div class="col-lg-6 col-md-6 col-sm-5">
+                                            <div class="row">
+                                                <label class="form-labelx" style="color:#626060;font-family: 'Roboto', Arial, Tahoma, sans-serif;font-weight: bold;">
+                                                Periodicidad :
+                                            </label>
+                                            <div class="col-sm-5">                                       
+                                                <select class="selectpicker show-tick" data-live-search="true" data-width="100%" name="periodo" id="periodo" required>
+                                                    <option value="" >Seleccione Opción...</option>
+                                                    <?php
+                                                    $idTabla = 0;
+                                                    require_once('../../apis/general/periodo.php');
+                                                    for($i=0; $i<count($mperiodo['gen_periodo']); $i++)
+                                                    {
+                                                        $IdPeriodo = $mperiodo['gen_periodo'][$i]['PER_IdPeriodo'];
+                                                        $Nombre = $mperiodo['gen_periodo'][$i]['PER_Nombre'];
+                                                        $Estado = $mperiodo['gen_periodo'][$i]['PER_Estado']; 
+                                                    ?>
+                                                        <option value="<?php echo $IdPeriodo; ?>" <?php if ($IdPeriodo == $Periodo){ echo "selected";} else{ echo "";} ?> >
+                                                            <?php echo $Nombre ; ?>                                                
+                                                        </option>
+                                                    <?php
+                                                    }
+                                                    ?>
+                                                </select>
+                                            </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                                 
                                 <div class="form-group" style="clear: both;">
+                                    <label class="form-label">Estado: </label>
                                     <input type="radio" name="estado" id="activo" class="with-gap" value="1" <?php if( $estado == 1){?>checked="checked"<?php } ?>>
                                     <label for="activo">Activo</label>
 

@@ -593,14 +593,46 @@ $IdUsuarioCierre = trim($mproceso['pro_proceso']['PRO_IdUsuarioCierre']);
 														</span>
 													</div>																																	
 												</div>
-											</div>
+                                            </div>
+
+                                            <div class="col-lg-1 col-md-1 col-sm-1">
+												<div class="row">&nbsp;
+												</div>
+                                            </div>
+                                            
+                                            <div class="col-lg-3 col-md-3 col-sm-3">
+												<div class="row">												                                                
+													<label class="form-label" style="font-size: 12;">Origen / Autor:</label>
+													<div class="xform-line">													    
+														
+														<select class="selectpicker show-tick" data-live-search="true" data-width="95%" name="actpro" id="actpro" required>
+														<option value="" >SeleccioneOrigen / Autor:...</option>
+														<?php                                                             
+															$idTabla = 0;
+															require_once('../../apis/proceso/origenactprocesal.php');
+															for($i=0; $i<count($morigenactprocesal['pro_origenactprocesal']); $i++)
+															{
+                                                                $IdOrigen = $morigenactprocesal['pro_origenactprocesal'][$i]['OAP_IdOrigen'];
+                                                                $Nombre = $morigenactprocesal['pro_origenactprocesal'][$i]['OAP_Nombre'];
+                                                                $Estado = $morigenactprocesal['pro_origenactprocesal'][$i]['OAP_Estado'];															
+														?>
+																 <option value="<?php echo $IdOrigen; ?>" >
+                                                                    <?php echo $Nombre ; ?>                                                
+																</option>
+														<?php
+															}
+														?>
+														</select>
+													</div>												
+												</div>
+                                            </div>
 
 											<div class="col-lg-1 col-md-1 col-sm-1">
 												<div class="row">&nbsp;
 												</div>
 											</div>	
 									
-											<div class="col-lg-8 col-md-8 col-sm-8">
+											<div class="col-lg-5 col-md-5 col-sm-5">
 												<div class="row">												                                                
 													<label class="form-label" style="font-size: 12;">Actuación Procesal:</label>
 													<div class="xform-line">													    
@@ -624,7 +656,8 @@ $IdUsuarioCierre = trim($mproceso['pro_proceso']['PRO_IdUsuarioCierre']);
 														</select>
 													</div>												
 												</div>
-											</div>
+                                            </div>
+                                            
 										</div>
                                     </div>   
 

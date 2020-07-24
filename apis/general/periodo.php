@@ -58,7 +58,7 @@ else
 
 $soportecURL = "S";
 $url         = urlServicios."consultadetalle/consultadetalle_gen_periodo.php?".$params;
-//echo("<script>console.log('PHP: ".$url."');</script>");
+//echo("<script>console.log('PHP CS: ".$url."');</script>");
 if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
 {
     $ch = curl_init();
@@ -74,8 +74,8 @@ if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
 
     $mperiodo =  preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $resultado);    
     $mperiodo = json_decode($mperiodo, true);
-    //echo("<script>console.log('PHP: ".print_r($mciudad)."');</script>");
-    //echo("<script>console.log('PHP: ".count($m['gen_ciudad'])."');</script>");
+    //echo("<script>console.log('PHP pr: ".print_r($mperiodo)."');</script>");
+    //echo("<script>console.log('PHP count: ".count($mperiodo['gen_periodo'])."');</script>");
     
     $json_errors = array(
         JSON_ERROR_NONE => 'No se ha producido ningún error',

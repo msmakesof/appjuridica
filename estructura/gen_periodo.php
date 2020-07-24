@@ -74,7 +74,7 @@ class GEN_PERIODO
 
 
     /**
-     * Obtiene los campos de una gen_departamento con un estado Activo
+     * Obtiene los campos de una gen_periodo con un estado Activo
      * determinado
      *
      * @param $IdEstadoTabla Identificador del estado de la tabla
@@ -82,11 +82,11 @@ class GEN_PERIODO
      */
     public static function getByIdEstado($IdEstadoTabla)
     {
-        // Consulta de la GEN_PAIS
-        $consulta = "SELECT ".$GLOBALS['Llave'].", PER_Nombre, PER_Abreviatura, PER_IdDepartamento, PER_Estado".
+        // Consulta de la GEN_PERIODO
+        $consulta = "SELECT ".$GLOBALS['Llave'].", PER_Nombre, PER_Abreviatura, PER_Valor, PER_Estado".
                     " FROM ". $GLOBALS['TABLA'].
                     " WHERE PER_Estado = ? ORDER BY PER_Nombre; ";
-
+        //echo $consulta;
         try {
             // Preparar sentencia
             $comando = Database::getInstance()->getDb()->prepare($consulta);
@@ -113,8 +113,8 @@ class GEN_PERIODO
      */
     public static function getByIdExiste($IdEstadoTabla)
     {
-        // Consulta de la gen_departamento
-        $consulta = "SELECT Count(".$GLOBALS['Llave'].") AS TotalTablas, PER_Nombre, PER_IdDepartamento, PER_Estado ".
+        // Consulta de la gen_periodo
+        $consulta = "SELECT Count(".$GLOBALS['Llave'].") AS TotalTablas, PER_Nombre, PER_Valor, PER_Estado ".
                     " FROM ". $GLOBALS['TABLA'].
                     " WHERE ".$GLOBALS['Llave']." = ? ;";
 
@@ -174,7 +174,7 @@ class GEN_PERIODO
      * @param $IdTabla            identificador
      * @param $Nombre             nuevo Nombre Periodo
      * @param $Abreviatura        nueva Nombre Abreviatura a mostrar
-     * @param $Valor              nueva Nombre Departamento a mostrar
+     * @param $Valor              nueva Nombre Valor a mostrar
      * @param $Estado             Estado   
      * @return PDOStatement
      */
@@ -210,7 +210,7 @@ class GEN_PERIODO
     /**
      * Eliminar el registro con el identificador especificado
      *
-     * @param $IdTabla identificador de la gen_departamento
+     * @param $IdTabla identificador de la gen_periodo
      * @return bool Respuesta de la eliminación
      */
     public static function delete($IdTabla)
@@ -225,9 +225,9 @@ class GEN_PERIODO
     }
 
     /**
-     * Verifica si existe el Pais
+     * Verifica si existe el Periodo
      *
-     * @param $IdUsuario identificador de la gen_departamento
+     * @param $IdUsuario identificador de la gen_periodo
      * @return bool Respuesta de la consulta
      */
     public static function existetabla($Nombre, $Abreviatura, $Valor, $par4)
@@ -249,39 +249,6 @@ class GEN_PERIODO
             // para presentarlo en la respuesta Json
             return -1;
         }
-    }
-
-    /**
-     * Verifica si existe el Pais
-     *
-     * @param $IdUsuario identificador de la gen_departamento
-     * @return bool Respuesta de la consulta
-     */
-    public static function ciudadesxdepto($parametro) //($Deptoproceso, $Ciudadproceso)
-    {
-        $consulta = "SELECT PER_IdCiudades, PER_Nombre, PER_Abreviatura, PER_IdDepartamento, 
-                PER_Estado, gen_departamento.DEP_CodigoDane
-            FROM gen_departamento
-            JOIN gen_ciudad 
-                ON gen_ciudad.PER_IdDepartamento = gen_departamento.DEP_IdDepartamento
-                AND gen_ciudad.PER_Abreviatura > ''
-            WHERE gen_departamento.DEP_CodigoDane > '' ORDER BY PER_Nombre; ";        
-
-        try {
-            // Preparar sentencia
-            $comando = Database::getInstance()->getDb()->prepare($consulta);
-            // Ejecutar sentencia preparada
-            $comando->execute(array($parametro)); //$Deptoproceso, $Ciudadproceso));
-
-            // Muestra todos los rows
-            return $comando->fetchAll(PDO::FETCH_ASSOC);
-
-        } catch (PDOException $e) {
-            // Aquí puedes clasificar el error dependiendo de la excepción
-            // para presentarlo en la respuesta Json
-            return -1;
-        }
-    }
+    }    
 }
-
 ?>

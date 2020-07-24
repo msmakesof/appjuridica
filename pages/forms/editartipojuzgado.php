@@ -226,42 +226,53 @@ $idtabla = $mtipojuzgado['juz_tipojuzgado']['TJU_IdTipoJuzgado'];
             var codigo = $("#codigo").val();
 			var estado = $('input:radio[name=estado]:checked').val();
 			var idtabla = "<?php echo $idtabla; ?>";
-			
-			$.ajax({
-				data : {"nombre": nombre, "codigo": codigo, "estado": estado, "idtabla": idtabla},
-				type: "POST",
-				dataType: "html",
-				url : "editar_<?php echo strtolower($Tabla); ?>.php",
-            })  
-			.done(function( dataX, textStatus, jqXHR ){	
-			    // 				
-				var xrespstr = dataX.trim();
-                var respstr = xrespstr.substr(0,1);
-                var msj = xrespstr.substr(2); 
-				
-				if( respstr == "S" )
-                {
-                    swal("Atención: ", msj, "success");
-                    return false;                    
-                }
-				else
-				{					
-                    swal({
-                        title: "Atención: ",   
-                        text: msj,   
-                        type: "error" 
-                    });
-                    return false;                    
-				}
-			})
-			.fail(function( jqXHR, textStatus, errorThrown ) {
-			 	//e.stopPropagation();
-				if ( console && console.log ) 
-				{						
-					console.log( "La solicitud a fallado: " +  textStatus);
-					$("#msj").html("");
-			 	}
-			});
+
+            if( nombre == "" || codigo == "" ||  estado == undefined ){
+                swal({
+                    title: "Atención: ",   
+                    text: "Debe Seleccionar un Estado o digitar Nombre.",   
+                    type: "error" 
+                });
+                return false;
+            }
+			else
+            {			
+                $.ajax({
+                    data : {"nombre": nombre, "codigo": codigo, "estado": estado, "idtabla": idtabla},
+                    type: "POST",
+                    dataType: "html",
+                    url : "editar_<?php echo strtolower($Tabla); ?>.php",
+                })  
+                .done(function( dataX, textStatus, jqXHR ){	
+                    // 				
+                    var xrespstr = dataX.trim();
+                    var respstr = xrespstr.substr(0,1);
+                    var msj = xrespstr.substr(2); 
+                    
+                    if( respstr == "S" )
+                    {
+                        swal("Atención: ", msj, "success");
+                        return false;                    
+                    }
+                    else
+                    {					
+                        swal({
+                            title: "Atención: ",   
+                            text: msj,   
+                            type: "error" 
+                        });
+                        return false;                    
+                    }
+                })
+                .fail(function( jqXHR, textStatus, errorThrown ) {
+                    //e.stopPropagation();
+                    if ( console && console.log ) 
+                    {						
+                        console.log( "La solicitud a fallado: " +  textStatus);
+                        $("#msj").html("");
+                    }
+                });
+            }
 		});
 
 	

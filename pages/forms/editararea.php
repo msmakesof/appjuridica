@@ -1,16 +1,8 @@
 <?php
 include_once("../tables/header.inc.php");
-require_once ('../../Connections/DataConex.php'); //('../../Connections/cnn_kn.php');
+require_once ('../../Connections/DataConex.php'); 
 $LogoInterno = LogoInterno;
 require_once('../../Connections/config2.php'); 
-/* 
-require_once('../../Connections/cnn_kn.php'); 
-require_once('../../Connections/config2.php');
-if(!isset($_SESSION)) 
-{ 
-    session_start(); 
-} 
-*/
 ?>
 <?php
 if (!function_exists("GetSQLValueString")) {
@@ -248,42 +240,53 @@ $idtabla = $marea['juz_area']['ARE_IdArea'];
             var tipojuzgado= $("#tipojuzgado").val();
 			var estado = $('input:radio[name=estado]:checked').val();
 			var idtabla = "<?php echo $idtabla; ?>";
-			
-			$.ajax({
-				data : {"nombre": nombre, "codigo": codigo, "tipojuzgado": tipojuzgado, "estado": estado, "idtabla": idtabla},
-				type: "POST",
-				dataType: "html",
-				url : "editar_<?php echo strtolower($Tabla); ?>.php",
-            })  
-			.done(function( dataX, textStatus, jqXHR ){	
-			    // 				
-				var xrespstr = dataX.trim();
-                var respstr = xrespstr.substr(0,1);
-                var msj = xrespstr.substr(2); 
-				
-				if( respstr == "S" )
-                {
-                    swal("Atención: ", msj, "success");
-                    return false;                    
-                }
-				else
-				{					
-                    swal({
-                        title: "Atención: ",   
-                        text: msj,   
-                        type: "error" 
-                    });
-                    return false;                    
-				}
-			})
-			.fail(function( jqXHR, textStatus, errorThrown ) {
-			 	//e.stopPropagation();
-				if ( console && console.log ) 
-				{						
-					console.log( "La solicitud a fallado: " +  textStatus);
-					$("#msj").html("");
-			 	}
-			});
+
+            if( nombre == "" || tipojuzgado == "" || codigo == "" ||  estado == undefined ){
+                swal({
+                    title: "Atención: ",   
+                    text: "Debe Seleccionar una Corporaciòn o Estado o digitar Nombre.",   
+                    type: "error" 
+                });
+                return false;
+            }
+			else
+            {
+                $.ajax({
+                    data : {"nombre": nombre, "codigo": codigo, "tipojuzgado": tipojuzgado, "estado": estado, "idtabla": idtabla},
+                    type: "POST",
+                    dataType: "html",
+                    url : "editar_<?php echo strtolower($Tabla); ?>.php",
+                })  
+                .done(function( dataX, textStatus, jqXHR ){	
+                    // 				
+                    var xrespstr = dataX.trim();
+                    var respstr = xrespstr.substr(0,1);
+                    var msj = xrespstr.substr(2); 
+                    
+                    if( respstr == "S" )
+                    {
+                        swal("Atención: ", msj, "success");
+                        return false;                    
+                    }
+                    else
+                    {					
+                        swal({
+                            title: "Atención: ",   
+                            text: msj,   
+                            type: "error" 
+                        });
+                        return false;                    
+                    }
+                })
+                .fail(function( jqXHR, textStatus, errorThrown ) {
+                    //e.stopPropagation();
+                    if ( console && console.log ) 
+                    {						
+                        console.log( "La solicitud a fallado: " +  textStatus);
+                        $("#msj").html("");
+                    }
+                });
+            }
 		});
 
 	
