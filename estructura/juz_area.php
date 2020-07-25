@@ -84,8 +84,9 @@ class JUZ_AREA
     public static function getByIdEstado($IdEstadoTabla)
     {
         // Consulta de la GEN_PAIS
-        $consulta = "SELECT ".$GLOBALS['Llave'].", ARE_Nombre, ARE_Codigo, ARE_Estado".
+        $consulta = "SELECT ".$GLOBALS['Llave'].", ARE_Nombre, ARE_Codigo, ARE_Estado, TJU_Nombre as corporacion ".
                     " FROM ". $GLOBALS['TABLA'].
+                    " JOIN juz_tipojuzgado ON TJU_IdTipoJuzgado = ARE_IdTipoJuzgado".
                     " WHERE ARE_Estado = ? ORDER BY ARE_Nombre; ";
 
         try {

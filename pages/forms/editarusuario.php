@@ -100,7 +100,7 @@ $TarjetaProfesional = $muser['usu_usuario']['USU_TarjetaProfesional'];
 
     <!-- Sweet Alert Css -->
     <link href="../../plugins/sweetalert/sweetalert.css" rel="stylesheet" />
-		<link href="../../css/sweet/main.css" rel="stylesheet" />
+	<link href="../../css/sweet/main.css" rel="stylesheet" />
 
     <!-- Bootstrap Select Css -->
     <link href="../../plugins/bootstrap-select/css/bootstrap-select.css" rel="stylesheet" />
@@ -177,7 +177,7 @@ $TarjetaProfesional = $muser['usu_usuario']['USU_TarjetaProfesional'];
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <div class="card">
                         <div class="header">
-                            <h2>REGISTRO EDICION DE ESTUDIANTES.</h2>
+                            <h2>REGISTRO EDICION DE USUARIOS.</h2>
                              <ul class="header-dropdown m-r--5">
                                <li class="dropdown">
                                     <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">

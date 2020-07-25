@@ -662,7 +662,7 @@ if( $marea['estado'] < 2)
     ?>
         <tr>
             <td>
-                <a href="javascript:void(0);" onclick="cambiar('../forms/editar<?php echo $nombre_lnk ;?>.php?f=<?php echo $idTabla; ?>')" class="nav nav-tabs nav-stacked" data-toggle="modal" data-target="#defaultModalEditar" style="text-decoration:none;"><?php echo $NombreTabla; ?></a>
+                <a href="javascript:void(0);" onclick="cambiar('../forms/editar<?php echo $nombre_lnk ;?>.php?f=<?php echo $idTabla; ?>')" class="nav nav-tabs nav-stacked" data-toggle="modal" data-target="#defaultModalEditar" style="text-decoration:none;"><?php echo $NombreTabla; ?></a>                
             </td>
             <td><?php echo $codigo; ?></td>
             <td><?php echo $IdCorporacion . ' - ' . $tipojuzgado; ?></td>
@@ -764,7 +764,7 @@ if( $marea['estado'] < 2)
 	 	 window.location="juz_<?php echo $nombre_lnk; ?>.php";
 	});		
 
- }); 
+ });
 
 function cambiar(nuevaurl) 
 { 

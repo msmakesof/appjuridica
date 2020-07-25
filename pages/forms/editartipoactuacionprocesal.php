@@ -45,8 +45,12 @@ if( isset($_GET['f'])  && !empty($_GET['f']) )
 $Tabla ="TIPOACTUACIONPROCESAL";
 $idtabla = 0;
 
+if ( isset( $_POST["id"]))
+{ 
+    $idTabla = $_POST["id"];
+}
 require_once('../../apis/proceso/tipoactuacionprocesal.php');
-$Nombre = trim($mtipoactuacionprocesal['pro_tipoactuacionprocesal']['TAP_Nombre']);
+$NombreTAP = trim($mtipoactuacionprocesal['pro_tipoactuacionprocesal']['TAP_Nombre']); //echo "ntes...$Nombre";
 $diashabiles = $mtipoactuacionprocesal['pro_tipoactuacionprocesal']['TAP_DiasHabiles'];
 $origen = $mtipoactuacionprocesal['pro_tipoactuacionprocesal']['TAP_IdOrigen'];
 $estado = $mtipoactuacionprocesal['pro_tipoactuacionprocesal']['TAP_Estado'];
@@ -83,6 +87,7 @@ $idtabla = $mtipoactuacionprocesal['pro_tipoactuacionprocesal']['TAP_IdTipoActua
 
     <!-- Sweet Alert Css -->
     <link href="../../plugins/sweetalert/sweetalert.css" rel="stylesheet" />
+    <link href="../../css/sweet/main.css" rel="stylesheet" />
 	
 	<!-- Bootstrap Select Css -->
 	<link href="../../plugins/bootstrap-select/css/bootstrap-select.css" rel="stylesheet" />
@@ -96,11 +101,50 @@ $idtabla = $mtipoactuacionprocesal['pro_tipoactuacionprocesal']['TAP_IdTipoActua
     <link rel="stylesheet" href="../../css/themes2/alertify.core.css" />
     <link rel="stylesheet" href="../../css/themes2/alertify.default.css" id="toggleCSS" />
 
+    <!-- Jquery Core Js -->
+    <script src="../../plugins/jquery/jquery.min.js"></script>
+
+    <!-- Bootstrap Core Js -->
+    <script src="../../plugins/bootstrap/js/bootstrap.js"></script>
+
+    <!-- Select Plugin Js -->
+    <script src="../../plugins/bootstrap-select/js/bootstrap-select.js"></script>
+
+    <!-- Slimscroll Plugin Js -->
+    <script src="../../plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
+
+    <!-- Jquery Validation Plugin Css -->
+    <script src="../../plugins/jquery-validation/jquery.validate.js"></script>
+
+    <!-- JQuery Steps Plugin Js -->
+    <script src="../../plugins/jquery-steps/jquery.steps.js"></script>
+
+    <!-- Sweet Alert Plugin Js -->
+    <script src="../../plugins/sweetalert/sweetalert.min.js"></script>
+
+    <!-- Waves Effect Plugin Js -->
+    <script src="../../plugins/node-waves/waves.js"></script>
+
+    <!-- Custom Js -->
+    <script src="../../js/admin.js"></script>
+    <script src="../../js/pages/forms/form-validation.js"></script>
+    <script src="../../plugins/jquery-validation/localization/messages_es.js"></script>
+
+    <script src="../../js/pages/ui/dialogs.js"></script>
+    <!-- Demo Js -->
+    <script src="../../js/demo.js"></script> 
+    <script src="../../js/jquery.numeric.js"></script>   
+
+    <script src="../../js/alertify.min.js"></script>
 </head>
 
 <body class="theme-indigo">
+
+    <?php 	
+	require_once('../tables/secciones.html');
+	?>
       
-     <section class="content" style="margin-top:15px;">
+     <section class="content" style="margin-top:85px;">
         <div class="container-fluid">
             <div class="block-header">
                 <h2>
@@ -126,20 +170,25 @@ $idtabla = $mtipoactuacionprocesal['pro_tipoactuacionprocesal']['TAP_IdTipoActua
                             <form id="form_validation" method="POST">
                                 
                                 <div class="form-group form-float">
-                                    <div class="col-lg-3 col-md-3 col-sm-3">
+                                    <div class="col-lg-5 col-md-5 col-sm-5">
                                         <div class="row">
                                             <label class="form-label">Nombre</label>
                                             <div class="form-line">
-                                                <input type="text" class="form-control" name="nombre" id="nombre" value="<?php echo $Nombre ;?>" required>
+                                                <input type="text" class="form-control" name="nombre" id="nombre" value="<?php echo $NombreTAP ;?>" required>
                                             <!-- -->
                                             </div>
                                         </div>
                                     </div>
                                 </div>
+
+                                <div style="float: left;">
+                                        <div class="col-lg-1 col-md-1 col-sm-1">                                            
+                                        </div>
+                                    </div>
                                
-                                <div class="form-group" style="clear: both;">
+                                <div class="form-group">
                                     <div style="float: left;">
-                                        <div class="col-lg-2 col-md-2 col-sm-2">                                    
+                                        <div class="col-lg-3 col-md-3 col-sm-3">                                    
                                             <div class="row">
                                                 <label class="form-label">D&iacute;as: </label>
                                                 <div class="form-line">
@@ -151,8 +200,7 @@ $idtabla = $mtipoactuacionprocesal['pro_tipoactuacionprocesal']['TAP_IdTipoActua
                                     </div>
 
                                     <div style="float: left;">
-                                        <div class="col-lg-1 col-md-1 col-sm-1">                                    
-                                            <div class="row">&nbsp;</div>
+                                        <div class="col-lg-1 col-md-1 col-sm-1">                                            
                                         </div>
                                     </div>
 
@@ -185,30 +233,35 @@ $idtabla = $mtipoactuacionprocesal['pro_tipoactuacionprocesal']['TAP_IdTipoActua
                                     </div>
                                 </div>
                                 
-                                <div class="form-group form-float" style="clear: both;">
-                                    <div style="float: left;">
-                                        <label class="form-labelx" style="color:#626060;font-family: 'Roboto', Arial, Tahoma, sans-serif;font-weight: bold;">
-                                            Area - Especialidad - Sala :
-                                        </label>
-                                        <div class="col-sm-5">                                       
-                                            <select class="selectpicker show-tick" data-live-search="true" data-width="100%" name="area" id="area" required>
-                                                <option value="" >Seleccione Opción...</option>
-                                                <?php
-                                                $idTabla = 0;
-                                                require_once('../../apis/general/area.php');
-                                                for($i=0; $i<count($marea['juz_area']); $i++)
-                                                {
-                                                    $IdArea = $marea['juz_area'][$i]['ARE_IdArea'];
-                                                    $Nombre = $marea['juz_area'][$i]['ARE_Nombre'];
-                                                    $Estado = $marea['juz_area'][$i]['ARE_Estado']; 
-                                                ?>
-                                                    <option value="<?php echo $IdArea; ?>" <?php if ($IdArea == $Area){ echo "selected";} else{ echo "";} ?> >
-                                                        <?php echo $Nombre ; ?>                                                
-                                                    </option>
-                                                <?php
-                                                }
-                                                ?>
-                                            </select>
+                                <div class="form-group" style="clear: both;">
+                                    <div >
+                                        <div class="col-lg-6 col-md-6 col-sm-6">                                    
+                                            <div class="row">
+                                                <label class="form-labelx" style="color:#626060;font-family: 'Roboto', Arial, Tahoma, sans-serif;font-weight: bold;">
+                                                    Corporacion / Area - Especialidad - Sala :
+                                                </label>
+                                                <div class="xcol-sm-5">                                       
+                                                    <select class="selectpicker show-tick" data-live-search="true" data-width="100%" name="area" id="area" required>
+                                                        <option value="" >Seleccione Opción...</option>
+                                                        <?php
+                                                        $idTabla = 0;
+                                                        require_once('../../apis/general/area.php');
+                                                        for($i=0; $i<count($marea['juz_area']); $i++)
+                                                        {
+                                                            $IdArea = $marea['juz_area'][$i]['ARE_IdArea'];
+                                                            $Nombre = trim($marea['juz_area'][$i]['ARE_Nombre']);
+                                                            $Estado = $marea['juz_area'][$i]['ARE_Estado'];
+                                                            $corporacion = trim($marea['juz_area'][$i]['corporacion']);
+                                                        ?>
+                                                            <option value="<?php echo $IdArea; ?>" <?php if ($IdArea == $Area){ echo "selected";} else{ echo "";} ?>  style="font-size: 11px !important;">
+                                                                <?php echo $corporacion .' - '. $Nombre ; ?>                                                
+                                                            </option>
+                                                        <?php
+                                                        }
+                                                        ?>
+                                                    </select>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>                                        
                                 </div>
@@ -278,7 +331,9 @@ $idtabla = $mtipoactuacionprocesal['pro_tipoactuacionprocesal']['TAP_IdTipoActua
                                 <div class="form-group" style="clear: both; margin-top:20px; margin-bottom:20px;">                               
 									<button class="btn btn-primary waves-effect" type="button" id="grabar">GRABAR</button>
 								   <!--  <button type="button" class="btn btn-danger waves-effect" id="borrar" onclick="borrarc(<?php echo $idtabla ; ?>);">BORRAR</button> -->
-									<button type="button" class="btn btn-danger waves-effect" id="borrar">BORRAR</button>
+                                    <button type="button" class="btn btn-danger waves-effect" id="borrar">BORRAR</button>
+                                    <button class="btn btn-danger waves-effect" type="submit" id="cerrar">SALIR</button>
+                                    <div><span style="color:red;">* Campos Obligatorios.</span></div>
 								</div>
 								
                             </form>                        
@@ -297,41 +352,7 @@ $idtabla = $mtipoactuacionprocesal['pro_tipoactuacionprocesal']['TAP_IdTipoActua
         </div>
     </section>
 
-        <!-- Jquery Core Js -->
-    <script src="../../plugins/jquery/jquery.min.js"></script>
-
-    <!-- Bootstrap Core Js -->
-    <script src="../../plugins/bootstrap/js/bootstrap.js"></script>
-
-    <!-- Select Plugin Js -->
-    <script src="../../plugins/bootstrap-select/js/bootstrap-select.js"></script>
-
-    <!-- Slimscroll Plugin Js -->
-    <script src="../../plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
-
-    <!-- Jquery Validation Plugin Css -->
-    <script src="../../plugins/jquery-validation/jquery.validate.js"></script>
-
-    <!-- JQuery Steps Plugin Js -->
-    <script src="../../plugins/jquery-steps/jquery.steps.js"></script>
-
-    <!-- Sweet Alert Plugin Js -->
-    <script src="../../plugins/sweetalert/sweetalert.min.js"></script>
-
-    <!-- Waves Effect Plugin Js -->
-    <script src="../../plugins/node-waves/waves.js"></script>
-
-    <!-- Custom Js -->
-    <script src="../../js/admin.js"></script>
-    <script src="../../js/pages/forms/form-validation.js"></script>
-    <script src="../../plugins/jquery-validation/localization/messages_es.js"></script>
-
-    <script src="../../js/pages/ui/dialogs.js"></script>
-    <!-- Demo Js -->
-    <script src="../../js/demo.js"></script> 
-    <script src="../../js/jquery.numeric.js"></script>   
-
-    <script src="../../js/alertify.min.js"></script>
+    
 
     <script type="text/javascript">    
     $(document).ready(function()
@@ -407,6 +428,11 @@ $idtabla = $mtipoactuacionprocesal['pro_tipoactuacionprocesal']['TAP_IdTipoActua
                 });
             }    
 		});
+
+        $("#cerrar").on('click', function(e) {
+            e.preventDefault();
+            window.location = 'pro_tipoactuacionprocesal.php';
+        });    
 
 	
     $("#borrar").on('click', function() {   
