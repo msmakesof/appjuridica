@@ -98,15 +98,7 @@ if ($usuario == "")
 
     <!-- Jquery Core Js -->
     <script src="../../plugins/jquery/jquery.min.js"></script>
-
-   <style>
-    object{
-       width:100%;
-       height:450px ;  
-	}
-   </style>     
 </head>
-
 <body class="theme-red">
     <!-- Page Loader -->
     <div class="page-loader-wrapper">
@@ -569,7 +561,8 @@ if ($usuario == "")
                                     
                                     <ul class="dropdown-menu pull-right">
                                        <li>
-                                       <a id="nuevo" class="btn btn-warning btn-xs waves-effect" data-toggle="modal" data-target="#defaultModal">Nuevo</a>
+                                       <!-- <a id="nuevo" class="btn btn-warning btn-xs waves-effect" data-toggle="modal" data-target="#defaultModal">Nuevo</a> -->
+                                       <a id="nuevo" class="btn btn-warning btn-xs waves-effect">Nuevo</a>
                                       <!--  <button type="button" class="btn btn-default waves-effect m-r-20" data-toggle="modal" data-target="#defaultModal">Nuevo</button>-->
                                         </li>
                                         <!-- 
@@ -587,16 +580,16 @@ if ($usuario == "")
                                 <thead>
                                     <tr>
                                         <th>Nombre</th>
-                                        <th>D&iacute;as H&aacute;biles</th>
-                                        <th>Origen / Autor</th> 
+                                        <th>Corporaci&oacute;n - Area</th>                                       
+                                        <th>Origen / Autor</th>
                                         <th>Estado</th> 
                                     </tr>
                                 </thead>
                                 <tfoot>
                                     <tr>
                                         <th>Nombre</th>
-                                        <th>D&iacute;as H&aacute;biles</th>
-                                        <th>Origen / Autor</th>
+                                        <th>Corporaci&oacute;n - Area</th>
+                                        <th>Origen / Autor</th>                                       
                                         <th>Estado</th>                                        
                                     </tr>
                                 </tfoot>
@@ -658,8 +651,11 @@ if( $mtipoactuacionprocesal['estado'] < 2)
         $NombreTabla = trim($mtipoactuacionprocesal['pro_tipoactuacionprocesal'][$i]['TAP_Nombre']);        
         $archivo = $NombreTabla.".php";
         $idTabla = $mtipoactuacionprocesal['pro_tipoactuacionprocesal'][$i]['TAP_IdTipoActuacionProcesal'];
-        $DiasHabiles = trim($mtipoactuacionprocesal['pro_tipoactuacionprocesal'][$i]['TAP_DiasHabiles']);
+        //$DiasHabiles = trim($mtipoactuacionprocesal['pro_tipoactuacionprocesal'][$i]['TER_DiasHabiles']);
         $Origen = trim($mtipoactuacionprocesal['pro_tipoactuacionprocesal'][$i]['Origen']);
+        $Area = trim($mtipoactuacionprocesal['pro_tipoactuacionprocesal'][$i]['area']);
+        //$NombrePeriodo = trim($mtipoactuacionprocesal['pro_tipoactuacionprocesal'][$i]['NombrePeriodo']);
+        $Corporacion = trim($mtipoactuacionprocesal['pro_tipoactuacionprocesal'][$i]['corporacion']);
         $estadoTabla = trim($mtipoactuacionprocesal['pro_tipoactuacionprocesal'][$i]['EstadoTabla']);
     ?>
         <tr>
@@ -667,8 +663,8 @@ if( $mtipoactuacionprocesal['estado'] < 2)
                 <!-- <a href="javascript:void(0);" onclick="cambiar('../forms/editar<?php echo $nombre_lnk ;?>.php?f=<?php echo $idTabla; ?>')" class="nav nav-tabs nav-stacked" data-toggle="modal" data-target="#defaultModalEditar" style="text-decoration:none;"><?php echo $NombreTabla; ?></a> -->
                 <a href="javascript:void(0);" onclick="editar(<?php echo $idTabla; ?>)"><?php echo $NombreTabla; ?></a>
             </td>
-            <td><?php echo $DiasHabiles; ?></td>
-            <td><?php echo $Origen; ?></td>
+            <td><?php echo $Corporacion .' - '.$Area; ?></td>
+            <td><?php echo $Origen; ?></td>            
             <td><?php echo $estadoTabla; ?></td>               
         </tr>
     <?php                          
@@ -765,7 +761,7 @@ if( $mtipoactuacionprocesal['estado'] < 2)
 	});	
 
     $("#nuevo").on("click", function(){
-        //window.location='../forms/form-validationBasepais.php';
+        window.location='tipoactuacionprocesal.php';
     });
 
  });
