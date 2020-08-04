@@ -83,11 +83,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     elseif (isset($_GET['ExisteTabla']) )
     {
         $par1 = $_GET['Nombre'];
-        $par2 = $_GET['Dias'];
+        //$par2 = $_GET['Dias'];
         $par3 = $_GET['Origen'];
-		$par4 = $_GET['idtabla'];        
+        $par4 = $_GET['Area'];
+        //$par5 = $_GET['Periodo'];
+        //$par6 = $_GET['Notifica'];
+		$par7 = $_GET['idtabla'];        
 
-        $retorno = PRO_TIPOACTUACIONPROCESAL::existetabla($par1,$par2,$par3,$par4);
+        $retorno = PRO_TIPOACTUACIONPROCESAL::existetabla($par1,$par3,$par4,$par7);
         if ($retorno) 
         {
             $pro_tipoactuacionprocesal["estado"] = "1";
@@ -143,11 +146,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     {
         //Obtener Parametros
         $par1 = $_GET['Nombre'];        
-        $par2 = $_GET['Dias'];
+        //$par2 = $_GET['Dias'];
         $par3 = $_GET['Origen'];
-        $par4 = $_GET['Estado'];
+        $par4 = $_GET['Area'];
+        //$par5 = $_GET['Periodo'];
+        //$par6 = $_GET['Notifica'];
+        $par7 = $_GET['Estado'];
+        //$par8 = $_GET['Datos'];
 
-        $retorno = PRO_TIPOACTUACIONPROCESAL::insert($par1, $par2, $par3, $par4);
+        $retorno = PRO_TIPOACTUACIONPROCESAL::insert($par1, $par3, $par4, $par7);
         $msj = $retorno;
         if($retorno)
         {
@@ -172,12 +179,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     {
         //Obtener Parametros
         $par1 = $_GET['nombre'];        
-        $par2 = $_GET['dias'];
+        //$par2 = $_GET['dias'];
         $par3 = $_GET['origen'];
         $par4 = $_GET['estado'];
-        $par5 = $_GET['idtabla'];
+        $par5 = $_GET['area'];
+        //$par6 = $_GET['periodo'];
+        //$par7 = $_GET['notifica'];
+        $par8 = $_GET['idtabla'];
 
-        $retorno = PRO_TIPOACTUACIONPROCESAL::update($par1, $par2, $par3, $par4, $par5);
+        $retorno = PRO_TIPOACTUACIONPROCESAL::update($par1, $par3, $par4, $par5, $par8);
         $msj = $retorno;
         if($retorno)
         {
@@ -222,7 +232,28 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             );
         }
     }   
-
+    elseif(isset($_GET['maxid'])){
+        
+        $retorno = PRO_TIPOACTUACIONPROCESAL::maxid();
+        if ($retorno) 
+        {
+            $pro_tipoactuacionprocesal["estado"] = "1";
+            $pro_tipoactuacionprocesal["pro_tipoactuacionprocesal"] = $retorno;
+            // Enviar objeto json de la PRO_TIPOACTUACIONPROCESAL
+            header('Content-Type: application/json');
+            echo json_encode($pro_tipoactuacionprocesal);
+        } 
+        else 
+        {
+            // Enviar respuesta de error general
+            print json_encode(
+                array(
+                    'estado' => '2',
+                    'mensaje' => 'No se obtuvo el registro'
+                )
+            );
+        }
+    }
     else {
         // Enviar respuesta de error
         print json_encode(
