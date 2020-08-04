@@ -41,10 +41,10 @@ if(isset($_POST['nombre'])){
     $nombre = str_replace(' ', '%20', $nombre);
 }
 
-$dias ="";
-if(isset($_POST['dias'])){
-	$dias = trim($_POST['dias']);
-}
+// $dias ="";
+// if(isset($_POST['dias'])){
+// 	$dias = trim($_POST['dias']);
+// }
 
 $origen ="";
 if(isset($_POST['origen'])){
@@ -55,6 +55,21 @@ $estado ="";
 if(isset($_POST['estado'])){
 	$estado = trim($_POST['estado']);
 }
+
+$area ="";
+if(isset($_POST['area'])){
+	$area = trim($_POST['area']);
+}
+
+// $periodo ="";
+// if(isset($_POST['periodo'])){
+// 	$periodo = trim($_POST['periodo']);
+// }
+
+// $notifica ="";
+// if(isset($_POST['notifica'])){
+// 	$notifica = trim($_POST['notifica']);
+// }
 
 $idtabla = 0;
 if(isset($_POST['idtabla'])){
