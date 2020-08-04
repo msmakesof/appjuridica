@@ -38,16 +38,15 @@ if (!function_exists("GetSQLValueString"))
   }
 }
 
-//require_once('../../Connections/DataConex.php');
 if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
-{
-	
+{	
 	$existeReg = "N";	
 	$tabla = 'tipoactuacionprocesal';		
 	include $_SERVER['DOCUMENT_ROOT']."/$dominio/apis/revisaExiste.php" ;
 	if($existeReg == "S")
 	{
-		$parameters = "update=update&nombre=$nombre&dias=$dias&origen=$origen&estado=$estado&idtabla=$idtabla";
+		//$parameters = "update=update&nombre=$nombre&dias=$dias&origen=$origen&estado=$estado&area=$area&periodo=$periodo&notifica=$notifica&idtabla=$idtabla";
+		$parameters = "update=update&nombre=$nombre&origen=$origen&estado=$estado&area=$area&idtabla=$idtabla";
 		$soportecURL = "S";
 		$url         = urlServicios."consultadetalle/consultadetalle_pro_tipoactuacionprocesal.php?".$parameters;
 		$existe      = "";
