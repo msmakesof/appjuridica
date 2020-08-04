@@ -48,21 +48,15 @@ $NombreTabla ="TIPOACTUACIONPROCESAL";
     <!-- AdminBSB Themes. You can choose a theme from css/themes instead of get all themes -->
     <link href="../../css/themes/all-themes.css" rel="stylesheet" />
 
-   
-
 <!-- mks 20170128
     <link rel="stylesheet" href="../../css/themes2/alertify.core.css" />
     <link rel="stylesheet" href="../../css/themes2/alertify.default.css" id="toggleCSS" /> -->
 
-
-
  <!-- Jquery Core Js -->
     <script src="../../plugins/jquery/jquery.min.js"></script>
     <!-- <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script> -->
-    
-
-
-        <!-- Sweet Alert Plugin Js -->
+  
+<!-- Sweet Alert Plugin Js -->
    <!--  <script src="../../plugins/sweetalert/sweetalert.min.js"></script> -->
     <script src="../../js/sweet/functions.js"></script>
      <script src="../../js/sweet/sweetalert.min.js"></script>
@@ -105,6 +99,8 @@ $NombreTabla ="TIPOACTUACIONPROCESAL";
     {           
         $("#dias").numeric();
         $("#msj").hide();
+        $("#hper").hide();
+        $("#hrep").hide();
         function reset () {
             $("#toggleCSS").attr("href", "../../css/themes2/alertify.default.css");
             alertify.set({
@@ -118,6 +114,24 @@ $NombreTabla ="TIPOACTUACIONPROCESAL";
             });
         }
 
+        $("input[name=notifica]").change(function () {	 
+			if($(this).val() ==1 ){
+                $("#hper").show();
+            }
+            else{
+                $("#hper").hide();
+            }
+		});
+
+        $("input[name=repite]").change(function () {	 
+			if($(this).val() ==1 ){
+                $("#hrep").show();
+            }
+            else{
+                $("#hrep").hide();
+            }
+		});
+
         $("#dias").on('change', function(e){
             var dias = $("#dias").val();
             if(dias > 30)
@@ -127,9 +141,14 @@ $NombreTabla ="TIPOACTUACIONPROCESAL";
                 $("#dias").val('');
                 return false; 
             }
-        })       
+        })
 
-        
+
+        $("#cerrar").on('click', function(e) {
+            e.preventDefault();
+            window.location = '../tables/pro_tipoactuacionprocesal.php';
+        });
+                
         $("#grabar").on('click', function(e) { 
            
             //var nombremostrar = $("#nombremostrar").val();
@@ -137,11 +156,14 @@ $NombreTabla ="TIPOACTUACIONPROCESAL";
             nombre = nombre.toUpperCase();
             var dias = $("#dias").val();
             var origen = $("#origen").val();
+            var area = $("#area").val();
+            var periodo = $("#periodo").val();
+            var notifica = $('input:radio[name=notifica]:checked').val();
             var estado = $('input:radio[name=estado]:checked').val();
             e.preventDefault();
-            if( estado == undefined || nombre == "" || dias == "" || dias > 30  || origen == "" )
+            if( estado == undefined || nombre == "" || dias == "" || dias > 30  || origen == "" || area == "" || notifica == undefined)
             {                 
-                swal("Atencion:", "Debe digitar un Nombre y/o seleccionar un Estado y/o digitar dias hablies y/o Origen.");
+                swal("Atencion:", "Debe seleccionar los campos obligatorios.");
                 e.stopPropagation();
                 return false;
             }
@@ -149,7 +171,7 @@ $NombreTabla ="TIPOACTUACIONPROCESAL";
             else
             {
                 $.ajax({
-                    data : {"pnombre": nombre, "pestado": estado, "pdias": dias, "porigen": origen},
+                    data : {"pnombre": nombre, "pestado": estado, "pdias": dias, "porigen": origen, "parea":area, "pperiodo":periodo, "pnotifica": notifica},
                     type: "POST",
                     dataType: "html",
                     url : "crea_<?php echo strtolower($NombreTabla); ?>.php",
@@ -200,8 +222,12 @@ $NombreTabla ="TIPOACTUACIONPROCESAL";
 </head>
 
 <body class="theme-indigo">
-      
-     <section class="content" style="margin-top:15px;">
+    
+    <?php 	
+	require_once('../tables/secciones.html');
+	?>
+    
+    <section class="content" style="margin-top:85px;">
         <div class="container-fluid">
             <div class="block-header">
                 <h2>
@@ -226,38 +252,48 @@ $NombreTabla ="TIPOACTUACIONPROCESAL";
                         </div>
                         <div class="body">
                             <form id="form_validation" method="POST">
-                                
-                                <div class="form-group form-float">
-                                    <label class="form-label">&nbsp;</label>
-                                    <div class="form-line">
-                                        <input type="text" class="form-control" name="nombre" id="nombre" required>
-                                        <label class="form-label">Nombre:</label>
-                                    </div>
-                                </div>
 
-                                 <div class="form-group form-float">                                 
-                                    <label class="form-label">&nbsp;</label>                                    
-                                    <div class="form-line">                                        
-                                        <input type="text" class="form-control" name="dias" id="dias" required maxlength="2">                                        
-                                        <label class="form-label">D&iacute;as:</label>                                       
-                                    </div>
-                                    <div style="font-size:10px">m&aacute;ximo: 30</div>
-                                </div>
-
-                                <p></p>
-
-                                <div class="form-group form-float" style="clear: both;">
-                                    <div style="float: left;">                                     
-                                        <label class="form-labelx" style="color:#A4A4A4;font-family: 'Roboto', Arial, Tahoma, sans-serif;font-weight: normal;">Origen / Autor:</label>                                    
-                                        <div class="col-sm-4">                                       
-                                            <select class="selectpicker show-tick" data-live-search="true" data-width="100%" name="origen" id="origen" required>
-                                             <option value="" >Seleccione Opción...</option>
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-lg-12 col-md-12 col-sm-12"><span style="color:red;">*</span>
+                                            <label class="form-label">
+                                                Corporacion - Area o Especialidad o Sala :
+                                            </label>
+                                            <select class="selectpicker show-tick" data-live-search="true" data-width="100%" name="area" id="area" required>
+                                                <option value="" >Seleccione Opción...</option>
                                                 <?php
-                                                   for($i=0; $i<count($morigenactprocesal['pro_origenactprocesal']); $i++)
-                                                   {
-                                                       $IdOrgien = $morigenactprocesal['pro_origenactprocesal'][$i]['OAP_IdOrigen'];
-                                                       $Nombre = $morigenactprocesal['pro_origenactprocesal'][$i]['OAP_Nombre'];
-                                                       $Estado = $morigenactprocesal['pro_origenactprocesal'][$i]['OAP_Estado']; 
+                                                $idTabla = 0;
+                                                require_once('../../apis/general/area.php');
+                                                for($i=0; $i<count($marea['juz_area']); $i++)
+                                                {
+                                                    $IdArea = $marea['juz_area'][$i]['ARE_IdArea'];
+                                                    $Nombre = trim($marea['juz_area'][$i]['ARE_Nombre']);
+                                                    $Estado = $marea['juz_area'][$i]['ARE_Estado'];
+                                                    $corporacion = trim($marea['juz_area'][$i]['corporacion']);
+                                                ?>
+                                                    <option value="<?php echo $IdArea; ?>">
+                                                        <?php echo $corporacion .' - '. $Nombre ; ?>                                                
+                                                    </option>
+                                                <?php
+                                                }
+                                                ?>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-lg-3 col-md-3 col-sm-3"><span style="color:red;">*</span>
+                                            <label class="form-label">Origen / Autor:</label>                                        
+                                            <select class="selectpicker show-tick" data-live-search="true" data-width="100%" name="origen" id="origen" required>
+                                                <option value="" >Seleccione Opción...</option>
+                                                <?php
+                                                    for($i=0; $i<count($morigenactprocesal['pro_origenactprocesal']); $i++)
+                                                    {
+                                                        $IdOrgien = $morigenactprocesal['pro_origenactprocesal'][$i]['OAP_IdOrigen'];
+                                                        $Nombre = $morigenactprocesal['pro_origenactprocesal'][$i]['OAP_Nombre'];
+                                                        $Estado = $morigenactprocesal['pro_origenactprocesal'][$i]['OAP_Estado']; 
                                                 ?>
                                                         <option value="<?php echo $IdOrgien; ?>" >
                                                         <?php echo $Nombre ; ?>                                                
@@ -267,19 +303,104 @@ $NombreTabla ="TIPOACTUACIONPROCESAL";
                                                 ?>
                                             </select>
                                         </div>
-                                    </div>                                        
+                                        <div class="col-lg-9 col-md-9 col-sm-9"><span style="color:red;">*</span>
+                                            <label class="form-label">Nombre Actuaci&oacute;n Procesal:</label>
+                                            <div class="form-line">
+                                                <input type="text" class="form-control" name="nombre" id="nombre" required>
+                                                <label class="form-label"></label>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-                                
-                                <div class="form-group"  style="clear: both;">
-                                    <input type="radio" name="estado" id="activo" class="with-gap" value="1">
-                                    <label for="activo">Activo</label>
 
-                                    <input type="radio" name="estado" id="inactivo" class="with-gap" value="2">
-                                    <label for="inactivo" class="m-l-20">Inactivo</label>
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div style="text-align:center;">
+                                            <div class="badge badge-warning">TERMINOS</div>
+                                            <hr>
+                                        </div>
+
+                                        <div class="col-lg-2 col-md-2 col-sm-2"><span style="color:red;">*</span>                                 
+                                            <label class="form-label">D&iacute;as:</label>                                    
+                                            <div class="form-line">                                        
+                                                <input type="text" class="form-control" name="dias" id="dias" required maxlength="2">                                        
+                                                <!-- <label class="form-label"></label> -->
+                                            </div>
+                                            <div style="font-size:10px">m&aacute;ximo: 30</div>
+                                        </div>
+
+                                        <div class="col-lg-2 col-md-2 col-sm-2"><span style="color:red;">*</span>                                            
+                                            <label class="form-label">Recordatorio: </label><br>
+                                            <input type="radio" name="notifica" id="no" class="with-gap" value="2">
+                                            <label for="no">No</label>                                                    
+                                            <input type="radio" name="notifica" id="si" class="with-gap" value="1">
+                                            <label for="si" class="m-l-20">Si</label>                                            
+                                        </div>
+
+                                        <div id="hper">            
+                                            <div class="col-lg-3 col-md-3 col-sm-3">
+                                                <label class="form-labelx" style="color:#626060;font-family: 'Roboto', Arial, Tahoma, sans-serif;font-weight: bold;">
+                                                    Periodicidad :
+                                                </label>                                            
+                                                <select class="selectpicker show-tick" data-live-search="true" data-width="100%" name="periodo" id="periodo" required>
+                                                    <option value="" >Seleccione Opción...</option>
+                                                    <?php
+                                                    $idTabla = 0;
+                                                    require_once('../../apis/general/periodo.php');
+                                                    for($i=0; $i<count($mperiodo['gen_periodo']); $i++)
+                                                    {
+                                                        $IdPeriodo = $mperiodo['gen_periodo'][$i]['PER_IdPeriodo'];
+                                                        $Nombre = $mperiodo['gen_periodo'][$i]['PER_Nombre'];
+                                                        $Estado = $mperiodo['gen_periodo'][$i]['PER_Estado']; 
+                                                    ?>
+                                                        <option value="<?php echo $IdPeriodo; ?>">
+                                                            <?php echo $Nombre ; ?>                                                
+                                                        </option>
+                                                    <?php
+                                                    }
+                                                    ?>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-3 col-md-3 col-sm-3"><span style="color:red;">*</span>                                            
+                                            <label class="form-label">Repetici&oacute;n: </label><br>
+                                            <input type="radio" name="repite" id="no" class="with-gap" value="2">
+                                            <label for="no">No</label>                                                    
+                                            <input type="radio" name="repite" id="si" class="with-gap" value="1">
+                                            <label for="si" class="m-l-20">Si</label>                                            
+                                        </div>
+                                        
+                                        <div id="hrep">
+                                        <div class="col-lg-2 col-md-2 col-sm-2"><span style="color:red;">*</span>                                 
+                                            <label class="form-label">D&iacute;as:</label>                                    
+                                            <div class="form-line">                                        
+                                                <input type="text" class="form-control" name="diasrep" id="diasrep" required maxlength="2">                                        
+                                                <!-- <label class="form-label"></label> -->
+                                            </div>
+                                            <div style="font-size:10px">m&aacute;ximo: 30</div>
+                                        </div>
+                                        </div>
+                                    </div>    
+                                </div>
+
+                                <div class="form-group">
+                                    <div class="row">
+
+                                        <div class="col-lg-3 col-md-3 col-sm-3"><span style="color:red;">*</span>
+                                        <label class="form-label">Estado: </label>
+                                            <input type="radio" name="estado" id="activo" class="with-gap" value="1">
+                                            <label for="activo">Activo</label>
+
+                                            <input type="radio" name="estado" id="inactivo" class="with-gap" value="2">
+                                            <label for="inactivo" class="m-l-20">Inactivo</label>
+                                        </div>
+
+                                    </div>
                                 </div>
                                 
                                 <button class="btn btn-primary waves-effect" type="submit" id="grabar">GRABAR</button>
-
+                                <button class="btn btn-danger waves-effect" type="submit" id="cerrar">SALIR</button>
                                 <!-- <div id="g" class='alert'>GRabado</div> -->
                             </form>                        
                     	</div>
