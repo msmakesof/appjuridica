@@ -2,7 +2,6 @@
 include_once("../tables/header.inc.php");
 require_once ('../../Connections/DataConex.php'); 
 require_once('../../Connections/config2.php');
-
 ?>
 <?php
   if (!function_exists("GetSQLValueString")) {
@@ -49,24 +48,28 @@ if( isset($_POST['pestado']) )
 	  $pestado = trim($_POST['pestado']);
 }
 
-$pdias ="";
-if( isset($_POST['pdias']) )
-{
-	  $pdias = trim($_POST['pdias']);
-}
-
 $porigen ="";
 if( isset($_POST['porigen']) )
 {
 	  $porigen = trim($_POST['porigen']);
 }
 
-//require_once('../../Connections/DataConex.php');
-//Verifico si existe una Tabla con las siguientes caracteristicas
-// Nombres iguales 
-if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
+$parea ="";
+if( isset($_POST['parea']) )
 {
-  $parameters = "ExisteTabla=1&Nombre=$pnombre&Dias=$pdias&Origen=$porigen&idtabla=0";
+	  $parea = trim($_POST['parea']);
+}
+
+$pdatos ="";
+if( isset($_POST['pdatos']) )
+{
+	  $pdatos = json_decode($_POST['pdatos']);
+}
+
+//Verifico si existe una Tabla con las siguientes caracteristicas: Nombres iguales 
+if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
+{  
+  $parameters = "ExisteTabla=1&Nombre=$pnombre&Origen=$porigen&Area=$parea&idtabla=0";
   $url = urlServicios."consultadetalle/consultadetalle_pro_tipoactuacionprocesal.php?".$parameters;
   $ch = curl_init();
   curl_setopt($ch, CURLOPT_VERBOSE, true);
@@ -83,25 +86,21 @@ if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
   curl_close($ch);
 
   if($resultado === false || $curl_errno > 0)
-  {
-      //echo 'Curl error: ' . curl_error($ch);
+  {      
       $sigue = "N - Curl Error: " . $curl_errno;
   }
   else
-  {          
-    
+  { 
     $m = preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $resultado);    
-    $m = json_decode($m, true);
-    //print_r ($m);
+    $m = json_decode($m, true);    
     $existe = $m['pro_tipoactuacionprocesal']['existe'];
     if($existe > 0)
     {
       $sigue = "E-Existe un Tipo Actuacion Procesal registrado con el mismo Nombre.";
     }
     else
-    {
-      
-      $parameters = "insert=insert&Nombre=$pnombre&Dias=$pdias&Origen=$porigen&Estado=$pestado";
+    {     
+      $parameters = "insert=insert&Nombre=$pnombre&Origen=$porigen&Estado=$pestado&Area=$parea";
       $soportecURL = "S";
       $url         = urlServicios."consultadetalle/consultadetalle_pro_tipoactuacionprocesal.php?".$parameters;
       $existe      = "";
@@ -116,9 +115,7 @@ if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
           curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
           curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
           curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
-          curl_setopt($ch, CURLOPT_POST, 0);          
-          //curl_setopt($handle, CURLOPT_STDERR, $verbose);
-          //curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($parameters));    
+          curl_setopt($ch, CURLOPT_POST, 0);
 
           $resultado = curl_exec ($ch);         
           $http_status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
@@ -128,12 +125,10 @@ if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
           
           if($resultado === false || $curl_errno > 0)
           {
-              //echo 'Curl error: ' . curl_error($ch);
               $sigue = "N-Se presentó problema... ". $curl_errno.' '.$curl_msj;
           }
           else
-          {          
-            //echo "Curl Err_no returned.... $curl_errno <br/>";
+          {             
             $m = preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $resultado);    
             $m = json_decode($m, true);
             $grabadoOK = $m['pro_tipoactuacionprocesal'];
@@ -144,6 +139,69 @@ if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
             else
             {
               $sigue = "S-Registro grabado Correctamente.";
+              // aki el max del pro_tipoactuacionprocesal
+              $parameters = "maxid=maxid";
+              $soportecURL = "S";
+              $url         = urlServicios."consultadetalle/consultadetalle_pro_tipoactuacionprocesal.php?".$parameters;
+              $existe      = "";
+              $maxidestado = "N";
+              if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
+              {    
+                  $ch = curl_init();
+                  curl_setopt($ch, CURLOPT_VERBOSE, true);
+                  curl_setopt($ch, CURLOPT_URL, $url);
+                  curl_setopt($ch, CURLOPT_TIMEOUT, 30);
+                  curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                  curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+                  curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
+                  curl_setopt($ch, CURLOPT_POST, 0);
+                  $resultado = curl_exec ($ch);         
+                  $http_status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+                  $curl_errno = curl_errno($ch);
+                  $curl_msj = curl_error($ch) ;
+                  curl_close($ch);
+
+                  if($resultado === false || $curl_errno > 0)
+                  {                     
+                    $maxidestado = "N-Se presentó problema... ". $curl_errno.' '.$curl_msj;
+                  }
+                  else
+                  { 
+                    $maxidestado = "S";
+                    $m = preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $resultado);    
+                    $m = json_decode($m, true);                    
+                    $MaxId = $m['pro_tipoactuacionprocesal']['MaxId'];
+                    $siguetermino = "N";
+                    $parameters = "insert=insert&IdTAP=$MaxId&Datos=".json_encode($pdatos);
+                    $soportecURL = "S";
+                    $url = urlServicios."consultadetalle/pro_terminos.php?".$parameters;
+                    //echo "<script>console.log('Terminos: '".$url.")</script>" ;
+                    {    
+                      $ch = curl_init();
+                      curl_setopt($ch, CURLOPT_VERBOSE, true);
+                      curl_setopt($ch, CURLOPT_URL, $url);
+                      curl_setopt($ch, CURLOPT_TIMEOUT, 30);
+                      curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                      curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+                      curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
+                      curl_setopt($ch, CURLOPT_POST, 0); 
+                      $resultado = curl_exec ($ch);         
+                      $http_status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+                      $curl_errno = curl_errno($ch);
+                      $curl_msj = curl_error($ch) ;
+                      curl_close($ch);
+    
+                      if($resultado === false || $curl_errno > 0)
+                      {
+                          $sigue = "N-Se presentó problema... ". $curl_errno.' '.$curl_msj;
+                      }
+                      else
+                      {
+                        $siguetermino = "S";
+                      }
+                    }    
+                  }
+              }
             }  
           }
 
@@ -153,7 +211,6 @@ if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
             JSON_ERROR_CTRL_CHAR => 'Error de carácter de control, posiblemente codificado incorrectamente',
             JSON_ERROR_SYNTAX => 'Error de Sintaxis',
           );
-            //echo "Error : ", $json_errors[json_last_error()], PHP_EOL, PHP_EOL."<br>";        
       }
       else
       {
@@ -169,12 +226,19 @@ if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
           $resultado = $response->raw_body;
           $resultado = preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $resultado);
           $m = json_decode($resultado, true);	        
-      }
-      //
+      }      
     }
-    
   }
-
-}  
-echo $sigue;
+}
+if($pdatos == "" || empty($pdatos) || $maxidestado == "N" ||$siguetermino == "N" ) 
+{
+  $sigue = "N-Se presentó problema... con los Datos.";
+}
+else
+{
+  if(substr($sigue,0,1) == "S" && $siguetermino == "S") 
+  {
+    echo $sigue;
+  }
+}
 ?>
