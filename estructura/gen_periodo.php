@@ -85,7 +85,7 @@ class GEN_PERIODO
         // Consulta de la GEN_PERIODO
         $consulta = "SELECT ".$GLOBALS['Llave'].", PER_Nombre, PER_Abreviatura, PER_Valor, PER_Estado".
                     " FROM ". $GLOBALS['TABLA'].
-                    " WHERE PER_Estado = ? ORDER BY PER_Nombre; ";
+                    " WHERE PER_Estado = ? ORDER BY PER_Valor, PER_Nombre; ";
         //echo $consulta;
         try {
             // Preparar sentencia
