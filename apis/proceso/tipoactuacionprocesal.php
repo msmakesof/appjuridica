@@ -57,7 +57,7 @@ else
 require_once('../../Connections/DataConex.php');
 $soportecURL = "S";
 $url         = urlServicios."consultadetalle/consultadetalle_pro_tipoactuacionprocesal.php?$params"; 
-echo("<script>console.log('PHP upd: ".$url."');</script>");
+//echo("<script>console.log('PHP upd: ".$url."');</script>");
 if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
 {
     $ch = curl_init();
