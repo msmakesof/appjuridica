@@ -41,16 +41,16 @@ if( isset($_GET['f'])  && !empty($_GET['f']) )
     $idTabla = trim($_GET['f']);
 }
 
-$Tabla ="CIUDAD";
+$Tabla ="EVENTOINUSUAL";
 $idtabla = 0;
 
-require_once('../../apis/general/ciudad.php');
+require_once('../../apis/general/eventoinusual.php');
 
-$Nombre = trim($mciudad['gen_ciudad']['CIU_Nombre']);
-$Abreviatura = trim($mciudad['gen_ciudad']['CIU_Abreviatura']);
-$Departamento = trim($mciudad['gen_ciudad']['CIU_IdDepartamento']);
-$estado = $mciudad['gen_ciudad']['CIU_Estado'];
-$idtabla = $mciudad['gen_ciudad']['CIU_IdCiudades'];
+$Nombre = trim($meventoinusual['gen_eventoinusual']['EVI_Nombre']);
+$FechaInicio = trim($meventoinusual['gen_eventoinusual']['EVI_FechaInicio']);
+$FechaFinal = trim($meventoinusual['gen_eventoinusual']['EVI_FechaFinal']);
+$estado = $meventoinusual['gen_eventoinusual']['EVI_Estado'];
+$idtabla = $meventoinusual['gen_eventoinusual']['EVI_IdEventoInusual'];
 
 ?>
 <!DOCTYPE html>
@@ -127,39 +127,24 @@ $idtabla = $mciudad['gen_ciudad']['CIU_IdCiudades'];
                                     </div>
                                 </div>
 
-                                <div class="form-group form-float">
-                                    <label class="form-label">Abreviatura</label>
-                                    <div class="form-line">
-                                        <input type="text" class="form-control" name="abreviatura" id="abreviatura" value="<?php echo $Abreviatura ;?>" required>                                    
+                                <div class="form-group form-float" style="clear: both;">
+                                    <label class="form-label">Fecha Inicio</label>
+                                    <div class='input-group date form-line' name="fechainicio" id="fechainicio" required>
+                                        <input type='text' id="txtFechaInicio" name="txtFechaInicio" class="form-control" value="<?php echo $FechaInicio; ?>" readonly/>
+                                        <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span>
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <div class="form-group form-float" style="clear: both;">
+                                    <label class="form-label">Fecha Final</label>
+                                    <div class='input-group date form-line' name="fechafinal" id="fechafinal" required>
+                                        <input type='text' id="txtFechaFinal" name="txtFechaFinal" class="form-control" value="<?php echo $FechaFinal; ?>" readonly/>
+                                        <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span>
+                                        </span>
                                     </div>
                                 </div>                              
-
-                                <div class="form-float">
-                                    <div class="col-sm-4">
-                                        <label class="form-label">Departamento</label>
-                                    </div>
-
-                                    <div class="col-sm-4">
-                                        <select class="selectpicker show-tick" data-live-search="true" data-width="90%" name="depto" id="depto" style="z-index:5000 !important;" required>
-                                            <?php 
-                                                $idTabla = 0;
-                                                require_once('../../apis/general/departamento.php');                                                
-                                                 for($i=0; $i<count($mdepartamento['gen_departamento']); $i++)
-                                                {           
-                                                    $DEP_IdDepartamento = $mdepartamento['gen_departamento'][$i]['DEP_IdDepartamento'];
-                                                    $DEP_Nombre = $mdepartamento['gen_departamento'][$i]['DEP_Nombre'];
-                                                    $DEP_Estado = $mdepartamento['gen_departamento'][$i]['DEP_Estado']; 
-                                            ?>                                            
-                                            <option value="<?php echo $DEP_IdDepartamento; ?>" <?php if ($DEP_IdDepartamento == $Departamento){ echo "selected";} else{ echo "";} ?>>
-                                                <?php echo $DEP_Nombre ; ?>                                                
-                                            </option>
-                                            <?php                    
-                                                } 
-                                            ?>
-                                        </select>
-                                    </div>   
-                                </div>                            
-                                
+                               
                                 <div class="form-group" style="clear: both;">
                                     <input type="radio" name="estado" id="activo" class="with-gap" value="1" <?php if( $estado == 1){?>checked="checked"<?php } ?>>
                                     <label for="activo">Activo</label>
@@ -223,10 +208,14 @@ $idtabla = $mciudad['gen_ciudad']['CIU_IdCiudades'];
 
     <script src="../../js/pages/ui/dialogs.js"></script>
     <!-- Demo Js -->
-    <script src="../../js/demo.js"></script>
-    
+    <script src="../../js/demo.js"></script>   
 
     <script src="../../js/alertify.min.js"></script>
+
+    <script src="../../calendar/js/moment.min.js"></script>
+	<link rel="stylesheet" href="../../fc/css/bootstrap-datetimepicker.min.css" />
+	<script src="../../fc/js/bootstrap-datetimepicker.js"></script>    
+	<script src="../../fc/js/bootstrap-datetimepicker.es.js"></script>
 
     <script type="text/javascript">    
     $(document).ready(function()
@@ -236,52 +225,79 @@ $idtabla = $mciudad['gen_ciudad']['CIU_IdCiudades'];
         $("#form_validation").click(function() {
 			$("#msj").html("");
 		})
+
+        $('#fechainicio').datetimepicker({			
+			language: 'es',
+			daysOfWeekDisabled: [0, 6],			
+			format: 'YYYY-MM-DD',
+			autoclose: true			
+        });
+        
+        $('#fechafinal').datetimepicker({			
+			language: 'es',
+			daysOfWeekDisabled: [0, 6],			
+			format: 'YYYY-MM-DD',
+			autoclose: true			
+        });
 		
 		$("#grabar").on('click', function(e) {
             $("#mensaje").hide();
 			var nombre = $("#nombre").val();
             nombre = nombre.toUpperCase();
-            var abreviatura = $("#abreviatura").val();
-            abreviatura = abreviatura.toUpperCase();
-            var depto = $("#depto").val();			
+            var fechainicio = $("#txtFechaInicio").val();
+            var fechafinal = $("#txtFechaFinal").val();
 			var estado = $('input:radio[name=estado]:checked').val();
 			var idtabla = "<?php echo $idtabla; ?>";
 			
-			$.ajax({
-				data : {"nombre": nombre, "abreviatura": abreviatura, "depto": depto, "estado": estado, "idtabla": idtabla},
-				type: "POST",
-				dataType: "html",
-				url : "editar_ciudad.php",
-            })  
-			.done(function( dataX, textStatus, jqXHR ){	
-			    // 				
-				var xrespstr = dataX.trim();
-                var respstr = xrespstr.substr(0,1);
-                var msj = xrespstr.substr(2); 
-				
-				if( respstr == "S" )
-                {
-                    swal("Atención: ", msj, "success");
-                    return false;                    
-                }
-				else
-				{					
-                    swal({
-                        title: "Atención: ",   
-                        text: msj,   
-                        type: "error" 
-                    });
-                    return false;                    
-				}
-			})
-			.fail(function( jqXHR, textStatus, errorThrown ) {
-			 	//e.stopPropagation();
-				if ( console && console.log ) 
-				{						
-					console.log( "La solicitud a fallado: " +  textStatus);
-					$("#msj").html("");
-			 	}
-			});
+            if( estado == undefined || nombre == "" || fechainicio == "" || fechafinal == "" )
+            {               
+                swal({
+                  title: "Atención:  Ingrese información en todos los campos...",
+                  text: "un momento por favor.",
+                  imageUrl: "../../js/sweet/2.gif",
+                  timer: 1500,
+                  showConfirmButton: false
+                });
+                return false;
+            }
+            else
+            {
+                $.ajax({
+                    data : {"nombre": nombre, "fechainicio": fechainicio, "fechafinal": fechafinal, "estado": estado, "idtabla": idtabla},
+                    type: "POST",
+                    dataType: "html",
+                    url : "editar_eventoinusual.php",
+                })  
+                .done(function( dataX, textStatus, jqXHR ){	
+                    // 				
+                    var xrespstr = dataX.trim();
+                    var respstr = xrespstr.substr(0,1);
+                    var msj = xrespstr.substr(2); 
+                    
+                    if( respstr == "S" )
+                    {
+                        swal("Atención: ", msj, "success");
+                        return false;                    
+                    }
+                    else
+                    {					
+                        swal({
+                            title: "Atención: ",   
+                            text: msj,   
+                            type: "error" 
+                        });
+                        return false;                    
+                    }
+                })
+                .fail(function( jqXHR, textStatus, errorThrown ) {
+                    //e.stopPropagation();
+                    if ( console && console.log ) 
+                    {						
+                        console.log( "La solicitud a fallado: " +  textStatus);
+                        $("#msj").html("");
+                    }
+                });
+            }
 		});
 
 	
@@ -296,7 +312,7 @@ $idtabla = $mciudad['gen_ciudad']['CIU_IdCiudades'];
                     data : {"pidtabla": idtabla},
                     type: "POST",
                     dataType: "html",
-                    url : "../forms/borrar_ciudad.php",
+                    url : "../forms/borrar_eventoinusual.php",
                 })  
                 .done(function( dataX, textStatus, jqXHR ){                       
                     var xrespstr = dataX.trim();

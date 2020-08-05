@@ -41,15 +41,14 @@ if(isset($_POST['nombre'])){
     $nombre = str_replace(' ', '%20', $nombre);
 }
 
-$abreviatura ="";
-if(isset($_POST['abreviatura'])){
-    $abreviatura = trim($_POST['abreviatura']);
-    //$abreviatura = str_replace(' ', '%20', $abreviatura);
+$fechainicio ="";
+if(isset($_POST['fechainicio'])){
+    $fechainicio = trim($_POST['fechainicio']);
 }
 
-$depto ="";
-if(isset($_POST['depto'])){
-  $depto = trim($_POST['depto']);  
+$fechafinal ="";
+if(isset($_POST['fechafinal'])){
+  $fechafinal = trim($_POST['fechafinal']);  
 }
 
 $estado ="";
@@ -62,5 +61,5 @@ if(isset($_POST['idtabla'])){
 	$idtabla = trim($_POST['idtabla']);
 }
 
-require_once('../../apis/general/ciudad.upd.php');
+require_once('../../apis/general/eventoinusual.upd.php');
 ?>

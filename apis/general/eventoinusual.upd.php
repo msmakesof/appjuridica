@@ -42,14 +42,14 @@ if (!function_exists("GetSQLValueString"))
 if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
 {
 	$existeReg = "N";	
-	$tabla = 'ciudad';		
+	$tabla = 'eventoinusual';		
 	include $_SERVER['DOCUMENT_ROOT']."/$dominio/apis/revisaExiste.php" ;
 	if($existeReg == "S")
 	{	
 
-		$parameters = "update=update&nombre=$nombre&abreviatura=$abreviatura&depto=$depto&estado=$estado&idtabla=$idtabla";
+		$parameters = "update=update&nombre=$nombre&fechainicio=$fechainicio&fechafinal=$fechafinal&estado=$estado&idtabla=$idtabla";
 		$soportecURL = "S";
-		$url         = urlServicios."consultadetalle/consultadetalle_gen_ciudad.php?".$parameters;
+		$url         = urlServicios."consultadetalle/gen_eventoinusual.php?".$parameters;
 		$existe      = "";
 		$usulocal    = "";
 		$sigue      = "";
@@ -69,11 +69,11 @@ if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
 			$curl_errno  = curl_errno($ch);
 			curl_close($ch);
 
-			$mciudad = preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $resultado);    
-			$mciudad = json_decode($mciudad, true);    
-			//echo("<script>console.log('PHP: ".print_r($mciudad)."');</script>");
+			$meventoinusual = preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $resultado);    
+			$meventoinusual = json_decode($meventoinusual, true);    
+			//echo("<script>console.log('PHP: ".print_r($meventoinusual)."');</script>");
 			//echo("<script>console.log('PHP resultado: ".$resultado."');</script>");
-			//echo("<script>console.log('PHP: ".count($m['gen_ciudad'])."');</script>");
+			//echo("<script>console.log('PHP: ".count($m['gen_eventoinusual'])."');</script>");
 			
 			$json_errors = array(
 				JSON_ERROR_NONE => 'No se ha producido ningún error',
@@ -105,7 +105,7 @@ if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
 			$response = Unirest\Request::get($url, array("X-Mashape-Key" => "MY SECRET KEY"));
 			$resultado = $response->raw_body;
 			$resultado = preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $resultado);
-			$mciudad = json_decode($resultado, true);	        
+			$meventoinusual = json_decode($resultado, true);	        
 		}
 	}
 }
