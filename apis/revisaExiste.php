@@ -116,10 +116,16 @@ switch ($tabla)
 		break;
 
 	case 'origenactprocesal' :
-			$parameters = "ExisteTabla=1&Nombre=$nombre&idtabla=$idtabla";
-			$url = urlServicios."consultadetalle/consultadetalle_pro_origenactprocesal.php?".$parameters;
-			$arreglo= "pro_$tabla";
-			break;			
+		$parameters = "ExisteTabla=1&Nombre=$nombre&idtabla=$idtabla";
+		$url = urlServicios."consultadetalle/consultadetalle_pro_origenactprocesal.php?".$parameters;
+		$arreglo= "pro_$tabla";
+		break;
+
+	case 'eventoinusual' :
+		$parameters = "ExisteTabla=1&Nombre=$nombre&Fechainicio=$fechainicio&Fechafinal=$fechafinal&idtabla=$idtabla";
+		$url = urlServicios."consultadetalle/gen_eventoinusual.php?".$parameters;
+		$arreglo= "gen_$tabla";
+		break;			
 	
 }	
 
@@ -156,6 +162,5 @@ else
 	{
 		$existeReg = "S";
 	}		
-}
-	
+}	
 ?>
