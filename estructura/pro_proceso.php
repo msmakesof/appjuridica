@@ -22,6 +22,7 @@ class PRO_PROCESO
      */
     public static function getAll($par1, $Estado, $parametrousu, $parametroemp)
     {
+        //echo $pars = "$par1, $Estado, $parametrousu, $parametroemp<br>";
         $condi = "";
 		$condijoin = "";
 		$condijoin2 = ""; 
@@ -64,7 +65,7 @@ class PRO_PROCESO
             // Preparar sentencia
             $comando = Database::getInstance()->getDb()->prepare($consulta);
             // Ejecutar sentencia preparada
-            $comando->execute(array($Estado));
+            $comando->execute(array($par1, $Estado, $parametrousu, $parametroemp));
 
             return $comando->fetchAll(PDO::FETCH_ASSOC);
 
@@ -641,6 +642,77 @@ class PRO_PROCESO
             // para presentarlo en la respuesta Json
             return -1;
         }
+    }
+
+        /**
+     * Retorna todas las filas especificadas de la tabla '$IdTabla'
+     * para presentar el Aplazamiento para cada proceso,
+     * @param $IdTabla Identificador del registro
+     * @return array Datos del registro
+	 * @parametrousu = IdUsuario
+	 * @Estado = Estado del proceso
+     */
+    public static function getAllTAP($tap, $np)
+    {   
+        $condi = "";
+        $idevento = $tap;
+        if($np > 0)
+        {
+            $condi = " AND PRO_NumeroProceso = $np ";
+        }
+		$consulta = "SELECT ".$GLOBALS['Llave'].", PRO_NumeroProceso, EVI_FechaInicio, EVI_Nombre, EVI_FechaFinal
+            FROM ".$GLOBALS['TABLA'].     
+            " JOIN gen_eventoinusual ON EVI_IdEventoInusual = $idevento AND EVI_IdEventoInusual = PRO_IdEventoInusual AND EVI_Estado = 1 
+             WHERE PRO_EstadoProceso = 1 AND PRO_IdEventoInusual IS NOT NULL $condi 
+             ORDER BY PRO_NumeroProceso; ";
+			//echo $consulta ;
+        try {
+            // Preparar sentencia
+            $comando = Database::getInstance()->getDb()->prepare($consulta);
+            // Ejecutar sentencia preparada
+            $comando->execute(array($tap, $np));
+
+            return $comando->fetchAll(PDO::FETCH_ASSOC);
+
+        } catch (PDOException $e) {
+            return false;
+        }
+    }
+
+    /**
+     * Actualiza un registro de la bases de datos basado
+     * en los nuevos valores relacionados con un identificador
+     *
+     * @param $Proceso            identificador
+     * @param $Fechainicio        nuevo Nombre Tabla     
+     */
+    public static function asigna( $TAP, $OPC, $IdTabla)    
+    {
+        $condiWhere = "";
+        if($IdTabla == 0)
+        {
+            $condiWhere = "";
+        }
+        else
+        {
+            $condiWhere = " AND ". $GLOBALS['Llave'] ." = $IdTabla ;";
+        }
+
+        if($OPC == "d")
+        {
+            $TAP = 0;
+        }
+
+        // Creando consulta UPDATE
+        $consulta = "UPDATE ". $GLOBALS['TABLA']. " SET PRO_IdEventoInusual = $TAP ". 
+                    " WHERE PRO_EstadoProceso = 1 ". $condiWhere;
+        // Preparar la sentencia
+        $cmd = Database::getInstance()->getDb()->prepare($consulta);
+
+        // Relacionar y ejecutar la sentencia
+        $cmd->execute(array($TAP, $OPC, $IdTabla ));
+
+        return $cmd;
     }
 }
 ?>

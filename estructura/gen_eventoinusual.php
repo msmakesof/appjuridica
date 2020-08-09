@@ -141,24 +141,19 @@ class gen_eventoinusual
      * @param $IdEstadoTabla     nueva Estado       
      * 
      */
-    public static function update(
-        $nombre,
-        $FechaInicio,
-        $FechaFinal,
-        $estado,
-        $idtabla
-    )
+    public static function update($nombre, $fechainicio, $fechafinal, $estado, $idtabla )
     {
         // Creando consulta UPDATE
         $consulta = "UPDATE ". $GLOBALS['TABLA']. 
-            " SET EVI_Nombre=?, EVI_FechaInicio = ?, EVI_FechaFinal=?, EVI_Estado=? " .
-            " WHERE ". $GLOBALS['Llave'] ." =? ;";
+            " SET EVI_Nombre = ?, EVI_FechaInicio = ?, EVI_FechaFinal = ?, EVI_Estado = ? " .
+            " WHERE ". $GLOBALS['Llave'] ." = ? ;";
+			//echo $consulta;
 
         // Preparar la sentencia
         $cmd = Database::getInstance()->getDb()->prepare($consulta);
 
         // Relacionar y ejecutar la sentencia
-        $cmd->execute(array($nombre, $FechaInicio, $FechaFinal, $estado, $idtabla ));
+        $cmd->execute(array($nombre, $fechainicio, $fechafinal, $estado, $idtabla ));
 
         return $cmd;
     }

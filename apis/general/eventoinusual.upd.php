@@ -53,7 +53,8 @@ if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
 		$existe      = "";
 		$usulocal    = "";
 		$sigue      = "";
-		//echo("<script>console.log('PHP: ".$url."');</script>");
+		//echo("<script>console.log('PHP upd: ".$url."');</script>");
+		
 		if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
 		{
 			$ch = curl_init();

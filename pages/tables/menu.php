@@ -183,12 +183,20 @@ for($i=0; $i<count($mmenu['menu']); $i++)
 			</li>  		
 				
 
-			<li <?php if($NombreArchivo == "pro_proceso" || $NombreArchivo == "editaractprocesales" || $NombreArchivo == "pro_procesoc" || $NombreArchivo == "pro_procesoforma") { echo "class='active'"; }?> >
+			<li <?php if($NombreArchivo == "pro_proceso" || $NombreArchivo == "editaractprocesales" || $NombreArchivo == "pro_procesoc" || $NombreArchivo == "pro_procesoforma" || $NombreArchivo == "pro_aplazamiento") { echo "class='active'"; }?> >
 				<a href="javascript:void(0);" class="menu-toggle">
 					<i class="material-icons">work</i>
 					<span>Gesti&oacute;n Procesos</span>
 				</a>
 				<ul class="ml-menu">
+					
+					<li <?php if($NombreArchivo == "pro_aplazamiento") { echo "class='active'"; }?>>
+						<a href="pro_aplazamiento.php" id ="xp" name="xp" class="menu-toggle active">
+							<i class="material-icons">flag</i>
+							<span>Aplazamiento</span>
+						</a>
+					</li>
+
 					<li <?php if($NombreArchivo == "pro_proceso") { echo "class='active'"; }?>>
 						<a href="pro_proceso.php" id ="np" name="np" class="menu-toggle active">
 							<i class="material-icons">gavel</i>
@@ -203,7 +211,7 @@ for($i=0; $i<count($mmenu['menu']); $i++)
 						</a>
 					</li>
 					
-					<li <?php if($NombreArchivo == "pro_procesoc") { echo "class='active'"; }?>>	
+					<li <?php if($NombreArchivo == "pro_procesoc") { echo "class='active'"; }?>>
 						<a href="pro_procesoc.php" id ="cp" name="cp" class="menu-toggle active">
 							<i class="material-icons">exit_to_app</i>
 							<span>Procesos Cerrados</span>
@@ -351,16 +359,23 @@ for($i=0; $i<count($mmenu['menu']); $i++)
         </li>
 		-->
 		
-		<li <?php if($NombreArchivo == "pro_proceso" || $NombreArchivo == "editaractprocesales" || $NombreArchivo == "pro_procesoc" || $NombreArchivo == "pro_procesoforma") { echo "class='active'"; }?> >
+		<li <?php if($NombreArchivo == "pro_proceso" || $NombreArchivo == "editaractprocesales" || $NombreArchivo == "pro_procesoc" || $NombreArchivo == "pro_procesoforma" || $NombreArchivo == "pro_aplazamiento") { echo "class='active'"; }?> >
 			<a href="javascript:void(0);" class="menu-toggle">
 				<i class="material-icons">work</i>
 				<span>Gesti&oacute;n Procesos</span>
 			</a>
 			<ul class="ml-menu">
+				<li <?php if($NombreArchivo == "pro_aplazamiento") { echo "class='active'"; }?>>
+					<a href="pro_aplazamiento.php" id ="xp" name="xp" class="menu-toggle active">
+						<i class="material-icons">flag</i>
+						<span>Aplazamientos</span>
+					</a>
+				</li>	
+
 				<li <?php if($NombreArchivo == "pro_proceso") { echo "class='active'"; }?>>
 					<a href="pro_proceso.php" id ="np" name="np" class="menu-toggle active">
 						<i class="material-icons">gavel</i>
-						<span>Consulta Procesos</span>
+						<span>Consulta Procesos.</span>
 					</a>
 				</li>
 				
