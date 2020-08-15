@@ -189,7 +189,7 @@ if( isset($_POST['ƒ×'])  && !empty($_POST['ƒ×']) )
         <div class="container-fluid">
             <div class="block-header">
                 <h2>
-                    INFORMACION DE: <?php echo strtoupper($nombre_lnk); ?>
+                    INFORMACION DE: <?php echo strtoupper($nombre_lnk); ?> por Empresa.
                     <small>Opciones: <a href="#" target="_blank">consultar, crear, modificar.</a></small>
                 </h2>
             </div>
@@ -200,7 +200,7 @@ if( isset($_POST['ƒ×'])  && !empty($_POST['ƒ×']) )
                     <div class="card">
                         <div class="header">
                             <h2>
-                                Opciones para Exportar...
+                                Opciones para Exportar.
                             </h2>
                             <ul class="header-dropdown m-r--1">
                                 <li class="dropdown">                                   
