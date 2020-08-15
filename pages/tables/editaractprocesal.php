@@ -67,11 +67,11 @@ $nroproceso = $_POST['proceso'];
 $cadena = strlen($nroproceso);
 if( $cadena <= 22 )
 {
-	$txtnroproceso = "<span class='label label-danger'>Proceso Radicado, Nro. interno: ". $nroproceso."</span>";
+	$txtnroproceso = "<span class='label label-danger' style='border-radius: 5px;'>Proceso Radicado. Nro. interno: ". $nroproceso."</span>";
 }
 else
 {
-	$txtnroproceso = "<span class='label label-success'>Nro. Proceso: ". $nroproceso."</span>";
+	$txtnroproceso = "<span class='label label-success' style='border-radius: 5px;'>Nro. Proceso: ". $nroproceso."</span>";
 	$condinroproceso = $nroproceso;
 }
 
@@ -696,7 +696,7 @@ if( isset($_POST["id"]))  // Este es el id del Proceso la llave
 			
 					<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 						<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-							Direcci&oacute;n: <b><?php echo trim(strtoupper($DirDemandado)); ?></b>                            
+							Direcci&oacute;n: <b><?php echo trim(strtoupper($DirDemandado)); ?></b>
 						</div>    
 					</div>
 											
@@ -705,17 +705,22 @@ if( isset($_POST["id"]))  // Este es el id del Proceso la llave
 
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <div class="card">
-                        <div class="header">                            
+                        <div class="header">
                             <h2>
-                                Opciones para Exportar  <?php echo $txtnroproceso .' - ' . $midtabla; ?>
+                            Opciones para Exportar
+                            <div style="text-align: center; font-size:18px !important;">
+                                <?php echo $txtnroproceso .' - ' . $midtabla; ?>
+                            </div>
                             </h2>
                             
+
 							<ul class="header-dropdown m-r--1">                                                                
 								<li class="dropdown">
-									<a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-										<i class="material-icons" style="font-size:24px;color:red">add_circle_outline</i>  										      
-									</a>
-									
+                                    
+									<a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">                                        
+                                        <i class="material-icons" style="font-size:24px;color:red">add_circle_outline</i>                                        
+									</a>                                    
+
 									<ul class="dropdown-menu pull-right">
 									<li>
 									<!-- <a id="nuevo" class="btn btn-warning btn-xs waves-effect" data-toggle="modal" data-target="#defaultModal">Nuevo</a> -->
