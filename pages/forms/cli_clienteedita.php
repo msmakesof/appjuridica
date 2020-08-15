@@ -345,7 +345,7 @@ $Celularrl2 = trim($mcliente['cli_cliente']['CLI_CelularContacto']);
 									<div class="row">
 										<div class="col-md-3">
 											<label class="form-label">Autoriza acceso a la herramienta para que el cliente pueda ver seguimiento de su proceso?												
-												<input type="checkbox" name="verseguimiento" id="verseguimiento" data-toggle="toggle" data-on="Aceptar" data-off="Cancelar" data-onstyle="success" data-offstyle="danger" data-size="sm" <?php if( $Verseguimiento == 1){?>checked="checked"<?php } ?>>
+												<input type="checkbox" name="verseguimiento" id="verseguimiento" data-toggle="toggle" data-on="  Si   " data-off="   No  " data-onstyle="success" data-offstyle="danger" data-size="sm" <?php if( $Verseguimiento == 1){?>checked="checked"<?php } ?>>
 											</label>									
 											<hr style="margin-top:5px">
 										</div>

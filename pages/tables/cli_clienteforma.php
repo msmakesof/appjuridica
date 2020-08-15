@@ -563,7 +563,7 @@ require_once('../../apis/empresa/Empresa.php');
 										
 										<div class="col-md-3">
 											<label class="form-label">Autoriza acceso a la herramienta para que el cliente pueda ver seguimiento de su proceso?											
-												<input id="verseguimiento" type="checkbox" data-toggle="toggle" data-on="Aceptar" data-off="Cancelar" data-onstyle="success" data-offstyle="danger" data-size="sm">
+												<input id="verseguimiento" type="checkbox" data-toggle="toggle" data-on="  Si  " data-off="  No  " data-onstyle="success" data-offstyle="danger" data-size="sm">
 											</label>									
 											<hr style="margin-top:5px">
 										</div>
