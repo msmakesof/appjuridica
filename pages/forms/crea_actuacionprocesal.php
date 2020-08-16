@@ -46,6 +46,12 @@ if( isset($_POST['fechainicio']) )
     $pfechainicio = trim($_POST['fechainicio']);
 }
 
+$porigen ="";
+if( isset($_POST['origen']) )
+{
+    $porigen = trim($_POST['origen']);
+}
+
 $pactpro ="";
 if( isset($_POST['actpro']) )
 {
@@ -80,7 +86,7 @@ if( isset($_POST['gasto']) )
 // Nombres iguales 
 if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
 {
-  $parameters = "ExisteActPro=1&Proceso=$pproceso&FechaInicio=$pfechainicio&ActPro=$pactpro&FechaEstado=$pfechaestado&Observacion=$pobservacion";
+  $parameters = "ExisteActPro=1&Proceso=$pproceso&FechaInicio=$pfechainicio&Origen=$porigen&ActPro=$pactpro&FechaEstado=$pfechaestado&Observacion=$pobservacion";
   $url = urlServicios."consultadetalle/consultadetalle_pro_actuacionprocesal.php?".$parameters;
   $ch = curl_init();
   curl_setopt($ch, CURLOPT_VERBOSE, true);
@@ -116,7 +122,7 @@ if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
     {
       $idUsuario = $_SESSION['IdUsuario'];
 	  $estadoActPro = "1";
-      $parameters = "insert=insert&Proceso=$pproceso&Fechainicio=$pfechainicio&ActPro=$pactpro&FechaEstado=$pfechaestado&Observacion=$pobservacion&Usuario=$idUsuario&EstadoActPro=$estadoActPro&Gasto=$pgasto";
+      $parameters = "insert=insert&Proceso=$pproceso&Fechainicio=$pfechainicio&Origen=$porigen&ActPro=$pactpro&FechaEstado=$pfechaestado&Observacion=$pobservacion&Usuario=$idUsuario&EstadoActPro=$estadoActPro&Gasto=$pgasto";
       $soportecURL = "S";
       $url         = urlServicios."consultadetalle/consultadetalle_pro_actuacionprocesal.php?".$parameters;
       $existe      = "";

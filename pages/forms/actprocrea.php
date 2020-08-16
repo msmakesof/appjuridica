@@ -889,7 +889,7 @@ $IdUsuarioCierre = trim($mproceso['pro_proceso']['PRO_IdUsuarioCierre']);
             else
             {
     			$.ajax({
-    				data : {"idproceso": idproceso, "fechainicio": fechainicio, "actpro": actpro, "fechaestado": fechaestado, "observacion": observacion, "gasto": gasto},
+    				data : {"idproceso": idproceso, "fechainicio": fechainicio, "origen": origen, "actpro": actpro, "fechaestado": fechaestado, "observacion": observacion, "gasto": gasto},
     				type: "POST",				
     				url : "../forms/crea_<?php echo strtolower($Tabla); ?>.php",
                 })  

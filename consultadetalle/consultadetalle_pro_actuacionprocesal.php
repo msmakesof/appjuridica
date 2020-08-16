@@ -72,11 +72,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     {
         $par1 = $_GET['Proceso'];
         $par2 = $_GET['FechaInicio'];
-        $par3 = $_GET['ActPro'];
-		$par4 = $_GET['FechaEstado'];
-		$par5 = $_GET['Observacion'];		
+        $par3 = $_GET['Origen'];
+        $par4 = $_GET['ActPro'];
+		$par5 = $_GET['FechaEstado'];
+		$par6 = $_GET['Observacion'];		
 
-        $retorno = PRO_ACTUACIONPROCESAL::existeactpro($par1, $par2, $par3, $par4, $par5);
+        $retorno = PRO_ACTUACIONPROCESAL::existeactpro($par1, $par2, $par3, $par4, $par5,$par6);
         if ($retorno) 
         {
             $pro_actuacionprocesal["estado"] = "1";
@@ -124,14 +125,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         //Obtener Parametros
         $par1 = $_GET['Proceso'];
         $par2 = $_GET['Fechainicio'];
-		$par3 = $_GET['ActPro'];        
-        $par4 = $_GET['FechaEstado'];        
-        $par5 = $_GET['Observacion'];
-		$par6 = $_GET['Usuario'];
-		$par7 = $_GET['EstadoActPro'];
-		$par8 = $_GET['Gasto'];
+        $par3 = $_GET['Origen'];
+		$par4 = $_GET['ActPro'];
+        $par5 = $_GET['FechaEstado'];        
+        $par6 = $_GET['Observacion'];
+		$par7 = $_GET['Usuario'];
+		$par8 = $_GET['EstadoActPro'];
+		$par9 = $_GET['Gasto'];
 
-        $retorno = PRO_ACTUACIONPROCESAL::insert($par1, $par2, $par3, $par4, $par5, $par6, $par7, $par8);
+        $retorno = PRO_ACTUACIONPROCESAL::insert($par1, $par2, $par3, $par4, $par5, $par6, $par7, $par8, $par9);
         $msj = $retorno;
         if($retorno)
         {

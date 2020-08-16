@@ -97,17 +97,17 @@ class PRO_ACTUACIONPROCESAL
      * @param $IdUsuario identificador de la PRO_ACTUACIONPROCESAL
      * @return bool Respuesta de la consulta
      */
-    public static function existeactpro($Proceso, $FechaInicio, $ActPro, $FechaEstado, $Observacion)
+    public static function existeactpro($Proceso, $FechaInicio, $Origen, $ActPro, $FechaEstado, $Observacion)
     {
         $consulta = "SELECT count(". $GLOBALS['Llave']. ") existe, APR_IdActuacionProcesal FROM ".$GLOBALS['TABLA'].
-        " WHERE APR_IdActuacionProcesal = ? AND APR_FechaCreacion = ? AND APR_IdTipoActuacionProcesal = ? AND APR_FechaHabil = ? 
+        " WHERE APR_IdActuacionProcesal = ? AND APR_IdOrigen = ? AND APR_FechaCreacion = ? AND APR_IdTipoActuacionProcesal = ? AND APR_FechaHabil = ? 
 		AND APR_Observaciones = ? AND APR_EstadoActProcesal = 1; ";
 
         try {
             // Preparar sentencia
             $comando = Database::getInstance()->getDb()->prepare($consulta);
             // Ejecutar sentencia preparada
-            $comando->execute(array($Proceso, $FechaInicio, $ActPro, $FechaEstado, $Observacion));
+            $comando->execute(array($Proceso, $FechaInicio, $Origen, $ActPro, $FechaEstado, $Observacion));
             // Capturar primera fila del resultado
             $row = $comando->fetch(PDO::FETCH_ASSOC);
             return $row;
@@ -123,6 +123,7 @@ class PRO_ACTUACIONPROCESAL
      *         
      * @param $Proceso            Proceso 
      * @param $Fechainicio        Fechainicio
+     * @param $Origen             Origen
      * @param $ActPro             ActPro
      * @param $FechaEstado        FechaEstado
      * @param $Observacion        Observacion
@@ -133,6 +134,7 @@ class PRO_ACTUACIONPROCESAL
     public static function insert(        
         $Proceso,
         $Fechainicio,
+        $Origen,
         $ActPro,        
         $FechaEstado,
         $Observacion,
@@ -144,7 +146,8 @@ class PRO_ACTUACIONPROCESAL
         // Sentencia INSERT
         $comando = "INSERT INTO ". $GLOBALS['TABLA'] ." ( " . 
             " APR_IdProceso, " .            
-            " APR_FechaCreacion, " . 
+            " APR_FechaCreacion, " .
+            " APR_IdOrigen, ". 
             " APR_IdTipoActuacionProcesal, " .            
             " APR_FechaHabil, " . 
             " APR_Observaciones, " .            
@@ -152,7 +155,7 @@ class PRO_ACTUACIONPROCESAL
             " APR_EstadoActProcesal, ".
 			" APR_Gasto ".
             " )".     
-            " VALUES(?,?,?,?,?,?,?,?) ;";			
+            " VALUES(?,?,?,?,?,?,?,?,?) ;";			
 
         // Preparar la sentencia
         $sentencia = Database::getInstance()->getDb()->prepare($comando);
@@ -160,7 +163,8 @@ class PRO_ACTUACIONPROCESAL
         return $sentencia->execute(
             array(
                 $Proceso,
-				$Fechainicio,
+                $Fechainicio,
+                $Origen,
 				$ActPro,        
 				$FechaEstado,
 				$Observacion,
