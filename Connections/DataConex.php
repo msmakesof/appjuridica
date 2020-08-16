@@ -4,7 +4,7 @@
  * Mysql.
  */
  
-$hostname_cnn_kn = "192.168.0.6";
+$hostname_cnn_kn = "192.168.0.9";
 $database_cnn_kn = "appjudicial";
 $username_cnn_kn = "usrremoto";
 $password_cnn_kn = "Vialibre90$";
