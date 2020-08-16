@@ -132,6 +132,8 @@ $IdUsuarioCierre = trim($mproceso['pro_proceso']['PRO_IdUsuarioCierre']);
         {
             margin-bottom:-24px !important;
         }
+
+        #actpro option[value=""] { color: red; }
     </style>
 </head>
 
@@ -588,7 +590,7 @@ $IdUsuarioCierre = trim($mproceso['pro_proceso']['PRO_IdUsuarioCierre']);
 										<div class="col-lg-12 col-md-12 col-sm-12">
 											
 											<div class="col-lg-2 col-md-2 col-sm-2">
-												<div class="row">
+												<div class="row"><span style="color:red;">*</span>
 													<label class="form-label">Fecha</label>												
 													<div class='input-group date form-line' name="fechainicio" id="fechainicio" required>
 														<input type='text' id="txtFechaInicio" name="txtFechaInicio" class="form-control" readonly/>
@@ -604,11 +606,11 @@ $IdUsuarioCierre = trim($mproceso['pro_proceso']['PRO_IdUsuarioCierre']);
                                             </div>
                                             
                                             <div class="col-lg-3 col-md-3 col-sm-3">
-												<div class="row">												                                                
+												<div class="row"><span style="color:red;">*</span>
 													<label class="form-label" style="font-size: 12;">Origen / Autor:</label>
 													<div class="xform-line">													    
 														
-														<select class="selectpicker show-tick" data-live-search="true" data-width="95%" name="actpro" id="actpro" required>
+														<select class="selectpicker show-tick" data-live-search="true" data-width="95%" name="origen" id="origen" required>
 														<option value="" >SeleccioneOrigen / Autor:...</option>
 														<?php                                                             
 															$idTabla = 0;
@@ -636,26 +638,12 @@ $IdUsuarioCierre = trim($mproceso['pro_proceso']['PRO_IdUsuarioCierre']);
 											</div>	
 									
 											<div class="col-lg-5 col-md-5 col-sm-5">
-												<div class="row">												                                                
+												<div class="row"><span style="color:red;">*</span>
 													<label class="form-label" style="font-size: 12;">Actuación Procesal:</label>
 													<div class="xform-line">													    
 														
 														<select class="selectpicker show-tick" data-live-search="true" data-width="95%" name="actpro" id="actpro" required>
-														<option value="" >Seleccione Actuación Procesal...</option>
-														<?php                                                             
-															$idTabla = 0;
-															require_once('../../apis/proceso/tipoactuacionprocesal.php');
-															for($i=0; $i<count($mtipoactuacionprocesal['pro_tipoactuacionprocesal']); $i++)
-															{
-																$TAP_IdTipoActuacionProcesal = $mtipoactuacionprocesal['pro_tipoactuacionprocesal'][$i]['TAP_IdTipoActuacionProcesal'];
-																$TAP_Nombre = $mtipoactuacionprocesal['pro_tipoactuacionprocesal'][$i]['TAP_Nombre'];															
-														?>
-																<option value="<?php echo $TAP_IdTipoActuacionProcesal; ?>" <?php if ($TAP_IdTipoActuacionProcesal == $ciudadproceso){ echo "selected";} else{ echo "";} ?>>
-																	<?php echo $TAP_Nombre ; ?>                                                
-																</option>
-														<?php
-															}
-														?>
+														    <option value="" >Seleccione Actuación Procesal...</option>
 														</select>
 													</div>												
 												</div>
@@ -667,7 +655,7 @@ $IdUsuarioCierre = trim($mproceso['pro_proceso']['PRO_IdUsuarioCierre']);
 									<div class="form-group">
 										<div class="col-lg-12 col-md-12 col-sm-12">									
 											<div class="col-lg-2 col-md-2 col-sm-2">
-												<div class="row">											
+												<div class="row"><span style="color:red;">*</span>
 													<label class="form-label">Fecha Estado:</label>												
 													<div class='input-group date form-line' name="fechaestado" id="fechaestado" required>
 														<input type='text' id="txtFechaEstado" class="form-control"/>
@@ -683,7 +671,7 @@ $IdUsuarioCierre = trim($mproceso['pro_proceso']['PRO_IdUsuarioCierre']);
 											</div>
 																		   
 											<div class="col-lg-9 col-md-9 col-sm-9">
-												<div class="row">																						
+												<div class="row"><span style="color:red;">*</span>
 													<label class="form-label">Observaciones:</label>
 													<div class="form-line">
 														<input type="input" class="form-control" name="observacion" id="observacion" maxlength="90" autocomplete="off" required>
@@ -716,6 +704,7 @@ $IdUsuarioCierre = trim($mproceso['pro_proceso']['PRO_IdUsuarioCierre']);
                                             <div class="col-sm-8">	
                                                 <button class="btn btn-success waves-effect" type="button" id="grabar">GRABAR</button>
                                                 <button onclick="salir(<?php echo $idtabla; ?>)" class="btn btn-danger waves-effect">SALIR</button>
+                                                <div><span style="color:red;">* Campos Obligatorios.</span></div>
                                             </div>
                                         </div>    
                                     </div>
@@ -833,10 +822,42 @@ $IdUsuarioCierre = trim($mproceso['pro_proceso']['PRO_IdUsuarioCierre']);
 			format: 'YYYY-MM-DD',
 			autoclose: true			
         });
+
+        $("#origen").on('change', function(){
+            var __origen = $("#origen").val();
+            
+            $.getJSON('../tables/urlink.php', {funcion: "or", origen: __origen }, function (data) {
+                var zdata= data.pro_actuacionprocesal;
+                console.log(zdata);
+                var selectedOption = '';
+                var newOptions = zdata;
+
+                var select = $('#actpro');
+                if(select.prop) 
+                {
+                    var options = select.prop('options');
+                }
+                else 
+                {
+                    var options = select.attr('options');
+                }
+                $('option', select).remove();
+                options[options.length] = new Option('-- Seleccione Actuación Procesal... --', '');
+                if(newOptions != undefined)
+                {
+                    $.each(newOptions, function(val, text) {
+                        options[options.length] = new Option(text.TAP_Nombre, text.TAP_IdTipoActuacionProcesal);
+                    });
+                }    
+                select.val(selectedOption);
+                $('#actpro').selectpicker('refresh');
+            });
+
+        })
 		
 		$('#observacion').keypress(function() {
 			init_contador("#observacion","#muestrocantidadcaracteresid");
-		});              
+		});
 
         $("#cerrar").on('click', function(e) {
             e.preventDefault();
@@ -847,16 +868,17 @@ $IdUsuarioCierre = trim($mproceso['pro_proceso']['PRO_IdUsuarioCierre']);
 			e.preventDefault();
             $("#mensaje").hide();
             var fechainicio = $("#txtFechaInicio").val();            
+            var origen = $("#origen").val();
             var actpro = $("#actpro").val();
             var fechaestado = $("#txtFechaEstado").val();            
             var observacion = $("#observacion").val();
 			var gasto = $("#gasto").val();
 			var idproceso = "<?php echo $idtabla; ?>";		
 			
-            if( fechainicio == "" || actpro == "" || fechaestado == "" ||  observacion == "" )
+            if( fechainicio == "" || origen == "" || actpro == "" || fechaestado == "" ||  observacion == "" )
             {               
                 swal({
-                  title: "Atención:  Ingrese información en todos los campos...",
+                  title: "Atención:  Ingrese información en los campos Obligatorios...",
                   text: "un momento por favor.",
                   imageUrl: "../../js/sweet/2.gif",
                   timer: 1500,

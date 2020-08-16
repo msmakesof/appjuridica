@@ -63,6 +63,12 @@ if(isset($_GET['funcion']) && !empty($_GET['funcion'])) {
             include('../../apis/combos/clientexdemandado.php');
             $mjuzgado= json_encode($mjuzgado, JSON_PRETTY_PRINT);
 			$mretorno = $mjuzgado;
+            break;
+
+        case "or":
+            include('../../apis/combos/tapxorigen.php');
+            $mjuzgado= json_encode($mjuzgado, JSON_PRETTY_PRINT);
+            $mretorno = $mjuzgado;
             break;	
     }    
         

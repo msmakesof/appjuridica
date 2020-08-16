@@ -293,6 +293,37 @@ class PRO_TIPOACTUACIONPROCESAL
             return -1;
         }
     }
+
+    /**
+     * Obtiene los campos de una tabla con un identificador
+     * determinado
+     *
+     * @param $IdTabla Identificador de la $IdTabla
+     * @return mixed
+     */
+    public static function getIdTapxOrigen($IdTabla)
+    {
+        // Consulta de la tabla de tablas
+        $consulta = "SELECT ".$GLOBALS['Llave'].",
+                    TAP_Nombre, TAP_DiasHabiles, TAP_IdOrigen, TAP_Estado,
+                    TAP_Notifica, TAP_IdPeriodo, TAP_IdArea
+                    FROM ".$GLOBALS['TABLA'].
+                    " WHERE TAP_IdOrigen = ? AND TAP_Estado = 1 ORDER BY TAP_Nombre; ";
+        //echo "$consulta";
+        try {
+            // Preparar sentencia
+            $comando = Database::getInstance()->getDb()->prepare($consulta);
+            // Ejecutar sentencia preparada
+            $comando->execute(array($IdTabla));
+            // Capturar primera fila del resultado
+            return $comando->fetchAll(PDO::FETCH_ASSOC);
+        } 
+        catch (PDOException $e) {
+            // Aquí puedes clasificar el error dependiendo de la excepción
+            // para presentarlo en la respuesta Json
+            return -1;
+        }
+    }
 }
 
 ?>
