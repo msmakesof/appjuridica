@@ -642,7 +642,12 @@ if($usuario == "")
                                                     {
                                                         $IdProceso = $mproceso['pro_proceso'][$i]['PRO_IdProceso'];
                                                         $Nombre = $mproceso['pro_proceso'][$i]['PRO_NumeroProceso'];
-                                                        //$Estado = $mproceso['pro_proceso'][$i]['OAP_Estado'];															
+                                                        
+                                                        $nroproceso = substr($Nombre,16,5);
+                                                        if(strlen($nroproceso) < 5 )
+                                                        {
+                                                            $Nombre = $IdProceso.' - Sin Radicado';
+                                                        }
                                                 ?>
                                                         <option value="<?php echo $IdProceso; ?>" >
                                                             <?php echo $Nombre ; ?>                                                
