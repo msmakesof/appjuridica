@@ -1,21 +1,10 @@
 <?php
-//ob_start();
 include_once("../tables/header.inc.php");
-require_once ('../../Connections/DataConex.php'); //require_once('../../Connections/cnn_kn.php');
+require_once ('../../Connections/DataConex.php'); 
 $LogoInterno = LogoInterno;
 $empresa = Company ;
 require_once('../../Connections/config2.php');
-/*
-if(!isset($_SESSION)) 
-{ 
-    session_start(); 
-}
-if( !isset($_SESSION['IdUsuario']) && !isset($_SESSION['NombreUsuario']) )
-{
-	header("Location: ../../index.php");
-    exit;
-} 
-*/
+
 ?>
 <?php
 if (!function_exists("GetSQLValueString")) 
@@ -83,6 +72,7 @@ $IdUsuario = $mactuacionprocesal['pro_actuacionprocesal']['APR_IdUsuario'];
 $FechaHabil = $mactuacionprocesal['pro_actuacionprocesal']['APR_FechaHabil'];
 $EstadoActProcesal = $mactuacionprocesal['pro_actuacionprocesal']['APR_EstadoActProcesal'];
 $Gasto = $mactuacionprocesal['pro_actuacionprocesal']['APR_Gasto'];
+$IdOrigenAPR = $mactuacionprocesal['pro_actuacionprocesal']['APR_IdOrigen'];
 ?>
 <!DOCTYPE html>
 <html>
@@ -595,7 +585,7 @@ $Gasto = $mactuacionprocesal['pro_actuacionprocesal']['APR_Gasto'];
 										<div class="col-lg-12 col-md-12 col-sm-12">
 											
 											<div class="col-lg-2 col-md-2 col-sm-2">
-												<div class="row">
+												<div class="row"><span style="color:red;">*</span>
 													<label class="form-label">Fecha</label>												
 													<div class='input-group date form-line' name="fechainicio" id="fechainicio" required>
 														<input type='text' id="txtFechaInicio" name="txtFechaInicio" class="form-control" value="<?php echo $FechaCreacion; ?>" readonly/>
@@ -608,10 +598,42 @@ $Gasto = $mactuacionprocesal['pro_actuacionprocesal']['APR_Gasto'];
 											<div class="col-lg-1 col-md-1 col-sm-1">
 												<div class="row">&nbsp;
 												</div>
-											</div>	
+                                            </div>
+                                            
+                                            <div class="col-lg-3 col-md-3 col-sm-3">
+												<div class="row"><span style="color:red;">*</span>
+													<label class="form-label" style="font-size: 12;">Origen / Autor:</label>
+													<div class="xform-line">													    
+														
+														<select class="selectpicker show-tick" data-live-search="true" data-width="95%" name="origen" id="origen" required>
+														<option value="" >SeleccioneOrigen / Autor:...</option>
+														<?php                                                             
+															$idTabla = 0;
+															require_once('../../apis/proceso/origenactprocesal.php');
+															for($i=0; $i<count($morigenactprocesal['pro_origenactprocesal']); $i++)
+															{
+                                                                $IdOrigen = $morigenactprocesal['pro_origenactprocesal'][$i]['OAP_IdOrigen'];
+                                                                $Nombre = $morigenactprocesal['pro_origenactprocesal'][$i]['OAP_Nombre'];
+                                                                $Estado = $morigenactprocesal['pro_origenactprocesal'][$i]['OAP_Estado'];															
+														?>
+																 <option value="<?php echo $IdOrigen; ?>" <?php if ($IdOrigenAPR == $IdOrigen){ echo "selected";} else{ echo "";} ?>>
+                                                                    <?php echo $Nombre ; ?>                                                
+																</option>
+														<?php
+															}
+														?>
+														</select>
+													</div>
+												</div>
+                                            </div>
+
+                                            <div class="col-lg-1 col-md-1 col-sm-1">
+												<div class="row">&nbsp;
+												</div>
+											</div>
 									
-											<div class="col-lg-8 col-md-8 col-sm-8">
-												<div class="row">												                                                
+											<div class="col-lg-5 col-md-5 col-sm-5">
+												<div class="row"><span style="color:red;">*</span>
 													<label class="form-label" style="font-size: 12;">Actuación Procesal:</label>
 													<div class="xform-line">													    
 														
@@ -641,7 +663,7 @@ $Gasto = $mactuacionprocesal['pro_actuacionprocesal']['APR_Gasto'];
 									<div class="form-group">
 										<div class="col-lg-12 col-md-12 col-sm-12">									
 											<div class="col-lg-2 col-md-2 col-sm-2">
-												<div class="row">											
+												<div class="row"><span style="color:red;">*</span>
 													<label class="form-label">Fecha Estado:</label>												
 													<div class='input-group date form-line' name="fechaestado" id="fechaestado" required>
 														<input type='text' id="txtFechaEstado" class="form-control"  value="<?php echo $FechaHabil; ?>" />
@@ -657,7 +679,7 @@ $Gasto = $mactuacionprocesal['pro_actuacionprocesal']['APR_Gasto'];
 											</div>
 																		   
 											<div class="col-lg-9 col-md-9 col-sm-9">
-												<div class="row">																						
+												<div class="row"><span style="color:red;">*</span>
 													<label class="form-label">Observaciones:</label>
 													<div class="form-line">
 														<input type="input" class="form-control" name="observacion" id="observacion" maxlength="90" autocomplete="off" value="<?php echo $Observaciones; ?>" required>
@@ -690,7 +712,8 @@ $Gasto = $mactuacionprocesal['pro_actuacionprocesal']['APR_Gasto'];
                                             <div class="col-sm-8">	
                                                 <button class="btn btn-success waves-effect" type="button" id="grabar">GRABAR</button>
                                                 <button type="button" class="btn btn-danger waves-effect" id="borrar">BORRAR</button>
-												<button onclick='salir("<?php echo $idprocesopar; ?>","<?php echo $nroproceso ;?>")' class="btn btn-info waves-effect">SALIR</button>
+                                                <button onclick='salir("<?php echo $idprocesopar; ?>","<?php echo $nroproceso ;?>")' class="btn btn-info waves-effect">SALIR</button>
+                                                <div><span style="color:red;">* Campos Obligatorios.</span></div>
                                             </div>
                                         </div>    
                                     </div>
@@ -817,6 +840,37 @@ $Gasto = $mactuacionprocesal['pro_actuacionprocesal']['APR_Gasto'];
 			format: 'YYYY-MM-DD'
 			//viewMode: 'days'		  
         });
+
+        $("#origen").on('change', function(){
+            var __origen = $("#origen").val();
+            
+            $.getJSON('../tables/urlink.php', {funcion: "or", origen: __origen }, function (data) {
+                var zdata= data.pro_actuacionprocesal;
+                console.log(zdata);
+                var selectedOption = '';
+                var newOptions = zdata;
+
+                var select = $('#actpro');
+                if(select.prop) 
+                {
+                    var options = select.prop('options');
+                }
+                else 
+                {
+                    var options = select.attr('options');
+                }
+                $('option', select).remove();
+                options[options.length] = new Option('-- Seleccione Actuación Procesal... --', '');
+                if(newOptions != undefined)
+                {
+                    $.each(newOptions, function(val, text) {
+                        options[options.length] = new Option(text.TAP_Nombre, text.TAP_IdTipoActuacionProcesal);
+                    });
+                }    
+                select.val(selectedOption);
+                $('#actpro').selectpicker('refresh');
+            });
+        })
 		
 		$('#observacion').keypress(function() {
 			init_contador("#observacion","#muestrocantidadcaracteresid");
@@ -830,16 +884,17 @@ $Gasto = $mactuacionprocesal['pro_actuacionprocesal']['APR_Gasto'];
 		$("#grabar").on('click', function(e) {
 			e.preventDefault();
             $("#mensaje").hide();
-            var fechainicio = $("#txtFechaInicio").val();            
+            var fechainicio = $("#txtFechaInicio").val();
+            var origen = $("#origen").val();
             var actpro = $("#actpro").val();			
 			var fechaestado = $("#txtFechaEstado").val();            
             var observacion = $("#observacion").val();
 			var gasto = $('#gasto').val();
 			var idproceso = "<?php echo $idtabla; ?>";			
-            if( fechainicio == "" || actpro == "" || fechaestado == "" ||  observacion == "" )
+            if( fechainicio == "" || origen == "" || actpro == "" || fechaestado == "" ||  observacion == "" )
             {               
                 swal({
-                  title: "Atención:  Ingrese información en todos los campos...",
+                  title: "Atención:  Ingrese información en los campos Obligatorios...",
                   text: "un momento por favor.",
                   imageUrl: "../../js/sweet/2.gif",
                   timer: 1500,
@@ -850,7 +905,7 @@ $Gasto = $mactuacionprocesal['pro_actuacionprocesal']['APR_Gasto'];
             else
             {
     			$.ajax({
-    				data : {"idproceso": idproceso, "fechainicio": fechainicio, "actpro": actpro, "fechaestado": fechaestado, "observacion": observacion, "gasto": gasto},
+    				data : {"idproceso": idproceso, "fechainicio": fechainicio, "origen": origen, "actpro": actpro, "fechaestado": fechaestado, "observacion": observacion, "gasto": gasto},
     				type: "POST",				
     				url : "../forms/editar_<?php echo strtolower($Tabla); ?>.php",
                 })  

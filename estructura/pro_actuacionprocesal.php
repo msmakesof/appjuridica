@@ -71,7 +71,7 @@ class PRO_ACTUACIONPROCESAL
 							APR_IdUsuario, 
 							APR_FechaHabil, 
 							APR_EstadoActProcesal,
-							APR_Gasto
+							APR_Gasto, APR_IdOrigen
                             FROM ".$GLOBALS['TABLA'].
                             " WHERE ".$GLOBALS['Llave']." = ? ; ";
 
@@ -186,7 +186,8 @@ class PRO_ACTUACIONPROCESAL
      * 
      */
     public static function update(
-        $Fechainicio,		
+        $Fechainicio,
+        $Origen,		
         $Actpro,
         $Fechaestado,
 		$Observaciones,
@@ -196,14 +197,14 @@ class PRO_ACTUACIONPROCESAL
     {
         // Creando consulta UPDATE
         $consulta = "UPDATE ". $GLOBALS['TABLA'] .
-            " SET APR_FechaCreacion=?, APR_IdTipoActuacionProcesal=?, APR_FechaHabil=?, APR_Observaciones=?, APR_Gasto=? " .
+            " SET APR_FechaCreacion=?, APR_IdOrigen=?, APR_IdTipoActuacionProcesal=?, APR_FechaHabil=?, APR_Observaciones=?, APR_Gasto=? " .
             " WHERE ". $GLOBALS['Llave']. " =? ;";
 
         // Preparar la sentencia
         $cmd = Database::getInstance()->getDb()->prepare($consulta);
 
         // Relacionar y ejecutar la sentencia
-        $cmd->execute(array($Fechainicio, $Actpro, $Fechaestado, $Observaciones, $Gasto, $Idtabla ));
+        $cmd->execute(array($Fechainicio, $Origen, $Actpro, $Fechaestado, $Observaciones, $Gasto, $Idtabla ));
 
         return $cmd;
     }

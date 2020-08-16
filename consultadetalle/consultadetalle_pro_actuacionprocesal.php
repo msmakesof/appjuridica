@@ -159,13 +159,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     {
         //Obtener Parametros
         $par1 = $_GET['fechainicio'];
-		$par2 = $_GET['actpro'];		
-        $par3 = $_GET['fechaestado'];
-		$par4 = $_GET['observacion'];
-		$par5 = $_GET['gasto'];
-        $par6 = $_GET['idtabla'];
+        $par2 = $_GET['origen'];
+		$par3 = $_GET['actpro'];
+        $par4 = $_GET['fechaestado'];
+		$par5 = $_GET['observacion'];
+		$par6 = $_GET['gasto'];
+        $par7 = $_GET['idtabla'];
 
-        $retorno = PRO_ACTUACIONPROCESAL::update($par1, $par2, $par3, $par4, $par5, $par6);
+        $retorno = PRO_ACTUACIONPROCESAL::update($par1, $par2, $par3, $par4, $par5, $par6, $par7);
         $msj = $retorno;
         if($retorno)
         {

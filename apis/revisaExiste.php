@@ -125,7 +125,13 @@ switch ($tabla)
 		$parameters = "ExisteTabla=1&Nombre=$nombre&Fechainicio=$fechainicio&Fechafinal=$fechafinal&idtabla=$idtabla";
 		$url = urlServicios."consultadetalle/gen_eventoinusual.php?".$parameters;
 		$arreglo= "gen_$tabla";
-		break;			
+		break;
+
+	case 'actuacionprocesal' :
+		$parameters = "ExisteActPro=1&fechainicio=$fechainicio&origen=$origen&actpro=$actpro&fechaestado=$fechaestado&observacion=$observacion&gasto=$gasto&idtabla=$idtabla";
+		$url = urlServicios."consultadetalle/consultadetalle_pro_actuacionprocesal.php?".$parameters;
+		$arreglo= "pro_$tabla";
+		break;		
 	
 }	
 

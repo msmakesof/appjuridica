@@ -1,18 +1,7 @@
 <?php 
 include_once("../tables/header.inc.php");
-require_once ('../../Connections/DataConex.php'); //require_once('../../Connections/cnn_kn.php'); 
+require_once ('../../Connections/DataConex.php');
 require_once('../../Connections/config2.php');
-/*
-if(!isset($_SESSION)) 
-{ 
-  session_start(); 
-}
-if( !isset($_SESSION['IdUsuario']) && !isset($_SESSION['NombreUsuario']) )
-{
-	header("Location: ../../index.php");
-    exit;
-} 
-*/ 
 ?>
 <?php
 if (!function_exists("GetSQLValueString")) {
@@ -54,6 +43,10 @@ $fechainicio ="";
 if(isset($_POST['fechainicio'])){
 	$fechainicio = trim($_POST['fechainicio']);
 	$fechainicio = str_replace(' ', '%20', $fechainicio);
+}
+$origen ="";
+if(isset($_POST['origen'])){
+  $origen = trim($_POST['origen']);  
 }
 
 $actpro ="";
