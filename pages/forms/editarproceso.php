@@ -52,6 +52,9 @@ $row_rs_tabla = 0;
 $Nombreciudad = "";
 $yy = date("Y");
 
+$e = "";
+$iu = $_SESSION['TipoUsuario'];
+$em = $_SESSION['IdEmpresa'];
 require_once('../../apis/proceso/proceso.php');
 $txtEstado = "";
 $idtabla = $mproceso['pro_proceso']['PRO_IdProceso'];
