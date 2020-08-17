@@ -85,8 +85,15 @@ $IdUsuarioCierre = trim($mproceso['pro_proceso']['PRO_IdUsuarioCierre']);
 $EnviaEmail = $mproceso['pro_proceso']['PRO_EnviaEmail'];
 $Representante = $mproceso['pro_proceso']['PRO_RepresentanteDe'];
 $FechaCreado = $mproceso['pro_proceso']['PRO_FechaCreado'];
-//echo "IdJuzgado....$IdJuzgado";
-//GLOBAL $deptoproceso ;GLOBAL $ciudadproceso ;
+$IdEventoInusual =$mproceso['pro_proceso']['PRO_IdEventoInusual'];
+$NombreEventoInusual = trim($mproceso['pro_proceso']['EVI_Nombre']);
+$iconoBoqueo = '';
+$bloqueaGrabar ="n";
+if($IdEventoInusual > 0)
+{
+    $iconoBoqueo = '<i class="material-icons" style="margin-left:30px; font-size:28px; color:red;">visibility_off</i>';
+    $bloqueaGrabar ="s";
+}
 ?>
 <!DOCTYPE html>
 <html>
@@ -145,6 +152,44 @@ $FechaCreado = $mproceso['pro_proceso']['PRO_FechaCreado'];
         .rowx
         {
             margin-bottom:-24px !important;
+        }
+
+        .textbloqueo {
+            font-size:16px;
+            font-family:helvetica;
+            font-weight:bold;
+            color:#050504;
+            text-transform:uppercase;
+        }
+
+        .parpadea {  
+            animation-name: parpadeo;
+            animation-duration: 1s;
+            animation-timing-function: linear;
+            animation-iteration-count: infinite;
+
+            -webkit-animation-name:parpadeo;
+            -webkit-animation-duration: 1s;
+            -webkit-animation-timing-function: linear;
+            -webkit-animation-iteration-count: infinite;
+        }
+
+        @-moz-keyframes parpadeo{  
+            0% { opacity: 1.0; }
+            50% { opacity: 0.0; }
+            100% { opacity: 1.0; }
+        }
+
+        @-webkit-keyframes parpadeo {  
+            0% { opacity: 1.0; }
+            50% { opacity: 0.0; }
+            100% { opacity: 1.0; }
+        }
+
+        @keyframes parpadeo {  
+            0% { opacity: 1.0; }
+            50% { opacity: 0.0; }
+            100% { opacity: 1.0; }
         }
     </style>
 </head>
@@ -591,15 +636,24 @@ $FechaCreado = $mproceso['pro_proceso']['PRO_FechaCreado'];
      <section class="content" >
         <div class="container-fluid">
             <div class="block-header">
+                <?php if($bloqueaGrabar == "s") { ?>
+                    <div style="text-align:right; background-color:#F8D212; padding-right:15px; display: block; margin-bottom:9px;">
+                    
+                        <div style="vertical-align: middle; line-height: 1.5;">
+                            <!-- // $iconoBoqueo. -->
+                        <?php echo ' Proceso <span class="parpadea textbloqueo"><b>Bloqueado</b></span> - Motivo: <span class="parpadea textbloqueo"><b>'.$NombreEventoInusual. '</b></span>';?></div>
+                    </div>
+                <?php } ?>    
                 <h2>
 					<?php 
 						$textoCreado ="";
 						if($_SESSION['TipoUsuario'] == 4 )  // SA
 						{	
-							$textoCreado = "           Fecha Creación:  ".$FechaCreado;
+							$textoCreado = "Fecha Creación: ".$FechaCreado;
 						}
 					?>
-                    FORMULARIO: Edición <?php echo $Tabla;?>. <span class="badge badge-pill badge-info"><?php echo $txtEstado; ?></span><?php echo $textoCreado; ?>
+                    FORMULARIO: Edición <?php echo $Tabla;?>. <span class="badge badge-pill badge-info" style="font-size:16px !important; background-color:darkorange
+                    ; margin-left:20px; margin-right:20px;"><?php echo $txtEstado; ?></span><?php echo $textoCreado; ?>
                     <!--<small>Editar.</small>-->
                 </h2>
             </div>
@@ -1023,11 +1077,15 @@ $FechaCreado = $mproceso['pro_proceso']['PRO_FechaCreado'];
 								<div class="form-group">
                                     <div class="col-xs-9">                                
                                         <div class="row">
-                                            <div class="col-sm-8">	
-                                                <button class="btn btn-success waves-effect" type="button" id="grabar">GRABAR</button>
+                                            <div class="col-sm-8">
+                                                <?php if($bloqueaGrabar == "n") { ?>	
+                                                    <button class="btn btn-success waves-effect" type="button" id="grabar">GRABAR</button>
+                                                <?php } ?>
                                                 <button class="btn btn-primary waves-effect" type="button" id="actoprocesal">ACTUACION PROCESAL</button>
                                                 <!--  <button type="button" class="btn btn-danger waves-effect" id="borrar" onclick="borrarc(<?php echo $idtabla ; ?>);">BORRAR</button> -->
-                                                <button type="button" class="btn btn-info waves-effect" id="borrar">CERRAR PROCESO</button>
+                                                <?php if($bloqueaGrabar == "n") {?>
+                                                    <button type="button" class="btn btn-info waves-effect" id="borrar">CERRAR PROCESO</button>
+                                                <?php } ?>
                                                 <button type="submit" class="btn btn-danger waves-effect" id="salir">SALIR</button>
                                                 <div><span style="color:red;">* Campos Obligatorios.</span></div>
                                             </div>

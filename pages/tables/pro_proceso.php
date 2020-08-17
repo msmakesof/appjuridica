@@ -803,23 +803,30 @@ if( $mproceso['estado'] != 2)
     $nombre_Tabla="";	
     for($i=0; $i<count($mproceso['pro_proceso']); $i++)
     {
-			$icon="";
-			$NombreTabla = trim($mproceso['pro_proceso'][$i]['PRO_NumeroProceso']);
-			$nroproceso = substr($NombreTabla,16,5);        
-			$archivo = $NombreTabla.".php";
-			$idTabla = $mproceso['pro_proceso'][$i]['PRO_IdProceso'];		
-			if(strlen($nroproceso) < 5 )
-			{
-				$NombreTabla = $idTabla;
-				$icon = "t";
-			}
-			$AsignadoA =$mproceso['pro_proceso'][$i]['AsignadoA'];
-			$Ubicacion =$mproceso['pro_proceso'][$i]['Ubicacion'];
-			$ClaseProceso =$mproceso['pro_proceso'][$i]['ClaseProceso'];
-			$Juzgado =$mproceso['pro_proceso'][$i]['Juzgado'];
-            $estadoTabla = trim($mproceso['pro_proceso'][$i]['EstadoTabla']);
-            $Demandante = trim(strtoupper($mproceso['pro_proceso'][$i]['NombreDemandante']));
-            $Demandado = trim(strtoupper($mproceso['pro_proceso'][$i]['NombreDemandado']));
+        $icon="";
+        $NombreTabla = trim($mproceso['pro_proceso'][$i]['PRO_NumeroProceso']);
+        $nroproceso = substr($NombreTabla,16,5);        
+        $archivo = $NombreTabla.".php";
+        $idTabla = $mproceso['pro_proceso'][$i]['PRO_IdProceso'];		
+        if(strlen($nroproceso) < 5 )
+        {
+            $NombreTabla = $idTabla;
+            $icon = "t";
+        }
+        $AsignadoA =$mproceso['pro_proceso'][$i]['AsignadoA'];
+        $Ubicacion =$mproceso['pro_proceso'][$i]['Ubicacion'];
+        $ClaseProceso =$mproceso['pro_proceso'][$i]['ClaseProceso'];
+        $Juzgado =$mproceso['pro_proceso'][$i]['Juzgado'];
+        $estadoTabla = trim($mproceso['pro_proceso'][$i]['EstadoTabla']);
+        $Demandante = trim(strtoupper($mproceso['pro_proceso'][$i]['NombreDemandante']));
+        $Demandado = trim(strtoupper($mproceso['pro_proceso'][$i]['NombreDemandado']));
+        $IdEventoInusual =$mproceso['pro_proceso'][$i]['PRO_IdEventoInusual'];
+        $NombreEventoInusual = trim($mproceso['pro_proceso'][$i]['EVI_Nombre']);
+        $iconoBoqueo = '';
+        if($IdEventoInusual > 0)
+        {
+            $iconoBoqueo = '<i class="material-icons" style="color:red" data-md-tooltip="'.$NombreEventoInusual.'">visibility_off</i>';
+        }
     ?>
         <tr>
             <td>
@@ -828,12 +835,13 @@ if( $mproceso['estado'] != 2)
                     <a href='javascript:void(0)' onclick="cambiar(<?php echo $idTabla; ?>)">   
                         <?php if($icon == "t" ) { ?>
 							<div class="procesodiv2">
-							<i class="material-icons md-24">label_important</i>
+							    <i class="material-icons md-24">label_important</i>
 							</div>
 						<?php } ?>
 						<i class="md-24 md-tooltip--right" data-md-tooltip="Información Proceso">
 						<?php  echo $NombreTabla; ?>
-						</i>
+                        </i>
+                        <div><?php echo $iconoBoqueo; ?></div>
                     </a>
                 </div>                
             </td>

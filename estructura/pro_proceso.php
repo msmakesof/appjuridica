@@ -48,7 +48,8 @@ class PRO_PROCESO
             PRO_EstadoProceso, PRO_EnviaEmail, PRO_RepresentanteDe ,
             EPR_Nombre AS EstadoTabla ,
 			concat_ws(' ',C.CLI_Nombre, C.CLI_PrimerApellido, C.CLI_SegundoApellido) AS NombreDemandante,
-			concat_ws(' ',D.CLI_Nombre, D.CLI_PrimerApellido, D.CLI_SegundoApellido) AS NombreDemandado
+            concat_ws(' ',D.CLI_Nombre, D.CLI_PrimerApellido, D.CLI_SegundoApellido) AS NombreDemandado,
+            PRO_IdEventoInusual, EVI_Nombre
             FROM ".$GLOBALS['TABLA'].
             " LEFT JOIN usu_usuario ON usu_usuario.USU_IdUsuario = PRO_IdUsuario  AND usu_usuario.USU_Estado = 1 ". $condijoin .
             " JOIN pro_ubicacion ON pro_ubicacion.UBI_IdUbicacion = PRO_IdUbicacion ".
@@ -56,7 +57,8 @@ class PRO_PROCESO
             " LEFT JOIN juz_juzgado ON juz_juzgado.JUZ_IdJuzgado = PRO_IdJuzgadoOrigen ".
             " JOIN pro_estadoproceso ON pro_estadoproceso.EPR_IdEstado = PRO_EstadoProceso AND pro_estadoproceso.EPR_Estado = 1 ".
 			" JOIN cli_cliente C ON C.CLI_IdTipoCliente = 1 AND C.CLI_Estado = 1 AND C.CLI_IdCliente = ". $GLOBALS['TABLA'].".PRO_IdDemandante ".
-			" JOIN cli_cliente D ON D.CLI_IdTipoCliente = 2 AND D.CLI_Estado = 1 AND D.CLI_IdCliente = ". $GLOBALS['TABLA'].".PRO_IdDemandado ".
+            " JOIN cli_cliente D ON D.CLI_IdTipoCliente = 2 AND D.CLI_Estado = 1 AND D.CLI_IdCliente = ". $GLOBALS['TABLA'].".PRO_IdDemandado ".
+            " LEFT JOIN gen_eventoinusual ON EVI_IdEventoInusual = PRO_IdEventoInusual AND EVI_Estado = 1 ".
 			$condijoin2.
             " WHERE PRO_NumeroProceso > '' AND PRO_EstadoProceso = $Estado ". $condi .
             " ORDER BY PRO_NumeroProceso; ";
@@ -100,8 +102,9 @@ class PRO_PROCESO
 					PRO_ObservacionCierre,
 					PRO_IdUsuarioCierre,
 					PRO_RepresentanteDe ,
-					PRO_EnviaEmail, PRO_FechaCreado 
-					FROM ".$GLOBALS['TABLA'].
+					PRO_EnviaEmail, PRO_FechaCreado, PRO_IdEventoInusual, EVI_Nombre
+                    FROM ".$GLOBALS['TABLA'].
+                    " LEFT JOIN gen_eventoinusual ON EVI_IdEventoInusual = PRO_IdEventoInusual AND EVI_Estado = 1 ".
 					" WHERE ".$GLOBALS['Llave']." = ? ; ";
 
         try {
