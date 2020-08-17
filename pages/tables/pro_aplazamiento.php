@@ -703,7 +703,8 @@ if($usuario == "")
                                                                     <div class="header">
                                                                         <h2>
                                                                             Opciones para Exportar
-                                                                        </h2>                            
+                                                                        </h2>
+                                                                                                    
                                                                     </div>
                                                                     <div class="body table-responsive" id="zonatab">
                                                                     </div>
@@ -863,6 +864,11 @@ $(document).ready(function () {
                         {
                             var idproceso = datos[i].PRO_IdProceso;
                             var nroproceso = datos[i].PRO_NumeroProceso;
+                            var long_proceso = nroproceso.substr(16, 5);
+                            if( long_proceso.length < 5)
+                            {
+                                nroproceso = idproceso+ ' - Sin Radicado';
+                            }
                             var nombre = datos[i].EVI_Nombre;
                             var fechainicio = datos[i].EVI_FechaInicio;
                             var fechafin = datos[i].EVI_FechaFinal;
