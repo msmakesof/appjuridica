@@ -46,7 +46,8 @@ if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
 	include $_SERVER['DOCUMENT_ROOT']."/$dominio/apis/revisaExiste.php" ;
 	if($existeReg == "S")
 	{	
-
+		$fechainicio = substr($fechainicio, 0,10);
+		$fechafinal = substr($fechafinal, 0,10);
 		$parameters = "update=update&nombre=$nombre&fechainicio=$fechainicio&fechafinal=$fechafinal&estado=$estado&idtabla=$idtabla";
 		$soportecURL = "S";
 		$url         = urlServicios."consultadetalle/gen_eventoinusual.php?".$parameters;

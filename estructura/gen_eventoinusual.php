@@ -149,6 +149,7 @@ class gen_eventoinusual
             " WHERE ". $GLOBALS['Llave'] ." = ? ;";
 			//echo $consulta;
 
+		//echo "$nombre, $fechainicio, $fechafinal, $estado, $idtabla<br>";
         // Preparar la sentencia
         $cmd = Database::getInstance()->getDb()->prepare($consulta);
 

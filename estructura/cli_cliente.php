@@ -71,7 +71,7 @@ class CLI_CLIENTE
 		$condiSel
 		$condiWhere 
 		WHERE CLI_IdTipoCliente = $par4 	
-		ORDER BY CLI_Nombre; ";
+		ORDER BY NombreUsuario; ";
 		//echo $consulta;
         try {
             // Preparar sentencia

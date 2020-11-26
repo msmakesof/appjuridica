@@ -54,8 +54,6 @@ if( isset($_POST['ƒ×'])  && !empty($_POST['ƒ×']) )
 {    
      $usuario = trim($_POST['ƒ×']);   
 }
-
-
 ?>
 <!DOCTYPE html>
 <html>
@@ -195,12 +193,58 @@ if( isset($_POST['ƒ×'])  && !empty($_POST['ƒ×']) )
                     <li class="dropdown">
                         <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button">
                             <i class="material-icons">notifications</i>
-                            <span class="label-count">7</span>
+							<?php 										
+								$pusuario = $_SESSION['IdUsuario'];
+								$ptipousuario = $_SESSION["TipoUsuario"];								
+								$empresa = $_SESSION['IdEmpresa'];
+								$diascalcula = 0;
+								include('../../apis/proceso/robotnotifica.php');
+							?>
+                            <span class="label-count"><?php 
+								if($mproceso['estado'] == 1)
+								{
+									echo count($mproceso['robotnotifica']);
+								}
+								else { echo "0";} ?>
+							</span>
                         </a>
                         <ul class="dropdown-menu">
                             <li class="header">NOTIFICACIONES</li>
                             <li class="body">
                                 <ul class="menu">
+									<?php
+										if($mproceso['estado'] == 1)
+										{
+											for($i=0; $i<count($mproceso['robotnotifica']); $i++)
+											{
+												$IdActProcesal = $mproceso['robotnotifica'][$i]['NOT_IdActProcesal'];
+												$FechaEnvio = substr($mproceso['robotnotifica'][$i]['NOT_FechaEnvio'], 0,10);
+												$Nombre = trim($mproceso['robotnotifica'][$i]['TAP_Nombre']);
+												$NumeroProceso = $mproceso['robotnotifica'][$i]['PRO_NumeroProceso'];
+												$IdEmpresa = $mproceso['robotnotifica'][$i]['USU_IdEmpresa'];
+									?>
+									<li>
+                                        <a href="javascript:void(0);">
+                                            <div class="icon-circle bg-light-green">
+                                                <i class="material-icons">person_add</i>
+                                            </div>
+                                            <div class="menu-info">
+                                                <h4><?php echo $Nombre; ?></h4>
+                                                <p>
+                                                    <i class="material-icons">access_time</i> <?php echo $FechaEnvio; ?>
+                                                </p>
+                                            </div>
+                                        </a>
+                                    </li>
+									<?php
+											}
+										}
+										else
+										{
+											echo "No hay registros a consultar.";
+										}
+									?>
+									<!-- 
                                     <li>
                                         <a href="javascript:void(0);">
                                             <div class="icon-circle bg-light-green">
@@ -292,6 +336,7 @@ if( isset($_POST['ƒ×'])  && !empty($_POST['ƒ×']) )
                                             </div>
                                         </a>
                                     </li>
+									-->
                                 </ul>
                             </li>
                             <li class="footer">
@@ -515,7 +560,8 @@ if( isset($_POST['ƒ×'])  && !empty($_POST['ƒ×']) )
             </div>
             <!-- #END# Widgets -->
             <!-- CPU Usage -->
-            <!-- --><div id="graficaalumno">
+            <!-- -->
+			<div id="graficaalumno">
                 <div class="row clearfix">
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                         <div class="card">
@@ -561,7 +607,7 @@ if( isset($_POST['ƒ×'])  && !empty($_POST['ƒ×']) )
                             </div>-->                             
                             <div class="m-b--35 font-bold">
                                 <div class="icon">
-                                <i class="material-icons">av_timer</i> Estados de Procesos
+                                <i class="material-icons">av_timer</i> Estado de Procesos
                                 </div>                                
                             </div>                            
                             <ul class="dashboard-stat-list">
@@ -643,10 +689,13 @@ if( isset($_POST['ƒ×'])  && !empty($_POST['ƒ×']) )
             <div id="infoactividades">
                 <div class="row clearfix">
                     <!-- Task Info -->
-                    <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
+                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                         <div class="card">
                             <div class="header">
-                                <h2>INFORMACIÓN DE LOS 5 ÚLTIMOS PROCESOS CON ACTUACIÓN PROCESAL</h2>
+                                <h2 style="background-color:orange; border-radius: 7px;">
+									&nbsp;&nbsp;<i class="material-icons">mode_edit</i>
+									&nbsp;&nbsp;&nbsp;INFORMACIÓN DE LOS 5 ÚLTIMOS PROCESOS CON ACTUACIÓN PROCESAL
+								</h2>
                                 <ul class="header-dropdown m-r--5">
                                     <li class="dropdown">
                                         <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
@@ -667,6 +716,37 @@ if( isset($_POST['ƒ×'])  && !empty($_POST['ƒ×']) )
                     </div>
                     <!-- #END# Task Info -->
                     <!-- Browser Usage -->
+					
+					<!-- Task Info -->
+                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                        <div class="card">
+                            <div class="header">
+								<h2 style="background-color:#9CDF5C; border-radius: 7px;">
+									&nbsp;&nbsp;<i class="material-icons">comment</i>                                    
+									&nbsp;&nbsp;&nbsp;PROXIMAS NOTIFICACIONES ACTUACIONES PROCESALES.
+								</h2>
+                                <ul class="header-dropdown m-r--5">
+                                    <li class="dropdown">
+                                        <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                            <i class="material-icons">more_vert</i>
+                                        </a>
+                                        <ul class="dropdown-menu pull-right">
+                                            <li><a href="javascript:void(0);">Acción</a></li>
+                                            <!-- <li><a href="javascript:void(0);">Otra acción</a></li>
+                                            <li><a href="javascript:void(0);">S Otras</a></li> -->
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </div>							
+							<?php
+								//include('../../infoproceso/index2.html');
+								include('../../infoproceso/notificaciones.php');								
+							?>
+                        </div>
+                    </div>
+                    <!-- #END# Task Info -->
+                    <!-- Browser Usage -->
+					
                     <div id="enviocomunicados">
                         <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
                             <div class="card">
@@ -691,6 +771,7 @@ if( isset($_POST['ƒ×'])  && !empty($_POST['ƒ×']) )
                             </div>
                         </div>
                     </div>
+					
                     <!-- #END# Browser Usage -->
                 </div>
             </div>
@@ -739,6 +820,7 @@ if( isset($_POST['ƒ×'])  && !empty($_POST['ƒ×']) )
 	<script type="text/javascript">
     $(document).ready(function () {		
 		$("#graficaalumno").hide();
+		$("#enviocomunicados").hide();
 	});
 	</script>	
 </body>

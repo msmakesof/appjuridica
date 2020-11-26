@@ -234,8 +234,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         // Obtener parámetro IdMostrar de PRO_PROCESO		
         $parametro = $_GET['IdMostrar'];
 		$parametro2 = "";
-		$parametrousu = $_GET['iu']; //Administrador(1) o Abogado(2)
+		$parametrousu = $_GET['iu']; 
 		$parametroemp = $_GET['em'];
+		$paramtipouser = ""; //Administrador(1) o Abogado(2)
 		
 		if( isset($_GET['e']) )
 		{
@@ -256,9 +257,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 		{
 			$parametroemp = "";
 		}
+		if(isset($_GET['tu']))
+		{
+			$paramtipouser = $_GET['tu'];
+		}
 
         // Tratar retorno
-        $retorno = PRO_PROCESO::getAll($parametro,$parametro2,$parametrousu,$parametroemp );
+        $retorno = PRO_PROCESO::getAll($parametro,$parametro2,$parametrousu,$parametroemp,$paramtipouser );
 
         if ($retorno) 
         {

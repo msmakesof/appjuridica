@@ -207,12 +207,44 @@ if( isset($_POST["id"]))  // Este es el id del Proceso la llave
                     <li class="dropdown">
                         <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button">
                             <i class="material-icons">notifications</i>
-                            <span class="label-count">7</span>
+                            <?php 										
+								$pusuario = $_SESSION['IdUsuario'];
+								$ptipousuario = $_SESSION["TipoUsuario"];
+								$empresa = $_SESSION['IdEmpresa'];
+								include('../../apis/proceso/robotnotifica.php');
+							?>
+                            <span class="label-count"><?php echo count($mproceso['robotnotifica']); ?></span>
                         </a>
                         <ul class="dropdown-menu">
                             <li class="header">NOTIFICACIONES</li>
                             <li class="body">
                                 <ul class="menu">
+									<?php
+										for($i=0; $i<count($mproceso['robotnotifica']); $i++)
+										{
+											$IdActProcesal = $mproceso['robotnotifica'][$i]['NOT_IdActProcesal'];
+											$FechaEnvio = substr($mproceso['robotnotifica'][$i]['NOT_FechaEnvio'], 0,10);
+											$Nombre = trim($mproceso['robotnotifica'][$i]['TAP_Nombre']);
+											$NumeroProceso = $mproceso['robotnotifica'][$i]['PRO_NumeroProceso'];
+											$IdEmpresa = $mproceso['robotnotifica'][$i]['USU_IdEmpresa'];
+									?>
+									<li>
+                                        <a href="javascript:void(0);">
+                                            <div class="icon-circle bg-light-green">
+                                                <i class="material-icons">person_add</i>
+                                            </div>
+                                            <div class="menu-info">
+                                                <h4><?php echo $Nombre; ?></h4>
+                                                <p>
+                                                    <i class="material-icons">access_time</i> <?php echo $FechaEnvio; ?>
+                                                </p>
+                                            </div>
+                                        </a>
+                                    </li>
+									<?php										
+										}
+									?>
+									<!--
                                     <li>
                                         <a href="javascript:void(0);">
                                             <div class="icon-circle bg-light-green">
@@ -303,7 +335,7 @@ if( isset($_POST["id"]))  // Este es el id del Proceso la llave
                                                 </p>
                                             </div>
                                         </a>
-                                    </li>
+                                    </li> -->
                                 </ul>
                             </li>
                             <li class="footer">
@@ -751,7 +783,7 @@ if( isset($_POST["id"]))  // Este es el id del Proceso la llave
                                 <thead>
                                     <tr>
 										<th>Fecha</th>
-										<th>Actuaci&oacuten Procesal</th>
+										<th>Tipo Actuaci&oacuten Procesal</th>
 										<th>Fecha Estado</th>
 										<th>Observaci&oacute;n</th>
 										<th>Gasto</th>
@@ -760,7 +792,7 @@ if( isset($_POST["id"]))  // Este es el id del Proceso la llave
                                 <tfoot>
                                     <tr>
                                         <th>Fecha</th>
-										<th>Actuaci&oacuten Procesal</th>
+										<th>Tipo Actuaci&oacuten Procesal</th>
 										<th>Fecha Estado</th>
 										<th>Observaci&oacute;n</th>
 										<th>Gasto</th>

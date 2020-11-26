@@ -35,6 +35,21 @@ if (!function_exists("GetSQLValueString"))
     }
 }
 require_once('../../apis/general/ciudadesxdepto.php');
+
+$idTabla = 0;
+require_once('../../apis/general/festivo.php');
+//print_r($mfestivo);
+for($i=0; $i<count($mfestivo['gen_festivo']); $i++)
+{
+	$festivo = $mfestivo['gen_festivo'][$i]['FES_Festivo'];
+	$json[] = "moment('$festivo')";
+}
+$diasfestivos = str_replace('"','',json_encode($json));
+$json = $diasfestivos;
+$json = str_replace('[','',$diasfestivos);
+$json = str_replace(']','',$json);
+$json = str_replace('"','',$json);
+
 $idTabla = ""; 
 if ( isset( $_POST["id"]))
 { 
@@ -118,6 +133,9 @@ $IdUsuarioCierre = trim($mproceso['pro_proceso']['PRO_IdUsuarioCierre']);
 
     <link rel="stylesheet" href="../../css/themes2/alertify.core.css" />
     <link rel="stylesheet" href="../../css/themes2/alertify.default.css" id="toggleCSS" />
+	
+	<!-- Jquery Core Js -->
+    <script src="../../plugins/jquery/jquery.min.js"></script> 
     <style>
         .caja
         {
@@ -186,12 +204,44 @@ $IdUsuarioCierre = trim($mproceso['pro_proceso']['PRO_IdUsuarioCierre']);
                     <li class="dropdown">
                         <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button">
                             <i class="material-icons">notifications</i>
-                            <span class="label-count">7</span>
+                            <?php 										
+								$pusuario = $_SESSION['IdUsuario'];
+								$ptipousuario = $_SESSION["TipoUsuario"];
+								$empresa = $_SESSION['IdEmpresa'];
+								include('../../apis/proceso/robotnotifica.php');
+							?>
+                            <span class="label-count"><?php echo count($mproceso['robotnotifica']); ?></span>
                         </a>
                         <ul class="dropdown-menu">
                             <li class="header">NOTIFICACIONES</li>
                             <li class="body">
                                 <ul class="menu">
+									<?php
+										for($i=0; $i<count($mproceso['robotnotifica']); $i++)
+										{
+											$IdActProcesal = $mproceso['robotnotifica'][$i]['NOT_IdActProcesal'];
+											$FechaEnvio = substr($mproceso['robotnotifica'][$i]['NOT_FechaEnvio'], 0,10);
+											$Nombre = trim($mproceso['robotnotifica'][$i]['TAP_Nombre']);
+											$NumeroProceso = $mproceso['robotnotifica'][$i]['PRO_NumeroProceso'];
+											$IdEmpresa = $mproceso['robotnotifica'][$i]['USU_IdEmpresa'];
+									?>
+									<li>
+                                        <a href="javascript:void(0);">
+                                            <div class="icon-circle bg-light-green">
+                                                <i class="material-icons">person_add</i>
+                                            </div>
+                                            <div class="menu-info">
+                                                <h4><?php echo $Nombre; ?></h4>
+                                                <p>
+                                                    <i class="material-icons">access_time</i> <?php echo $FechaEnvio; ?>
+                                                </p>
+                                            </div>
+                                        </a>
+                                    </li>
+									<?php										
+										}
+									?>
+									<!--
                                     <li>
                                         <a href="javascript:void(0);">
                                             <div class="icon-circle bg-light-green">
@@ -282,7 +332,7 @@ $IdUsuarioCierre = trim($mproceso['pro_proceso']['PRO_IdUsuarioCierre']);
                                                 </p>
                                             </div>
                                         </a>
-                                    </li>
+                                    </li> -->
                                 </ul>
                             </li>
                             <li class="footer">
@@ -639,11 +689,11 @@ $IdUsuarioCierre = trim($mproceso['pro_proceso']['PRO_IdUsuarioCierre']);
 									
 											<div class="col-lg-5 col-md-5 col-sm-5">
 												<div class="row"><span style="color:red;">*</span>
-													<label class="form-label" style="font-size: 12;">Actuación Procesal:</label>
+													<label class="form-label" style="font-size: 12;">Tipo Actuación Procesal:</label>
 													<div class="xform-line">													    
 														
 														<select class="selectpicker show-tick" data-live-search="true" data-width="95%" name="actpro" id="actpro" required>
-														    <option value="" >Seleccione Actuación Procesal...</option>
+														    <option value="" >Seleccione Tipo Actuación Procesal...</option>
 														</select>
 													</div>												
 												</div>
@@ -725,8 +775,7 @@ $IdUsuarioCierre = trim($mproceso['pro_proceso']['PRO_IdUsuarioCierre']);
         </div>
     </section>
 
-    <!-- Jquery Core Js -->
-    <script src="../../plugins/jquery/jquery.min.js"></script> 	
+	
 
     <!-- Bootstrap Core Js -->
     <script src="../../plugins/bootstrap/js/bootstrap.js"></script>
@@ -803,24 +852,29 @@ $IdUsuarioCierre = trim($mproceso['pro_proceso']['PRO_IdUsuarioCierre']);
 		$("#gasto").numeric();
 		
         $('.selectpicker').selectpicker();
-		var exclude_dates = ['2019-04-18', '2019-04-19'];
+		//var exclude_dates = ['2020-12-08', '2020-12-25'];		
 		var disabledWeekDays = [0,6];
         $('#fechainicio').datetimepicker({
-			language: 'es',											
-			daysOfWeekDisabled: [0, 6],
-			datesDisabled: exclude_dates,			
+			language: 'es',
+			format: 'YYYY-MM-DD',
+			daysOfWeekDisabled: [0, 6],			
+			disabledDates: [
+					<?php echo ($json); ?>
+                ],			
 			autoclose: true,
 			defaultDate: new Date(),
-			minDate: new Date(),
-			format: 'YYYY-MM-DD',
-			viewMode: 'days'		  
+			minDate: new Date(),			
+			viewMode: 'days'
         });
 		
 		$('#fechaestado').datetimepicker({			
 			language: 'es',
-			daysOfWeekDisabled: [0, 6],			
+			daysOfWeekDisabled: [0, 6],
+			disabledDates: [
+					<?php echo ($json); ?>
+                ],			
 			format: 'YYYY-MM-DD',
-			autoclose: true			
+			autoclose: true
         });
 
         $("#origen").on('change', function(){
@@ -864,6 +918,35 @@ $IdUsuarioCierre = trim($mproceso['pro_proceso']['PRO_IdUsuarioCierre']);
             window.location = 'pro_proceso.php';
         });
 		
+		let dh = 0
+		let re = ""
+		let dr = 0
+		$("#actpro").on('change', function(){
+			let id = $("#actpro").val()			
+			$.getJSON( '../forms/gettipoactuacionprocesal.php', { 'id': id }, function (result) {
+				//dh = result
+				const array1 = JSON.stringify(result)				
+				//alert(array1)
+				dh = JSON.stringify(result, ['1'])
+				re = JSON.stringify(result, ['2'])
+				dr = JSON.stringify(result, ['3'])
+			})
+		})
+		
+		if(dh == 0)
+		{
+			let id = $("#actpro").val()
+			//alert(id)
+			$.getJSON( '../forms/gettipoactuacionprocesal.php', { 'id': id }, function (result) {
+				const array1 = JSON.stringify(result)				
+				//alert(array1)
+				dh = JSON.stringify(result, ['1'])
+				re = JSON.stringify(result, ['2'])
+				dr = JSON.stringify(result, ['3'])
+				//alert(dh)
+			})
+		}
+		
 		$("#grabar").on('click', function(e) {
 			e.preventDefault();
             $("#mensaje").hide();
@@ -889,7 +972,7 @@ $IdUsuarioCierre = trim($mproceso['pro_proceso']['PRO_IdUsuarioCierre']);
             else
             {
     			$.ajax({
-    				data : {"idproceso": idproceso, "fechainicio": fechainicio, "origen": origen, "actpro": actpro, "fechaestado": fechaestado, "observacion": observacion, "gasto": gasto},
+    				data : {"idproceso": idproceso, "fechainicio": fechainicio, "origen": origen, "actpro": actpro, "fechaestado": fechaestado, "observacion": observacion, "gasto": gasto, "dh": dh, "re": re, "dr": dr},
     				type: "POST",				
     				url : "../forms/crea_<?php echo strtolower($Tabla); ?>.php",
                 })  

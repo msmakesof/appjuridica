@@ -164,9 +164,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         $par4 = $_GET['fechaestado'];
 		$par5 = $_GET['observacion'];
 		$par6 = $_GET['gasto'];
-        $par7 = $_GET['idtabla'];
+		$par7 = $_GET['idusuario'];
+		$par8 = $_GET['FechaHabil'];
+        $par9 = $_GET['idtabla'];
 
-        $retorno = PRO_ACTUACIONPROCESAL::update($par1, $par2, $par3, $par4, $par5, $par6, $par7);
+        $retorno = PRO_ACTUACIONPROCESAL::update($par1, $par2, $par3, $par4, $par5, $par6, $par7, $par8, $par9);
         $msj = $retorno;
         if($retorno)
         {

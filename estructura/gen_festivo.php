@@ -221,16 +221,16 @@ class GEN_FESTIVO
      * @param $IdUsuario identificador de la gen_festivo
      * @return bool Respuesta de la consulta
      */
-    public static function existetabla($Nombre, $par2)
+    public static function existetabla($Nombre)  //, $par2
     {
-        $consulta = "SELECT count(". $GLOBALS['Llave']. ") existe, FES_Festivo FROM ".$GLOBALS['TABLA'].
-        " WHERE FES_Festivo = ? AND ". $GLOBALS['Llave']. " <> ? ; ";		
+        $consulta = "SELECT count(". $GLOBALS['Llave']. ") existe FROM ".$GLOBALS['TABLA'].
+        " WHERE FES_Festivo = ? ; ";	// AND ". $GLOBALS['Llave']. " <> ?
 
         try {
             // Preparar sentencia
             $comando = Database::getInstance()->getDb()->prepare($consulta);
             // Ejecutar sentencia preparada
-            $comando->execute(array($Nombre, $par2));
+            $comando->execute(array($Nombre));  // , $par2
             // Capturar primera fila del resultado
             $row = $comando->fetch(PDO::FETCH_ASSOC);
             return $row;

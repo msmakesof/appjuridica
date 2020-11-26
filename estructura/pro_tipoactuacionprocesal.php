@@ -53,9 +53,10 @@ class PRO_TIPOACTUACIONPROCESAL
         // Consulta de la tabla de tablas
         $consulta = "SELECT ".$GLOBALS['Llave'].",
                             TAP_Nombre, TAP_DiasHabiles, TAP_IdOrigen, TAP_Estado,
-                            TAP_Notifica, TAP_IdPeriodo, TAP_IdArea
-                            FROM ".$GLOBALS['TABLA'].
-                            " WHERE ".$GLOBALS['Llave']." = ? ORDER BY TAP_Nombre; ";
+                            TAP_Notifica, TAP_IdPeriodo, TAP_IdArea, TER_DiasHabiles
+                            FROM ".$GLOBALS['TABLA'].							
+                            " JOIN pro_terminos ON TAP_IdTipoActuacionProcesal = TER_IdTipoActProcesal 
+							WHERE ".$GLOBALS['Llave']." = ? ORDER BY TAP_Nombre; ";
         //echo "$consulta";
 
         try {

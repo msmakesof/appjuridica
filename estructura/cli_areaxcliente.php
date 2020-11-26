@@ -27,7 +27,8 @@ class CLI_AREAXCLIENTE
 			" JOIN emp_empresa E ON E.EMP_IdEmpresa = ".$GLOBALS['TABLA']. ".ARC_IdEmpresa ".
 			" JOIN juz_tipojuzgado TJ ON TJ.TJU_IdTipoJuzgado = ".$GLOBALS['TABLA']. ".ARC_IdTipoJuzgado ".
 			" JOIN juz_area JA ON JA.ARE_IdArea = cli_areaxcliente.ARC_IdArea AND JA.ARE_Estado = 1 ".
-			" WHERE cli_areaxcliente.ARC_Estado = 1 ORDER BY NombreEmpresa ;";
+			" WHERE cli_areaxcliente.ARC_Estado = 1 GROUP BY NombreEmpresa, NombreCorporacion, NombreArea
+			  ORDER BY NombreEmpresa, NombreCorporacion ;";
 			
 			//echo $consulta;
         try {
@@ -69,9 +70,39 @@ class CLI_AREAXCLIENTE
         } catch (PDOException $e) {
             // Aquí puedes clasificar el error dependiendo de la excepción
             // para presentarlo en la respuesta Json
-            return "Err.Stru(ln49)...$consulta";
+            return "Err.Stru(ln57)...$consulta";
         }
     }
+	
+	/**
+     * Obtiene los campos de una tabla con un identificador
+     * determinado
+     *
+     * @param $IdTabla Identificador de la $IdTabla
+     * @return mixed
+     */
+	public static function getByIdEmpresaTipoJuzgado($IdEmpresa, $IdTipoJuzgado)
+	{
+		// Consulta de la tabla de tablas
+        $consulta = "SELECT ".$GLOBALS['Llave'].", ARC_IdEmpresa, ARC_IdTipoJuzgado, ARC_IdArea, ARC_Estado ".
+            " FROM ".$GLOBALS['TABLA'].
+            " WHERE ARC_IdEmpresa = ? AND ARC_IdTipoJuzgado = ? AND ARC_Estado = 1 ORDER BY ARC_IdTipoJuzgado; ";
+		//echo $consulta ;
+        try {	
+            // Preparar sentencia
+            $comando = Database::getInstance()->getDb()->prepare($consulta);
+            // Ejecutar sentencia preparada
+            $comando->execute(array($IdEmpresa, $IdTipoJuzgado));
+            // Capturar primera fila del resultado
+            $row = $comando->fetchAll(PDO::FETCH_ASSOC);
+            return $row;
+
+        } catch (PDOException $e) {
+            // Aquí puedes clasificar el error dependiendo de la excepción
+            // para presentarlo en la respuesta Json
+            return "Err.Stru(ln87)...$consulta";
+        }
+	}
 
 
     /**

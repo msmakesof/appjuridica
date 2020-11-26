@@ -1,0 +1,118 @@
+﻿USE [Pqr]
+GO
+/****** Object:  StoredProcedure [pqr].[pa_CalcularDiasHabilesyCalendario]    Script Date: 28/10/2019 7:27:11 a. m. ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+-- =============================================
+-- Author:       Mauricio Sanchez Sierra
+-- Create date: 24/07/2019
+-- Description:  Calcular Dias Hábiles y días Calendario.
+-- =============================================
+ALTER   PROCEDURE [pqr].[pa_CalcularDiasHabilesyCalendario]
+
+@fch_ini DATETIME ,
+@fechaFin DATETIME output,
+@DiasHabilesTranscurridos VARCHAR(4) output
+AS
+BEGIN
+SET NOCOUNT ON;
+DECLARE @fch_fin DATE
+SET @fch_fin = CONVERT(DATE, SYSDATETIME())
+
+DECLARE @TotalDias  INT -- Calculamos cuantos días calendario hay en el rango de fechas.
+DECLARE @DiasNoLaborables INT -- Acumulamos los dias No laborables.
+DECLARE @DiasFeriados SMALLINT  -- Total días feriados entre el rango de fechas.
+DECLARE @Cnt INT -- Contador para saber cuando lleguemos al último día del rango.
+DECLARE @EvalDate DATETIME -- Comparamos para saber si el día que está calculando es sábado o domingo.
+ 
+SET @Cnt = 0
+SET @DiasNoLaborables = 0
+
+SET DATEFIRST 1
+ 
+-- Calculamos cuantos días normales hay en el rango de fechas
+SET @TotalDias = DATEDIFF(HOUR, @fch_ini, @fch_fin) / 24 -- Se maneja diferencia de días a nivel horas
+
+
+--* Cuento los días festivos del rango de fechas pero excluyo los festivos que caen un sábado o domingo, porque esto los cuenta en DiasNoLaborales
+SELECT @DiasFeriados = COUNT(1)
+FROM pqr.FestivosPqr
+WHERE FechaFestivo >= @fch_ini AND FechaFestivo <= @fch_fin
+AND DATEPART(dw, FechaFestivo) <= 5
+ 
+
+WHILE @Cnt < @TotalDias
+BEGIN
+SELECT @EvalDate = @fch_ini + @Cnt
+ 
+IF datepart(dw,@EvalDate) = 6 OR datepart(dw,@EvalDate) = 7
+BEGIN
+IF (SELECT COUNT(*) FROM pqr.FestivosPqr WHERE FechaFestivo = @Evaldate)=0
+SET @DiasNoLaborables = @DiasNoLaborables + 1
+END
+ 
+SET @Cnt = @Cnt + 1
+END
+
+
+DECLARE @DiasHabiles INT
+DECLARE @diasTrans INT
+DECLARE @Lapso INT
+DECLARE @fecha DATE
+DECLARE @fechaHabil DATE
+
+SET @DiasHabiles = 0
+SET @diasTrans = 0
+SET @Lapso = 15
+
+
+
+WHILE @DiasHabiles < (@Lapso )
+BEGIN
+
+SET @fecha = DATEADD(second, (@diasTrans * 86400), DATEADD(day,1,@fch_ini) )
+SET @EvalDate = @fecha
+
+IF (datepart(dw,@EvalDate) <= 5)
+BEGIN
+IF (SELECT COUNT(*) FROM pqr.FestivosPqr WHERE FechaFestivo = @Evaldate) = 0
+BEGIN
+SET @DiasHabiles = @DiasHabiles + 1
+END
+END
+
+SET @diasTrans = @diasTrans + 1
+
+END
+
+SET @fechaFin = DATEADD(day, @diasTrans, @fch_ini)
+
+
+SELECT @EvalDate = @fechaFin
+IF datepart(dw,@EvalDate) = 6
+BEGIN
+SET @fechaFin = DATEADD(day, -1, @fechaFin)
+END
+
+SET @fechaHabil = @fechaFin
+
+
+-- Si día de creación es sábado, domingo o festivo sumo 1 día a $cuentaDiasHabiles
+DECLARE @sumadiaHabil INT
+SET @sumadiaHabil = 0
+SET @EvalDate = @fch_ini
+IF datepart(dw,@EvalDate) = 7
+BEGIN
+SET @sumadiaHabil = 1
+END
+
+IF (SELECT COUNT(*) FROM pqr.FestivosPqr WHERE FechaFestivo =  @fch_ini) = 1
+BEGIN
+SET @sumadiaHabil = 1
+END
+
+SET @DiasHabilesTranscurridos =  @TotalDias - (@DiasNoLaborables + @DiasFeriados) + @sumadiaHabil
+
+END

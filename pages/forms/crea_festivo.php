@@ -68,6 +68,7 @@ if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
 {
   $parameters = "ExisteTabla=1&Nombre=$pnombre";
   $url = urlServicios."consultadetalle/consultadetalle_gen_festivo.php?".$parameters;
+  //echo "<script>console.log($url)</script>" ;
   $ch = curl_init();
   curl_setopt($ch, CURLOPT_VERBOSE, true);
   curl_setopt($ch, CURLOPT_URL, $url);
@@ -91,8 +92,7 @@ if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
   {          
     
     $m = preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $resultado);    
-    $m = json_decode($m, true);
-    //print_r ($m);
+    $m = json_decode($m, true);    
     $existe = $m['gen_festivo']['existe'];
     if($existe > 0)
     {
@@ -100,14 +100,12 @@ if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
     }
     else
     {
-      
-      $parameters = "insert=insert&Nombre=$pnombre&VanciaJudicial=$pvanciaJudicial&Estado=$pestado";
+        $parameters = "insert=insert&Nombre=$pnombre&VanciaJudicial=$pvanciaJudicial&Estado=$pestado";
       $soportecURL = "S";
       $url         = urlServicios."consultadetalle/consultadetalle_gen_festivo.php?".$parameters;
       $existe      = "";
       $usulocal    = "";
-      $sigue       = ""; 
-      //echo "<script>console.log($url)</script>" ;
+      $sigue       = "";       
       if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
       {    
           $ch = curl_init();
@@ -170,12 +168,9 @@ if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
           $resultado = $response->raw_body;
           $resultado = preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $resultado);
           $m = json_decode($resultado, true);	        
-      }
-      //
-    }
-    
+      }     
+    }    
   }
-
 }  
 echo $sigue;
 ?>

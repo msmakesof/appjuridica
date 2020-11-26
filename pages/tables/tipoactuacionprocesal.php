@@ -485,8 +485,8 @@ $NombreTabla ="TIPOACTUACIONPROCESAL";
                                 <div class="form-group">
                                     <div class="row">
                                         <div class="col-lg-12 col-md-12 col-sm-12">
-                                            <div style="text-align:center;">
-                                                <div class="badge badge-warning">Crear TERMINOS</div>                                                
+                                            <div style="text-align:center; background-color:orangered">
+                                                <div style="font-weight: bold; color:azure">Crear TERMINOS.</div>
                                             </div>
                                         </div>
                                     </div>

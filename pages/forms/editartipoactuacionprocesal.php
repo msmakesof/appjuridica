@@ -201,7 +201,8 @@ $idtabla = $mtipoactuacionprocesal['pro_tipoactuacionprocesal']['TAP_IdTipoActua
                                     </div>
                                 </div>                               
 
-                                <div class="form-group">
+                                <!-- 
+								<div class="form-group">
                                     <div class="row">
                                         <div class="col-lg-12 col-md-12 col-sm-12">
                                             <div style="text-align:center;">
@@ -211,10 +212,16 @@ $idtabla = $mtipoactuacionprocesal['pro_tipoactuacionprocesal']['TAP_IdTipoActua
                                     </div>
                                 </div>
                                 <hr style="margin-top:-5px; border-bottom-style: dotted; border-bottom-width: 1px; color: black">
+								-->
                                 
                                 <div class="form-group">
                                     <div class="row">
-                                        <div id="xzonaterminos">
+										<div style="text-align:center; background-color: orange; margin-bottom: 10px">
+											<div style="color:white; font-weight:bold;">Modificar TERMINOS</div>
+										</div>
+										
+										<div id="xzonaterminos">					                                        
+                                        
                                             <div class="col-lg-2 col-md-2 col-sm-2"><span style="color:red;">*</span>
                                                 <label class="form-label">D&iacute;as: </label>
                                                 <div class="form-line">

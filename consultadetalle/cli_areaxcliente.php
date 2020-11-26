@@ -57,7 +57,32 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
                 )
             );
         }
-    } 
+    }
+	elseif (isset($_GET['IdEmpresa']) && isset($_GET['IdTipoJuzgado']))	
+	{
+		$parametroEmpresa = $_GET['IdEmpresa'];
+        $parametroTipoJuzgado = $_GET['IdTipoJuzgado'];
+		
+		// Tratar retorno
+        $retorno = CLI_AREAXCLIENTE::getByIdEmpresaTipoJuzgado($parametroEmpresa,$parametroTipoJuzgado);
+		
+		if ($retorno) {
+            $cli_areaxcliente["estado"] = "1";
+            $cli_areaxcliente["cli_areaxcliente"] = $retorno;
+            // Enviar objeto json de cli_areaxcliente
+            header('Content-Type: application/json');
+            echo json_encode($cli_areaxcliente);
+        } else {
+            // Enviar respuesta de error general
+            print json_encode(
+                array(
+                    'estado' => '2',
+                    'mensaje' => 'No se obtuvo el registro en Tabla'
+                )
+            );
+        }
+		
+	}	
     elseif (isset($_GET['idU']) && isset($_GET['idC'])) {
         // Obtener parámetro idUsuario y idClave de GEN_tipodocumento
         $parametro = $_GET['idU'];

@@ -1,6 +1,7 @@
 <?php
 include_once("../tables/header.inc.php");
 require_once ('../../Connections/DataConex.php');
+
 ?>
 <?php
   if (!function_exists("GetSQLValueString")) {
@@ -64,6 +65,8 @@ if( isset($_POST['fechaestado']) )
     $pfechaestado = trim($_POST['fechaestado']);
 }
 
+//echo "fecEstado...".$pfechaestado;
+
 $pobservacion ="";
 if( isset($_POST['observacion']) )
 {
@@ -79,6 +82,19 @@ if( isset($_POST['gasto']) )
 	{
 		$pgasto = 0;
 	}
+}
+
+$dh = 0;
+if(isset($_POST['dh'])){
+	$dh = trim($_POST['dh']);
+}
+$re = "";
+if(isset($_POST['re'])){
+	$re = trim($_POST['re']);
+}
+$dr = 0;
+if(isset($_POST['dr'])){
+	$dr = trim($_POST['dr']);
 }
 
 //require_once('../../Connections/DataConex.php');
@@ -119,17 +135,17 @@ if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
       $sigue = "E-Existe un Proceso registrado con el mismo Código.";
     }
     else
-    {
-      $idUsuario = $_SESSION['IdUsuario'];
-	  $estadoActPro = "1";
-      $parameters = "insert=insert&Proceso=$pproceso&Fechainicio=$pfechainicio&Origen=$porigen&ActPro=$pactpro&FechaEstado=$pfechaestado&Observacion=$pobservacion&Usuario=$idUsuario&EstadoActPro=$estadoActPro&Gasto=$pgasto";
-      $soportecURL = "S";
-      $url         = urlServicios."consultadetalle/consultadetalle_pro_actuacionprocesal.php?".$parameters;
-      $existe      = "";
-      $usulocal    = "";
-      $sigue       = ""; 
-      //echo "<script>console.log('ins...'+$url)</script>" ;
-      if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
+    {      
+		$idUsuario = $_SESSION['IdUsuario'];
+		$estadoActPro = "1";
+		$parameters = "insert=insert&Proceso=$pproceso&Fechainicio=$pfechainicio&Origen=$porigen&ActPro=$pactpro&FechaEstado=$pfechaestado&Observacion=$pobservacion&Usuario=$idUsuario&EstadoActPro=$estadoActPro&Gasto=$pgasto";
+		$soportecURL = "S";
+		$url         = urlServicios."consultadetalle/consultadetalle_pro_actuacionprocesal.php?".$parameters;
+		$existe      = "";
+		$usulocal    = "";
+		$sigue       = ""; 
+		//echo "<script>console.log('ins...'+$url)</script>" ;
+		if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
       {    
           $ch = curl_init();
           curl_setopt($ch, CURLOPT_VERBOSE, true);
@@ -202,6 +218,54 @@ if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
 						$m = preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $resultado);    
 						$m = json_decode($m, true);
 						$MaxId = $m['pro_actuacionprocesal']['MaxIdProceso'];
+						
+						//Insertamos en tabla notificar
+						$fechaenvio = $pfechaestado;
+						$obj = json_decode($dh);
+						$dias = $obj->{'1'};
+						
+						$obj = json_decode($re);
+						$re = $obj->{'2'};
+						
+						$obj = json_decode($dr);
+						$dr = $obj->{'3'};
+						include('fechahabil.php');
+						
+						$parameters = "insert=insert&idusuario=$idUsuario&fechahabil=".($FechaHabil)."&idtabla=$MaxId";
+						$url = urlServicios."consultadetalle/not_notificar.php?".$parameters;
+						//echo "<script>console.log('ins...'+$url)</script>" ;
+						if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL				
+						{
+							$ch = curl_init();
+							curl_setopt($ch, CURLOPT_VERBOSE, true);
+							curl_setopt($ch, CURLOPT_URL, $url);
+							curl_setopt($ch, CURLOPT_TIMEOUT, 30);
+							curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+							curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+							curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
+							curl_setopt($ch, CURLOPT_POST, 0);          
+							//curl_setopt($handle, CURLOPT_STDERR, $verbose);
+							//curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($parameters));    
+
+							$resultado = curl_exec ($ch);         
+							$http_status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+							$curl_errno = curl_errno($ch);
+							$curl_msj = curl_error($ch) ;
+							curl_close($ch);
+							
+							$mestadoactprocesal = preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $resultado);    
+							$mestadoactprocesal = json_decode($mestadoactprocesal, true); 
+							
+							$json_errors = array(
+								JSON_ERROR_NONE => 'No se ha producido ningún error',
+								JSON_ERROR_DEPTH => 'Maxima profundidad de pila ha sido excedida',
+								JSON_ERROR_CTRL_CHAR => 'Error de carácter de control, posiblemente codificado incorrectamente',
+								JSON_ERROR_SYNTAX => 'Error de Sintaxis',
+							);
+							
+						}
+						
+						
 						$sigue = $sigue."*".$MaxId;
 					}
 				}
@@ -220,9 +284,7 @@ if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
 					$resultado = preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $resultado);
 					$m = json_decode($resultado, true);	        
 				}
-				//
-			  
-            }  
+			}  
           }
 
           $json_errors = array(
@@ -249,10 +311,8 @@ if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
           $m = json_decode($resultado, true);	        
       }
       //
-    }
-    
+    }    
   }
-
 }  
 echo $sigue;
 ?>

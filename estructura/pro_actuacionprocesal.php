@@ -72,7 +72,7 @@ class PRO_ACTUACIONPROCESAL
 							APR_FechaHabil, 
 							APR_EstadoActProcesal,
 							APR_Gasto, APR_IdOrigen
-                            FROM ".$GLOBALS['TABLA'].
+                            FROM ".$GLOBALS['TABLA'].							
                             " WHERE ".$GLOBALS['Llave']." = ? ; ";
 
         try {
@@ -192,21 +192,37 @@ class PRO_ACTUACIONPROCESAL
         $Fechaestado,
 		$Observaciones,
 		$Gasto,
+		$IdUsuario,
+		$FechaHabil,
         $Idtabla
     )
     {
+		
         // Creando consulta UPDATE
         $consulta = "UPDATE ". $GLOBALS['TABLA'] .
-            " SET APR_FechaCreacion=?, APR_IdOrigen=?, APR_IdTipoActuacionProcesal=?, APR_FechaHabil=?, APR_Observaciones=?, APR_Gasto=? " .
+            " SET APR_FechaCreacion=?, APR_IdOrigen=?, APR_IdTipoActuacionProcesal=?, APR_FechaHabil=?, APR_Observaciones=?, APR_Gasto=?, APR_IdUsuarioModifica=? " .
             " WHERE ". $GLOBALS['Llave']. " =? ;";
 
         // Preparar la sentencia
         $cmd = Database::getInstance()->getDb()->prepare($consulta);
 
         // Relacionar y ejecutar la sentencia
-        $cmd->execute(array($Fechainicio, $Origen, $Actpro, $Fechaestado, $Observaciones, $Gasto, $Idtabla ));
+        $cmd->execute(array($Fechainicio, $Origen, $Actpro, $Fechaestado, $Observaciones, $Gasto, $IdUsuario, $Idtabla ));
+		
+		$query = "UPDATE not_notificar SET NOT_IdEstado = 0, NOT_UsuarioModifica=? WHERE NOT_IdActProcesal=?; ";
+		 // Preparar la sentencia
+        $cmdx = Database::getInstance()->getDb()->prepare($query);
+		$cmdx->execute(array($IdUsuario, $Idtabla));
+		
+		$fh = json_decode($FechaHabil, true);		
+		foreach ($fh as $dato => $valor)
+		{	// Preparar la sentencia		
+			$query = "INSERT INTO not_notificar (NOT_IdActProcesal, NOT_UsuarioModifica, NOT_FechaEnvio, NOT_IdEstado) VALUES ($Idtabla,$IdUsuario,'$valor',1);";		//	echo $var_ins;
+			$cmdx = Database::getInstance()->getDb()->prepare($query);
+			$cmdx->execute(array($Idtabla,$IdUsuario,$FechaHabil));
+		}        
 
-        return $cmd;
+        return $cmd;		
     }
 	
 	/**

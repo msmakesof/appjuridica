@@ -44,6 +44,19 @@ if (!function_exists("GetSQLValueString"))
     }
 }
 $idTabla = 0;
+require_once('../../apis/general/festivo.php');
+//print_r($mfestivo);
+for($i=0; $i<count($mfestivo['gen_festivo']); $i++)
+{
+	$festivo = $mfestivo['gen_festivo'][$i]['FES_Festivo'];
+	$json[] = "moment('$festivo')";
+}
+$diasfestivos = str_replace('"','',json_encode($json));
+$json = $diasfestivos;
+$json = str_replace('[','',$diasfestivos);
+$json = str_replace(']','',$json);
+$json = str_replace('"','',$json);
+$idTabla = 0;
 $NombreTabla ="EVENTOINUSUAL";
 ?>
 <!DOCTYPE html>
@@ -153,14 +166,20 @@ $NombreTabla ="EVENTOINUSUAL";
 
         $('#fechainicio').datetimepicker({			
 			language: 'es',
-			daysOfWeekDisabled: [0, 6],			
+			daysOfWeekDisabled: [0, 6],
+			disabledDates: [
+					<?php echo ($json); ?>
+                ],
 			format: 'YYYY-MM-DD',
 			autoclose: true			
         });
         
         $('#fechafinal').datetimepicker({			
 			language: 'es',
-			daysOfWeekDisabled: [0, 6],			
+			daysOfWeekDisabled: [0, 6],
+			disabledDates: [
+					<?php echo ($json); ?>
+                ],
 			format: 'YYYY-MM-DD',
 			autoclose: true			
         });

@@ -656,11 +656,15 @@ else
 									$NomEmpresaAct = "";
 									for($i=0; $i<count($mareaxcliente['cli_areaxcliente']); $i++)
 									{
+										$NombreTabla = "";
+										$NombreCorporacion = "";
 										$NombreTabla = trim(strtoupper($mareaxcliente['cli_areaxcliente'][$i]['NombreEmpresa']));
 										$NombreCorporacion = trim(strtoupper($mareaxcliente['cli_areaxcliente'][$i]['NombreCorporacion']));
 										$archivo = $NombreTabla.".php";
 										$idTabla = $mareaxcliente['cli_areaxcliente'][$i]['ARC_Id_AreaCliente'];
 										$NombreArea = trim(strtoupper($mareaxcliente['cli_areaxcliente'][$i]['NombreArea']));
+										$IdEmpresa = $mareaxcliente['cli_areaxcliente'][$i]['ARC_IdEmpresa'];
+										$IdTipoJuzgado = $mareaxcliente['cli_areaxcliente'][$i]['ARC_IdTipoJuzgado']; 
 										
 										//if( $primera_vuelta )
 										//{
@@ -713,7 +717,9 @@ else
 													style="text-decoration:none;">
 													<?php echo $NombreTabla; ?>
 												</a>
-												--><?php echo $NombreTabla; ?>
+												--> 
+												<a href="javascript:void(0);" onclick="editar(<?php echo $idTabla; ?>,<?php echo $IdEmpresa; ?>,<?php echo $IdTipoJuzgado; ?>)"><?php echo trim(strtoupper($NombreTabla)); ?></a>
+												<?php //echo $NombreTabla; ?>
 											</td>											
 											<td>
 												<?php echo $NombreCorporacion; ?>       	
@@ -824,6 +830,16 @@ else
         window.location = 'cli_areaxclienteformaupd.php';
     });
  }); 
+
+function editar(id, id2, id3) 
+{    	
+	$.post('../forms/cli_areaxclienteformaupd.php', { 'id': id, 'id2': id2, 'id3': id3 }, function (result) {
+		WinId = window.open('','_self');
+		WinId.document.open();
+		WinId.document.write(result);
+		WinId.document.close();
+	});
+}
 
 function cambiar(nuevaurl) 
 { 

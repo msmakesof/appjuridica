@@ -76,11 +76,13 @@ else
 {
     $clave ="";
 }
+echo "<br><br><br><br><br><br><br><br>";
 $nombre_lnk = "areaxcliente";
 $nombre = "";
 $email  = "";
-$usuario ="";
-$url ="../../consultadetalle/consultadetalle_juzgado.php?IdTabla";
+$usuario = "";
+$url = "../../consultadetalle/consultadetalle_juzgado.php?IdTabla";
+
 
 if( isset($_POST['ƒ×'])  && !empty($_POST['ƒ×']) )
 {    

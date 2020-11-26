@@ -20,15 +20,15 @@ class PRO_PROCESO
 	 * @parametrousu = IdUsuario
 	 * @Estado = Estado del proceso
      */
-    public static function getAll($par1, $Estado, $parametrousu, $parametroemp)
+    public static function getAll($par1, $Estado, $parametrousu, $parametroemp, $parametrotipousu)
     {
         //echo $pars = "$par1, $Estado, $parametrousu, $parametroemp<br>";
         $condi = "";
 		$condijoin = "";
 		$condijoin2 = ""; 
-		if($parametrousu != "")  //Administrador(1) o Abogado(2)
+		if($parametrousu != ""  && $parametrotipousu != "")  //Administrador(1) o Abogado(2)
 		{
-			if($parametrousu == 2)
+			if($parametrousu > 0 && $parametrotipousu == 2)   //if($parametrousu == 2)
 			{	
 				$condi = " AND PRO_IdUsuario = $parametrousu ";
 			}
@@ -61,7 +61,7 @@ class PRO_PROCESO
             " LEFT JOIN gen_eventoinusual ON EVI_IdEventoInusual = PRO_IdEventoInusual AND EVI_Estado = 1 ".
 			$condijoin2.
             " WHERE PRO_NumeroProceso > '' AND PRO_EstadoProceso = $Estado ". $condi .
-            " ORDER BY PRO_NumeroProceso; ";
+            " ORDER BY PRO_NumeroProceso DESC; ";
 			//echo $consulta ;
         try {
             // Preparar sentencia

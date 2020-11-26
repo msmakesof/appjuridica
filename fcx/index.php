@@ -200,6 +200,55 @@ if( strlen($diahoy) == 1 )
 
 $fecha_actual = $nombredia." ". date("M") ." ". $diahoy ." ". $hoy['year']." ". $hoy['hours'].":".$hoy['minutes'].":".$hoy['seconds']." GMT-0500 (hora estándar de Colombia)";
 $fecha_actualdef = $nombredia." ". date("M") ." ". $dia ." ". $hoy['year']." ". $hoy['hours'].":".$hoy['minutes'].":".$hoy['seconds']." GMT-0500 (hora estándar de Colombia)";
+
+$idTabla = 0;
+echo urlServicios."<br>";
+//$url = urlServicios."apis/general/festivo.php";
+$params = "IdMostrar=0";
+$soportecURL = "S";
+$url = urlServicios."consultadetalle/consultadetalle_gen_festivo.php?".$params;
+//include($url);
+//print_r($mfestivo);
+
+if(function_exists('curl_init')) // Comprobamos si hay soporte para cURL
+{
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_VERBOSE, true);
+    curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_TIMEOUT, 30);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
+    curl_setopt($ch, CURLOPT_POST, 0);
+    $resultado = curl_exec ($ch);
+    curl_close($ch);
+
+    $mfestivo = preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $resultado);    
+    $mfestivo = json_decode($mfestivo, true);
+    //echo("<script>console.log('PHP: ".print_r($mproceso)."');</script>");
+    //echo("<script>console.log('PHP: ".count($m['gen_festivo'])."');</script>");
+    
+    $json_errors = array(
+        JSON_ERROR_NONE => 'No se ha producido ningún error',
+        JSON_ERROR_DEPTH => 'Maxima profundidad de pila ha sido excedida',
+        JSON_ERROR_CTRL_CHAR => 'Error de carácter de control, posiblemente codificado incorrectamente',
+        JSON_ERROR_SYNTAX => 'Error de Sintaxis',
+    );
+    //echo "Error : ", $json_errors[json_last_error()], PHP_EOL, PHP_EOL."<br>";
+	for($i=0; $i<count($mfestivo['gen_festivo']); $i++)
+	{
+		$festivo = $mfestivo['gen_festivo'][$i]['FES_Festivo'];
+		$json[] = "moment('$festivo')";
+	}
+	$diasfestivos = str_replace('"','',json_encode($json));
+	$json = $diasfestivos;
+	$json = str_replace('[','',$diasfestivos);
+	$json = str_replace(']','',$json);
+	$json = str_replace('"','',$json);	
+}
+
+
+
 ?>
 
 <!DOCTYPE html>
@@ -710,10 +759,8 @@ alert('fhoy...'+fechahoy+'\n dayw...'+dayw);
 			pickerPosition: 'bottom-left',
 			daysOfWeekDisabled: [6, 0],
 			disabledDates: [
-                        new Date(2020, 06 - 1, 15),
-                        new Date(2020, 06 - 1, 22),
-                        new Date(2020, 06 - 1, 29),
-                    ],
+				<?php echo ($json); ?>
+            ],
 			autoclose: true,
 			defaultDate: fechahoy,
 			minDate: fechahoy,
@@ -723,7 +770,9 @@ alert('fhoy...'+fechahoy+'\n dayw...'+dayw);
 				
 				$('#to').datetimepicker({
 					language: 'es',
-					datesDisabled: exclude_dates,
+					disabledDates: [
+						<?php echo ($json); ?>
+					],
 					pickerPosition: "bottom-left",
 					daysOfWeekDisabled: [0, 6],
 					todayHighlight: true,

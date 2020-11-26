@@ -42,7 +42,7 @@ if(isset($_POST['idproceso'])){
 $fechainicio ="";
 if(isset($_POST['fechainicio'])){
 	$fechainicio = trim($_POST['fechainicio']);
-	$fechainicio = str_replace(' ', '%20', $fechainicio);
+	$fechainiciomks = str_replace(' ', '%20', $fechainicio);
 }
 $origen ="";
 if(isset($_POST['origen'])){
@@ -68,6 +68,18 @@ if(isset($_POST['observacion'])){
 $gasto = 0;
 if(isset($_POST['gasto'])){
 	$gasto = trim($_POST['gasto']);
+}
+$dh = 0;
+if(isset($_POST['dh'])){
+	$dh = trim($_POST['dh']);
+}
+$re = "";
+if(isset($_POST['re'])){
+	$re = trim($_POST['re']);
+}
+$dr = 0;
+if(isset($_POST['dr'])){
+	$dr = trim($_POST['dr']);
 }
 require_once('../../apis/proceso/actuacionprocesal.upd.php');
 ?>
